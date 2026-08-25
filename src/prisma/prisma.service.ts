@@ -1,15 +1,16 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaPg } from '@prisma/adapter-pg';
+import 'dotenv/config';
 import { PrismaClient } from 'generated/prisma';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
     constructor() {
-        const adapter = new PrismaMariaDb(process.env.DATABASE_URL!, {
-            useTextProtocol: true
+        const adapter = new PrismaPg({
+            connectionString: process.env.DATABASE_URL!,
         });
 
-        super({ adapter })
+        super({ adapter });
     }
 
     async onModuleInit() {

@@ -5,6 +5,5 @@ import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
     imports: [PrismaModule, UsuarioModule]
-
 })
 export class AppModule { }
