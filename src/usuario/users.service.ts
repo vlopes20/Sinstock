@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service'; // Ajuste o caminho se necessário
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -31,5 +31,10 @@ export class UsersService {
         const {senha: _, ...result } = user;
         return result
     }
+    async findByEmail(email: string) {
+    return this.prisma.usuario.findUnique({
+      where: { email },
+    });
+  }
 }
 
