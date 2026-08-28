@@ -11,11 +11,11 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.criar(createUserDto);
   }
-  // Esta rota só aceita requisições com token JWT válido
+
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    // req.user contém o retorno do método validate() da JwtStrategy
+
     return req.user;
   }
 }
