@@ -1,32 +1,49 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProdutoDto {
+  @IsInt()
+  @IsNotEmpty()
+  categoria_id!: number;
+
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(150)
   nome!: string;
 
   @IsString()
   @IsOptional()
-  @MaxLength(50)
+  @MaxLength(100)
   marca?: string;
 
   @IsString()
   @IsOptional()
-  @MaxLength(50)
-  tipo?: string;
-
-  @IsString()
-  @IsNotEmpty()
   @MaxLength(100)
-  codigo_de_barra!: string;
+  codigo_barras?: string;
 
-  @IsInt()
+  @IsNumber()
   @IsOptional()
   @Min(0)
+  @Type(() => Number)
   estoque_minimo?: number;
 
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
-  categoria_id!: number;
+  @Min(0)
+  @Type(() => Number)
+  preco_venda!: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Type(() => Number)
+  custo_medio?: number;
 }
