@@ -1,74 +1,49 @@
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
-import { PrismaClient } from '../generated/prisma';
+import mysql from 'mysql2/promise';
 
 async function main() {
-  const urlString = process.env.DATABASE_URL;
-  if (!urlString) {
-    throw new Error('A variável DATABASE_URL não foi encontrada no .env');
+  console.log('Iniciando a execução do seed no banco de dados...');
+
+  // Conecta ao banco diretamente via mysql2 usando a URL do .env
+  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+
+  try {
+    // 1. Inserir ou atualizar Perfis
+    const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
+    const permissoesOperador = JSON.stringify({ operacoes: true });
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (1, 'Administrador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Administrador', permissoes = ?`,
+      [permissoesAdmin, permissoesAdmin],
+    );
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (2, 'Operador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Operador', permissoes = ?`,
+      [permissoesOperador, permissoesOperador],
+    );
+
+    // 2. Criar ou atualizar Usuário Administrador
+    const senhaHash = await bcrypt.hash('123456', 10);
+
+    await connection.execute(
+      `INSERT INTO usuarios (nome, email, senha_hash, perfil_id, ativo) 
+       VALUES ('Administrador Sinstock', 'admin@sinstock.com', ?, 1, true) 
+       ON DUPLICATE KEY UPDATE senha_hash = ?, perfil_id = 1, ativo = true`,
+      [senhaHash, senhaHash],
+    );
+
+    console.log('✅ Seed concluído com sucesso! Perfis e Usuário Admin cadastrados.');
+  } finally {
+    await connection.end();
   }
-
-  const dbUrl = new URL(urlString);
-
-  const adapter = new PrismaMariaDb({
-    host: dbUrl.hostname,
-    port: Number(dbUrl.port) || 3306,
-    user: dbUrl.username,
-    password: decodeURIComponent(dbUrl.password),
-    database: dbUrl.pathname.replace('/', ''),
-  });
-
-  const prisma = new PrismaClient({ adapter });
-
-  console.log('Iniciando o seed no banco local...');
-
-  // 1. Criar Perfis com o campo obrigatório "permissoes"
-  await prisma.perfis.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      nome: 'Administrador',
-      permissoes: { admin: true, todas: true },
-    },
-  });
-
-  await prisma.perfis.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
-      nome: 'Operador',
-      permissoes: { operacoes: true },
-    },
-  });
-
-  // 2. Criar Usuário Admin usando "senha_hash"
-  const senhaHash = await bcrypt.hash('123456', 10);
-
-  await prisma.usuarios.upsert({
-    where: { email: 'admin@sinstock.com' },
-    update: {
-      senha_hash: senhaHash,
-      perfil_id: 1,
-      ativo: true,
-    },
-    create: {
-      nome: 'Administrador Sinstock',
-      email: 'admin@sinstock.com',
-      senha_hash: senhaHash,
-      perfil_id: 1,
-      ativo: true,
-    },
-  });
-
-  console.log('Seed executado com sucesso! Usuário admin@sinstock.com pronto.');
-
-  await prisma.$disconnect();
 }
 
-main().catch(async (e) => {
-  console.error('Erro ao executar o seed:', e);
+main().catch((error) => {
+  console.error('Erro durante a execução do seed:', error);
   process.exit(1);
 });
