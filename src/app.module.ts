@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma/prisma.module';
-import { UsersModule } from './usuario/users.module';
 import { AuthModule } from './auth/auth.module';
+import { PerfisModule } from './perfis/perfis.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { ProdutosModule } from './produtos/produtos.module';
-
+import { UsersModule } from './usuario/users.module';
 
 @Module({
-    imports: [PrismaModule, UsersModule, AuthModule, ProdutosModule]
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    PerfisModule,
+    ProdutosModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
