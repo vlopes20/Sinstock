@@ -55,7 +55,54 @@ export class UsersService {
   async findByEmail(email: string) {
     return this.prisma.usuarios.findUnique({
       where: { email },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        senha_hash: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        token_2fa: true,
+        token_expiracao: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+      },
     });
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        senha_hash: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        token_2fa: true,
+        token_expiracao: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+        perfis: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+    }
+
+    return user;
+  }
+
+  async findOne(id: number) {
+    return this.findById(id);
   }
 
   async findAll() {
@@ -68,6 +115,7 @@ export class UsersService {
         telefone: true,
         ativo: true,
         criado_em: true,
+        isTwoFactorEnable: true,
         perfis: {
           select: { nome: true },
         },
@@ -75,25 +123,25 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number) {
-    const user = await this.prisma.usuarios.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        perfil_id: true,
-        telefone: true,
-        ativo: true,
-        criado_em: true,
-        perfis: true,
-      },
-    });
+  // Métodos auxiliares para gerenciar o 2FA no banco
 
-    if (!user) {
-      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
-    }
+  // Métodos auxiliares para gerenciar o 2FA no banco de dados
 
-    return user;
-  }
+async setTwoFactorSecret(id: number, secret: string) {
+  return this.prisma.usuarios.update({
+    where: { id },
+    data: { 
+      twoFactorSecret: secret 
+    },
+  });
+}
+
+async enableTwoFactor(id: number) {
+  return this.prisma.usuarios.update({
+    where: { id },
+    data: { 
+      isTwoFactorEnable: true 
+    },
+  });
+}
 }
