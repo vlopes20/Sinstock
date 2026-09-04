@@ -1,0 +1,1953 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+prisma/
+  migrations/
+    20260903185211_init/
+      migration.sql
+    migration_lock.toml
+  schema.prisma
+  seed.ts
+src/
+  auth/
+    decorators/
+      current-user.decorator.ts
+      roles.decorator.ts
+    dto/
+      login.dto.ts
+    guards/
+      jwt-auth.guard.ts
+      roles.guard.ts
+    strategies/
+      jwt.strategy.ts
+    auth.controller.ts
+    auth.module.ts
+    auth.service.ts
+  perfis/
+    dto/
+      create-perfil.dto.ts
+    perfis.controller.ts
+    perfis.module.ts
+    perfis.service.ts
+  prisma/
+    prisma.module.ts
+    prisma.service.ts
+  produtos/
+    dto/
+      create-produto.dto.ts
+      update-produto.dto.ts
+    produtos.controller.ts
+    produtos.module.ts
+    produtos.service.ts
+  usuario/
+    dto/
+      create-user.dto.ts
+    users.controller.ts
+    users.module.ts
+    users.service.ts
+  app.module.ts
+  main.ts
+.env.example
+.gitattributes
+.gitignore
+.prettierrc
+eslint.config.mjs
+nest-cli.json
+package.json
+prisma.config.ts
+README.md
+skills-lock.json
+tsconfig.build.json
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="prisma/migrations/20260903185211_init/migration.sql">
+-- CreateTable
+CREATE TABLE `categorias` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(100) NOT NULL,
+    `descricao` TEXT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `nome`(`nome`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `fornecedores` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome_juridico` VARCHAR(150) NOT NULL,
+    `cnpj` VARCHAR(20) NOT NULL,
+    `telefone` VARCHAR(20) NULL,
+    `email` VARCHAR(100) NULL,
+    `cep` VARCHAR(10) NULL,
+    `cidade` VARCHAR(100) NULL,
+    `estado` CHAR(2) NULL,
+    `endereco` VARCHAR(255) NULL,
+    `latitude` DECIMAL(10, 8) NULL,
+    `longitude` DECIMAL(11, 8) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `cnpj`(`cnpj`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `produtos` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `categoria_id` INTEGER NOT NULL,
+    `nome` VARCHAR(150) NOT NULL,
+    `marca` VARCHAR(100) NULL,
+    `codigo_barras` VARCHAR(100) NULL,
+    `estoque_minimo` DECIMAL(10, 3) NULL DEFAULT 0.000,
+    `preco_venda` DECIMAL(10, 2) NOT NULL,
+    `custo_medio` DECIMAL(10, 2) NULL DEFAULT 0.00,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `codigo_barras`(`codigo_barras`),
+    INDEX `fk_produtos_categoria`(`categoria_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `chamados_suporte` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `usuario_id` INTEGER NOT NULL,
+    `assunto` VARCHAR(150) NOT NULL,
+    `descricao` TEXT NOT NULL,
+    `status` ENUM('ABERTO', 'EM_ANDAMENTO', 'RESOLVIDO', 'FECHADO') NULL DEFAULT 'ABERTO',
+    `data_abertura` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `data_fechamento` TIMESTAMP(0) NULL,
+
+    INDEX `fk_chamados_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `clientes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(150) NOT NULL,
+    `cpf_cnpj` VARCHAR(20) NULL,
+    `telefone` VARCHAR(20) NULL,
+    `email` VARCHAR(100) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `faq` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `pergunta` VARCHAR(255) NOT NULL,
+    `resposta` TEXT NOT NULL,
+    `ordem` INTEGER NULL DEFAULT 0,
+    `ativo` BOOLEAN NULL DEFAULT true,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `filiais` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(100) NOT NULL,
+    `endereco` VARCHAR(255) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `itens_entrada` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nota_fiscal_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `custo_unitario` DECIMAL(10, 2) NOT NULL,
+
+    INDEX `fk_itens_entrada_lote`(`lote_id`),
+    INDEX `fk_itens_entrada_nf`(`nota_fiscal_id`),
+    INDEX `fk_itens_entrada_produto`(`produto_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `itens_venda` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `pedido_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `preco_unitario` DECIMAL(10, 2) NOT NULL,
+
+    INDEX `fk_itens_venda_lote`(`lote_id`),
+    INDEX `fk_itens_venda_pedido`(`pedido_id`),
+    INDEX `fk_itens_venda_produto`(`produto_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `logs_movimentacoes` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `produto_id` INTEGER NOT NULL,
+    `filial_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `usuario_id` INTEGER NOT NULL,
+    `tipo_movimentacao` ENUM('ENTRADA', 'SAIDA', 'TRANSFERENCIA', 'AJUSTE') NOT NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `saldo_anterior` DECIMAL(10, 3) NOT NULL,
+    `saldo_atual` DECIMAL(10, 3) NOT NULL,
+    `origem_id` INTEGER NULL,
+    `data_hora` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `fk_logs_filial`(`filial_id`),
+    INDEX `fk_logs_lote`(`lote_id`),
+    INDEX `fk_logs_produto`(`produto_id`),
+    INDEX `fk_logs_usuario`(`usuario_id`),
+    INDEX `idx_logs_data`(`data_hora`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `lotes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `produto_id` INTEGER NOT NULL,
+    `numero_lote` VARCHAR(50) NOT NULL,
+    `data_fabricacao` DATE NULL,
+    `data_validade` DATE NOT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `uk_lotes_produto_numero`(`produto_id`, `numero_lote`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `notas_fiscais_entrada` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fornecedor_id` INTEGER NOT NULL,
+    `usuario_id` INTEGER NOT NULL,
+    `numero_nf` VARCHAR(50) NOT NULL,
+    `data_emissao` DATE NOT NULL,
+    `data_recebimento` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `total` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('PENDENTE', 'RECEBIDA', 'CANCELADA') NULL DEFAULT 'RECEBIDA',
+
+    INDEX `fk_nf_fornecedor`(`fornecedor_id`),
+    INDEX `fk_nf_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `pedidos_venda` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `usuario_id` INTEGER NOT NULL,
+    `cliente_id` INTEGER NULL,
+    `filial_id` INTEGER NOT NULL,
+    `data_venda` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `total` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('ORCAMENTO', 'CONCLUIDO', 'CANCELADO') NULL DEFAULT 'CONCLUIDO',
+
+    INDEX `fk_pedidos_cliente`(`cliente_id`),
+    INDEX `fk_pedidos_filial`(`filial_id`),
+    INDEX `fk_pedidos_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `perfis` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(50) NOT NULL,
+    `permissoes` JSON NOT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `nome`(`nome`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `saldos_estoque` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `filial_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL DEFAULT 0.000,
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `fk_saldos_lote`(`lote_id`),
+    INDEX `fk_saldos_produto`(`produto_id`),
+    UNIQUE INDEX `uk_saldos_filial_produto_lote`(`filial_id`, `produto_id`, `lote_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `usuarios` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `perfil_id` INTEGER NOT NULL,
+    `nome` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `telefone` VARCHAR(20) NULL,
+    `senha_hash` VARCHAR(255) NOT NULL,
+    `token_2fa` VARCHAR(100) NULL,
+    `token_expiracao` DATETIME(0) NULL,
+    `ativo` BOOLEAN NULL DEFAULT true,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `email`(`email`),
+    INDEX `fk_usuarios_perfil`(`perfil_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `produtos` ADD CONSTRAINT `fk_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `chamados_suporte` ADD CONSTRAINT `fk_chamados_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_nf` FOREIGN KEY (`nota_fiscal_id`) REFERENCES `notas_fiscais_entrada`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos_venda`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `lotes` ADD CONSTRAINT `fk_lotes_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `notas_fiscais_entrada` ADD CONSTRAINT `fk_nf_fornecedor` FOREIGN KEY (`fornecedor_id`) REFERENCES `fornecedores`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `notas_fiscais_entrada` ADD CONSTRAINT `fk_nf_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_cliente` FOREIGN KEY (`cliente_id`) REFERENCES `clientes`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `usuarios` ADD CONSTRAINT `fk_usuarios_perfil` FOREIGN KEY (`perfil_id`) REFERENCES `perfis`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+</file>
+
+<file path="prisma/migrations/migration_lock.toml">
+# Please do not edit this file manually
+# It should be added in your version-control system (e.g., Git)
+provider = "mysql"
+</file>
+
+<file path="src/auth/decorators/roles.decorator.ts">
+import { SetMetadata } from '@nestjs/common';
+
+export const ROLES_KEY = 'roles';
+export const Roles = (...roles: number[]) => SetMetadata(ROLES_KEY, roles);
+</file>
+
+<file path="src/auth/guards/jwt-auth.guard.ts">
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
+</file>
+
+<file path="src/auth/guards/roles.guard.ts">
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<number[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    // Se a rota não definir NENHUMA role específica, permite o acesso
+    if (!requiredRoles) {
+      return true;
+    }
+
+    const { user } = context.switchToHttp().getRequest();
+
+    if (!user || !user.perfil_id) {
+      throw new ForbiddenException('Perfil do usuário não identificado.');
+    }
+
+    const temPermissao = requiredRoles.includes(user.perfil_id);
+
+    if (!temPermissao) {
+      throw new ForbiddenException('Acesso negado: seu perfil não possui permissão para este recurso.');
+    }
+
+    return true;
+  }
+}
+</file>
+
+<file path="src/perfis/dto/create-perfil.dto.ts">
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+
+export class CreatePerfilDto {
+  @IsString()
+  @IsNotEmpty({ message: 'O nome do perfil é obrigatório' })
+  nome: string;
+
+  @IsObject({ message: 'As permissões devem ser um objeto JSON válido' })
+  @IsNotEmpty({ message: 'As permissões são obrigatórias' })
+  permissoes: Record<string, any>;
+}
+</file>
+
+<file path="src/perfis/perfis.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PerfisController } from './perfis.controller';
+import { PerfisService } from './perfis.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [PerfisController],
+  providers: [PerfisService],
+  exports: [PerfisService],
+})
+export class PerfisModule {}
+</file>
+
+<file path="src/produtos/dto/update-produto.dto.ts">
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateProdutoDto } from './create-produto.dto';
+
+export class UpdateProdutoDto extends PartialType(CreateProdutoDto) {}
+</file>
+
+<file path=".gitattributes">
+# Auto detect text files and perform LF normalization
+* text=auto
+</file>
+
+<file path=".gitignore">
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# temp directory
+.temp
+.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
+</file>
+
+<file path=".prettierrc">
+{
+  "singleQuote": true,
+  "trailingComma": "all"
+}
+</file>
+
+<file path="eslint.config.mjs">
+// @ts-check
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['eslint.config.mjs'],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  eslintPluginPrettierRecommended,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+      sourceType: 'commonjs',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
+    },
+  },
+);
+</file>
+
+<file path="skills-lock.json">
+{
+  "version": 1,
+  "skills": {
+    "prisma-cli": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-cli/SKILL.md",
+      "computedHash": "b92e55aef78f6796d81433c44738a6733211a04c16e65cbad6d42c5f71092aab"
+    },
+    "prisma-client-api": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-client-api/SKILL.md",
+      "computedHash": "5dcc0793337151efa73a444e5adbc7e1c24180778e83b4fe94c9109c391bd333"
+    },
+    "prisma-compute": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-compute/SKILL.md",
+      "computedHash": "fbbdcf3e01ed876113d18804d38d17359d9f7ba7a4bd353193673d5924f19818"
+    },
+    "prisma-database-setup": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-database-setup/SKILL.md",
+      "computedHash": "0911d9454bd48df3badd23a50fd90a280eabb15dcbd472c14e7b729075dadefb"
+    },
+    "prisma-driver-adapter-implementation": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-driver-adapter-implementation/SKILL.md",
+      "computedHash": "07484627aea6cce4d0f94b4090ff9acc0caa7e104f9988b95abecf80132f4103"
+    },
+    "prisma-mongodb-upgrade": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-mongodb-upgrade/SKILL.md",
+      "computedHash": "f9ba440e88ca4cec9801d04762296e29e99ca08cb8a8156e4f783ecf90279c8f"
+    },
+    "prisma-postgres": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-postgres/SKILL.md",
+      "computedHash": "d669fbd0d8017d16c967f18b20e1c1345cd4a2a0076d762459bfef79f551f655"
+    },
+    "prisma-postgres-setup": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-postgres-setup/SKILL.md",
+      "computedHash": "c89d3aa91285d8e4964fcaa5238c99a3d3c20b617e032e731cf632330a85a5a6"
+    },
+    "prisma-upgrade-v7": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-upgrade-v7/SKILL.md",
+      "computedHash": "dcc6c71adca6b22f37c5bda5ac7fd63c3bb59495596a22e06a29c7c85371558f"
+    }
+  }
+}
+</file>
+
+<file path="tsconfig.build.json">
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}
+</file>
+
+<file path="src/auth/decorators/current-user.decorator.ts">
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const CurrentUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+</file>
+
+<file path="src/auth/dto/login.dto.ts">
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
+export class LoginDto {
+  @IsEmail({}, { message: 'Informe um e-mail válido' })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'A senha é obrigatória' })
+  senha: string;
+}
+</file>
+
+<file path="src/auth/strategies/jwt.strategy.ts">
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+    });
+  }
+
+  async validate(payload: any) {
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      perfil_id: payload.perfil_id,
+    };
+  }
+}
+</file>
+
+<file path="src/auth/auth.controller.ts">
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
+}
+</file>
+
+<file path="src/perfis/perfis.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreatePerfilDto } from './dto/create-perfil.dto';
+import { PerfisService } from './perfis.service';
+
+@Controller('perfis')
+@UseGuards(JwtAuthGuard)
+export class PerfisController {
+  constructor(private readonly perfisService: PerfisService) {}
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Post()
+  create(@Body() createPerfilDto: CreatePerfilDto) {
+    return this.perfisService.create(createPerfilDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.perfisService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.perfisService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/perfis/perfis.service.ts">
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreatePerfilDto } from './dto/create-perfil.dto';
+
+@Injectable()
+export class PerfisService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createPerfilDto: CreatePerfilDto) {
+    try {
+      return await this.prisma.perfis.create({
+        data: {
+          nome: createPerfilDto.nome,
+          permissoes: createPerfilDto.permissoes,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Já existe um perfil cadastrado com este nome.');
+      }
+      throw new InternalServerErrorException('Erro ao criar o perfil.');
+    }
+  }
+
+  async findAll() {
+    return this.prisma.perfis.findMany({
+      include: {
+        _count: {
+          select: { usuarios: true },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    const perfil = await this.prisma.perfis.findUnique({
+      where: { id },
+      include: {
+        usuarios: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            ativo: true,
+          },
+        },
+      },
+    });
+
+    if (!perfil) {
+      throw new NotFoundException(`Perfil com ID ${id} não encontrado`);
+    }
+
+    return perfil;
+  }
+}
+</file>
+
+<file path="src/prisma/prisma.module.ts">
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+</file>
+
+<file path="src/produtos/dto/create-produto.dto.ts">
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateProdutoDto {
+  @IsInt()
+  @IsNotEmpty()
+  categoria_id!: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(150)
+  nome!: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  marca?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  codigo_barras?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Type(() => Number)
+  estoque_minimo?: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  @Type(() => Number)
+  preco_venda!: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Type(() => Number)
+  custo_medio?: number;
+}
+</file>
+
+<file path="src/produtos/produtos.controller.ts">
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+
+import { ProdutosService } from './produtos.service';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
+
+@Controller('produtos')
+export class ProdutosController {
+  constructor(private readonly produtosService: ProdutosService) {}
+
+  @Post()
+  criar(@Body() dto: CreateProdutoDto) {
+    return this.produtosService.criar(dto);
+  }
+
+  @Get()
+  listar() {
+    return this.produtosService.listar();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id') id: string) {
+    return this.produtosService.buscarPorId(Number(id));
+  }
+
+  @Patch(':id')
+  atualizar(
+    @Param('id') id: string,
+    @Body() dto: UpdateProdutoDto,
+  ) {
+    return this.produtosService.atualizar(Number(id), dto);
+  }
+
+  @Delete(':id')
+  remover(@Param('id') id: string) {
+    return this.produtosService.remover(Number(id));
+  }
+}
+</file>
+
+<file path="src/produtos/produtos.module.ts">
+import { Module } from '@nestjs/common';
+
+import { ProdutosController } from './produtos.controller';
+import { ProdutosService } from './produtos.service';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [ProdutosController],
+  providers: [ProdutosService],
+})
+export class ProdutosModule {}
+</file>
+
+<file path="src/usuario/dto/create-user.dto.ts">
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+
+export class CreateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  nome: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  senha: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  perfil_id: number;
+
+  @IsString()
+  @IsOptional()
+  telefone?: string;
+}
+</file>
+
+<file path="nest-cli.json">
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "include": "../generated/**/*",
+        "outDir": "dist/generated"
+      }
+    ]
+  }
+}
+</file>
+
+<file path="README.md">
+**# Backend Sinstock**
+
+API do sistema Sinstock, desenvolvida utilizando [NestJS]\([https://nestjs.com/](https://nestjs.com/)) e [Prisma ORM]\([https://www.prisma.io/](https://www.prisma.io/)), com banco de dados MariaDB/MySQL.
+
+**## 📋 Pré-requisitos**
+
+Certifique-se de ter instalado em sua máquina:
+
+\- [Node.js]\([https://nodejs.org/en/](https://nodejs.org/en/)) (versão 18 ou superior)
+
+\- Banco de dados MariaDB ou MySQL rodando localmente ou em nuvem.
+
+**## 🚀 Instalação e Configuração**
+
+**\*\*1. Instale as dependências do projeto:\*\***
+
+```bash
+
+npm install
+
+```
+
+**\*\*2. Configure as variáveis de ambiente:\*\***
+
+Crie o arquivo `.env` a partir do arquivo de exemplo. 
+
+No Windows (PowerShell/CMD):
+
+```bash
+
+copy .env.example .env
+
+```
+
+No Linux/Mac:
+
+```bash
+
+cp .env.example .env
+
+```
+
+\> **\*\*Nota:\*\*** Abra o arquivo `.env` recém-criado e preencha as credenciais corretas de acesso ao seu banco de dados e a sua \`JWT\_SECRET\`.
+
+**\*\*3. Configure o Banco de Dados (Prisma):\*\***
+
+Gere os artefatos do Prisma Client, crie as tabelas no banco e popule com os dados iniciais (Seed):
+
+```bash
+
+**# Gera o Client do Prisma**
+
+npx prisma generate
+
+**# Cria e aplica a migration**
+
+npx prisma migrate dev --name init
+
+**# Popula o banco com os usuários e perfis iniciais**
+
+npx tsx prisma/seed.ts
+
+```
+
+**## 💻 Executando a Aplicação**
+
+```bash
+
+**# Modo de desenvolvimento (recomendado)**
+
+npm run start
+
+**# Modo de produção**
+
+npm run start\:prod
+
+```
+
+A aplicação estará disponível em \`[http://localhost:3000](http://localhost:3000)\`.
+
+**## 🧪 Testes**
+
+```bash
+
+**# Testes unitários**
+
+npm run test
+
+**# Cobertura de testes**
+
+npm run test\:cov
+
+```
+
+**## 🛠️ Tecnologias Utilizadas**
+
+\- **\*\*NestJS:\*\*** Framework Node.js para construção de APIs eficientes e escaláveis.
+
+\- **\*\*Prisma:\*\*** ORM moderno para Node.js e TypeScript.
+
+\- **\*\*JWT & Passport:\*\*** Autenticação e segurança de rotas.
+
+\- **\*\*Bcrypt:\*\*** Criptografia de senhas.
+
+\- **\*\*MariaDB / MySQL:\*\*** Banco de dados relacional.
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
+}
+</file>
+
+<file path="prisma/schema.prisma">
+generator client {
+  provider     = "prisma-client-js"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model categorias {
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique(map: "nome") @db.VarChar(100)
+  descricao String?    @db.Text
+  criado_em DateTime?  @default(now()) @db.Timestamp(0)
+  produtos  produtos[]
+}
+
+model fornecedores {
+  id                    Int                     @id @default(autoincrement())
+  nome_juridico         String                  @db.VarChar(150)
+  cnpj                  String                  @unique(map: "cnpj") @db.VarChar(20)
+  telefone              String?                 @db.VarChar(20)
+  email                 String?                 @db.VarChar(100)
+  cep                   String?                 @db.VarChar(10)
+  cidade                String?                 @db.VarChar(100)
+  estado                String?                 @db.Char(2)
+  endereco              String?                 @db.VarChar(255)
+  latitude              Decimal?                @db.Decimal(10, 8)
+  longitude             Decimal?                @db.Decimal(11, 8)
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  notas_fiscais_entrada notas_fiscais_entrada[]
+}
+
+model produtos {
+  id                 Int                  @id @default(autoincrement())
+  categoria_id       Int
+  nome               String               @db.VarChar(150)
+  marca              String?              @db.VarChar(100)
+  codigo_barras      String?              @unique(map: "codigo_barras") @db.VarChar(100)
+  estoque_minimo     Decimal?             @default(0.000) @db.Decimal(10, 3)
+  preco_venda        Decimal              @db.Decimal(10, 2)
+  custo_medio        Decimal?             @default(0.00) @db.Decimal(10, 2)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  atualizado_em      DateTime?            @default(now()) @db.Timestamp(0)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  lotes              lotes[]
+  categorias         categorias           @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "fk_categoria")
+  saldos_estoque     saldos_estoque[]
+
+  @@index([categoria_id], map: "fk_produtos_categoria")
+}
+
+model chamados_suporte {
+  id              Int                      @id @default(autoincrement())
+  usuario_id      Int
+  assunto         String                   @db.VarChar(150)
+  descricao       String                   @db.Text
+  status          chamados_suporte_status? @default(ABERTO)
+  data_abertura   DateTime?                @default(now()) @db.Timestamp(0)
+  data_fechamento DateTime?                @db.Timestamp(0)
+  usuarios        usuarios                 @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
+
+  @@index([usuario_id], map: "fk_chamados_usuario")
+}
+
+model clientes {
+  id            Int             @id @default(autoincrement())
+  nome          String          @db.VarChar(150)
+  cpf_cnpj      String?         @db.VarChar(20)
+  telefone      String?         @db.VarChar(20)
+  email         String?         @db.VarChar(100)
+  criado_em     DateTime?       @default(now()) @db.Timestamp(0)
+  pedidos_venda pedidos_venda[]
+}
+
+model faq {
+  id       Int      @id @default(autoincrement())
+  pergunta String   @db.VarChar(255)
+  resposta String   @db.Text
+  ordem    Int?     @default(0)
+  ativo    Boolean? @default(true)
+}
+
+model filiais {
+  id                 Int                  @id @default(autoincrement())
+  nome               String               @db.VarChar(100)
+  endereco           String?              @db.VarChar(255)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  logs_movimentacoes logs_movimentacoes[]
+  pedidos_venda      pedidos_venda[]
+  saldos_estoque     saldos_estoque[]
+}
+
+model itens_entrada {
+  id                    Int                   @id @default(autoincrement())
+  nota_fiscal_id        Int
+  produto_id            Int
+  lote_id               Int?
+  quantidade            Decimal               @db.Decimal(10, 3)
+  custo_unitario        Decimal               @db.Decimal(10, 2)
+  lotes                 lotes?                @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_entrada_lote")
+  notas_fiscais_entrada notas_fiscais_entrada @relation(fields: [nota_fiscal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_entrada_nf")
+  produtos              produtos              @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_entrada_produto")
+
+  @@index([lote_id], map: "fk_itens_entrada_lote")
+  @@index([nota_fiscal_id], map: "fk_itens_entrada_nf")
+  @@index([produto_id], map: "fk_itens_entrada_produto")
+}
+
+model itens_venda {
+  id             Int           @id @default(autoincrement())
+  pedido_id      Int
+  produto_id     Int
+  lote_id        Int?
+  quantidade     Decimal       @db.Decimal(10, 3)
+  preco_unitario Decimal       @db.Decimal(10, 2)
+  lotes          lotes?        @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_venda_lote")
+  pedidos_venda  pedidos_venda @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_venda_pedido")
+  produtos       produtos      @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_venda_produto")
+
+  @@index([lote_id], map: "fk_itens_venda_lote")
+  @@index([pedido_id], map: "fk_itens_venda_pedido")
+  @@index([produto_id], map: "fk_itens_venda_produto")
+}
+
+model logs_movimentacoes {
+  id                BigInt                               @id @default(autoincrement())
+  produto_id        Int
+  filial_id         Int
+  lote_id           Int?
+  usuario_id        Int
+  tipo_movimentacao logs_movimentacoes_tipo_movimentacao
+  quantidade        Decimal                              @db.Decimal(10, 3)
+  saldo_anterior    Decimal                              @db.Decimal(10, 3)
+  saldo_atual       Decimal                              @db.Decimal(10, 3)
+  origem_id         Int?
+  data_hora         DateTime?                            @default(now()) @db.Timestamp(0)
+  filiais           filiais                              @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_logs_filial")
+  lotes             lotes?                               @relation(fields: [lote_id], references: [id], onUpdate: NoAction, map: "fk_logs_lote")
+  produtos          produtos                             @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_logs_produto")
+  usuarios          usuarios                             @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_logs_usuario")
+
+  @@index([filial_id], map: "fk_logs_filial")
+  @@index([lote_id], map: "fk_logs_lote")
+  @@index([produto_id], map: "fk_logs_produto")
+  @@index([usuario_id], map: "fk_logs_usuario")
+  @@index([data_hora], map: "idx_logs_data")
+}
+
+model lotes {
+  id                 Int                  @id @default(autoincrement())
+  produto_id         Int
+  numero_lote        String               @db.VarChar(50)
+  data_fabricacao    DateTime?            @db.Date
+  data_validade      DateTime             @db.Date
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  produtos           produtos             @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_lotes_produto")
+  saldos_estoque     saldos_estoque[]
+
+  @@unique([produto_id, numero_lote], map: "uk_lotes_produto_numero")
+}
+
+model notas_fiscais_entrada {
+  id               Int                           @id @default(autoincrement())
+  fornecedor_id    Int
+  usuario_id       Int
+  numero_nf        String                        @db.VarChar(50)
+  data_emissao     DateTime                      @db.Date
+  data_recebimento DateTime?                     @default(now()) @db.Timestamp(0)
+  total            Decimal                       @db.Decimal(10, 2)
+  status           notas_fiscais_entrada_status? @default(RECEBIDA)
+  itens_entrada    itens_entrada[]
+  fornecedores     fornecedores                  @relation(fields: [fornecedor_id], references: [id], onUpdate: NoAction, map: "fk_nf_fornecedor")
+  usuarios         usuarios                      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_nf_usuario")
+
+  @@index([fornecedor_id], map: "fk_nf_fornecedor")
+  @@index([usuario_id], map: "fk_nf_usuario")
+}
+
+model pedidos_venda {
+  id          Int                   @id @default(autoincrement())
+  usuario_id  Int
+  cliente_id  Int?
+  filial_id   Int
+  data_venda  DateTime?             @default(now()) @db.Timestamp(0)
+  total       Decimal               @db.Decimal(10, 2)
+  status      pedidos_venda_status? @default(CONCLUIDO)
+  itens_venda itens_venda[]
+  clientes    clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
+  filiais     filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
+  usuarios    usuarios              @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_usuario")
+
+  @@index([cliente_id], map: "fk_pedidos_cliente")
+  @@index([filial_id], map: "fk_pedidos_filial")
+  @@index([usuario_id], map: "fk_pedidos_usuario")
+}
+
+model perfis {
+  id         Int        @id @default(autoincrement())
+  nome       String     @unique(map: "nome") @db.VarChar(50)
+  permissoes Json
+  criado_em  DateTime?  @default(now()) @db.Timestamp(0)
+  usuarios   usuarios[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model saldos_estoque {
+  id            Int       @id @default(autoincrement())
+  filial_id     Int
+  produto_id    Int
+  lote_id       Int?
+  quantidade    Decimal   @default(0.000) @db.Decimal(10, 3)
+  atualizado_em DateTime? @default(now()) @db.Timestamp(0)
+  filiais       filiais   @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_saldos_filial")
+  lotes         lotes?    @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_saldos_lote")
+  produtos      produtos  @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_saldos_produto")
+
+  @@unique([filial_id, produto_id, lote_id], map: "uk_saldos_filial_produto_lote")
+  @@index([lote_id], map: "fk_saldos_lote")
+  @@index([produto_id], map: "fk_saldos_produto")
+}
+
+model usuarios {
+  id                    Int                     @id @default(autoincrement())
+  perfil_id             Int
+  nome                  String                  @db.VarChar(100)
+  email                 String                  @unique(map: "email") @db.VarChar(100)
+  telefone              String?                 @db.VarChar(20)
+  senha_hash            String                  @db.VarChar(255)
+  token_2fa             String?                 @db.VarChar(100)
+  token_expiracao       DateTime?               @db.DateTime(0)
+  ativo                 Boolean?                @default(true)
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
+  chamados_suporte      chamados_suporte[]
+  logs_movimentacoes    logs_movimentacoes[]
+  notas_fiscais_entrada notas_fiscais_entrada[]
+  pedidos_venda         pedidos_venda[]
+  perfis                perfis                  @relation(fields: [perfil_id], references: [id], onUpdate: NoAction, map: "fk_usuarios_perfil")
+
+  @@index([perfil_id], map: "fk_usuarios_perfil")
+}
+
+enum chamados_suporte_status {
+  ABERTO
+  EM_ANDAMENTO
+  RESOLVIDO
+  FECHADO
+}
+
+enum logs_movimentacoes_tipo_movimentacao {
+  ENTRADA
+  SAIDA
+  TRANSFERENCIA
+  AJUSTE
+}
+
+enum pedidos_venda_status {
+  ORCAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum notas_fiscais_entrada_status {
+  PENDENTE
+  RECEBIDA
+  CANCELADA
+}
+</file>
+
+<file path="prisma/seed.ts">
+import * as bcrypt from 'bcrypt';
+import 'dotenv/config';
+import mysql from 'mysql2/promise';
+
+async function main() {
+  console.log('Iniciando a execução do seed no banco de dados...');
+
+  // Conecta ao banco diretamente via mysql2 usando a URL do .env
+  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+
+  try {
+    // 1. Inserir ou atualizar Perfis
+    const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
+    const permissoesOperador = JSON.stringify({ operacoes: true });
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (1, 'Administrador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Administrador', permissoes = ?`,
+      [permissoesAdmin, permissoesAdmin],
+    );
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (2, 'Operador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Operador', permissoes = ?`,
+      [permissoesOperador, permissoesOperador],
+    );
+
+    // 2. Criar ou atualizar Usuário Administrador
+    const senhaHash = await bcrypt.hash('123456', 10);
+
+    await connection.execute(
+      `INSERT INTO usuarios (nome, email, senha_hash, perfil_id, ativo) 
+       VALUES ('Administrador Sinstock', 'admin@sinstock.com', ?, 1, true) 
+       ON DUPLICATE KEY UPDATE senha_hash = ?, perfil_id = 1, ativo = true`,
+      [senhaHash, senhaHash],
+    );
+
+    console.log('✅ Seed concluído com sucesso! Perfis e Usuário Admin cadastrados.');
+  } finally {
+    await connection.end();
+  }
+}
+
+main().catch((error) => {
+  console.error('Erro durante a execução do seed:', error);
+  process.exit(1);
+});
+</file>
+
+<file path="src/produtos/produtos.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
+
+@Injectable()
+export class ProdutosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async criar(dto: CreateProdutoDto) {
+    return this.prisma.produtos.create({
+      data: {
+        categoria_id: dto.categoria_id,
+        nome: dto.nome,
+        marca: dto.marca,
+        codigo_barras: dto.codigo_barras,
+        estoque_minimo: dto.estoque_minimo,
+        preco_venda: dto.preco_venda,
+        custo_medio: dto.custo_medio,
+      },
+    });
+  }
+
+  async listar() {
+    return this.prisma.produtos.findMany();
+  }
+
+  async buscarPorId(id: number) {
+    return this.prisma.produtos.findUnique({
+      where: {id},
+    });
+  }
+
+  async atualizar(id: number, dto: UpdateProdutoDto) {
+    return this.prisma.produtos.update({
+      where: {id},
+      data: dto,
+    });
+  }
+
+  async remover(id: number) {
+    return this.prisma.produtos.delete({
+      where: {id},
+    });
+  }
+}
+</file>
+
+<file path="src/auth/auth.module.ts">
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from '../usuario/users.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+
+@Module({
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
+})
+export class AuthModule {}
+</file>
+
+<file path="src/auth/auth.service.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UsersService } from '../usuario/users.service';
+import { LoginDto } from './dto/login.dto';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+
+    if (!user || !user.ativo) {
+      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.senha,
+      user.senha_hash,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Credenciais inválidas.');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      perfil_id: user.perfil_id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        perfil_id: user.perfil_id,
+      },
+    };
+  }
+}
+</file>
+
+<file path="src/usuario/users.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
+})
+export class UsersModule {}
+</file>
+
+<file path="src/usuario/users.service.ts">
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const saltRounds = 10;
+    const senha_hash = await bcrypt.hash(createUserDto.senha, saltRounds);
+
+    try {
+      const user = await this.prisma.usuarios.create({
+        data: {
+          nome: createUserDto.nome,
+          email: createUserDto.email,
+          senha_hash,
+          perfil_id: createUserDto.perfil_id,
+          telefone: createUserDto.telefone,
+        },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          perfil_id: true,
+          telefone: true,
+          ativo: true,
+          criado_em: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail informado já está em uso.');
+        }
+        if (error.code === 'P2003') {
+          throw new BadRequestException('O perfil_id informado não existe.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao criar o usuário.');
+    }
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.usuarios.findUnique({
+      where: { email },
+    });
+  }
+
+  async findAll() {
+    return this.prisma.usuarios.findMany({
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        perfis: {
+          select: { nome: true },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        perfis: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+    }
+
+    return user;
+  }
+}
+</file>
+
+<file path="prisma.config.ts">
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
+
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'npx ts-node ./prisma/seed.ts',
+  },
+
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
+</file>
+
+<file path="src/main.ts">
+import 'dotenv/config';
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  await app.listen(3000);
+  console.log('Aplicação Sinstock rodando em: http://localhost:3000');
+}
+bootstrap();
+</file>
+
+<file path="src/usuario/users.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from './users.service';
+
+@Controller('users')
+@UseGuards(JwtAuthGuard)
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
+  @Get('profile')
+  getProfile(@CurrentUser() user: any) {
+    return this.usersService.findOne(user.userId);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/prisma/prisma.service.ts">
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  constructor() {
+    const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+    super({ adapter });
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "backend-sinstock",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.1",
+    "@prisma/adapter-mariadb": "^7.10.0",
+    "@prisma/client": "^7.9.1",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "dotenv": "^17.4.2",
+    "mariadb": "^3.5.4",
+    "mysql2": "^3.24.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "pg": "^8.23.0",
+    "prisma": "^7.9.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^7.0.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^17.0.0",
+    "jest": "^30.0.0",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.23.13",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
+</file>
+
+<file path="src/app.module.ts">
+import { Module } from '@nestjs/common';
+import { AuthModule } from './auth/auth.module';
+import { PerfisModule } from './perfis/perfis.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { ProdutosModule } from './produtos/produtos.module';
+import { UsersModule } from './usuario/users.module';
+
+@Module({
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    PerfisModule,
+    ProdutosModule,
+  ],
+})
+export class AppModule {}
+</file>
+
+</files>
