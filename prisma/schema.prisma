@@ -235,9 +235,15 @@ model usuarios {
   senha_hash            String                  @db.VarChar(255)
   token_2fa             String?                 @db.VarChar(100)
   token_expiracao       DateTime?               @db.DateTime(0)
+  
+  // Campos do 2FA (TOTP)
+  twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
+  isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
+
   ativo                 Boolean?                @default(true)
   criado_em             DateTime?               @default(now()) @db.Timestamp(0)
   atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
+
   chamados_suporte      chamados_suporte[]
   logs_movimentacoes    logs_movimentacoes[]
   notas_fiscais_entrada notas_fiscais_entrada[]
