@@ -1,45 +1,40 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as qrcode from 'qrcode';
+import * as speakeasy from 'speakeasy';
 import { UsersService } from '../usuario/users.service';
-
-// Importação segura do authenticator via require
-const { authenticator } = require('otplib');
 
 @Injectable()
 export class TwoFactorService {
-  constructor(private readonly usersService: UsersService) {
-    // Configura a janela de tolerância para sincronização de horário (30 segundos)
-    if (authenticator) {
-      authenticator.options = { window: 1 };
-    }
-  }
+  constructor(private readonly usersService: UsersService) {}
 
-  // 1. Gerar Secret e QR Code
   async generateTwoFactorSecret(userId: number, email: string) {
-    const secret = authenticator.generateSecret();
-    const appName = 'Sinstock';
-    const otpauthUrl = authenticator.keyuri(email, appName, secret);
+    const secret = speakeasy.generateSecret({
+      name: `Sinstock (${email})`,
+    });
 
-    // Salva o segredo no banco via UsersService
-    await this.usersService.setTwoFactorSecret(userId, secret);
+    if (!secret.otpauth_url) {
+      throw new BadRequestException('Não foi possível gerar a URL para o QR Code.');
+    }
 
-    const qrCodeDataUrl = await qrcode.toDataURL(otpauthUrl);
+    await this.usersService.setTwoFactorSecret(userId, secret.base32);
+
+    const qrCodeDataUrl = await qrcode.toDataURL(secret.otpauth_url);
 
     return {
-      secret,
+      secret: secret.base32,
       qrCodeDataUrl,
     };
   }
 
-  // 2. Verificar código TOTP de 6 dígitos
   verifyTwoFactorCode(code: string, secret: string): boolean {
-    return authenticator.verify({
-      token: code,
+    return speakeasy.totp.verify({
       secret: secret,
+      encoding: 'base32',
+      token: code,
+      window: 1,
     });
   }
 
-  // 3. Ativar 2FA na conta
   async enableTwoFactor(userId: number, code: string) {
     const user = await this.usersService.findById(userId);
 

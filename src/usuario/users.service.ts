@@ -80,7 +80,6 @@ export class UsersService {
         id: true,
         nome: true,
         email: true,
-        senha_hash: true,
         perfil_id: true,
         telefone: true,
         ativo: true,
@@ -123,9 +122,6 @@ export class UsersService {
     });
   }
 
-  // Métodos auxiliares para gerenciar o 2FA no banco
-
-  // Métodos auxiliares para gerenciar o 2FA no banco de dados
 
 async setTwoFactorSecret(id: number, secret: string) {
   return this.prisma.usuarios.update({
