@@ -1,46 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException, BadRequestException, ConflictException,} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { Prisma } from '../../generated/prisma';
 
 @Injectable()
 export class ProdutosService {
   constructor(private readonly prisma: PrismaService) {}
 
   async criar(dto: CreateProdutoDto) {
-    return this.prisma.produtos.create({
-      data: {
-        categoria_id: dto.categoria_id,
-        nome: dto.nome,
-        marca: dto.marca,
-        codigo_barras: dto.codigo_barras,
-        estoque_minimo: dto.estoque_minimo,
-        preco_venda: dto.preco_venda,
-        custo_medio: dto.custo_medio,
-      },
-    });
+    try {
+      return await this.prisma.produtos.create({
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2003') {
+          throw new BadRequestException('A categoria informada não existe.');
+        }
+        if (error.code === 'P2002') {
+          throw new ConflictException('Já existe um produto cadastrado com este código de barras.');
+        }
+      }
+      throw error;
+    }
   }
 
   async listar() {
-    return this.prisma.produtos.findMany();
+    return this.prisma.produtos.findMany({
+      include: {
+        categorias: true,
+      },
+      orderBy: { id: 'desc' },
+    });
   }
 
   async buscarPorId(id: number) {
-    return this.prisma.produtos.findUnique({
-      where: {id},
+    const produto = await this.prisma.produtos.findUnique({
+      where: { id },
+      include: {
+        categorias: true,
+      },
     });
+
+    if (!produto) {
+      throw new NotFoundException(`Produto com ID ${id} não encontrado.`);
+    }
+
+    return produto;
   }
 
   async atualizar(id: number, dto: UpdateProdutoDto) {
-    return this.prisma.produtos.update({
-      where: {id},
-      data: dto,
-    });
+    await this.buscarPorId(id);
+
+    try {
+      return await this.prisma.produtos.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2003') {
+          throw new BadRequestException('A categoria informada não existe.');
+        }
+        if (error.code === 'P2002') {
+          throw new ConflictException('Já existe um produto cadastrado com este código de barras.');
+        }
+      }
+      throw error;
+    }
   }
 
   async remover(id: number) {
-    return this.prisma.produtos.delete({
-      where: {id},
-    });
+    await this.buscarPorId(id);
+
+    try {
+      return await this.prisma.produtos.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+        throw new BadRequestException(
+          'Não é possível excluir este produto pois existem registros ou movimentações vinculadas a ele.',
+        );
+      }
+      throw error;
+    }
   }
 }
