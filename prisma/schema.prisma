@@ -209,7 +209,6 @@ model perfis {
   usuarios   usuarios[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model saldos_estoque {
   id            Int       @id @default(autoincrement())
   filial_id     Int
@@ -236,7 +235,6 @@ model usuarios {
   token_2fa             String?                 @db.VarChar(100)
   token_expiracao       DateTime?               @db.DateTime(0)
   
-  // Campos do 2FA (TOTP)
   twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
   isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
 
