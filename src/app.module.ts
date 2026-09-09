@@ -1,19 +1,35 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { PerfisModule } from './perfis/perfis.module';
+import { FiliaisModule } from './filiais/filiais.module';
+import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProdutosModule } from './produtos/produtos.module';
+import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
 import { UsersModule } from './usuario/users.module';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     PrismaModule,
-    UsersModule,
     AuthModule,
-    PerfisModule,
+    UsersModule,
     ProdutosModule,
-    CategoriasModule,
+    FiliaisModule,
+    SaldosEstoqueModule,
+    MovimentacoesModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}
