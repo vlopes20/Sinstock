@@ -85,9 +85,6 @@ export class UsersService {
         ativo: true,
         criado_em: true,
         atualizado_em: true,
-        token_2fa: true,
-        token_expiracao: true,
-        twoFactorSecret: true,
         isTwoFactorEnable: true,
         perfis: true,
       },
@@ -139,5 +136,25 @@ async enableTwoFactor(id: number) {
       isTwoFactorEnable: true 
     },
   });
+}
+
+async findByIdWithSecrets(id: number) {
+  const user = await this.prisma.usuarios.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      nome: true,
+      email: true,
+      perfil_id: true,
+      twoFactorSecret: true,
+      isTwoFactorEnable: true,
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+  }
+
+  return user;
 }
 }

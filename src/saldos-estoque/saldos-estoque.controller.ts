@@ -15,14 +15,10 @@ export class SaldosEstoqueController {
   @ApiOperation({ summary: 'Lista os saldos de estoque com paginação e filtros' })
   findAll(
     @Query() paginationDto: PaginationDto,
-    @Query('filial_id') filialId?: string,
-    @Query('produto_id') produtoId?: string,
+    @Query('filial_id', new ParseIntPipe({ optional: true })) filialId?: number,
+    @Query('produto_id', new ParseIntPipe({ optional: true })) produtoId?: number,
   ) {
-    return this.saldosEstoqueService.findAll(
-      paginationDto,
-      filialId ? parseInt(filialId, 10) : undefined,
-      produtoId ? parseInt(produtoId, 10) : undefined,
-    );
+    return this.saldosEstoqueService.findAll(paginationDto, filialId, produtoId);
   }
 
   @Get(':id')
@@ -30,4 +26,6 @@ export class SaldosEstoqueController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.saldosEstoqueService.findOne(id);
   }
+
+  
 }

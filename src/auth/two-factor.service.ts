@@ -36,20 +36,20 @@ export class TwoFactorService {
   }
 
   async enableTwoFactor(userId: number, code: string) {
-    const user = await this.usersService.findById(userId);
+  const user = await this.usersService.findByIdWithSecrets(userId);
 
-    if (!user || !user.twoFactorSecret) {
-      throw new BadRequestException('Segredo 2FA não gerado para este usuário.');
-    }
-
-    const isValid = this.verifyTwoFactorCode(code, user.twoFactorSecret);
-
-    if (!isValid) {
-      throw new BadRequestException('Código 2FA inválido ou expirado.');
-    }
-
-    await this.usersService.enableTwoFactor(userId);
-
-    return { message: 'Autenticação de Dois Fatores ativada com sucesso!' };
+  if (!user || !user.twoFactorSecret) {
+    throw new BadRequestException('Segredo 2FA não gerado para este usuário.');
   }
+
+  const isValid = this.verifyTwoFactorCode(code, user.twoFactorSecret);
+
+  if (!isValid) {
+    throw new BadRequestException('Código 2FA inválido ou expirado.');
+  }
+
+  await this.usersService.enableTwoFactor(userId);
+
+  return { message: 'Autenticação de Dois Fatores ativada com sucesso!' };
+}
 }
