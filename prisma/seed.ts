@@ -5,11 +5,9 @@ import mysql from 'mysql2/promise';
 async function main() {
   console.log('Iniciando a execução do seed no banco de dados...');
 
-  // Conecta ao banco diretamente via mysql2 usando a URL do .env
   const connection = await mysql.createConnection(process.env.DATABASE_URL!);
 
   try {
-    // 1. Inserir ou atualizar Perfis
     const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
     const permissoesOperador = JSON.stringify({ operacoes: true });
 
@@ -27,7 +25,6 @@ async function main() {
       [permissoesOperador, permissoesOperador],
     );
 
-    // 2. Criar ou atualizar Usuário Administrador
     const senhaHash = await bcrypt.hash('123456', 10);
 
     await connection.execute(

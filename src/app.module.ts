@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
 import { UsersModule } from './usuario/users.module';
+import { RelatoriosModule } from './relatorios/relatorios.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UsersModule } from './usuario/users.module';
     FiliaisModule,
     SaldosEstoqueModule,
     MovimentacoesModule,
+    RelatoriosModule
   ],
   providers: [
     {

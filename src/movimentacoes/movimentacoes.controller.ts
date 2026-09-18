@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateMovimentacaoDto } from './dto/create-movimentacao.dto';
+import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
 import { MovimentacoesService } from './movimentacoes.service';
 import { Request } from 'express';
 
@@ -21,5 +22,12 @@ export class MovimentacoesController {
     const usuarioId = req.user.userId;
     
     return this.movimentacoesService.registrarMovimentacao(dto, usuarioId);
+  }
+
+  @Post('transferencia')
+  transferir(@Body() dto: CreateTransferenciaDto, @Req() req: RequestWithUser) {
+    const usuarioId = req.user.userId;
+
+    return this.movimentacoesService.transferirSaldo(dto, usuarioId);
   }
 }
