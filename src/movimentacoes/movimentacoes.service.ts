@@ -28,7 +28,10 @@ export class MovimentacoesService {
         if (saldoRegistro) {
           await tx.saldos_estoque.update({
             where: { id: saldoRegistro.id },
-            data: { quantidade: saldoAtualNovo },
+            data: { 
+              quantidade: saldoAtualNovo,
+              atualizado_em: new Date(), 
+             },
           });
         } else {
           await tx.saldos_estoque.create({
@@ -53,7 +56,10 @@ export class MovimentacoesService {
 
         await tx.saldos_estoque.update({
           where: { id: saldoRegistro.id },
-          data: { quantidade: saldoAtualNovo },
+          data: { 
+            quantidade: saldoAtualNovo,
+            atualizado_em: new Date(),
+           },
         });
       }
 
