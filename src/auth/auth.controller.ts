@@ -1,8 +1,9 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { PreAuthGuard } from './guards/pre-auth.guard';
 import { TwoFactorService } from './two-factor.service';
-import { Request as ExpressRequest } from 'express';
 
 interface RequestWithUser extends ExpressRequest {
   user: {
@@ -23,7 +24,6 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
- 
   @UseGuards(JwtAuthGuard)
   @Post('2fa/generate')
   async generate2FA(@Request() req: RequestWithUser) {
@@ -35,14 +35,20 @@ export class AuthController {
 
   @Post('2fa/enable')
   @UseGuards(JwtAuthGuard)
-  async enable2FA(@Request() req: RequestWithUser, @Body('codigo') codigo: string) {
+  async enable2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
     const usuarioId = req.user.userId;
     return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
   }
 
   @Post('2fa/authenticate')
-  @UseGuards(JwtAuthGuard)
-  async authenticate2FA(@Request() req: RequestWithUser, @Body('codigo') codigo: string) {
+  @UseGuards(PreAuthGuard)
+  async authenticate2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
     const usuarioId = req.user.userId;
     return this.authService.authenticateTwoFactor(usuarioId, codigo);
   }
