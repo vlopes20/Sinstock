@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
-import mysql from 'mysql2/promise';
+import * as mysql from 'mysql2/promise';
 
 async function main() {
   console.log('Iniciando a execução do seed no banco de dados...');
