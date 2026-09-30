@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PreAuthGuard } from './guards/pre-auth.guard';
 import { TwoFactorService } from './two-factor.service';
+import { LoginDto } from './dto/login.dto';
 
 interface RequestWithUser extends ExpressRequest {
   user: {
@@ -20,7 +21,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  async login(@Body() loginDto: any) {
+  async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
