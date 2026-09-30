@@ -1,30 +1,26 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AlertasService } from './alertas.service';
+import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
 
 @Controller('alertas')
 export class AlertasController {
   constructor(private readonly alertasService: AlertasService) {}
 
   @Get()
-  obterDashboard(
-    @Query('filial_id') filialId?: string,
-    @Query('dias_vencimento') diasVencimento?: string,
-  ) {
-    const filial = filialId ? parseInt(filialId, 10) : undefined;
-    const dias = diasVencimento ? parseInt(diasVencimento, 10) : 30;
-
-    return this.alertasService.obterDashboardAlertas(filial, dias);
+  obterDashboard(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.obterDashboardAlertas(query);
   }
 
   @Get('estoque-baixo')
-  obterEstoqueBaixo(@Query('filial_id') filialId?: string) {
-    const filial = filialId ? parseInt(filialId, 10) : undefined;
-    return this.alertasService.verificarEstoqueMinimo(filial);
+  obterEstoqueBaixo(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.verificarEstoqueMinimo(query.filial_id);
   }
 
   @Get('vencimentos')
-  obterVencimentos(@Query('dias') dias?: string) {
-    const diasAviso = dias ? parseInt(dias, 10) : 30;
-    return this.alertasService.verificarLotesVencimento(diasAviso);
+  obterVencimentos(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.verificarLotesVencimento(
+      query.dias_vencimento,
+      query.filial_id,
+    );
   }
 }

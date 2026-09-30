@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
 
 @Injectable()
 export class AlertasService {
@@ -28,7 +29,7 @@ export class AlertasService {
       }));
   }
 
-  async verificarLotesVencimento(diasAviso = 30) {
+  async verificarLotesVencimento(diasAviso = 30, filialId?: number) {
     const dataLimite = new Date();
     dataLimite.setDate(dataLimite.getDate() + diasAviso);
 
@@ -37,6 +38,7 @@ export class AlertasService {
         data_validade: {
           lte: dataLimite,
         },
+        ...(filialId ? { filial_id: filialId } : {}),
       },
       include: {
         produtos: true,
@@ -63,15 +65,25 @@ export class AlertasService {
     });
   }
 
-  async obterDashboardAlertas(filialId?: number, diasVencimento = 30) {
-    const estoqueBaixo = await this.verificarEstoqueMinimo(filialId);
-    const lotesVencendo = await this.verificarLotesVencimento(diasVencimento);
+  async obterDashboardAlertas(dto?: ConsultaAlertasDto) {
+    const filialId = dto?.filial_id;
+    const diasVencimento = dto?.dias_vencimento ?? 30;
+
+    // Executa as duas consultas em paralelo para melhor performance
+    const [estoqueBaixo, lotesVencendo] = await Promise.all([
+      this.verificarEstoqueMinimo(filialId),
+      this.verificarLotesVencimento(diasVencimento, filialId),
+    ]);
 
     return {
       resumo: {
         total_alertas: estoqueBaixo.length + lotesVencendo.length,
         total_estoque_baixo: estoqueBaixo.length,
         total_lotes_vencendo: lotesVencendo.length,
+        parametros_aplicados: {
+          filial_id: filialId ?? 'todas',
+          dias_vencimento: diasVencimento,
+        },
       },
       alertas: {
         estoque_baixo: estoqueBaixo,
