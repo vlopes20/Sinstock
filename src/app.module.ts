@@ -11,6 +11,7 @@ import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
 import { NotasFiscaisEntradaModule } from './notas-fiscais-entrada/notas-fiscais-entrada.module';
 import { NotificacoesModule } from './notificacoes/notificacoes.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { PedidosModule } from './pedidos/pedidos.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
 import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
@@ -38,6 +39,7 @@ import { UsersModule } from './usuario/users.module';
     SaldosEstoqueModule,
     MovimentacoesModule,
     RelatoriosModule,
+    PedidosModule
   ],
   providers: [
     {
