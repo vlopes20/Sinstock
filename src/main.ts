@@ -3,22 +3,34 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { PrismaExceptionFilter } from 'src/common/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
 
+  // Validação Global dos DTOs com conversão implícita
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+
+  // Tratamento Global de Exceções do Prisma
+  app.useGlobalFilters(new PrismaExceptionFilter());
+
+  // Configuração da Documentação Swagger
   const config = new DocumentBuilder()
     .setTitle('Sinstock API')
-    .setDescription('API REST para Gestão de Estoque, Filiais e Autenticação com 2FA')
+    .setDescription(
+      'API REST para Gestão de Estoque, Filiais e Autenticação com 2FA',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -38,6 +50,8 @@ async function bootstrap() {
 
   await app.listen(3000);
   console.log('🚀 Aplicação rodando em: http://localhost:3000');
-  console.log('📚 Documentação Swagger disponível em: http://localhost:3000/api');
+  console.log(
+    '📖 Documentação Swagger disponível em: http://localhost:3000/api',
+  );
 }
 bootstrap();
