@@ -13,22 +13,28 @@ export class RelatoriosService {
     if (filtros.filial_id) where.filial_id = filtros.filial_id;
     if (filtros.produto_id) where.produto_id = filtros.produto_id;
     if (filtros.data_inicio || filtros.data_fim) {
-      where.data_hora = {};
-      if (filtros.data_inicio) where.data_hora.gte = filtros.data_inicio;
-      if (filtros.data_fim) where.data_hora.lte = filtros.data_fim;
-    }
+  where.data_hora = {};
 
+  if (filtros.data_inicio) {
+    where.data_hora.gte = filtros.data_inicio;
+  }
 
-    const movimentacoes = await this.prisma.logs_movimentacoes.findMany({
-      where,
-      include: {
-        produtos: { select: { nome: true } },
-        filiais: { select: { nome: true } },
-        usuarios: { select: { nome: true } },
-      },
-      orderBy: { data_hora: 'desc' },
-    });
+  if (filtros.data_fim) {
+    const dataFim = new Date(filtros.data_fim);
+    dataFim.setUTCHours(23, 59, 59, 999);
+    where.data_hora.lte = dataFim;
+  }
+}
 
+const movimentacoes = await this.prisma.logs_movimentacoes.findMany({
+  where,
+  include: {
+  produtos: { select: { nome: true } },
+    filiais: { select: { nome: true } },
+    usuarios: { select: { nome: true } },
+  },
+  orderBy: { data_hora: 'desc' },
+});
 
     return new Promise((resolve, reject) => {
       try {

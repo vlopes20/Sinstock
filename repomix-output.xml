@@ -1,0 +1,5113 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+prisma/
+  migrations/
+    20260903185211_init/
+      migration.sql
+    20260904190336_add_two_factor/
+      migration.sql
+    migration_lock.toml
+  schema.prisma
+  seed.ts
+src/
+  alertas/
+    dto/
+      consulta-alertas.dto.ts
+    alertas.controller.ts
+    alertas.module.ts
+    alertas.service.ts
+  auth/
+    decorators/
+      current-user.decorator.ts
+      roles.decorator.ts
+    dto/
+      login.dto.ts
+    guards/
+      jwt-auth.guard.ts
+      pre-auth.guard.ts
+      roles.guard.ts
+    strategies/
+      jwt.strategy.ts
+      pre-auth.strategy.ts
+    auth.controller.ts
+    auth.module.ts
+    auth.service.ts
+    two-factor.service.ts
+  busca-global/
+    dto/
+      busca-global.dto.ts
+    busca-global.controller.ts
+    busca-global.module.ts
+    busca-global.service.ts
+  categorias/
+    dto/
+      create-categoria.dto.ts
+      update-categoria.dto.ts
+    categorias.controller.ts
+    categorias.module.ts
+    categorias.service.ts
+  common/
+    dto/
+      paginacao-filtro.dto.ts
+    filters/
+      prisma-exception.filter.ts
+  filiais/
+    dto/
+      create-filial.dto.ts
+    filiais.controller.ts
+    filiais.module.ts
+    filiais.service.ts
+  fornecedores/
+    dto/
+      create-fornecedor.dto.ts
+      update-fornecedor.dto.ts
+    fornecedores.controller.ts
+    fornecedores.module.ts
+    fornecedores.service.ts
+  movimentacoes/
+    dto/
+      create-movimentacao.dto.ts
+      create-transferencia.dto.ts
+    movimentacoes.controller.ts
+    movimentacoes.module.ts
+    movimentacoes.service.ts
+  notas-fiscais-entrada/
+    dto/
+      ajuste-lote.dto.ts
+      create-item-entrada.dto.ts
+      create-nota-fiscal-entrada.dto.ts
+      estorno-nota-fiscal.dto.ts
+    notas-fiscais-entrada.controller.ts
+    notas-fiscais-entrada.module.ts
+    notas-fiscais-entrada.service.ts
+  notificacoes/
+    notificacoes.controller.ts
+    notificacoes.module.ts
+    notificacoes.service.ts
+  pedidos/
+    dto/
+      create-checkout.dto.ts
+    pedidos.controller.ts
+    pedidos.module.ts
+    pedidos.service.ts
+  perfis/
+    dto/
+      create-perfil.dto.ts
+    perfis.controller.ts
+    perfis.module.ts
+    perfis.service.ts
+  prisma/
+    prisma.module.ts
+    prisma.service.ts
+  produtos/
+    dto/
+      busca-codigo-barras.dto.ts
+      create-produto.dto.ts
+      filtro-produtos.dto.ts
+      update-produto.dto.ts
+    produtos.controller.ts
+    produtos.module.ts
+    produtos.service.ts
+  relatorios/
+    dto/
+      relatorio-movimentacoes.dto.ts
+    relatorios.controller.ts
+    relatorios.module.ts
+    relatorios.service.ts
+  saldos-estoque/
+    dto/
+      saldos-estoque-filter.dto.ts
+    saldos-estoque.controller.ts
+    saldos-estoque.module.ts
+    saldos-estoque.service.ts
+  usuario/
+    dto/
+      create-user.dto.ts
+    users.controller.ts
+    users.module.ts
+    users.service.ts
+  app.module.ts
+  main.ts
+.env.example
+.gitattributes
+.gitignore
+.prettierrc
+eslint.config.mjs
+nest-cli.json
+package.json
+prisma.config.ts
+README.md
+skills-lock.json
+tsconfig.build.json
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="prisma/migrations/20260903185211_init/migration.sql">
+-- CreateTable
+CREATE TABLE `categorias` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(100) NOT NULL,
+    `descricao` TEXT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `nome`(`nome`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `fornecedores` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome_juridico` VARCHAR(150) NOT NULL,
+    `cnpj` VARCHAR(20) NOT NULL,
+    `telefone` VARCHAR(20) NULL,
+    `email` VARCHAR(100) NULL,
+    `cep` VARCHAR(10) NULL,
+    `cidade` VARCHAR(100) NULL,
+    `estado` CHAR(2) NULL,
+    `endereco` VARCHAR(255) NULL,
+    `latitude` DECIMAL(10, 8) NULL,
+    `longitude` DECIMAL(11, 8) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `cnpj`(`cnpj`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `produtos` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `categoria_id` INTEGER NOT NULL,
+    `nome` VARCHAR(150) NOT NULL,
+    `marca` VARCHAR(100) NULL,
+    `codigo_barras` VARCHAR(100) NULL,
+    `estoque_minimo` DECIMAL(10, 3) NULL DEFAULT 0.000,
+    `preco_venda` DECIMAL(10, 2) NOT NULL,
+    `custo_medio` DECIMAL(10, 2) NULL DEFAULT 0.00,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `codigo_barras`(`codigo_barras`),
+    INDEX `fk_produtos_categoria`(`categoria_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `chamados_suporte` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `usuario_id` INTEGER NOT NULL,
+    `assunto` VARCHAR(150) NOT NULL,
+    `descricao` TEXT NOT NULL,
+    `status` ENUM('ABERTO', 'EM_ANDAMENTO', 'RESOLVIDO', 'FECHADO') NULL DEFAULT 'ABERTO',
+    `data_abertura` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `data_fechamento` TIMESTAMP(0) NULL,
+
+    INDEX `fk_chamados_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `clientes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(150) NOT NULL,
+    `cpf_cnpj` VARCHAR(20) NULL,
+    `telefone` VARCHAR(20) NULL,
+    `email` VARCHAR(100) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `faq` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `pergunta` VARCHAR(255) NOT NULL,
+    `resposta` TEXT NOT NULL,
+    `ordem` INTEGER NULL DEFAULT 0,
+    `ativo` BOOLEAN NULL DEFAULT true,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `filiais` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(100) NOT NULL,
+    `endereco` VARCHAR(255) NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `itens_entrada` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nota_fiscal_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `custo_unitario` DECIMAL(10, 2) NOT NULL,
+
+    INDEX `fk_itens_entrada_lote`(`lote_id`),
+    INDEX `fk_itens_entrada_nf`(`nota_fiscal_id`),
+    INDEX `fk_itens_entrada_produto`(`produto_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `itens_venda` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `pedido_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `preco_unitario` DECIMAL(10, 2) NOT NULL,
+
+    INDEX `fk_itens_venda_lote`(`lote_id`),
+    INDEX `fk_itens_venda_pedido`(`pedido_id`),
+    INDEX `fk_itens_venda_produto`(`produto_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `logs_movimentacoes` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `produto_id` INTEGER NOT NULL,
+    `filial_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `usuario_id` INTEGER NOT NULL,
+    `tipo_movimentacao` ENUM('ENTRADA', 'SAIDA', 'TRANSFERENCIA', 'AJUSTE') NOT NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `saldo_anterior` DECIMAL(10, 3) NOT NULL,
+    `saldo_atual` DECIMAL(10, 3) NOT NULL,
+    `origem_id` INTEGER NULL,
+    `data_hora` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `fk_logs_filial`(`filial_id`),
+    INDEX `fk_logs_lote`(`lote_id`),
+    INDEX `fk_logs_produto`(`produto_id`),
+    INDEX `fk_logs_usuario`(`usuario_id`),
+    INDEX `idx_logs_data`(`data_hora`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `lotes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `produto_id` INTEGER NOT NULL,
+    `numero_lote` VARCHAR(50) NOT NULL,
+    `data_fabricacao` DATE NULL,
+    `data_validade` DATE NOT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `uk_lotes_produto_numero`(`produto_id`, `numero_lote`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `notas_fiscais_entrada` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fornecedor_id` INTEGER NOT NULL,
+    `usuario_id` INTEGER NOT NULL,
+    `numero_nf` VARCHAR(50) NOT NULL,
+    `data_emissao` DATE NOT NULL,
+    `data_recebimento` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `total` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('PENDENTE', 'RECEBIDA', 'CANCELADA') NULL DEFAULT 'RECEBIDA',
+
+    INDEX `fk_nf_fornecedor`(`fornecedor_id`),
+    INDEX `fk_nf_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `pedidos_venda` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `usuario_id` INTEGER NOT NULL,
+    `cliente_id` INTEGER NULL,
+    `filial_id` INTEGER NOT NULL,
+    `data_venda` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `total` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('ORCAMENTO', 'CONCLUIDO', 'CANCELADO') NULL DEFAULT 'CONCLUIDO',
+
+    INDEX `fk_pedidos_cliente`(`cliente_id`),
+    INDEX `fk_pedidos_filial`(`filial_id`),
+    INDEX `fk_pedidos_usuario`(`usuario_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `perfis` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nome` VARCHAR(50) NOT NULL,
+    `permissoes` JSON NOT NULL,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `nome`(`nome`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `saldos_estoque` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `filial_id` INTEGER NOT NULL,
+    `produto_id` INTEGER NOT NULL,
+    `lote_id` INTEGER NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL DEFAULT 0.000,
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `fk_saldos_lote`(`lote_id`),
+    INDEX `fk_saldos_produto`(`produto_id`),
+    UNIQUE INDEX `uk_saldos_filial_produto_lote`(`filial_id`, `produto_id`, `lote_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `usuarios` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `perfil_id` INTEGER NOT NULL,
+    `nome` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `telefone` VARCHAR(20) NULL,
+    `senha_hash` VARCHAR(255) NOT NULL,
+    `token_2fa` VARCHAR(100) NULL,
+    `token_expiracao` DATETIME(0) NULL,
+    `ativo` BOOLEAN NULL DEFAULT true,
+    `criado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `atualizado_em` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `email`(`email`),
+    INDEX `fk_usuarios_perfil`(`perfil_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `produtos` ADD CONSTRAINT `fk_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `chamados_suporte` ADD CONSTRAINT `fk_chamados_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_nf` FOREIGN KEY (`nota_fiscal_id`) REFERENCES `notas_fiscais_entrada`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_entrada` ADD CONSTRAINT `fk_itens_entrada_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos_venda`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `itens_venda` ADD CONSTRAINT `fk_itens_venda_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `logs_movimentacoes` ADD CONSTRAINT `fk_logs_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `lotes` ADD CONSTRAINT `fk_lotes_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `notas_fiscais_entrada` ADD CONSTRAINT `fk_nf_fornecedor` FOREIGN KEY (`fornecedor_id`) REFERENCES `fornecedores`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `notas_fiscais_entrada` ADD CONSTRAINT `fk_nf_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_cliente` FOREIGN KEY (`cliente_id`) REFERENCES `clientes`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `pedidos_venda` ADD CONSTRAINT `fk_pedidos_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_filial` FOREIGN KEY (`filial_id`) REFERENCES `filiais`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_lote` FOREIGN KEY (`lote_id`) REFERENCES `lotes`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `saldos_estoque` ADD CONSTRAINT `fk_saldos_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `usuarios` ADD CONSTRAINT `fk_usuarios_perfil` FOREIGN KEY (`perfil_id`) REFERENCES `perfis`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
+</file>
+
+<file path="prisma/migrations/20260904190336_add_two_factor/migration.sql">
+-- AlterTable
+ALTER TABLE `usuarios` ADD COLUMN `is_two_factor_enabled` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `two_factor_secret` VARCHAR(255) NULL;
+</file>
+
+<file path="prisma/migrations/migration_lock.toml">
+# Please do not edit this file manually
+# It should be added in your version-control system (e.g., Git)
+provider = "mysql"
+</file>
+
+<file path="src/alertas/dto/consulta-alertas.dto.ts">
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, Max, Min } from 'class-validator';
+
+export class ConsultaAlertasDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O ID da filial deve ser um número inteiro.' })
+  @Min(1, { message: 'O ID da filial deve ser maior que zero.' })
+  filial_id?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'Os dias de vencimento devem ser um número inteiro.' })
+  @Min(1, { message: 'O parâmetro de dias para vencimento deve ser de pelo menos 1 dia.' })
+  @Max(365, { message: 'O parâmetro de dias para vencimento não pode exceder 365 dias.' })
+  dias_vencimento?: number = 30; // Valor padrão de 30 dias se omitido
+}
+</file>
+
+<file path="src/alertas/alertas.module.ts">
+import { Module } from '@nestjs/common';
+import { AlertasController } from './alertas.controller';
+import { AlertasService } from './alertas.service';
+
+@Module({
+  controllers: [AlertasController],
+  providers: [AlertasService],
+  exports: [AlertasService],
+})
+export class AlertasModule {}
+</file>
+
+<file path="src/auth/decorators/roles.decorator.ts">
+import { SetMetadata } from '@nestjs/common';
+
+export const ROLES_KEY = 'roles';
+export const Roles = (...roles: number[]) => SetMetadata(ROLES_KEY, roles);
+</file>
+
+<file path="src/auth/guards/jwt-auth.guard.ts">
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
+</file>
+
+<file path="src/auth/guards/pre-auth.guard.ts">
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class PreAuthGuard extends AuthGuard('jwt-pre-auth') {}
+</file>
+
+<file path="src/auth/guards/roles.guard.ts">
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<number[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    // Se a rota não definir NENHUMA role específica, permite o acesso
+    if (!requiredRoles) {
+      return true;
+    }
+
+    const { user } = context.switchToHttp().getRequest();
+
+    if (!user || !user.perfil_id) {
+      throw new ForbiddenException('Perfil do usuário não identificado.');
+    }
+
+    const temPermissao = requiredRoles.includes(user.perfil_id);
+
+    if (!temPermissao) {
+      throw new ForbiddenException('Acesso negado: seu perfil não possui permissão para este recurso.');
+    }
+
+    return true;
+  }
+}
+</file>
+
+<file path="src/auth/strategies/pre-auth.strategy.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+@Injectable()
+export class PreAuthStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-pre-auth',
+) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey:
+        process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+    });
+  }
+
+  async validate(payload: any) {
+    if (payload.isPreAuth !== true) {
+      throw new UnauthorizedException('Token de pré-autenticação inválido.',
+);
+    }
+
+    return {
+      userId: payload.sub,
+      isPreAuth: true,
+    };
+  }
+}
+</file>
+
+<file path="src/busca-global/dto/busca-global.dto.ts">
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Max, Min, MinLength } from 'class-validator';
+
+export class BuscaGlobalDto {
+  @IsString({ message: 'O termo de busca deve ser um texto.' })
+  @MinLength(2, { message: 'O termo de busca deve ter pelo menos 2 caracteres.' })
+  termo: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O ID da filial deve ser um número inteiro.' })
+  @Min(1, { message: 'O ID da filial deve ser maior que zero.' })
+  filial_id?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O limite deve ser um número inteiro.' })
+  @Min(1)
+  @Max(50)
+  limite?: number = 10;
+}
+</file>
+
+<file path="src/busca-global/busca-global.controller.ts">
+import { Controller, Get, Query } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { BuscaGlobalService } from './busca-global.service';
+import { BuscaGlobalDto } from './dto/busca-global.dto';
+
+@ApiTags('Busca Global')
+@Controller('busca-global')
+export class BuscaGlobalController {
+  constructor(private readonly buscaGlobalService: BuscaGlobalService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Realiza pesquisa multi-critério centralizada no sistema' })
+  buscar(@Query() query: BuscaGlobalDto) {
+    return this.buscaGlobalService.buscar(query);
+  }
+}
+</file>
+
+<file path="src/busca-global/busca-global.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { BuscaGlobalController } from './busca-global.controller';
+import { BuscaGlobalService } from './busca-global.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [BuscaGlobalController],
+  providers: [BuscaGlobalService],
+})
+export class BuscaGlobalModule {}
+</file>
+
+<file path="src/busca-global/busca-global.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { BuscaGlobalDto } from './dto/busca-global.dto';
+
+@Injectable()
+export class BuscaGlobalService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async buscar(dto: BuscaGlobalDto) {
+    const { termo, filial_id, limite = 10 } = dto;
+
+    const [produtos, fornecedores, lotes, notasFiscais] = await Promise.all([
+      // 1. Busca em Produtos (por nome ou código de barras)
+      this.prisma.produtos.findMany({
+        where: {
+          OR: [
+            { nome: { contains: termo } },
+            { codigo_barras: { contains: termo } },
+          ],
+        },
+        take: limite,
+      }),
+
+      // 2. Busca em Fornecedores (por nome_juridico ou cnpj)
+      this.prisma.fornecedores.findMany({
+        where: {
+          OR: [
+            { nome_juridico: { contains: termo } },
+            { cnpj: { contains: termo } },
+          ],
+        },
+        take: limite,
+      }),
+
+      // 3. Busca em Lotes (por numero_lote e relacionamento com saldos_estoque)
+      this.prisma.lotes.findMany({
+        where: {
+          numero_lote: { contains: termo },
+          ...(filial_id ? { saldos_estoque: { some: { filial_id } } } : {}),
+        },
+        include: {
+          produtos: { select: { nome: true } },
+          saldos_estoque: true,
+        },
+        take: limite,
+      }),
+
+      // 4. Busca em Notas Fiscais de Entrada (por numero_nf)
+      this.prisma.notas_fiscais_entrada.findMany({
+        where: {
+          numero_nf: { contains: termo },
+        },
+        include: {
+          fornecedores: { select: { nome_juridico: true } },
+        },
+        take: limite,
+      }),
+    ]);
+
+    const totalResultados =
+      produtos.length +
+      fornecedores.length +
+      lotes.length +
+      notasFiscais.length;
+
+    return {
+      termo_pesquisado: termo,
+      filtros: {
+        filial_id: filial_id ?? 'todas',
+        limite_por_categoria: limite,
+      },
+      total_resultados: totalResultados,
+      resultados: {
+        produtos: produtos.map((p) => ({
+          id: p.id,
+          nome: p.nome,
+          codigo_barras: p.codigo_barras,
+          estoque_minimo: p.estoque_minimo,
+        })),
+        fornecedores: fornecedores.map((f) => ({
+          id: f.id,
+          nome_juridico: f.nome_juridico,
+          cnpj: f.cnpj,
+          email: f.email,
+          telefone: f.telefone,
+        })),
+        lotes: lotes.map((l) => {
+          const quantidadeTotal = l.saldos_estoque.reduce(
+            (acc, saldo) => acc + Number(saldo.quantidade ?? 0),
+            0,
+          );
+
+          return {
+            id: l.id,
+            numero_lote: l.numero_lote,
+            produto_nome: l.produtos?.nome,
+            quantidade_total: quantidadeTotal,
+            data_validade: l.data_validade,
+          };
+        }),
+        notas_fiscais: notasFiscais.map((nf) => ({
+          id: nf.id,
+          numero_nf: nf.numero_nf,
+          fornecedor_nome: nf.fornecedores?.nome_juridico,
+          total: nf.total,
+          status: nf.status,
+          data_emissao: nf.data_emissao,
+        })),
+      },
+    };
+  }
+}
+</file>
+
+<file path="src/categorias/dto/create-categoria.dto.ts">
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+
+export class CreateCategoriaDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  nome!: string;
+
+  @IsString()
+  @IsOptional()
+  descricao?: string;
+}
+</file>
+
+<file path="src/categorias/dto/update-categoria.dto.ts">
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateCategoriaDto } from './create-categoria.dto';
+
+export class UpdateCategoriaDto extends PartialType(CreateCategoriaDto) {}
+</file>
+
+<file path="src/categorias/categorias.controller.ts">
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { CategoriasService } from './categorias.service';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
+
+@Controller('categorias')
+export class CategoriasController {
+  constructor(private readonly categoriasService: CategoriasService) {}
+
+  @Post()
+  criar(@Body() dto: CreateCategoriaDto) {
+    return this.categoriasService.criar(dto);
+  }
+
+  @Get()
+  listar() {
+    return this.categoriasService.listar();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriasService.buscarPorId(id);
+  }
+}
+</file>
+
+<file path="src/categorias/categorias.module.ts">
+import { Module } from '@nestjs/common';
+import { CategoriasController } from './categorias.controller';
+import { CategoriasService } from './categorias.service';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [CategoriasController],
+  providers: [CategoriasService],
+  exports: [CategoriasService],
+})
+export class CategoriasModule {}
+</file>
+
+<file path="src/common/dto/paginacao-filtro.dto.ts">
+import { Type } from 'class-transformer';
+import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+
+export class PaginacaoFiltroDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'A página deve ser um número inteiro.' })
+  @Min(1, { message: 'A página mínima é 1.' })
+  pagina?: number = 1;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O limite deve ser um número inteiro.' })
+  @Min(1, { message: 'O limite mínimo por página é 1.' })
+  @Max(100, { message: 'O limite máximo por página é 100.' })
+  limite?: number = 10;
+
+  @IsOptional()
+  @IsString()
+  busca?: string;
+
+  @IsOptional()
+  @IsString()
+  ordenar_por?: string = 'criado_em';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc'], { message: 'A ordem deve ser "asc" ou "desc".' })
+  ordem?: 'asc' | 'desc' = 'desc';
+}
+</file>
+
+<file path="src/common/filters/prisma-exception.filter.ts">
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpStatus,
+} from '@nestjs/common';
+import { Response } from 'express';
+import { Prisma } from 'generated/prisma';
+
+@Catch(Prisma.PrismaClientKnownRequestError)
+export class PrismaExceptionFilter implements ExceptionFilter {
+  catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Erro de banco de dados não tratado.';
+
+    switch (exception.code) {
+      case 'P2002': {
+        status = HttpStatus.CONFLICT;
+        const campos = Array.isArray(exception.meta?.target)
+          ? (exception.meta?.target as string[]).join(', ')
+          : 'campo único';
+        message = `Conflito: Já existe um registro com o mesmo valor para: ${campos}.`;
+        break;
+      }
+
+      case 'P2025': {
+        status = HttpStatus.NOT_FOUND;
+        message = 'O registro solicitado não foi encontrado no banco de dados.';
+        break;
+      }
+
+      case 'P2003': {
+        status = HttpStatus.BAD_REQUEST;
+        message =
+          'Operação inválida: violação de chave estrangeira ou vinculo com outros registros.';
+        break;
+      }
+
+      default:
+        message = `Erro de banco de dados (${exception.code}).`;
+        break;
+    }
+
+    response.status(status).json({
+      statusCode: status,
+      message,
+      codigo_erro: exception.code,
+      timestamp: new Date().toISOString(),
+    });
+  }
+}
+</file>
+
+<file path="src/filiais/dto/create-filial.dto.ts">
+import { IsOptional, IsString, Length } from 'class-validator';
+
+export class CreateFilialDto {
+  @IsString()
+  @Length(2, 100)
+  nome: string;
+
+  @IsOptional()
+  @IsString()
+  endereco?: string;
+}
+</file>
+
+<file path="src/filiais/filiais.controller.ts">
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreateFilialDto } from './dto/create-filial.dto';
+import { FiliaisService } from './filiais.service';
+
+@UseGuards(JwtAuthGuard)
+@Controller('filiais')
+export class FiliaisController {
+  constructor(private readonly filiaisService: FiliaisService) {}
+
+  @Post()
+  create(@Body() dto: CreateFilialDto) {
+    return this.filiaisService.create(dto);
+  }
+
+  @Get()
+  findAll() {
+    return this.filiaisService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.filiaisService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: Partial<CreateFilialDto>,
+  ) {
+    return this.filiaisService.update(id, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.filiaisService.remove(id);
+  }
+}
+</file>
+
+<file path="src/filiais/filiais.module.ts">
+import { Module } from '@nestjs/common';
+import { FiliaisService } from './filiais.service';
+import { FiliaisController } from './filiais.controller';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [FiliaisController],
+  providers: [FiliaisService],
+  exports: [FiliaisService],
+})
+export class FiliaisModule {}
+</file>
+
+<file path="src/filiais/filiais.service.ts">
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateFilialDto } from './dto/create-filial.dto';
+
+@Injectable()
+export class FiliaisService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(dto: CreateFilialDto) {
+    try {
+      return await this.prisma.filiais.create({ data: dto });
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao criar filial.');
+    }
+  }
+
+  async findAll() {
+    return this.prisma.filiais.findMany({
+      select: {
+        id: true,
+        nome: true,
+        endereco: true,
+        criado_em: true,
+        _count: { select: { saldos_estoque: true } },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    const filial = await this.prisma.filiais.findUnique({
+      where: { id },
+      include: { 
+        saldos_estoque: {
+          include: {
+            produtos: { select: { nome: true } }
+          }
+        } 
+      },
+    });
+
+    if (!filial) {
+      throw new NotFoundException(`Filial com ID ${id} não encontrada.`);
+    }
+
+    return filial;
+  }
+
+  async update(id: number, dto: Partial<CreateFilialDto>) {
+    try {
+      return await this.prisma.filiais.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException(`Filial com ID ${id} não encontrada.`);
+      }
+      throw new InternalServerErrorException('Erro ao atualizar filial.');
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      return await this.prisma.filiais.delete({ where: { id } });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException(`Filial com ID ${id} não encontrada.`);
+      }
+      throw new InternalServerErrorException('Erro ao excluir filial. Verifique se não há estoques vinculados a ela.');
+    }
+  }
+}
+</file>
+
+<file path="src/fornecedores/dto/create-fornecedor.dto.ts">
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+
+export class CreateFornecedorDto {
+  @IsString()
+  @IsNotEmpty()
+  nome_juridico!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  cnpj!: string;
+
+  @IsString()
+  @IsOptional()
+  telefone?: string;
+
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  cep?: string;
+
+  @IsString()
+  @IsOptional()
+  cidade?: string;
+
+  @IsString()
+  @IsOptional()
+  estado?: string;
+
+  @IsString()
+  @IsOptional()
+  endereco?: string;
+
+  @IsNumber()
+  @IsOptional()
+  latitude?: number;
+
+  @IsNumber()
+  @IsOptional()
+  longitude?: number;
+}
+</file>
+
+<file path="src/fornecedores/dto/update-fornecedor.dto.ts">
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateFornecedorDto } from './create-fornecedor.dto';
+
+export class UpdateFornecedorDto extends PartialType(CreateFornecedorDto) {}
+</file>
+
+<file path="src/fornecedores/fornecedores.controller.ts">
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
+import { FornecedoresService } from './fornecedores.service';
+
+@Controller('fornecedores')
+export class FornecedoresController {
+  constructor(private readonly fornecedoresService: FornecedoresService) {}
+
+  @Post()
+  criar(@Body() dto: CreateFornecedorDto) {
+    return this.fornecedoresService.criar(dto);
+  }
+
+  @Get()
+  listar() {
+    return this.fornecedoresService.listar();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.fornecedoresService.buscarPorId(id);
+  }
+
+  @Patch(':id')
+  atualizar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateFornecedorDto,
+  ) {
+    return this.fornecedoresService.atualizar(id, dto);
+  }
+
+  @Delete(':id')
+  remover(@Param('id', ParseIntPipe) id: number) {
+    return this.fornecedoresService.remover(id);
+  }
+}
+</file>
+
+<file path="src/fornecedores/fornecedores.module.ts">
+import { Module } from '@nestjs/common';
+import { FornecedoresController } from './fornecedores.controller';
+import { FornecedoresService } from './fornecedores.service';
+
+@Module({
+  controllers: [FornecedoresController],
+  providers: [FornecedoresService],
+  exports: [FornecedoresService],
+})
+export class FornecedoresModule {}
+</file>
+
+<file path="src/fornecedores/fornecedores.service.ts">
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
+
+@Injectable()
+export class FornecedoresService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async criar(dto: CreateFornecedorDto) {
+    const existeCnpj = await this.prisma.fornecedores.findUnique({
+      where: { cnpj: dto.cnpj },
+    });
+
+    if (existeCnpj) {
+      throw new ConflictException(`O CNPJ ${dto.cnpj} já está cadastrado.`);
+    }
+
+    return this.prisma.fornecedores.create({
+      data: dto,
+    });
+  }
+
+  async listar() {
+    return this.prisma.fornecedores.findMany({
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async buscarPorId(id: number) {
+    const fornecedor = await this.prisma.fornecedores.findUnique({
+      where: { id },
+    });
+
+    if (!fornecedor) {
+      throw new NotFoundException(`Fornecedor com ID ${id} não encontrado.`);
+    }
+
+    return fornecedor;
+  }
+
+  async atualizar(id: number, dto: UpdateFornecedorDto) {
+    await this.buscarPorId(id);
+
+    if (dto.cnpj) {
+      const existeCnpj = await this.prisma.fornecedores.findUnique({
+        where: { cnpj: dto.cnpj },
+      });
+
+      if (existeCnpj && existeCnpj.id !== id) {
+        throw new ConflictException(`O CNPJ ${dto.cnpj} já pertence a outro fornecedor.`);
+      }
+    }
+
+    return this.prisma.fornecedores.update({
+      where: { id },
+      data: dto,
+    });
+  }
+
+  async remover(id: number) {
+    await this.buscarPorId(id);
+
+    return this.prisma.fornecedores.delete({
+      where: { id },
+    });
+  }
+}
+</file>
+
+<file path="src/movimentacoes/movimentacoes.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { MovimentacoesController } from './movimentacoes.controller';
+import { MovimentacoesService } from './movimentacoes.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [MovimentacoesController],
+  providers: [MovimentacoesService],
+})
+export class MovimentacoesModule {}
+</file>
+
+<file path="src/notas-fiscais-entrada/dto/ajuste-lote.dto.ts">
+import { IsDateString, IsNumber, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+
+export class AjusteLoteDto {
+  @IsString()
+  @IsOptional()
+  numero_lote?: string;
+
+  @IsDateString()
+  @IsOptional()
+  data_fabricacao?: string;
+
+  @IsDateString()
+  @IsOptional()
+  data_validade?: string;
+
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  quantidade?: number;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  custo_unitario?: number;
+}
+</file>
+
+<file path="src/notas-fiscais-entrada/dto/create-item-entrada.dto.ts">
+import { Type } from 'class-transformer';
+import {
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+
+export class CreateLoteDto {
+  @IsString()
+  @IsNotEmpty()
+  numero_lote!: string;
+
+  @IsDateString()
+  @IsOptional()
+  data_fabricacao?: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  data_validade!: string;
+}
+
+export class CreateItemEntradaDto {
+  @IsInt()
+  @IsNotEmpty()
+  produto_id!: number;
+
+  @IsNumber()
+  @IsPositive()
+  quantidade!: number;
+
+  @IsNumber()
+  @Min(0)
+  custo_unitario!: number;
+
+  @IsInt()
+  @IsOptional()
+  lote_id?: number;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateLoteDto)
+  lote?: CreateLoteDto;
+}
+</file>
+
+<file path="src/notas-fiscais-entrada/dto/create-nota-fiscal-entrada.dto.ts">
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+
+export class CreateLoteDto {
+  @IsString()
+  @IsNotEmpty()
+  numero_lote!: string;
+
+  @IsDateString()
+  @IsOptional()
+  data_fabricacao?: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  data_validade!: string;
+}
+
+export class CreateItemEntradaDto {
+  @IsNumber()
+  @IsNotEmpty()
+  produto_id!: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  quantidade!: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  custo_unitario!: number;
+
+  @IsNumber()
+  @IsOptional()
+  lote_id?: number;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateLoteDto)
+  lote?: CreateLoteDto;
+}
+
+export class CreateNotaFiscalEntradaDto {
+  @IsNumber()
+  @IsNotEmpty()
+  fornecedor_id!: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  usuario_id!: number;
+
+  @IsNumber()
+  @IsOptional()
+  filial_id?: number;
+
+  @IsString()
+  @IsNotEmpty()
+  numero_nf!: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  data_emissao!: string;
+
+  @IsDateString()
+  @IsOptional()
+  data_recebimento?: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  total!: number;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateItemEntradaDto)
+  itens!: CreateItemEntradaDto[];
+}
+</file>
+
+<file path="src/notas-fiscais-entrada/dto/estorno-nota-fiscal.dto.ts">
+import { IsNotEmpty, IsString } from 'class-validator';
+
+export class EstornoNotaFiscalDto {
+  @IsString()
+  @IsNotEmpty()
+  motivo!: string;
+}
+</file>
+
+<file path="src/notas-fiscais-entrada/notas-fiscais-entrada.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { AjusteLoteDto } from './dto/ajuste-lote.dto';
+import { CreateNotaFiscalEntradaDto } from './dto/create-nota-fiscal-entrada.dto';
+import { EstornoNotaFiscalDto } from './dto/estorno-nota-fiscal.dto';
+import { NotasFiscaisEntradaService } from './notas-fiscais-entrada.service';
+
+@Controller('notas-fiscais-entrada')
+export class NotasFiscaisEntradaController {
+  constructor(private readonly service: NotasFiscaisEntradaService) {}
+
+  @Post()
+  criar(@Body() dto: CreateNotaFiscalEntradaDto) {
+    return this.service.criar(dto);
+  }
+
+  @Get()
+  listar() {
+    return this.service.listar();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.service.buscarPorId(id);
+  }
+
+  @Patch(':id/estorno')
+  estornar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: EstornoNotaFiscalDto,
+  ) {
+    return this.service.estornar(id, dto);
+  }
+
+  @Patch('lotes/:loteId')
+  ajustarLote(
+    @Param('loteId', ParseIntPipe) loteId: number,
+    @Body() dto: AjusteLoteDto,
+  ) {
+    return this.service.ajustarLote(loteId, dto);
+  }
+}
+</file>
+
+<file path="src/notas-fiscais-entrada/notas-fiscais-entrada.module.ts">
+import { Module } from '@nestjs/common';
+import { NotasFiscaisEntradaController } from './notas-fiscais-entrada.controller';
+import { NotasFiscaisEntradaService } from './notas-fiscais-entrada.service';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [NotasFiscaisEntradaController],
+  providers: [NotasFiscaisEntradaService],
+})
+export class NotasFiscaisEntradaModule {}
+</file>
+
+<file path="src/notas-fiscais-entrada/notas-fiscais-entrada.service.ts">
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { AjusteLoteDto } from './dto/ajuste-lote.dto';
+import { CreateNotaFiscalEntradaDto } from './dto/create-nota-fiscal-entrada.dto';
+import { EstornoNotaFiscalDto } from './dto/estorno-nota-fiscal.dto';
+
+@Injectable()
+export class NotasFiscaisEntradaService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async criar(dto: CreateNotaFiscalEntradaDto) {
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Validar Fornecedor
+      const fornecedor = await tx.fornecedores.findUnique({
+        where: { id: dto.fornecedor_id },
+      });
+      if (!fornecedor) {
+        throw new NotFoundException(
+          `Fornecedor ID ${dto.fornecedor_id} não encontrado.`,
+        );
+      }
+
+      // 2. Validar Usuário
+      const usuario = await tx.usuarios.findUnique({
+        where: { id: dto.usuario_id },
+      });
+      if (!usuario) {
+        throw new NotFoundException(
+          `Usuário ID ${dto.usuario_id} não encontrado.`,
+        );
+      }
+
+      // 3. Criar Nota Fiscal de Entrada
+      const notaFiscal = await tx.notas_fiscais_entrada.create({
+        data: {
+          fornecedor_id: dto.fornecedor_id,
+          usuario_id: dto.usuario_id,
+          numero_nf: dto.numero_nf,
+          data_emissao: new Date(dto.data_emissao),
+          data_recebimento: dto.data_recebimento
+            ? new Date(dto.data_recebimento)
+            : new Date(),
+          total: dto.total,
+          status: (dto.status ?? 'RECEBIDA') as any,
+        },
+      });
+
+      // 4. Processar os itens, lotes, estoque e logs
+      for (const item of dto.itens) {
+        const produto = await tx.produtos.findUnique({
+          where: { id: item.produto_id },
+        });
+        if (!produto) {
+          throw new NotFoundException(
+            `Produto ID ${item.produto_id} não encontrado.`,
+          );
+        }
+
+        let loteId = item.lote_id;
+
+        if (!loteId && item.lote) {
+          let loteExistente = await tx.lotes.findFirst({
+            where: {
+              produto_id: item.produto_id,
+              numero_lote: item.lote.numero_lote,
+            },
+          });
+
+          if (!loteExistente) {
+            loteExistente = await tx.lotes.create({
+              data: {
+                produto_id: item.produto_id,
+                numero_lote: item.lote.numero_lote,
+                data_fabricacao: item.lote.data_fabricacao
+                  ? new Date(item.lote.data_fabricacao)
+                  : null,
+                data_validade: new Date(item.lote.data_validade),
+              },
+            });
+          }
+
+          loteId = loteExistente.id;
+        }
+
+        // Criar o item da nota fiscal
+        await tx.itens_entrada.create({
+          data: {
+            nota_fiscal_id: notaFiscal.id,
+            produto_id: item.produto_id,
+            lote_id: loteId ?? null,
+            quantidade: item.quantidade,
+            custo_unitario: item.custo_unitario,
+          },
+        });
+
+        // Atualizar saldo de estoque se a NF for RECEBIDA
+        if (notaFiscal.status === 'RECEBIDA') {
+          const filialId = dto.filial_id ?? 1;
+
+          const saldoExistente = await tx.saldos_estoque.findFirst({
+            where: {
+              produto_id: item.produto_id,
+              filial_id: filialId,
+            },
+          });
+
+          if (saldoExistente) {
+            await tx.saldos_estoque.update({
+              where: { id: saldoExistente.id },
+              data: { quantidade: { increment: item.quantidade } },
+            });
+          } else {
+            await tx.saldos_estoque.create({
+              data: {
+                produto_id: item.produto_id,
+                filial_id: filialId,
+                quantidade: item.quantidade,
+              } as any,
+            });
+          }
+
+          // Registrar histórico de movimentação
+          await tx.logs_movimentacoes.create({
+            data: {
+              produto_id: item.produto_id,
+              lote_id: loteId ?? null,
+              usuario_id: dto.usuario_id,
+              tipo: 'ENTRADA' as any,
+              quantidade: item.quantidade,
+              descricao: `Entrada via NF ${dto.numero_nf}`,
+            } as any,
+          });
+        }
+      }
+
+      return tx.notas_fiscais_entrada.findUnique({
+        where: { id: notaFiscal.id },
+        include: {
+          fornecedores: true,
+          usuarios: { select: { id: true, nome: true, email: true } },
+          itens_entrada: {
+            include: {
+              produtos: true,
+              lotes: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  async listar() {
+    return this.prisma.notas_fiscais_entrada.findMany({
+      include: {
+        fornecedores: true,
+        usuarios: { select: { id: true, nome: true, email: true } },
+        itens_entrada: {
+          include: {
+            produtos: true,
+            lotes: true,
+          },
+        },
+      },
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async buscarPorId(id: number) {
+    const nf = await this.prisma.notas_fiscais_entrada.findUnique({
+      where: { id },
+      include: {
+        fornecedores: true,
+        usuarios: { select: { id: true, nome: true, email: true } },
+        itens_entrada: {
+          include: {
+            produtos: true,
+            lotes: true,
+          },
+        },
+      },
+    });
+
+    if (!nf) {
+      throw new NotFoundException(`Nota Fiscal com ID ${id} não encontrada.`);
+    }
+
+    return nf;
+  }
+
+  async estornar(id: number, dto: EstornoNotaFiscalDto) {
+    return this.prisma.$transaction(async (tx) => {
+      const nf = await tx.notas_fiscais_entrada.findUnique({
+        where: { id },
+        include: { itens_entrada: true },
+      });
+
+      if (!nf) {
+        throw new NotFoundException(`Nota Fiscal com ID ${id} não encontrada.`);
+      }
+
+      if (nf.status === 'CANCELADA') {
+        throw new BadRequestException(
+          `A Nota Fiscal ID ${id} já está cancelada.`,
+        );
+      }
+
+      // Reverter o saldo de estoque e registrar log para cada item
+      if (nf.status === 'RECEBIDA') {
+        for (const item of nf.itens_entrada) {
+          const saldoExistente = await tx.saldos_estoque.findFirst({
+            where: { produto_id: item.produto_id },
+          });
+
+          if (saldoExistente) {
+            await tx.saldos_estoque.update({
+              where: { id: saldoExistente.id },
+              data: { quantidade: { decrement: item.quantidade } },
+            });
+          }
+
+          await tx.logs_movimentacoes.create({
+            data: {
+              produto_id: item.produto_id,
+              lote_id: item.lote_id,
+              usuario_id: nf.usuario_id,
+              tipo: 'SAIDA' as any,
+              quantidade: item.quantidade,
+              descricao: `Estorno de NF ${nf.numero_nf}. Motivo: ${dto.motivo}`,
+            } as any,
+          });
+        }
+      }
+
+      const nfAtualizada = await tx.notas_fiscais_entrada.update({
+        where: { id },
+        data: { status: 'CANCELADA' as any },
+        include: {
+          fornecedores: true,
+          usuarios: { select: { id: true, nome: true, email: true } },
+          itens_entrada: {
+            include: { produtos: true, lotes: true },
+          },
+        },
+      });
+
+      return {
+        mensagem: 'Nota Fiscal estornada e estoque revertido com sucesso.',
+        motivo: dto.motivo,
+        nota_fiscal: nfAtualizada,
+      };
+    });
+  }
+
+  async ajustarLote(loteId: number, dto: AjusteLoteDto) {
+    return this.prisma.$transaction(async (tx) => {
+      const lote = await tx.lotes.findUnique({
+        where: { id: loteId },
+      });
+
+      if (!lote) {
+        throw new NotFoundException(`Lote ID ${loteId} não encontrado.`);
+      }
+
+      const loteAtualizado = await tx.lotes.update({
+        where: { id: loteId },
+        data: {
+          ...(dto.numero_lote && { numero_lote: dto.numero_lote }),
+          ...(dto.data_fabricacao && {
+            data_fabricacao: new Date(dto.data_fabricacao),
+          }),
+          ...(dto.data_validade && {
+            data_validade: new Date(dto.data_validade),
+          }),
+        },
+      });
+
+      if (dto.quantidade !== undefined || dto.custo_unitario !== undefined) {
+        const itemEntrada = await tx.itens_entrada.findFirst({
+          where: { lote_id: loteId },
+        });
+
+        if (itemEntrada) {
+          await tx.itens_entrada.update({
+            where: { id: itemEntrada.id },
+            data: {
+              ...(dto.quantidade !== undefined && {
+                quantidade: dto.quantidade,
+              }),
+              ...(dto.custo_unitario !== undefined && {
+                custo_unitario: dto.custo_unitario,
+              }),
+            },
+          });
+        }
+      }
+
+      return {
+        mensagem: 'Lote e item de entrada ajustados com sucesso.',
+        lote: loteAtualizado,
+      };
+    });
+  }
+}
+</file>
+
+<file path="src/notificacoes/notificacoes.controller.ts">
+import { Controller, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { NotificacoesService } from './notificacoes.service';
+
+@Controller('notificacoes')
+export class NotificacoesController {
+  constructor(private readonly service: NotificacoesService) {}
+
+  @Get()
+  listar(@Query('lida') lida?: string) {
+    const statusLida = lida !== undefined ? lida === 'true' : undefined;
+    return this.service.listarNotificacoes(statusLida);
+  }
+
+  @Patch(':id/ler')
+  marcarComoLida(@Param('id', ParseIntPipe) id: number) {
+    return this.service.marcarComoLida(id);
+  }
+
+  // Endpoint para disparar a varredura manualmente via Postman sem esperar o Cron
+  @Post('executar-varredura')
+  executarVarredura() {
+    return this.service.dispararNotificacoesDiarias();
+  }
+}
+</file>
+
+<file path="src/notificacoes/notificacoes.module.ts">
+import { Module } from '@nestjs/common';
+import { AlertasModule } from '../alertas/alertas.module';
+import { PrismaModule } from '../prisma/prisma.module';
+import { NotificacoesController } from './notificacoes.controller';
+import { NotificacoesService } from './notificacoes.service';
+
+@Module({
+  imports: [PrismaModule, AlertasModule],
+  controllers: [NotificacoesController],
+  providers: [NotificacoesService],
+  exports: [NotificacoesService],
+})
+export class NotificacoesModule {}
+</file>
+
+<file path="src/notificacoes/notificacoes.service.ts">
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { AlertasService } from '../alertas/alertas.service';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class NotificacoesService {
+  private readonly logger = new Logger(NotificacoesService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly alertasService: AlertasService,
+  ) {}
+
+  // Executa automaticamente todo dia às 08:00 AM
+  @Cron(CronExpression.EVERY_DAY_AT_8AM)
+  async dispararNotificacoesDiarias() {
+    this.logger.log('Iniciando varredura de alertas para disparo de notificações...');
+
+    const estoqueBaixo = await this.alertasService.verificarEstoqueMinimo();
+    const lotesVencendo = await this.alertasService.verificarLotesVencimento(30);
+
+    // Grava as notificações pendentes na tabela de notificações
+    for (const item of estoqueBaixo) {
+      await this.prisma.notificacoes.create({
+        data: {
+          titulo: 'Alerta de Estoque Baixo',
+          mensagem: `O produto ${item.produto_nome} está com apenas ${item.quantidade_atual} unidades no estoque da filial ${item.filial_id}.`,
+          tipo: 'ESTOQUE_BAIXO',
+          lida: false,
+        } as any,
+      });
+    }
+
+    for (const lote of lotesVencendo) {
+      await this.prisma.notificacoes.create({
+        data: {
+          titulo: 'Alerta de Validade de Lote',
+          mensagem: `O lote ${lote.numero_lote} do produto ${lote.produto_nome} vence em ${lote.dias_para_vencer} dias.`,
+          tipo: 'VENCIMENTO',
+          lida: false,
+        } as any,
+      });
+    }
+
+    this.logger.log(`Notificações geradas com sucesso: ${estoqueBaixo.length + lotesVencendo.length} novos avisos.`);
+  }
+
+  async listarNotificacoes(lida?: boolean) {
+    return this.prisma.notificacoes.findMany({
+      where: lida !== undefined ? { lida } : {},
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async marcarComoLida(id: number) {
+    return this.prisma.notificacoes.update({
+      where: { id },
+      data: { lida: true },
+    });
+  }
+}
+</file>
+
+<file path="src/pedidos/dto/create-checkout.dto.ts">
+import { Type } from 'class-transformer';
+import { IsArray, IsInt, IsNumber, IsOptional, IsPositive, ValidateNested } from 'class-validator';
+
+export class ItemCheckoutDto {
+  @IsInt()
+  produto_id: number;
+
+  @IsOptional()
+  @IsInt()
+  lote_id?: number;
+
+  @IsNumber()
+  @IsPositive()
+  quantidade: number;
+
+  @IsNumber()
+  @IsPositive()
+  preco_unitario: number;
+}
+
+export class CreateCheckoutDto {
+  @IsOptional()
+  @IsInt()
+  cliente_id?: number;
+
+  @IsInt()
+  filial_id: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemCheckoutDto)
+  itens: ItemCheckoutDto[];
+}
+</file>
+
+<file path="src/pedidos/pedidos.controller.ts">
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreateCheckoutDto } from './dto/create-checkout.dto';
+import { PedidosService } from './pedidos.service';
+import { Request } from 'express';
+
+interface RequestWithUser extends Request {
+  user: {
+    userId: number;
+    email: string;
+  };
+}
+
+@UseGuards(JwtAuthGuard)
+@Controller('pedidos')
+export class PedidosController {
+  constructor(private readonly pedidosService: PedidosService) {}
+
+  @Post('checkout')
+  realizarCheckout(@Body() dto: CreateCheckoutDto, @Req() req: RequestWithUser) {
+    const usuarioId = req.user.userId;
+    
+    return this.pedidosService.processarCheckout(dto, usuarioId);
+  }
+}
+</file>
+
+<file path="src/pedidos/pedidos.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PedidosController } from './pedidos.controller';
+import { PedidosService } from './pedidos.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [PedidosController],
+  providers: [PedidosService],
+})
+export class PedidosModule {}
+</file>
+
+<file path="src/pedidos/pedidos.service.ts">
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCheckoutDto } from './dto/create-checkout.dto';
+import { TipoMovimentacao } from '../movimentacoes/dto/create-movimentacao.dto';
+
+@Injectable()
+export class PedidosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async processarCheckout(dto: CreateCheckoutDto, usuarioId: number) {
+    if (!dto.itens || dto.itens.length === 0) {
+      throw new BadRequestException('O carrinho de compras não pode estar vazio.');
+    }
+
+    const totalPedido = dto.itens.reduce(
+      (acc, item) => acc + item.quantidade * item.preco_unitario,
+      0,
+    );
+
+    return await this.prisma.$transaction(async (tx) => {
+      const pedido = await tx.pedidos_venda.create({
+        data: {
+          usuario_id: usuarioId,
+          cliente_id: dto.cliente_id || null,
+          filial_id: dto.filial_id,
+          total: totalPedido,
+          status: 'CONCLUIDO',
+        },
+      });
+
+      for (const item of dto.itens) {
+        const saldoRegistro = await tx.saldos_estoque.findFirst({
+          where: {
+            produto_id: item.produto_id,
+            filial_id: dto.filial_id,
+            lote_id: item.lote_id || null,
+          },
+        });
+
+        const saldoAnterior = saldoRegistro ? Number(saldoRegistro.quantidade) : 0;
+
+        if (!saldoRegistro || saldoAnterior < item.quantidade) {
+          throw new BadRequestException(
+            `Estoque insuficiente para o produto ID ${item.produto_id}. Saldo atual: ${saldoAnterior}, Tentativa de venda: ${item.quantidade}.`
+          );
+        }
+
+        const saldoAtualNovo = saldoAnterior - item.quantidade;
+
+        await tx.saldos_estoque.update({
+          where: { id: saldoRegistro.id },
+          data: {
+            quantidade: saldoAtualNovo,
+            atualizado_em: new Date(),
+          },
+        });
+
+        await tx.itens_venda.create({
+          data: {
+            pedido_id: pedido.id,
+            produto_id: item.produto_id,
+            lote_id: item.lote_id || null,
+            quantidade: item.quantidade,
+            preco_unitario: item.preco_unitario,
+          },
+        });
+
+        await tx.logs_movimentacoes.create({
+          data: {
+            produto_id: item.produto_id,
+            filial_id: dto.filial_id,
+            lote_id: item.lote_id || null,
+            usuario_id: usuarioId,
+            tipo_movimentacao: TipoMovimentacao.SAIDA as any,
+            quantidade: item.quantidade,
+            saldo_anterior: saldoAnterior,
+            saldo_atual: saldoAtualNovo,
+            origem_id: pedido.id,
+          },
+        });
+      }
+
+      return {
+        message: 'Checkout processado com sucesso!',
+        pedido_id: pedido.id,
+        total: totalPedido,
+      };
+    });
+  }
+}
+</file>
+
+<file path="src/perfis/dto/create-perfil.dto.ts">
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+
+export class CreatePerfilDto {
+  @IsString()
+  @IsNotEmpty({ message: 'O nome do perfil é obrigatório' })
+  nome: string;
+
+  @IsObject({ message: 'As permissões devem ser um objeto JSON válido' })
+  @IsNotEmpty({ message: 'As permissões são obrigatórias' })
+  permissoes: Record<string, any>;
+}
+</file>
+
+<file path="src/perfis/perfis.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PerfisController } from './perfis.controller';
+import { PerfisService } from './perfis.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [PerfisController],
+  providers: [PerfisService],
+  exports: [PerfisService],
+})
+export class PerfisModule {}
+</file>
+
+<file path="src/produtos/dto/busca-codigo-barras.dto.ts">
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, Min } from 'class-validator';
+
+export class BuscaCodigoBarrasDto {
+  @ApiPropertyOptional({ description: 'ID da filial para filtrar o saldo disponível' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  filial_id?: number;
+}
+</file>
+
+<file path="src/produtos/dto/filtro-produtos.dto.ts">
+import { Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional, Min } from 'class-validator';
+import { PaginacaoFiltroDto } from '../../common/dto/paginacao-filtro.dto';
+
+export class FiltroProdutosDto extends PaginacaoFiltroDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  categoria_id?: number;
+
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  apenas_estoque_baixo?: boolean;
+
+  @IsOptional()
+  data_inicio?: string;
+
+  @IsOptional()
+  data_fim?: string;
+}
+</file>
+
+<file path="src/produtos/dto/update-produto.dto.ts">
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateProdutoDto } from './create-produto.dto';
+
+export class UpdateProdutoDto extends PartialType(CreateProdutoDto) {}
+</file>
+
+<file path="src/relatorios/dto/relatorio-movimentacoes.dto.ts">
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsDate, IsInt, IsOptional } from 'class-validator';
+
+export class RelatorioMovimentacoesDto {
+  @ApiPropertyOptional({ description: 'Data de início (YYYY-MM-DD)' })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  data_inicio?: Date;
+
+  @ApiPropertyOptional({ description: 'Data de fim (YYYY-MM-DD)' })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  data_fim?: Date;
+
+  @ApiPropertyOptional({ description: 'Filtrar por filial' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  filial_id?: number;
+
+  @ApiPropertyOptional({ description: 'Filtrar por produto' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  produto_id?: number;
+}
+</file>
+
+<file path="src/relatorios/relatorios.controller.ts">
+import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
+import { RelatoriosService } from './relatorios.service';
+
+@ApiTags('Relatórios')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('relatorios')
+export class RelatoriosController {
+  constructor(private readonly relatoriosService: RelatoriosService) {}
+
+  @Get('movimentacoes/pdf')
+  @ApiOperation({ summary: 'Gera PDF do extrato de movimentações' })
+  async baixarRelatorioMovimentacoes(
+    @Query() filtros: RelatorioMovimentacoesDto,
+    @Res() res: Response,
+  ) {
+
+    const pdfBuffer = await this.relatoriosService.gerarPdfMovimentacoes(filtros);
+
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="relatorio-auditoria-sinstock.pdf"',
+      'Content-Length': pdfBuffer.length,
+    });
+
+
+    res.end(pdfBuffer);
+  }
+}
+</file>
+
+<file path="src/relatorios/relatorios.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { RelatoriosController } from './relatorios.controller';
+import { RelatoriosService } from './relatorios.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [RelatoriosController],
+  providers: [RelatoriosService],
+})
+export class RelatoriosModule {}
+</file>
+
+<file path="src/relatorios/relatorios.service.ts">
+import { Injectable } from '@nestjs/common';
+import PdfDocument from 'pdfkit-table';
+import { PrismaService } from '../prisma/prisma.service';
+import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
+
+@Injectable()
+export class RelatoriosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async gerarPdfMovimentacoes(filtros: RelatorioMovimentacoesDto): Promise<Buffer> {
+
+    const where: any = {};
+    if (filtros.filial_id) where.filial_id = filtros.filial_id;
+    if (filtros.produto_id) where.produto_id = filtros.produto_id;
+    if (filtros.data_inicio || filtros.data_fim) {
+      where.data_hora = {};
+      if (filtros.data_inicio) where.data_hora.gte = filtros.data_inicio;
+      if (filtros.data_fim) where.data_hora.lte = filtros.data_fim;
+    }
+
+
+    const movimentacoes = await this.prisma.logs_movimentacoes.findMany({
+      where,
+      include: {
+        produtos: { select: { nome: true } },
+        filiais: { select: { nome: true } },
+        usuarios: { select: { nome: true } },
+      },
+      orderBy: { data_hora: 'desc' },
+    });
+
+
+    return new Promise((resolve, reject) => {
+      try {
+        const doc = new PdfDocument({ margin: 30, size: 'A4' });
+        const buffers: Buffer[] = [];
+
+        doc.on('data', buffers.push.bind(buffers));
+        doc.on('end', () => resolve(Buffer.concat(buffers)));
+
+
+        doc.fontSize(20).text('SINSTOCK - Relatório de Auditoria de Estoque', { align: 'center' });
+        doc.moveDown();
+        doc.fontSize(10).text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, { align: 'right' });
+        doc.moveDown(2);
+
+
+        const table = {
+          title: 'Extrato de Movimentações',
+          headers: ['Data', 'Produto', 'Filial', 'Tipo', 'Qtd', 'Usuário'],
+          rows: movimentacoes.map(mov => [
+            mov.data_hora ? mov.data_hora.toLocaleDateString('pt-BR') : '-',
+            mov.produtos?.nome || 'N/A',
+            mov.filiais?.nome || 'N/A',
+            mov.tipo_movimentacao,
+            Number(mov.quantidade).toString(),
+            mov.usuarios?.nome || 'N/A',
+          ]),
+        };
+
+
+        doc.table(table, { prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10) });
+        doc.end();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+}
+</file>
+
+<file path="src/saldos-estoque/dto/saldos-estoque-filter.dto.ts">
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+
+export class SaldosEstoqueFilterDto extends PaginationDto {
+  @ApiPropertyOptional({ description: 'ID da filial para filtragem' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  filial_id?: number;
+
+  @ApiPropertyOptional({ description: 'ID do produto para filtragem' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  produto_id?: number;
+}
+</file>
+
+<file path="src/saldos-estoque/saldos-estoque.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { SaldosEstoqueController } from './saldos-estoque.controller';
+import { SaldosEstoqueService } from './saldos-estoque.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [SaldosEstoqueController],
+  providers: [SaldosEstoqueService],
+  exports: [SaldosEstoqueService],
+})
+export class SaldosEstoqueModule {}
+</file>
+
+<file path="src/saldos-estoque/saldos-estoque.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class SaldosEstoqueService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findAll(paginationDto: PaginationDto, filialId?: number, produtoId?: number) {
+    const { page = 1, limit = 10 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (filialId) where.filial_id = filialId;
+    if (produtoId) where.produto_id = produtoId;
+
+   
+    const [total, data] = await Promise.all([
+      this.prisma.saldos_estoque.count({ where }),
+      this.prisma.saldos_estoque.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          filiais: { select: { id: true, nome: true } },
+          produtos: { select: { id: true, nome: true } },
+          lotes: true,
+        },
+        orderBy: { atualizado_em: 'desc' },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data,
+      meta: {
+        totalItems: total,
+        itemCount: data.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page,
+      },
+    };
+  }
+
+  async findOne(id: number) {
+    const saldo = await this.prisma.saldos_estoque.findUnique({
+      where: { id },
+      include: {
+        filiais: { select: { id: true, nome: true } },
+        produtos: { select: { id: true, nome: true } },
+        lotes: true,
+      },
+    });
+
+    if (!saldo) {
+      throw new NotFoundException(`Registro de saldo com ID ${id} não encontrado.`);
+    }
+
+    return saldo;
+  }
+}
+</file>
+
+<file path=".gitattributes">
+# Auto detect text files and perform LF normalization
+* text=auto
+</file>
+
+<file path=".gitignore">
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# temp directory
+.temp
+.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
+</file>
+
+<file path=".prettierrc">
+{
+  "singleQuote": true,
+  "trailingComma": "all"
+}
+</file>
+
+<file path="eslint.config.mjs">
+// @ts-check
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['eslint.config.mjs'],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  eslintPluginPrettierRecommended,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+      sourceType: 'commonjs',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
+    },
+  },
+);
+</file>
+
+<file path="skills-lock.json">
+{
+  "version": 1,
+  "skills": {
+    "prisma-cli": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-cli/SKILL.md",
+      "computedHash": "b92e55aef78f6796d81433c44738a6733211a04c16e65cbad6d42c5f71092aab"
+    },
+    "prisma-client-api": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-client-api/SKILL.md",
+      "computedHash": "5dcc0793337151efa73a444e5adbc7e1c24180778e83b4fe94c9109c391bd333"
+    },
+    "prisma-compute": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-compute/SKILL.md",
+      "computedHash": "fbbdcf3e01ed876113d18804d38d17359d9f7ba7a4bd353193673d5924f19818"
+    },
+    "prisma-database-setup": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-database-setup/SKILL.md",
+      "computedHash": "0911d9454bd48df3badd23a50fd90a280eabb15dcbd472c14e7b729075dadefb"
+    },
+    "prisma-driver-adapter-implementation": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-driver-adapter-implementation/SKILL.md",
+      "computedHash": "07484627aea6cce4d0f94b4090ff9acc0caa7e104f9988b95abecf80132f4103"
+    },
+    "prisma-mongodb-upgrade": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-mongodb-upgrade/SKILL.md",
+      "computedHash": "f9ba440e88ca4cec9801d04762296e29e99ca08cb8a8156e4f783ecf90279c8f"
+    },
+    "prisma-postgres": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-postgres/SKILL.md",
+      "computedHash": "d669fbd0d8017d16c967f18b20e1c1345cd4a2a0076d762459bfef79f551f655"
+    },
+    "prisma-postgres-setup": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-postgres-setup/SKILL.md",
+      "computedHash": "c89d3aa91285d8e4964fcaa5238c99a3d3c20b617e032e731cf632330a85a5a6"
+    },
+    "prisma-upgrade-v7": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "skillPath": "prisma-upgrade-v7/SKILL.md",
+      "computedHash": "dcc6c71adca6b22f37c5bda5ac7fd63c3bb59495596a22e06a29c7c85371558f"
+    }
+  }
+}
+</file>
+
+<file path="tsconfig.build.json">
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}
+</file>
+
+<file path="src/alertas/alertas.controller.ts">
+import { Controller, Get, Query } from '@nestjs/common';
+import { AlertasService } from './alertas.service';
+import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
+
+@Controller('alertas')
+export class AlertasController {
+  constructor(private readonly alertasService: AlertasService) {}
+
+  @Get()
+  obterDashboard(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.obterDashboardAlertas(query);
+  }
+
+  @Get('estoque-baixo')
+  obterEstoqueBaixo(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.verificarEstoqueMinimo(query.filial_id);
+  }
+
+  @Get('vencimentos')
+  obterVencimentos(@Query() query: ConsultaAlertasDto) {
+    return this.alertasService.verificarLotesVencimento(
+      query.dias_vencimento,
+      query.filial_id,
+    );
+  }
+}
+</file>
+
+<file path="src/alertas/alertas.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
+
+@Injectable()
+export class AlertasService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async verificarEstoqueMinimo(filialId?: number) {
+    const saldos = await this.prisma.saldos_estoque.findMany({
+      where: filialId ? { filial_id: filialId } : {},
+      include: {
+        produtos: true,
+      },
+    });
+
+    return saldos
+      .filter((saldo) => {
+        const estoqueMinimo = (saldo.produtos as any)?.estoque_minimo ?? 10;
+        return saldo.quantidade <= estoqueMinimo;
+      })
+      .map((saldo) => ({
+        tipo: 'ESTOQUE_BAIXO',
+        produto_id: saldo.produto_id,
+        produto_nome: (saldo.produtos as any)?.nome,
+        filial_id: saldo.filial_id,
+        quantidade_atual: saldo.quantidade,
+        estoque_minimo: (saldo.produtos as any)?.estoque_minimo ?? 10,
+      }));
+  }
+
+  async verificarLotesVencimento(diasAviso = 30, filialId?: number) {
+    const dataLimite = new Date();
+    dataLimite.setDate(dataLimite.getDate() + diasAviso);
+
+    const lotes = await this.prisma.lotes.findMany({
+      where: {
+        data_validade: {
+          lte: dataLimite,
+        },
+        ...(filialId ? { filial_id: filialId } : {}),
+      },
+      include: {
+        produtos: true,
+      },
+      orderBy: { data_validade: 'asc' },
+    });
+
+    return lotes.map((lote) => {
+      const hoje = new Date();
+      const validade = new Date(lote.data_validade);
+      const diffDias = Math.ceil(
+        (validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24),
+      );
+
+      return {
+        tipo: diffDias < 0 ? 'LOTE_VENCIDO' : 'LOTE_PROXIMO_VENCIMENTO',
+        lote_id: lote.id,
+        numero_lote: lote.numero_lote,
+        produto_id: lote.produto_id,
+        produto_nome: (lote.produtos as any)?.nome,
+        data_validade: lote.data_validade,
+        dias_para_vencer: diffDias,
+      };
+    });
+  }
+
+  async obterDashboardAlertas(dto?: ConsultaAlertasDto) {
+    const filialId = dto?.filial_id;
+    const diasVencimento = dto?.dias_vencimento ?? 30;
+
+    // Executa as duas consultas em paralelo para melhor performance
+    const [estoqueBaixo, lotesVencendo] = await Promise.all([
+      this.verificarEstoqueMinimo(filialId),
+      this.verificarLotesVencimento(diasVencimento, filialId),
+    ]);
+
+    return {
+      resumo: {
+        total_alertas: estoqueBaixo.length + lotesVencendo.length,
+        total_estoque_baixo: estoqueBaixo.length,
+        total_lotes_vencendo: lotesVencendo.length,
+        parametros_aplicados: {
+          filial_id: filialId ?? 'todas',
+          dias_vencimento: diasVencimento,
+        },
+      },
+      alertas: {
+        estoque_baixo: estoqueBaixo,
+        lotes_vencendo: lotesVencendo,
+      },
+    };
+  }
+}
+</file>
+
+<file path="src/auth/decorators/current-user.decorator.ts">
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const CurrentUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+</file>
+
+<file path="src/auth/dto/login.dto.ts">
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
+export class LoginDto {
+  @IsEmail({}, { message: 'Informe um e-mail válido' })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'A senha é obrigatória' })
+  senha: string;
+}
+</file>
+
+<file path="src/categorias/categorias.service.ts">
+import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
+import { UpdateCategoriaDto } from './dto/update-categoria.dto';
+import { Prisma } from '../../generated/prisma';
+
+@Injectable()
+export class CategoriasService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async criar(dto: CreateCategoriaDto) {
+    try {
+      return await this.prisma.categorias.create({
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('Já existe uma categoria com este nome.');
+      }
+      throw error;
+    }
+  }
+
+  async listar() {
+    return this.prisma.categorias.findMany({
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async buscarPorId(id: number) {
+    const categoria = await this.prisma.categorias.findUnique({
+      where: { id },
+    });
+
+    if (!categoria) {
+      throw new NotFoundException(`Categoria com ID ${id} não encontrada.`);
+    }
+
+    return categoria;
+  }
+
+  async atualizar(id: number, dto: UpdateCategoriaDto) {
+    await this.buscarPorId(id); 
+
+    try {
+      return await this.prisma.categorias.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('Já existe uma categoria cadastrada com este nome.');
+      }
+      throw error;
+    }
+  }
+
+  async remover(id: number) {
+    await this.buscarPorId(id); 
+
+    try {
+      return await this.prisma.categorias.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+        throw new BadRequestException('Não é possível excluir esta categoria pois existem produtos vinculados a ela.');
+      }
+      throw error;
+    }
+  }
+}
+</file>
+
+<file path="src/movimentacoes/dto/create-movimentacao.dto.ts">
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
+
+export enum TipoMovimentacao {
+  ENTRADA = 'ENTRADA',
+  SAIDA = 'SAIDA',
+  AJUSTE = 'AJUSTE',
+}
+
+export class CreateMovimentacaoDto {
+  @ApiProperty({ description: 'ID do produto' })
+  @IsInt()
+  @Min(1)
+  produto_id: number;
+
+  @ApiProperty({ description: 'ID da filial onde ocorre a movimentação' })
+  @IsInt()
+  @Min(1)
+  filial_id: number;
+
+  @ApiPropertyOptional({ description: 'ID do lote (opcional)' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  lote_id?: number;
+
+  @ApiProperty({ enum: TipoMovimentacao, description: 'Tipo da movimentação' })
+  @IsEnum(TipoMovimentacao)
+  tipo: TipoMovimentacao;
+
+  @ApiProperty({ description: 'Quantidade movimentada' })
+  @IsInt()
+  @Min(1)
+  quantidade: number;
+
+  @ApiPropertyOptional({ description: 'Observação ou justificativa' })
+  @IsOptional()
+  @IsString()
+  observacao?: string;
+}
+</file>
+
+<file path="src/movimentacoes/dto/create-transferencia.dto.ts">
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+
+export class CreateTransferenciaDto {
+  @ApiProperty({ description: 'ID do produto' })
+  @IsInt()
+  @Min(1)
+  produto_id: number;
+
+  @ApiProperty({ description: 'ID da filial de origem' })
+  @IsInt()
+  @Min(1)
+  filial_origem_id: number;
+
+  @ApiProperty({ description: 'ID da filial de destino' })
+  @IsInt()
+  @Min(1)
+  filial_destino_id: number;
+
+  @ApiPropertyOptional({ description: 'ID do lote (opcional)' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  lote_id?: number;
+
+  @ApiProperty({ description: 'Quantidade transferida' })
+  @IsInt()
+  @Min(1)
+  quantidade: number;
+
+  @ApiPropertyOptional({ description: 'Observação ou justificativa' })
+  @IsOptional()
+  @IsString()
+  observacao?: string;
+}
+</file>
+
+<file path="src/perfis/perfis.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreatePerfilDto } from './dto/create-perfil.dto';
+import { PerfisService } from './perfis.service';
+
+@Controller('perfis')
+@UseGuards(JwtAuthGuard)
+export class PerfisController {
+  constructor(private readonly perfisService: PerfisService) {}
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Post()
+  create(@Body() createPerfilDto: CreatePerfilDto) {
+    return this.perfisService.create(createPerfilDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.perfisService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.perfisService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/perfis/perfis.service.ts">
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreatePerfilDto } from './dto/create-perfil.dto';
+
+@Injectable()
+export class PerfisService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createPerfilDto: CreatePerfilDto) {
+    try {
+      return await this.prisma.perfis.create({
+        data: {
+          nome: createPerfilDto.nome,
+          permissoes: createPerfilDto.permissoes,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Já existe um perfil cadastrado com este nome.');
+      }
+      throw new InternalServerErrorException('Erro ao criar o perfil.');
+    }
+  }
+
+  async findAll() {
+    return this.prisma.perfis.findMany({
+      include: {
+        _count: {
+          select: { usuarios: true },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    const perfil = await this.prisma.perfis.findUnique({
+      where: { id },
+      include: {
+        usuarios: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            ativo: true,
+          },
+        },
+      },
+    });
+
+    if (!perfil) {
+      throw new NotFoundException(`Perfil com ID ${id} não encontrado`);
+    }
+
+    return perfil;
+  }
+}
+</file>
+
+<file path="src/prisma/prisma.module.ts">
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+</file>
+
+<file path="src/produtos/dto/create-produto.dto.ts">
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateProdutoDto {
+  @IsInt()
+  @IsNotEmpty()
+  categoria_id!: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(150)
+  nome!: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  marca?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  codigo_barras?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Type(() => Number)
+  estoque_minimo?: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  @Type(() => Number)
+  preco_venda!: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  @Type(() => Number)
+  custo_medio?: number;
+}
+</file>
+
+<file path="src/produtos/produtos.module.ts">
+import { Module } from '@nestjs/common';
+
+import { ProdutosController } from './produtos.controller';
+import { ProdutosService } from './produtos.service';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [ProdutosController],
+  providers: [ProdutosService],
+})
+export class ProdutosModule {}
+</file>
+
+<file path="src/usuario/dto/create-user.dto.ts">
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+
+export class CreateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  nome: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  senha: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  perfil_id: number;
+
+  @IsString()
+  @IsOptional()
+  telefone?: string;
+}
+</file>
+
+<file path="nest-cli.json">
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "include": "../generated/**/*",
+        "outDir": "dist/generated"
+      }
+    ]
+  }
+}
+</file>
+
+<file path="README.md">
+# Backend Sinstock
+
+API do sistema Sinstock, desenvolvida utilizando [NestJS](https://nestjs.com/) e [Prisma ORM](https://www.prisma.io/), com banco de dados MariaDB/MySQL.
+
+## 📋 Pré-requisitos
+
+Certifique-se de ter instalado em sua máquina:
+- [Node.js](https://nodejs.org/en/) (versão 18 ou superior)
+- Banco de dados MariaDB ou MySQL rodando localmente ou em nuvem.
+
+## 🚀 Instalação e Configuração
+
+**1. Instale as dependências do projeto:**
+\`\`\`bash
+npm install
+\`\`\`
+
+**2. Configure as variáveis de ambiente:**
+Crie o arquivo `.env` a partir do arquivo de exemplo. 
+
+No Windows (PowerShell/CMD):
+\`\`\`bash
+copy .env.example .env
+\`\`\`
+No Linux/Mac:
+\`\`\`bash
+cp .env.example .env
+\`\`\`
+> **Nota:** Abra o arquivo `.env` recém-criado e preencha as credenciais corretas de acesso ao seu banco de dados e a sua `JWT_SECRET`.
+
+**3. Configure o Banco de Dados (Prisma):**
+Gere os artefatos do Prisma Client, crie as tabelas no banco e popule com os dados iniciais (Seed):
+\`\`\`bash
+# Gera o Client do Prisma
+npx prisma generate
+
+# Sincroniza o banco de dados com o schema
+npx prisma db push
+
+# Popula o banco com os usuários e perfis iniciais
+npx prisma db seed
+\`\`\`
+
+## 💻 Executando a Aplicação
+
+\`\`\`bash
+# Modo de desenvolvimento (recomendado)
+npm run start:dev
+
+# Modo de produção
+npm run start:prod
+\`\`\`
+A aplicação estará disponível em `http://localhost:3000`.
+
+## 🧪 Testes
+
+\`\`\`bash
+# Testes unitários
+npm run test
+
+# Cobertura de testes
+npm run test:cov
+\`\`\`
+
+## 🛠️ Tecnologias Utilizadas
+
+- **NestJS:** Framework Node.js para construção de APIs eficientes e escaláveis.
+- **Prisma:** ORM moderno para Node.js e TypeScript.
+- **JWT & Passport:** Autenticação e segurança de rotas.
+- **Bcrypt:** Criptografia de senhas.
+- **MariaDB / MySQL:** Banco de dados relacional.
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
+}
+</file>
+
+<file path="src/auth/strategies/jwt.strategy.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey:
+        process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+    });
+  }
+
+  async validate(payload: any) {
+    if (payload.isPreAuth === true) {
+      throw new UnauthorizedException(
+        'Token de pré-autenticação não autorizado para esta rota.',
+      );
+    }
+
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      perfil_id: payload.perfil_id,
+    };
+  }
+}
+</file>
+
+<file path="src/auth/two-factor.service.ts">
+import { BadRequestException, Injectable } from '@nestjs/common';
+import * as qrcode from 'qrcode';
+import * as speakeasy from 'speakeasy';
+import { UsersService } from '../usuario/users.service';
+
+@Injectable()
+export class TwoFactorService {
+  constructor(private readonly usersService: UsersService) {}
+
+  async generateTwoFactorSecret(userId: number, email: string) {
+    const secret = speakeasy.generateSecret({
+      name: `Sinstock (${email})`,
+    });
+
+    if (!secret.otpauth_url) {
+      throw new BadRequestException('Não foi possível gerar a URL para o QR Code.');
+    }
+
+    await this.usersService.setTwoFactorSecret(userId, secret.base32);
+
+    const qrCodeDataUrl = await qrcode.toDataURL(secret.otpauth_url);
+
+    return {
+      secret: secret.base32,
+      qrCodeDataUrl,
+    };
+  }
+
+  verifyTwoFactorCode(code: string, secret: string): boolean {
+    return speakeasy.totp.verify({
+      secret: secret,
+      encoding: 'base32',
+      token: code,
+      window: 1,
+    });
+  }
+
+  async enableTwoFactor(userId: number, code: string) {
+  const user = await this.usersService.findByIdWithSecrets(userId);
+
+  if (!user || !user.twoFactorSecret) {
+    throw new BadRequestException('Segredo 2FA não gerado para este usuário.');
+  }
+
+  const isValid = this.verifyTwoFactorCode(code, user.twoFactorSecret);
+
+  if (!isValid) {
+    throw new BadRequestException('Código 2FA inválido ou expirado.');
+  }
+
+  await this.usersService.enableTwoFactor(userId);
+
+  return { message: 'Autenticação de Dois Fatores ativada com sucesso!' };
+}
+}
+</file>
+
+<file path="src/movimentacoes/movimentacoes.controller.ts">
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { MovimentacoesService } from './movimentacoes.service';
+import { CreateMovimentacaoDto } from './dto/create-movimentacao.dto';
+import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
+
+@ApiTags('Movimentações de Estoque')
+@Controller('movimentacoes')
+export class MovimentacoesController {
+  constructor(private readonly movimentacoesService: MovimentacoesService) {}
+
+  @Post()
+  @ApiOperation({
+    summary: 'Registra movimentação de estoque (ENTRADA, SAIDA ou AJUSTE)',
+  })
+  registrarMovimentacao(@Body() dto: CreateMovimentacaoDto) {
+    // ID do usuário logado (fixado temporariamente em 1 até a integração do JWT)
+    const usuarioId = 1;
+    return this.movimentacoesService.registrarMovimentacao(dto, usuarioId);
+  }
+
+  @Post('transferencia')
+  @ApiOperation({
+    summary: 'Realiza a transferência de estoque entre duas filiais',
+  })
+  transferirSaldo(@Body() dto: CreateTransferenciaDto) {
+    const usuarioId = 1;
+    return this.movimentacoesService.transferirSaldo(dto, usuarioId);
+  }
+
+  @Get('historico')
+  @ApiOperation({
+    summary: 'Lista o histórico de movimentações com filtros opcionais',
+  })
+  @ApiQuery({ name: 'filial_id', required: false, type: Number })
+  @ApiQuery({ name: 'produto_id', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  listarHistorico(
+    @Query('filial_id') filialId?: number,
+    @Query('produto_id') produtoId?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.movimentacoesService.listarHistorico(
+      filialId ? Number(filialId) : undefined,
+      produtoId ? Number(produtoId) : undefined,
+      limit ? Number(limit) : 50,
+    );
+  }
+}
+</file>
+
+<file path="src/saldos-estoque/saldos-estoque.controller.ts">
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SaldosEstoqueFilterDto } from './dto/saldos-estoque-filter.dto';
+import { SaldosEstoqueService } from './saldos-estoque.service';
+
+@ApiTags('Saldos de Estoque')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('saldos-estoque')
+export class SaldosEstoqueController {
+  constructor(private readonly saldosEstoqueService: SaldosEstoqueService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Lista os saldos de estoque com paginação e filtros' })
+  findAll(@Query() filterDto: SaldosEstoqueFilterDto) {
+    const { filial_id, produto_id, ...paginationDto } = filterDto;
+    return this.saldosEstoqueService.findAll(paginationDto, filial_id, produto_id);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Busca o detalhe do saldo de estoque por ID' })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.saldosEstoqueService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/movimentacoes/movimentacoes.service.ts">
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import {
+  CreateMovimentacaoDto,
+  TipoMovimentacao,
+} from './dto/create-movimentacao.dto';
+import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
+
+@Injectable()
+export class MovimentacoesService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async registrarMovimentacao(dto: CreateMovimentacaoDto, usuarioId: number) {
+    return await this.prisma.$transaction(async (tx) => {
+      // 1. Localiza o registro de saldo atual na filial e lote informados
+      const saldoRegistro = await tx.saldos_estoque.findFirst({
+        where: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_id,
+          lote_id: dto.lote_id ?? null,
+        },
+      });
+
+      const saldoAnterior = saldoRegistro
+        ? Number(saldoRegistro.quantidade)
+        : 0;
+      let saldoAtualNovo = 0;
+
+      // ENTRADA
+      if (dto.tipo === TipoMovimentacao.ENTRADA) {
+        saldoAtualNovo = saldoAnterior + dto.quantidade;
+
+        if (saldoRegistro) {
+          await tx.saldos_estoque.update({
+            where: { id: saldoRegistro.id },
+            data: {
+              quantidade: saldoAtualNovo,
+              atualizado_em: new Date(),
+            },
+          });
+        } else {
+          await tx.saldos_estoque.create({
+            data: {
+              produto_id: dto.produto_id,
+              filial_id: dto.filial_id,
+              lote_id: dto.lote_id ?? null,
+              quantidade: saldoAtualNovo,
+            },
+          });
+        }
+      }
+
+      // SAÍDA
+      if (dto.tipo === TipoMovimentacao.SAIDA) {
+        if (!saldoRegistro || saldoAnterior < dto.quantidade) {
+          throw new BadRequestException(
+            `Estoque insuficiente. Saldo atual: ${saldoAnterior}, Tentativa de saída: ${dto.quantidade}.`,
+          );
+        }
+
+        saldoAtualNovo = saldoAnterior - dto.quantidade;
+
+        await tx.saldos_estoque.update({
+          where: { id: saldoRegistro.id },
+          data: {
+            quantidade: saldoAtualNovo,
+            atualizado_em: new Date(),
+          },
+        });
+      }
+
+      // AJUSTE (Inventário/Ajuste manual)
+      if (dto.tipo === TipoMovimentacao.AJUSTE) {
+        saldoAtualNovo = dto.quantidade;
+
+        if (saldoRegistro) {
+          await tx.saldos_estoque.update({
+            where: { id: saldoRegistro.id },
+            data: {
+              quantidade: saldoAtualNovo,
+              atualizado_em: new Date(),
+            },
+          });
+        } else {
+          await tx.saldos_estoque.create({
+            data: {
+              produto_id: dto.produto_id,
+              filial_id: dto.filial_id,
+              lote_id: dto.lote_id ?? null,
+              quantidade: saldoAtualNovo,
+            },
+          });
+        }
+      }
+
+      // 2. Grava o log de movimentação
+      const log = await tx.logs_movimentacoes.create({
+        data: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_id,
+          lote_id: dto.lote_id ?? null,
+          usuario_id: usuarioId,
+          tipo_movimentacao: dto.tipo as any,
+          quantidade: dto.quantidade,
+          saldo_anterior: saldoAnterior,
+          saldo_atual: saldoAtualNovo,
+        },
+      });
+
+      return {
+        message: `Movimentação de ${dto.tipo} registrada com sucesso!`,
+        log: {
+          ...log,
+          id: log.id.toString(),
+          quantidade: Number(log.quantidade),
+          saldo_anterior: Number(log.saldo_anterior),
+          saldo_atual: Number(log.saldo_atual),
+        },
+      };
+    });
+  }
+
+  async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
+    if (dto.filial_origem_id === dto.filial_destino_id) {
+      throw new BadRequestException(
+        'A filial de origem e de destino não podem ser iguais.',
+      );
+    }
+
+    return await this.prisma.$transaction(async (tx) => {
+      // ORIGEM: Verifica e decrementa o saldo
+      const saldoOrigem = await tx.saldos_estoque.findFirst({
+        where: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_origem_id,
+          lote_id: dto.lote_id ?? null,
+        },
+      });
+
+      const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
+
+      if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
+        throw new BadRequestException(
+          `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
+        );
+      }
+
+      const novoSaldoOrigem = qtdOrigemAtual - dto.quantidade;
+      await tx.saldos_estoque.update({
+        where: { id: saldoOrigem.id },
+        data: {
+          quantidade: novoSaldoOrigem,
+          atualizado_em: new Date(),
+        },
+      });
+
+      // DESTINO: Verifica e incrementa o saldo
+      const saldoDestino = await tx.saldos_estoque.findFirst({
+        where: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_destino_id,
+          lote_id: dto.lote_id ?? null,
+        },
+      });
+
+      const qtdDestinoAtual = saldoDestino
+        ? Number(saldoDestino.quantidade)
+        : 0;
+      const novoSaldoDestino = qtdDestinoAtual + dto.quantidade;
+
+      if (saldoDestino) {
+        await tx.saldos_estoque.update({
+          where: { id: saldoDestino.id },
+          data: {
+            quantidade: novoSaldoDestino,
+            atualizado_em: new Date(),
+          },
+        });
+      } else {
+        await tx.saldos_estoque.create({
+          data: {
+            produto_id: dto.produto_id,
+            filial_id: dto.filial_destino_id,
+            lote_id: dto.lote_id ?? null,
+            quantidade: novoSaldoDestino,
+          },
+        });
+      }
+
+      // AUDITORIA: Registra logs de saída e entrada
+      const logSaida = await tx.logs_movimentacoes.create({
+        data: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_origem_id,
+          lote_id: dto.lote_id ?? null,
+          usuario_id: usuarioId,
+          tipo_movimentacao: TipoMovimentacao.SAIDA as any,
+          quantidade: dto.quantidade,
+          saldo_anterior: qtdOrigemAtual,
+          saldo_atual: novoSaldoOrigem,
+          origem_id: dto.filial_destino_id,
+        },
+      });
+
+      const logEntrada = await tx.logs_movimentacoes.create({
+        data: {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_destino_id,
+          lote_id: dto.lote_id ?? null,
+          usuario_id: usuarioId,
+          tipo_movimentacao: TipoMovimentacao.ENTRADA as any,
+          quantidade: dto.quantidade,
+          saldo_anterior: qtdDestinoAtual,
+          saldo_atual: novoSaldoDestino,
+          origem_id: dto.filial_origem_id,
+        },
+      });
+
+      return {
+        message: 'Transferência entre unidades realizada com sucesso!',
+        detalhes: {
+          produto_id: dto.produto_id,
+          quantidade_transferida: dto.quantidade,
+          origem: {
+            filial_id: dto.filial_origem_id,
+            saldo_anterior: qtdOrigemAtual,
+            saldo_atual: novoSaldoOrigem,
+            log_id: logSaida.id.toString(),
+          },
+          destino: {
+            filial_id: dto.filial_destino_id,
+            saldo_anterior: qtdDestinoAtual,
+            saldo_atual: novoSaldoDestino,
+            log_id: logEntrada.id.toString(),
+          },
+        },
+      };
+    });
+  }
+
+  async listarHistorico(filialId?: number, produtoId?: number, limit = 50) {
+    const logs = await this.prisma.logs_movimentacoes.findMany({
+      where: {
+        ...(filialId && { filial_id: filialId }),
+        ...(produtoId && { produto_id: produtoId }),
+      },
+      orderBy: { id: 'desc' },
+      take: limit,
+      include: {
+        produtos: { select: { id: true, nome: true, codigo_barras: true } },
+        usuarios: { select: { id: true, nome: true, email: true } },
+        lotes: { select: { id: true, numero_lote: true } },
+      },
+    });
+
+    return logs.map((log) => ({
+      ...log,
+      id: log.id.toString(),
+      quantidade: Number(log.quantidade),
+      saldo_anterior: Number(log.saldo_anterior),
+      saldo_atual: Number(log.saldo_atual),
+    }));
+  }
+}
+</file>
+
+<file path="src/produtos/produtos.controller.ts">
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ProdutosService } from './produtos.service';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { FiltroProdutosDto } from './dto/filtro-produtos.dto';
+import { BuscaCodigoBarrasDto } from './dto/busca-codigo-barras.dto';
+
+@ApiTags('Produtos')
+@Controller('produtos')
+export class ProdutosController {
+  constructor(private readonly produtosService: ProdutosService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Cadastra um novo produto' })
+  criar(@Body() dto: CreateProdutoDto) {
+    return this.produtosService.criar(dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Listagem de produtos com filtros dinâmicos e paginação' })
+  listar(@Query() query: FiltroProdutosDto) {
+    return this.produtosService.listar(query);
+  }
+
+  @Get('codigo-barras/:codigo')
+  @ApiOperation({ summary: 'Busca expressa de produto por código de barras' })
+  buscarPorCodigoBarras(
+    @Param('codigo') codigo: string,
+    @Query() query: BuscaCodigoBarrasDto,
+  ) {
+    return this.produtosService.buscarPorCodigoBarras(
+      codigo,
+      query.filial_id,
+    );
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Busca um produto pelo ID' })
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.produtosService.buscarPorId(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Atualiza os dados de um produto' })
+  atualizar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateProdutoDto,
+  ) {
+    return this.produtosService.atualizar(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Remove um produto do sistema' })
+  remover(@Param('id', ParseIntPipe) id: number) {
+    return this.produtosService.remover(id);
+  }
+}
+</file>
+
+<file path="src/usuario/users.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
+})
+export class UsersModule {}
+</file>
+
+<file path="prisma.config.ts">
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
+
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'npx ts-node ./prisma/seed.ts',
+  },
+
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
+</file>
+
+<file path="src/produtos/produtos.service.ts">
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { FiltroProdutosDto } from './dto/filtro-produtos.dto';
+import { Prisma } from '../../generated/prisma';
+
+@Injectable()
+export class ProdutosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async criar(dto: CreateProdutoDto) {
+    try {
+      return await this.prisma.produtos.create({
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2003') {
+          throw new BadRequestException('A categoria informada não existe.');
+        }
+        if (error.code === 'P2002') {
+          throw new ConflictException('Já existe um produto cadastrado com este código de barras.');
+        }
+      }
+      throw error;
+    }
+  }
+
+  async listar(dto: FiltroProdutosDto) {
+    const {
+      pagina = 1,
+      limite = 10,
+      busca,
+      categoria_id,
+      apenas_estoque_baixo,
+      ordenar_por = 'id',
+      ordem = 'desc',
+    } = dto;
+
+    const skip = (pagina - 1) * limite;
+
+    // Cláusula WHERE dinâmica
+    const where: Prisma.produtosWhereInput = {};
+
+    if (busca) {
+      where.OR = [
+        { nome: { contains: busca } },
+        { codigo_barras: { contains: busca } },
+      ];
+    }
+
+    if (categoria_id) {
+      where.categoria_id = categoria_id;
+    }
+
+    if (apenas_estoque_baixo) {
+      where.saldos_estoque = {
+        some: {
+          quantidade: { lte: 10 },
+        },
+      };
+    }
+
+    // Ordenação segura
+    const camposPermitidos = ['id', 'nome', 'codigo_barras', 'criado_em'];
+    const campoOrdenacao = camposPermitidos.includes(ordenar_por)
+      ? ordenar_por
+      : 'id';
+
+    const orderBy = { [campoOrdenacao]: ordem };
+
+    // Consulta paralela de total e dados paginados
+    const [total, dados] = await Promise.all([
+      this.prisma.produtos.count({ where }),
+      this.prisma.produtos.findMany({
+        where,
+        skip,
+        take: limite,
+        orderBy,
+        include: {
+          categorias: true,
+          saldos_estoque: true,
+        },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limite);
+
+    return {
+      dados,
+      meta: {
+        total,
+        pagina,
+        limite,
+        totalPages,
+        hasNextPage: pagina < totalPages,
+        hasPreviousPage: pagina > 1,
+      },
+    };
+  }
+
+  async buscarPorId(id: number) {
+    const produto = await this.prisma.produtos.findUnique({
+      where: { id },
+      include: {
+        categorias: true,
+        saldos_estoque: true,
+      },
+    });
+
+    if (!produto) {
+      throw new NotFoundException(`Produto com ID ${id} não encontrado.`);
+    }
+
+    return produto;
+  }
+
+  async atualizar(id: number, dto: UpdateProdutoDto) {
+    await this.buscarPorId(id);
+
+    try {
+      return await this.prisma.produtos.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2003') {
+          throw new BadRequestException('A categoria informada não existe.');
+        }
+        if (error.code === 'P2002') {
+          throw new ConflictException('Já existe um produto cadastrado com este código de barras.');
+        }
+      }
+      throw error;
+    }
+  }
+
+  async remover(id: number) {
+    await this.buscarPorId(id);
+
+    try {
+      return await this.prisma.produtos.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+        throw new BadRequestException(
+          'Não é possível excluir este produto pois existem registros ou movimentações vinculadas a ele.',
+        );
+      }
+      throw error;
+    }
+  }
+
+  async buscarPorCodigoBarras(codigo: string, filialId?: number) {
+    const produto = await this.prisma.produtos.findUnique({
+      where: { codigo_barras: codigo },
+      include: {
+        categorias: {
+          select: { id: true, nome: true },
+        },
+        saldos_estoque: {
+          where: filialId ? { filial_id: filialId } : {},
+          include: {
+            lotes: {
+              select: {
+                id: true,
+                numero_lote: true,
+                data_validade: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!produto) {
+      throw new NotFoundException(
+        `Produto com código de barras '${codigo}' não encontrado.`,
+      );
+    }
+
+    // 1. Soma do saldo total de estoque
+    const saldoTotal = produto.saldos_estoque.reduce(
+      (acc, saldo) => acc + Number(saldo.quantidade ?? 0),
+      0,
+    );
+
+    // 2. Trata estoque_minimo convertendo Decimal/null para number
+    const estoqueMinimo = Number(produto.estoque_minimo ?? 0);
+
+    // 3. Retorno formatado
+    return {
+      id: produto.id,
+      nome: produto.nome,
+      codigo_barras: produto.codigo_barras,
+      categoria: produto.categorias?.nome ?? null,
+      estoque_minimo: estoqueMinimo,
+      saldo_total: saldoTotal,
+      alerta_estoque_baixo: saldoTotal <= estoqueMinimo,
+      lotes: produto.saldos_estoque.map((saldo) => ({
+        saldo_id: saldo.id,
+        filial_id: saldo.filial_id,
+        lote_id: saldo.lote_id,
+        numero_lote: saldo.lotes?.numero_lote,
+        data_validade: saldo.lotes?.data_validade,
+        quantidade: Number(saldo.quantidade ?? 0),
+      })),
+    };
+  }
+}
+</file>
+
+<file path="prisma/schema.prisma">
+generator client {
+  provider     = "prisma-client-js"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model categorias {
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique(map: "nome") @db.VarChar(100)
+  descricao String?    @db.Text
+  criado_em DateTime?  @default(now()) @db.Timestamp(0)
+  produtos  produtos[]
+}
+
+model fornecedores {
+  id                    Int                     @id @default(autoincrement())
+  nome_juridico         String                  @db.VarChar(150)
+  cnpj                  String                  @unique(map: "cnpj") @db.VarChar(20)
+  telefone              String?                 @db.VarChar(20)
+  email                 String?                 @db.VarChar(100)
+  cep                   String?                 @db.VarChar(10)
+  cidade                String?                 @db.VarChar(100)
+  estado                String?                 @db.Char(2)
+  endereco              String?                 @db.VarChar(255)
+  latitude              Decimal?                @db.Decimal(10, 8)
+  longitude             Decimal?                @db.Decimal(11, 8)
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  notas_fiscais_entrada notas_fiscais_entrada[]
+}
+
+model produtos {
+  id                 Int                  @id @default(autoincrement())
+  categoria_id       Int
+  nome               String               @db.VarChar(150)
+  marca              String?              @db.VarChar(100)
+  codigo_barras      String?              @unique(map: "codigo_barras") @db.VarChar(100)
+  estoque_minimo     Decimal?             @default(0.000) @db.Decimal(10, 3)
+  preco_venda        Decimal              @db.Decimal(10, 2)
+  custo_medio        Decimal?             @default(0.00) @db.Decimal(10, 2)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  atualizado_em      DateTime?            @default(now()) @db.Timestamp(0)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  lotes              lotes[]
+  categorias         categorias           @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "fk_categoria")
+  saldos_estoque     saldos_estoque[]
+
+  @@index([categoria_id], map: "fk_produtos_categoria")
+}
+
+model chamados_suporte {
+  id              Int                      @id @default(autoincrement())
+  usuario_id      Int
+  assunto         String                   @db.VarChar(150)
+  descricao       String                   @db.Text
+  status          chamados_suporte_status? @default(ABERTO)
+  data_abertura   DateTime?                @default(now()) @db.Timestamp(0)
+  data_fechamento DateTime?                @db.Timestamp(0)
+  usuarios        usuarios                 @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
+
+  @@index([usuario_id], map: "fk_chamados_usuario")
+}
+
+model clientes {
+  id            Int             @id @default(autoincrement())
+  nome          String          @db.VarChar(150)
+  cpf_cnpj      String?         @db.VarChar(20)
+  telefone      String?         @db.VarChar(20)
+  email         String?         @db.VarChar(100)
+  criado_em     DateTime?       @default(now()) @db.Timestamp(0)
+  pedidos_venda pedidos_venda[]
+}
+
+model faq {
+  id       Int      @id @default(autoincrement())
+  pergunta String   @db.VarChar(255)
+  resposta String   @db.Text
+  ordem    Int?     @default(0)
+  ativo    Boolean? @default(true)
+}
+
+model filiais {
+  id                 Int                  @id @default(autoincrement())
+  nome               String               @db.VarChar(100)
+  endereco           String?              @db.VarChar(255)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  logs_movimentacoes logs_movimentacoes[]
+  pedidos_venda      pedidos_venda[]
+  saldos_estoque     saldos_estoque[]
+}
+
+model itens_entrada {
+  id                    Int                   @id @default(autoincrement())
+  nota_fiscal_id        Int
+  produto_id            Int
+  lote_id               Int?
+  quantidade            Decimal               @db.Decimal(10, 3)
+  custo_unitario        Decimal               @db.Decimal(10, 2)
+  lotes                 lotes?                @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_entrada_lote")
+  notas_fiscais_entrada notas_fiscais_entrada @relation(fields: [nota_fiscal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_entrada_nf")
+  produtos              produtos              @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_entrada_produto")
+
+  @@index([lote_id], map: "fk_itens_entrada_lote")
+  @@index([nota_fiscal_id], map: "fk_itens_entrada_nf")
+  @@index([produto_id], map: "fk_itens_entrada_produto")
+}
+
+model itens_venda {
+  id             Int           @id @default(autoincrement())
+  pedido_id      Int
+  produto_id     Int
+  lote_id        Int?
+  quantidade     Decimal       @db.Decimal(10, 3)
+  preco_unitario Decimal       @db.Decimal(10, 2)
+  lotes          lotes?        @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_venda_lote")
+  pedidos_venda  pedidos_venda @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_venda_pedido")
+  produtos       produtos      @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_venda_produto")
+
+  @@index([lote_id], map: "fk_itens_venda_lote")
+  @@index([pedido_id], map: "fk_itens_venda_pedido")
+  @@index([produto_id], map: "fk_itens_venda_produto")
+}
+
+model logs_movimentacoes {
+  id                BigInt                               @id @default(autoincrement())
+  produto_id        Int
+  filial_id         Int
+  lote_id           Int?
+  usuario_id        Int
+  tipo_movimentacao logs_movimentacoes_tipo_movimentacao
+  quantidade        Decimal                              @db.Decimal(10, 3)
+  saldo_anterior    Decimal                              @db.Decimal(10, 3)
+  saldo_atual       Decimal                              @db.Decimal(10, 3)
+  origem_id         Int?
+  data_hora         DateTime?                            @default(now()) @db.Timestamp(0)
+  filiais           filiais                              @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_logs_filial")
+  lotes             lotes?                               @relation(fields: [lote_id], references: [id], onUpdate: NoAction, map: "fk_logs_lote")
+  produtos          produtos                             @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_logs_produto")
+  usuarios          usuarios                             @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_logs_usuario")
+
+  @@index([filial_id], map: "fk_logs_filial")
+  @@index([lote_id], map: "fk_logs_lote")
+  @@index([produto_id], map: "fk_logs_produto")
+  @@index([usuario_id], map: "fk_logs_usuario")
+  @@index([data_hora], map: "idx_logs_data")
+}
+
+model lotes {
+  id                 Int                  @id @default(autoincrement())
+  produto_id         Int
+  numero_lote        String               @db.VarChar(50)
+  data_fabricacao    DateTime?            @db.Date
+  data_validade      DateTime             @db.Date
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  produtos           produtos             @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_lotes_produto")
+  saldos_estoque     saldos_estoque[]
+
+  @@unique([produto_id, numero_lote], map: "uk_lotes_produto_numero")
+}
+
+model notas_fiscais_entrada {
+  id               Int                           @id @default(autoincrement())
+  fornecedor_id    Int
+  usuario_id       Int
+  numero_nf        String                        @db.VarChar(50)
+  data_emissao     DateTime                      @db.Date
+  data_recebimento DateTime?                     @default(now()) @db.Timestamp(0)
+  total            Decimal                       @db.Decimal(10, 2)
+  status           notas_fiscais_entrada_status? @default(RECEBIDA)
+  itens_entrada    itens_entrada[]
+  fornecedores     fornecedores                  @relation(fields: [fornecedor_id], references: [id], onUpdate: NoAction, map: "fk_nf_fornecedor")
+  usuarios         usuarios                      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_nf_usuario")
+
+  @@index([fornecedor_id], map: "fk_nf_fornecedor")
+  @@index([usuario_id], map: "fk_nf_usuario")
+}
+
+model pedidos_venda {
+  id          Int                   @id @default(autoincrement())
+  usuario_id  Int
+  cliente_id  Int?
+  filial_id   Int
+  data_venda  DateTime?             @default(now()) @db.Timestamp(0)
+  total       Decimal               @db.Decimal(10, 2)
+  status      pedidos_venda_status? @default(CONCLUIDO)
+  itens_venda itens_venda[]
+  clientes    clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
+  filiais     filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
+  usuarios    usuarios              @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_usuario")
+
+  @@index([cliente_id], map: "fk_pedidos_cliente")
+  @@index([filial_id], map: "fk_pedidos_filial")
+  @@index([usuario_id], map: "fk_pedidos_usuario")
+}
+
+model perfis {
+  id         Int        @id @default(autoincrement())
+  nome       String     @unique(map: "nome") @db.VarChar(50)
+  permissoes Json
+  criado_em  DateTime?  @default(now()) @db.Timestamp(0)
+  usuarios   usuarios[]
+}
+
+model saldos_estoque {
+  id            Int       @id @default(autoincrement())
+  filial_id     Int
+  produto_id    Int
+  lote_id       Int?
+  quantidade    Decimal   @default(0.000) @db.Decimal(10, 3)
+  atualizado_em DateTime? @default(now()) @db.Timestamp(0)
+  filiais       filiais   @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_saldos_filial")
+  lotes         lotes?    @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_saldos_lote")
+  produtos      produtos  @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_saldos_produto")
+
+  @@unique([filial_id, produto_id, lote_id], map: "uk_saldos_filial_produto_lote")
+  @@index([lote_id], map: "fk_saldos_lote")
+  @@index([produto_id], map: "fk_saldos_produto")
+}
+
+model usuarios {
+  id                    Int                     @id @default(autoincrement())
+  perfil_id             Int
+  nome                  String                  @db.VarChar(100)
+  email                 String                  @unique(map: "email") @db.VarChar(100)
+  telefone              String?                 @db.VarChar(20)
+  senha_hash            String                  @db.VarChar(255)
+  token_2fa             String?                 @db.VarChar(100)
+  token_expiracao       DateTime?               @db.DateTime(0)
+  
+  twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
+  isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
+
+  ativo                 Boolean?                @default(true)
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
+
+  chamados_suporte      chamados_suporte[]
+  logs_movimentacoes    logs_movimentacoes[]
+  notas_fiscais_entrada notas_fiscais_entrada[]
+  pedidos_venda         pedidos_venda[]
+  perfis                perfis                  @relation(fields: [perfil_id], references: [id], onUpdate: NoAction, map: "fk_usuarios_perfil")
+
+  @@index([perfil_id], map: "fk_usuarios_perfil")
+}
+
+model notificacoes {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  mensagem  String
+  tipo      String
+  lida      Boolean  @default(false)
+  criado_em DateTime @default(now())
+}
+
+enum chamados_suporte_status {
+  ABERTO
+  EM_ANDAMENTO
+  RESOLVIDO
+  FECHADO
+}
+
+enum logs_movimentacoes_tipo_movimentacao {
+  ENTRADA
+  SAIDA
+  TRANSFERENCIA
+  AJUSTE
+}
+
+enum pedidos_venda_status {
+  ORCAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum notas_fiscais_entrada_status {
+  PENDENTE
+  RECEBIDA
+  CANCELADA
+}
+</file>
+
+<file path="prisma/seed.ts">
+import * as bcrypt from 'bcrypt';
+import 'dotenv/config';
+import * as mysql from 'mysql2/promise';
+
+async function main() {
+  console.log('Iniciando a execução do seed no banco de dados...');
+
+  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+
+  try {
+    // 1. Perfis (Admin e Operador)
+    const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
+    const permissoesOperador = JSON.stringify({ operacoes: true });
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (1, 'Administrador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Administrador', permissoes = ?`,
+      [permissoesAdmin, permissoesAdmin],
+    );
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (2, 'Operador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Operador', permissoes = ?`,
+      [permissoesOperador, permissoesOperador],
+    );
+
+    // 2. Usuário Admin
+    const senhaHash = await bcrypt.hash('123456', 10);
+
+    await connection.execute(
+      `INSERT INTO usuarios (id, nome, email, senha_hash, perfil_id, ativo) 
+       VALUES (1, 'Administrador Sinstock', 'admin@sinstock.com', ?, 1, true) 
+       ON DUPLICATE KEY UPDATE senha_hash = ?, perfil_id = 1, ativo = true`,
+      [senhaHash, senhaHash],
+    );
+
+    // 3. Filiais
+    await connection.execute(
+      `INSERT INTO filiais (id, nome, codigo) 
+       VALUES (1, 'Filial Matriz', 'FILIAL-01') 
+       ON DUPLICATE KEY UPDATE nome = 'Filial Matriz'`,
+    );
+
+    // 4. Categorias de Produtos
+    await connection.execute(
+      `INSERT INTO categorias (id, nome, descricao) 
+       VALUES (1, 'Limpeza e Higiene', 'Produtos voltados para limpeza geral') 
+       ON DUPLICATE KEY UPDATE nome = 'Limpeza e Higiene'`,
+    );
+
+    // 5. Fornecedores
+    await connection.execute(
+      `INSERT INTO fornecedores (id, nome_juridico, cnpj, telefone, email, cidade, estado) 
+       VALUES (1, 'Distribuidora Sinstock Ltda', '12345678000195', '11999998888', 'contato@distribuidorasinstock.com.br', 'São Paulo', 'SP') 
+       ON DUPLICATE KEY UPDATE nome_juridico = 'Distribuidora Sinstock Ltda', cnpj = '12345678000195'`,
+    );
+
+    // 6. Produtos
+    await connection.execute(
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
+       VALUES (1, 1, 'Detergente Neutro 500ml', '7891234560001', 20) 
+       ON DUPLICATE KEY UPDATE nome = 'Detergente Neutro 500ml', estoque_minimo = 20`,
+    );
+
+    await connection.execute(
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
+       VALUES (2, 1, 'Sabão em Pó 1kg', '7891234560002', 15) 
+       ON DUPLICATE KEY UPDATE nome = 'Sabão em Pó 1kg', estoque_minimo = 15`,
+    );
+
+    // 7. Lote (Com data de validade próxima para testar a Engine de Alertas)
+    await connection.execute(
+      `INSERT INTO lotes (id, produto_id, numero_lote, data_fabricacao, data_validade) 
+       VALUES (1, 1, 'LOTE-DET-2026-01', '2026-01-10', '2026-10-15') 
+       ON DUPLICATE KEY UPDATE numero_lote = 'LOTE-DET-2026-01'`,
+    );
+
+    // 8. Saldo de Estoque (Abaixo do estoque mínimo para disparar alerta)
+    await connection.execute(
+      `INSERT INTO saldos_estoque (id, produto_id, lote_id, filial_id, quantidade) 
+       VALUES (1, 1, 1, 1, 5) 
+       ON DUPLICATE KEY UPDATE quantidade = 5`,
+    );
+
+    // 9. Nota Fiscal de Entrada
+    await connection.execute(
+      `INSERT INTO notas_fiscais_entrada (id, fornecedor_id, usuario_id, numero_nf, data_emissao, total, status) 
+       VALUES (1, 1, 1, 'NF-100200', '2026-09-01', 1500.00, 'RECEBIDA') 
+       ON DUPLICATE KEY UPDATE numero_nf = 'NF-100200'`,
+    );
+
+    console.log(
+      'Seed concluído com sucesso! Perfis, Usuários, Filiais, Fornecedores, Produtos, Lotes, Estoque e NFs cadastrados.',
+    );
+  } catch (error) {
+    console.error('Erro durante a execução do seed:', error);
+    process.exit(1);
+  } finally {
+    await connection.end();
+  }
+}
+
+main();
+</file>
+
+<file path="src/auth/auth.module.ts">
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from '../usuario/users.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { TwoFactorService } from './two-factor.service';
+import { PreAuthStrategy } from './strategies/pre-auth.strategy';
+
+@Module({
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, TwoFactorService, JwtStrategy, PreAuthStrategy],
+  exports: [AuthService, TwoFactorService],
+})
+export class AuthModule {}
+</file>
+
+<file path="src/auth/auth.service.ts">
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UsersService } from '../usuario/users.service';
+import { LoginDto } from './dto/login.dto';
+import { TwoFactorService } from './two-factor.service';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly twoFactorService: TwoFactorService,
+  ) {}
+
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+
+    if (!user || !user.ativo) {
+      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.senha,
+      user.senha_hash,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Credenciais inválidas.');
+    }
+
+    if (user.isTwoFactorEnable) {
+      return {
+        mfaRequired: true,
+        userId: user.id,
+        message: 'Insira o código de 6 dígitos do seu aplicativo autenticador.',
+        preAuthToken: this.jwtService.sign(
+          { sub: user.id, isPreAuth: true },
+          { expiresIn: '5m' },
+        ),
+      };
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      perfil_id: user.perfil_id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        perfil_id: user.perfil_id,
+      },
+    };
+  }
+
+
+  async authenticateTwoFactor(userId: number, code: string) {
+
+    const user = await this.usersService.findByIdWithSecrets(userId);
+
+    if (!user || !user.twoFactorSecret || !user.isTwoFactorEnable) {
+      throw new BadRequestException('O 2FA não está ativado para esta conta.');
+    }
+
+    const isValid = this.twoFactorService.verifyTwoFactorCode(
+      code,
+      user.twoFactorSecret,
+    );
+
+    if (!isValid) {
+      throw new UnauthorizedException('Código 2FA inválido ou expirado.');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      perfil_id: user.perfil_id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        perfil_id: user.perfil_id,
+      },
+    };
+}
+}
+</file>
+
+<file path="src/usuario/users.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from './users.service';
+
+@Controller('users')
+@UseGuards(JwtAuthGuard)
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
+  @Get('profile')
+  getProfile(@CurrentUser() user: any) {
+    return this.usersService.findOne(user.userId);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/auth/auth.controller.ts">
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { PreAuthGuard } from './guards/pre-auth.guard';
+import { TwoFactorService } from './two-factor.service';
+import { LoginDto } from './dto/login.dto';
+
+interface RequestWithUser extends ExpressRequest {
+  user: {
+    userId: number;
+    email: string;
+  };
+}
+
+@Controller('auth')
+export class AuthController {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly twoFactorService: TwoFactorService,
+  ) {}
+
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/generate')
+  async generate2FA(@Request() req: RequestWithUser) {
+    return this.twoFactorService.generateTwoFactorSecret(
+      req.user.userId,
+      req.user.email,
+    );
+  }
+
+  @Post('2fa/enable')
+  @UseGuards(JwtAuthGuard)
+  async enable2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
+  }
+
+  @Post('2fa/authenticate')
+  @UseGuards(PreAuthGuard)
+  async authenticate2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.authService.authenticateTwoFactor(usuarioId, codigo);
+  }
+}
+</file>
+
+<file path="src/usuario/users.service.ts">
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const saltRounds = 10;
+    const senha_hash = await bcrypt.hash(createUserDto.senha, saltRounds);
+
+    try {
+      const user = await this.prisma.usuarios.create({
+        data: {
+          nome: createUserDto.nome,
+          email: createUserDto.email,
+          senha_hash,
+          perfil_id: createUserDto.perfil_id,
+          telefone: createUserDto.telefone,
+        },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          perfil_id: true,
+          telefone: true,
+          ativo: true,
+          criado_em: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail informado já está em uso.');
+        }
+        if (error.code === 'P2003') {
+          throw new BadRequestException('O perfil_id informado não existe.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao criar o usuário.');
+    }
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.usuarios.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        senha_hash: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        token_2fa: true,
+        token_expiracao: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+      },
+    });
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        isTwoFactorEnable: true,
+        perfis: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+    }
+
+    return user;
+  }
+
+  async findOne(id: number) {
+    return this.findById(id);
+  }
+
+  async findAll() {
+    return this.prisma.usuarios.findMany({
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        isTwoFactorEnable: true,
+        perfis: {
+          select: { nome: true },
+        },
+      },
+    });
+  }
+
+
+async setTwoFactorSecret(id: number, secret: string) {
+  return this.prisma.usuarios.update({
+    where: { id },
+    data: { 
+      twoFactorSecret: secret 
+    },
+  });
+}
+
+async enableTwoFactor(id: number) {
+  return this.prisma.usuarios.update({
+    where: { id },
+    data: { 
+      isTwoFactorEnable: true 
+    },
+  });
+}
+
+async findByIdWithSecrets(id: number) {
+  const user = await this.prisma.usuarios.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      nome: true,
+      email: true,
+      perfil_id: true,
+      twoFactorSecret: true,
+      isTwoFactorEnable: true,
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+  }
+
+  return user;
+}
+}
+</file>
+
+<file path="src/main.ts">
+import 'dotenv/config';
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import { PrismaExceptionFilter } from 'src/common/filters/prisma-exception.filter';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
+
+  // Validação Global dos DTOs com conversão implícita
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // Tratamento Global de Exceções do Prisma
+  app.useGlobalFilters(new PrismaExceptionFilter());
+
+  // Configuração da Documentação Swagger
+  const config = new DocumentBuilder()
+    .setTitle('Sinstock API')
+    .setDescription(
+      'API REST para Gestão de Estoque, Filiais e Autenticação com 2FA',
+    )
+    .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Insira seu token JWT obtido no login',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(3000);
+  console.log('🚀 Aplicação rodando em: http://localhost:3000');
+  console.log(
+    '📖 Documentação Swagger disponível em: http://localhost:3000/api',
+  );
+}
+bootstrap();
+</file>
+
+<file path="src/prisma/prisma.service.ts">
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from '../../generated/prisma';
+import 'dotenv/config';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  constructor() {
+    const connectionString = process.env.DATABASE_URL;
+
+    if (!connectionString) {
+      throw new Error('DATABASE_URL não foi definida no arquivo .env');
+    }
+
+    const adapter = new PrismaMariaDb(connectionString);
+
+    super({ adapter });
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
+  }
+}
+</file>
+
+<file path="src/app.module.ts">
+import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AlertasModule } from './alertas/alertas.module';
+import { AuthModule } from './auth/auth.module';
+import { CategoriasModule } from './categorias/categorias.module';
+import { FiliaisModule } from './filiais/filiais.module';
+import { FornecedoresModule } from './fornecedores/fornecedores.module';
+import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
+import { NotasFiscaisEntradaModule } from './notas-fiscais-entrada/notas-fiscais-entrada.module';
+import { NotificacoesModule } from './notificacoes/notificacoes.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { PedidosModule } from './pedidos/pedidos.module';
+import { ProdutosModule } from './produtos/produtos.module';
+import { RelatoriosModule } from './relatorios/relatorios.module';
+import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
+import { UsersModule } from './usuario/users.module';
+
+@Module({
+  imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
+    ScheduleModule.forRoot(),
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    ProdutosModule,
+    CategoriasModule,
+    NotasFiscaisEntradaModule,
+    FornecedoresModule,
+    AlertasModule,
+    NotificacoesModule,
+    FiliaisModule,
+    SaldosEstoqueModule,
+    MovimentacoesModule,
+    RelatoriosModule,
+    PedidosModule
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
+})
+export class AppModule {}
+</file>
+
+<file path="package.json">
+{
+  "name": "backend-sinstock",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/mapped-types": "^12.0.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^12.0.2",
+    "@nestjs/swagger": "^11.4.7",
+    "@nestjs/throttler": "^6.5.0",
+    "@prisma/adapter-mariadb": "^7.10.0",
+    "@prisma/client": "^7.9.1",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "dotenv": "^17.4.2",
+    "mariadb": "^3.5.4",
+    "mysql2": "^3.24.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "pdfkit": "^0.20.2",
+    "pdfkit-table": "^0.2.11",
+    "pg": "^8.23.0",
+    "prisma": "^7.9.1",
+    "qrcode": "^1.5.4",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/pdfkit": "^0.17.6",
+    "@types/qrcode": "^1.5.6",
+    "@types/speakeasy": "^2.0.10",
+    "@types/supertest": "^7.0.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^17.0.0",
+    "jest": "^30.0.0",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.23.13",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
+</file>
+
+</files>
