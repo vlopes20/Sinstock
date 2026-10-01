@@ -1,9 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
-import { PaginationDto } from '../../common/dto/pagination.dto';
-
-export class SaldosEstoqueFilterDto extends PaginationDto {
+import { PaginacaoFiltroDto } from '../../common/dto/paginacao-filtro.dto';
+export class SaldosEstoqueFilterDto extends PaginacaoFiltroDto {
   @ApiPropertyOptional({ description: 'ID da filial para filtragem' })
   @IsOptional()
   @Type(() => Number)

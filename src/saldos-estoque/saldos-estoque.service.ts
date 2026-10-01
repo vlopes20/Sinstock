@@ -1,26 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginacaoFiltroDto } from '../common/dto/paginacao-filtro.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SaldosEstoqueService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(paginationDto: PaginationDto, filialId?: number, produtoId?: number) {
-    const { page = 1, limit = 10 } = paginationDto;
-    const skip = (page - 1) * limit;
+  async findAll(paginationDto: PaginacaoFiltroDto, filialId?: number, produtoId?: number) {
+    const { pagina = 1, limite = 10 } = paginationDto;
+    const skip = (pagina - 1) * limite;
 
     const where: any = {};
     if (filialId) where.filial_id = filialId;
     if (produtoId) where.produto_id = produtoId;
 
-   
     const [total, data] = await Promise.all([
       this.prisma.saldos_estoque.count({ where }),
       this.prisma.saldos_estoque.findMany({
         where,
         skip,
-        take: limit,
+        take: limite,
         include: {
           filiais: { select: { id: true, nome: true } },
           produtos: { select: { id: true, nome: true } },
@@ -30,16 +29,16 @@ export class SaldosEstoqueService {
       }),
     ]);
 
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = Math.ceil(total / limite);
 
     return {
       data,
       meta: {
         totalItems: total,
         itemCount: data.length,
-        itemsPerPage: limit,
+        itemsPerPage: limite,
         totalPages,
-        currentPage: page,
+        currentPage: pagina,
       },
     };
   }
