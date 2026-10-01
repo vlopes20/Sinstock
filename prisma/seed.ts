@@ -37,11 +37,11 @@ async function main() {
     );
 
     // 3. Filiais
-    await connection.execute(
-      `INSERT INTO filiais (id, nome, codigo) 
-       VALUES (1, 'Filial Matriz', 'FILIAL-01') 
-       ON DUPLICATE KEY UPDATE nome = 'Filial Matriz'`,
-    );
+  await connection.execute(
+     `INSERT INTO filiais (id, nome)
+   VALUES (1, 'Filial Matriz')
+   ON DUPLICATE KEY UPDATE nome = 'Filial Matriz'`,
+);
 
     // 4. Categorias de Produtos
     await connection.execute(
@@ -56,18 +56,17 @@ async function main() {
        VALUES (1, 'Distribuidora Sinstock Ltda', '12345678000195', '11999998888', 'contato@distribuidorasinstock.com.br', 'São Paulo', 'SP') 
        ON DUPLICATE KEY UPDATE nome_juridico = 'Distribuidora Sinstock Ltda', cnpj = '12345678000195'`,
     );
-
     // 6. Produtos
     await connection.execute(
-      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
-       VALUES (1, 1, 'Detergente Neutro 500ml', '7891234560001', 20) 
-       ON DUPLICATE KEY UPDATE nome = 'Detergente Neutro 500ml', estoque_minimo = 20`,
-    );
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo, preco_venda) 
+   VALUES (1, 1, 'Detergente Neutro 500ml', '7891234560001', 20, 5.99) 
+   ON DUPLICATE KEY UPDATE nome = 'Detergente Neutro 500ml', estoque_minimo = 20, preco_venda = 5.99`,
+);
 
     await connection.execute(
-      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
-       VALUES (2, 1, 'Sabão em Pó 1kg', '7891234560002', 15) 
-       ON DUPLICATE KEY UPDATE nome = 'Sabão em Pó 1kg', estoque_minimo = 15`,
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo, preco_venda) 
+    VALUES (2, 1, 'Sabão em Pó 1kg', '7891234560002', 15, 18.90) 
+   ON DUPLICATE KEY UPDATE nome = 'Sabão em Pó 1kg', estoque_minimo = 15, preco_venda = 18.90`,
     );
 
     // 7. Lote (Com data de validade próxima para testar a Engine de Alertas)
