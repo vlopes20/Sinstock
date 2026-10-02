@@ -251,6 +251,24 @@ model usuarios {
   @@index([perfil_id], map: "fk_usuarios_perfil")
 }
 
+model LogAuditoriaEstoque {
+  id              String   @id @default(uuid())
+  usuarioId       String?
+  acao            String   
+  recurso         String 
+  recursoId       String?
+  dadosAnteriores Json?
+  dadosNovos      Json?
+  ip              String?
+  userAgent       String?
+  criadoEm        DateTime @default(now())
+
+  @@index([usuarioId])
+  @@index([recurso, recursoId])
+  @@index([criadoEm])
+  @@map("logs_auditoria_estoque")
+}
+
 model notificacoes {
   id        Int      @id @default(autoincrement())
   titulo    String
