@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { Prisma } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -50,6 +51,66 @@ export class UsersService {
       }
       throw new InternalServerErrorException('Erro ao criar o usuário.');
     }
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.findById(id);
+
+    const dataToUpdate: any = {};
+
+    if (updateUserDto.nome !== undefined) dataToUpdate.nome = updateUserDto.nome;
+    if (updateUserDto.email !== undefined) dataToUpdate.email = updateUserDto.email;
+    if (updateUserDto.perfil_id !== undefined) dataToUpdate.perfil_id = updateUserDto.perfil_id;
+    if (updateUserDto.telefone !== undefined) dataToUpdate.telefone = updateUserDto.telefone;
+    if (updateUserDto.ativo !== undefined) dataToUpdate.ativo = updateUserDto.ativo;
+
+    if (updateUserDto.senha) {
+      const saltRounds = 10;
+      dataToUpdate.senha_hash = await bcrypt.hash(updateUserDto.senha, saltRounds);
+    }
+
+    try {
+      return await this.prisma.usuarios.update({
+        where: { id },
+        data: dataToUpdate,
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          perfil_id: true,
+          telefone: true,
+          ativo: true,
+          criado_em: true,
+          atualizado_em: true,
+          perfis: { select: { nome: true } },
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail informado já está em uso.');
+        }
+        if (error.code === 'P2003') {
+          throw new BadRequestException('O perfil_id informado não existe.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao atualizar o usuário.');
+    }
+  }
+
+  async toggleStatus(id: number) {
+    const user = await this.findById(id);
+
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: { ativo: !user.ativo },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        ativo: true,
+      },
+    });
   }
 
   async findByEmail(email: string) {
@@ -116,45 +177,45 @@ export class UsersService {
           select: { nome: true },
         },
       },
+      orderBy: { id: 'asc' },
     });
   }
 
-
-async setTwoFactorSecret(id: number, secret: string) {
-  return this.prisma.usuarios.update({
-    where: { id },
-    data: { 
-      twoFactorSecret: secret 
-    },
-  });
-}
-
-async enableTwoFactor(id: number) {
-  return this.prisma.usuarios.update({
-    where: { id },
-    data: { 
-      isTwoFactorEnable: true 
-    },
-  });
-}
-
-async findByIdWithSecrets(id: number) {
-  const user = await this.prisma.usuarios.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      nome: true,
-      email: true,
-      perfil_id: true,
-      twoFactorSecret: true,
-      isTwoFactorEnable: true,
-    },
-  });
-
-  if (!user) {
-    throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+  async setTwoFactorSecret(id: number, secret: string) {
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: {
+        twoFactorSecret: secret,
+      },
+    });
   }
 
-  return user;
-}
+  async enableTwoFactor(id: number) {
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: {
+        isTwoFactorEnable: true,
+      },
+    });
+  }
+
+  async findByIdWithSecrets(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+    }
+
+    return user;
+  }
 }
