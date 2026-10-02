@@ -14,19 +14,24 @@ export class AlertasService {
       },
     });
 
-    return saldos
-      .filter((saldo) => {
-        const estoqueMinimo = (saldo.produtos as any)?.estoque_minimo ?? 10;
-        return saldo.quantidade <= estoqueMinimo;
-      })
-      .map((saldo) => ({
-        tipo: 'ESTOQUE_BAIXO',
-        produto_id: saldo.produto_id,
-        produto_nome: (saldo.produtos as any)?.nome,
-        filial_id: saldo.filial_id,
-        quantidade_atual: saldo.quantidade,
-        estoque_minimo: (saldo.produtos as any)?.estoque_minimo ?? 10,
-      }));
+
+
+    
+   
+      return saldos
+  .filter((saldo) => {
+    const estoqueMinimo = (saldo.produtos as any)?.estoque_minimo ?? 10;
+
+    return Number(saldo.quantidade) <= Number(estoqueMinimo);
+  })
+  .map((saldo) => ({
+    tipo: 'ESTOQUE_BAIXO',
+    produto_id: saldo.produto_id,
+    produto_nome: (saldo.produtos as any)?.nome,
+    filial_id: saldo.filial_id,
+    quantidade_atual: saldo.quantidade,
+    estoque_minimo: (saldo.produtos as any)?.estoque_minimo ?? 10,
+  }));
   }
 
   async verificarLotesVencimento(diasAviso = 30, filialId?: number) {
