@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateMovimentacaoDto,
@@ -120,30 +124,40 @@ export class MovimentacoesService {
     });
   }
 
-  async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
-    if (dto.filial_origem_id === dto.filial_destino_id) {
-      throw new BadRequestException(
-        'A filial de origem e de destino não podem ser iguais.',
-      );
-    }
+    async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
+  if (dto.filial_origem_id === dto.filial_destino_id) {
+    throw new BadRequestException(
+      'A filial de origem e de destino não podem ser iguais.',
+    );
+  }
 
-    return await this.prisma.$transaction(async (tx) => {
-      // ORIGEM: Verifica e decrementa o saldo
-      const saldoOrigem = await tx.saldos_estoque.findFirst({
-        where: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_origem_id,
-          lote_id: dto.lote_id ?? null,
-        },
-      });
+  return await this.prisma.$transaction(async (tx) => {
+  const produto = await tx.produtos.findUnique({
+    where: { id: dto.produto_id },
+  });
 
-      const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
+  if (!produto) {
+    throw new NotFoundException(
+      `Produto com ID ${dto.produto_id} não encontrado.`,
+    );
+  }
 
-      if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
-        throw new BadRequestException(
-          `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
-        );
-      }
+  
+  const saldoOrigem = await tx.saldos_estoque.findFirst({
+    where: {
+      produto_id: dto.produto_id,
+      filial_id: dto.filial_origem_id,
+      lote_id: dto.lote_id ?? null,
+    },
+  });
+
+  const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
+
+  if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
+    throw new BadRequestException(
+      `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
+    );
+  }
 
       const novoSaldoOrigem = qtdOrigemAtual - dto.quantidade;
       await tx.saldos_estoque.update({
