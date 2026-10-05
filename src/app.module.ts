@@ -19,6 +19,7 @@ import { ProdutosModule } from './produtos/produtos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
 import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
 import { UsersModule } from './usuario/users.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './usuario/users.module';
     ScheduleModule.forRoot(),
     PrismaModule,
     PerfisModule,
+    ClientesModule,
     AuthModule,
     IntegracoesModule,
     BuscaGlobalModule,
