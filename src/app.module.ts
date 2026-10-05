@@ -1,14 +1,20 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AlertasModule } from './alertas/alertas.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AuthModule } from './auth/auth.module';
 import { BuscaGlobalModule } from './busca-global/busca-global.module';
 import { CategoriasModule } from './categorias/categorias.module';
+import { ChamadosModule } from './chamados/chamados.module';
+import { CommonModule } from './common/common.module';
+import { DashboardModule } from './dashboards/dashboard.module';
 import { FiliaisModule } from './filiais/filiais.module';
 import { FornecedoresModule } from './fornecedores/fornecedores.module';
 import { IntegracoesModule } from './integracoes/integracoes.module';
+import { MailModule } from './mail/mail.module';
 import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
 import { NotasFiscaisEntradaModule } from './notas-fiscais-entrada/notas-fiscais-entrada.module';
 import { NotificacoesModule } from './notificacoes/notificacoes.module';
@@ -23,14 +29,23 @@ import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000,
-        limit: 100,
-      },
-    ]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: config.get<number>('THROTTLE_TTL', 60000),
+          limit: config.get<number>('THROTTLE_LIMIT', 100),
+        },
+      ],
+    }),
     ScheduleModule.forRoot(),
     PrismaModule,
+    CommonModule,
+    AuditoriaModule,
     PerfisModule,
     ClientesModule,
     AuthModule,
@@ -47,7 +62,10 @@ import { ClientesModule } from './clientes/clientes.module';
     SaldosEstoqueModule,
     MovimentacoesModule,
     RelatoriosModule,
-    PedidosModule
+    PedidosModule,
+    DashboardModule,
+    MailModule,
+    ChamadosModule,
   ],
   providers: [
     {
