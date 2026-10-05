@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,8 +8,19 @@ import { PrismaExceptionFilter } from 'src/common/filters/prisma-exception.filte
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
-  app.enableCors();
+  // Configuração Dinâmica do CORS via .env
+  const rawOrigins = configService.get<string>('CORS_ORIGIN', '*');
+  const allowedOrigins = rawOrigins.includes(',')
+    ? rawOrigins.split(',').map((origin) => origin.trim())
+    : rawOrigins;
+
+  app.enableCors({
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   // Validação Global dos DTOs com conversão implícita
   app.useGlobalPipes(
@@ -48,10 +60,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
-  console.log('🚀 Aplicação rodando em: http://localhost:3000');
+  // Porta dinâmica obtida do .env (padrão 3000)
+  const port = configService.get<number>('PORT', 3000);
+  await app.listen(port);
+
+  console.log(`🚀 Aplicação rodando em: http://localhost:${port}`);
   console.log(
-    '📖 Documentação Swagger disponível em: http://localhost:3000/api',
+    `📖 Documentação Swagger disponível em: http://localhost:${port}/api`,
   );
 }
 bootstrap();
