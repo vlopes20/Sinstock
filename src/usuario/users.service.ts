@@ -5,8 +5,8 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -56,11 +56,13 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     await this.findById(id);
 
-    const dataToUpdate: any = {};
+    const dataToUpdate: Prisma.usuariosUpdateInput = {};
 
     if (updateUserDto.nome !== undefined) dataToUpdate.nome = updateUserDto.nome;
     if (updateUserDto.email !== undefined) dataToUpdate.email = updateUserDto.email;
-    if (updateUserDto.perfil_id !== undefined) dataToUpdate.perfil_id = updateUserDto.perfil_id;
+    if (updateUserDto.perfil_id !== undefined) {
+      dataToUpdate.perfis = { connect: { id: updateUserDto.perfil_id } };
+    }
     if (updateUserDto.telefone !== undefined) dataToUpdate.telefone = updateUserDto.telefone;
     if (updateUserDto.ativo !== undefined) dataToUpdate.ativo = updateUserDto.ativo;
 
@@ -82,7 +84,7 @@ export class UsersService {
           ativo: true,
           criado_em: true,
           atualizado_em: true,
-          perfis: { select: { nome: true } },
+          perfis: { select: { id: true, nome: true, permissoes: true } },
         },
       });
     } catch (error) {
@@ -130,6 +132,13 @@ export class UsersService {
         token_expiracao: true,
         twoFactorSecret: true,
         isTwoFactorEnable: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
       },
     });
   }
@@ -147,7 +156,13 @@ export class UsersService {
         criado_em: true,
         atualizado_em: true,
         isTwoFactorEnable: true,
-        perfis: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
       },
     });
 
@@ -174,7 +189,7 @@ export class UsersService {
         criado_em: true,
         isTwoFactorEnable: true,
         perfis: {
-          select: { nome: true },
+          select: { id: true, nome: true },
         },
       },
       orderBy: { id: 'asc' },
@@ -206,9 +221,23 @@ export class UsersService {
         id: true,
         nome: true,
         email: true,
+        telefone: true,
         perfil_id: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        senha_hash: true,
         twoFactorSecret: true,
         isTwoFactorEnable: true,
+        token_2fa: true,
+        token_expiracao: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
       },
     });
 

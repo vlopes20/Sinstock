@@ -7,5 +7,6 @@ import { RelatoriosService } from './relatorios.service';
   imports: [PrismaModule],
   controllers: [RelatoriosController],
   providers: [RelatoriosService],
+  exports: [RelatoriosService], 
 })
 export class RelatoriosModule {}
