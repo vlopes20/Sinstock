@@ -62,9 +62,7 @@ export class AuthService {
     };
   }
 
-
   async authenticateTwoFactor(userId: number, code: string) {
-
     const user = await this.usersService.findByIdWithSecrets(userId);
 
     if (!user || !user.twoFactorSecret || !user.isTwoFactorEnable) {
@@ -95,5 +93,19 @@ export class AuthService {
         perfil_id: user.perfil_id,
       },
     };
-}
+  }
+
+  // Método responsável por alimentar o endpoint GET /auth/me
+  async getProfile(userId: number) {
+    const user = await this.usersService.findByIdWithSecrets(userId);
+
+    if (!user || !user.ativo) {
+      throw new UnauthorizedException('Usuário não encontrado ou inativo.');
+    }
+
+    // Oculta dados sensíveis antes de retornar para a aplicação
+    const { senha_hash, twoFactorSecret, token_2fa, token_expiracao, ...usuarioSanitizado } = user;
+
+    return usuarioSanitizado;
+  }
 }

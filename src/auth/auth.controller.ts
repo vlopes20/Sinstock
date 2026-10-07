@@ -1,10 +1,10 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PreAuthGuard } from './guards/pre-auth.guard';
 import { TwoFactorService } from './two-factor.service';
-import { LoginDto } from './dto/login.dto';
 
 interface RequestWithUser extends ExpressRequest {
   user: {
@@ -34,8 +34,8 @@ export class AuthController {
     );
   }
 
-  @Post('2fa/enable')
   @UseGuards(JwtAuthGuard)
+  @Post('2fa/enable')
   async enable2FA(
     @Request() req: RequestWithUser,
     @Body('codigo') codigo: string,
@@ -44,8 +44,8 @@ export class AuthController {
     return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
   }
 
-  @Post('2fa/authenticate')
   @UseGuards(PreAuthGuard)
+  @Post('2fa/authenticate')
   async authenticate2FA(
     @Request() req: RequestWithUser,
     @Body('codigo') codigo: string,

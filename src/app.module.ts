@@ -3,12 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+
 import { AlertasModule } from './alertas/alertas.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AuthModule } from './auth/auth.module';
 import { BuscaGlobalModule } from './busca-global/busca-global.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { ChamadosModule } from './chamados/chamados.module';
+import { ClientesModule } from './clientes/clientes.module';
 import { CommonModule } from './common/common.module';
 import { DashboardModule } from './dashboards/dashboard.module';
 import { FiliaisModule } from './filiais/filiais.module';
@@ -25,7 +27,6 @@ import { ProdutosModule } from './produtos/produtos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
 import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
 import { UsersModule } from './usuario/users.module';
-import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [

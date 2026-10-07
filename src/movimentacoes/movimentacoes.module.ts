@@ -7,5 +7,6 @@ import { MovimentacoesService } from './movimentacoes.service';
   imports: [PrismaModule],
   controllers: [MovimentacoesController],
   providers: [MovimentacoesService],
+  exports: [MovimentacoesService],
 })
 export class MovimentacoesModule {}

@@ -4,17 +4,22 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { PrismaExceptionFilter } from 'src/common/filters/prisma-exception.filter';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  // Configuração Dinâmica do CORS via .env
+  // 1. Configuração Dinâmica do CORS via .env
   const rawOrigins = configService.get<string>('CORS_ORIGIN', '*');
-  const allowedOrigins = rawOrigins.includes(',')
-    ? rawOrigins.split(',').map((origin) => origin.trim())
-    : rawOrigins;
+  
+  // Evita erro no navegador quando credentials: true e origin: '*' são usados juntos
+  const allowedOrigins =
+    rawOrigins === '*'
+      ? true
+      : rawOrigins.includes(',')
+        ? rawOrigins.split(',').map((origin) => origin.trim())
+        : rawOrigins;
 
   app.enableCors({
     origin: allowedOrigins,
@@ -22,7 +27,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Validação Global dos DTOs com conversão implícita
+  // 2. Validação Global dos DTOs com conversão implícita de tipos
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -34,10 +39,10 @@ async function bootstrap() {
     }),
   );
 
-  // Tratamento Global de Exceções do Prisma
+  // 3. Tratamento Global de Exceções do Prisma
   app.useGlobalFilters(new PrismaExceptionFilter());
 
-  // Configuração da Documentação Swagger
+  // 4. Configuração da Documentação Swagger
   const config = new DocumentBuilder()
     .setTitle('Sinstock API')
     .setDescription(
@@ -60,7 +65,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Porta dinâmica obtida do .env (padrão 3000)
+  // 5. Inicialização do servidor HTTP na porta definida
   const port = configService.get<number>('PORT', 3000);
   await app.listen(port);
 
