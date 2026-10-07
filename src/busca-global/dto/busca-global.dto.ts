@@ -16,6 +16,6 @@ export class BuscaGlobalDto {
   @Type(() => Number)
   @IsInt({ message: 'O limite deve ser um número inteiro.' })
   @Min(1)
-  @Max(50)
+  @Max(50, {message: 'O limite não deve ser superior a 50.'})
   limite?: number = 10;
 }
