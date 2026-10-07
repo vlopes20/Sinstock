@@ -7,7 +7,8 @@ export class BuscaGlobalService {
   constructor(private readonly prisma: PrismaService) {}
 
   async buscar(dto: BuscaGlobalDto) {
-    const { termo, filial_id, limite = 10 } = dto;
+    const termo = dto.termo.trim();
+    const { filial_id, limite = 10 } = dto;
 
     const [produtos, fornecedores, lotes, notasFiscais] = await Promise.all([
       // 1. Busca em Produtos (por nome ou código de barras)
