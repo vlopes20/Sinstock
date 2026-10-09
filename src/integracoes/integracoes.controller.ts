@@ -1,11 +1,14 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IntegracoesService } from './integracoes.service';
 import { ConsultaCepDto } from './dto/consulta-cep.dto';
 import { ConsultaCoordenadasDto } from './dto/consulta-coordenadas.dto';
 import { ConsultaDistanciaCepsDto } from './dto/consulta-distancia-ceps.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Integrações Externas (CEP e Mapas)')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('integracoes')
 export class IntegracoesController {
   constructor(private readonly integracoesService: IntegracoesService) {}
