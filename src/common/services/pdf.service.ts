@@ -1,74 +1,54 @@
+
 import { Injectable } from '@nestjs/common';
 
 export type ColunaDef =
   | string
   | { header: string; key?: string; width?: number | string };
 
-function getPdfPrinterClass(): any {
-  // Caminhos possíveis para o construtor do Printer no pdfmake (Node.js)
-  const pathsToTry = [
-    'pdfmake/js/printer',
-    'pdfmake/src/printer',
-    'pdfmake',
-  ];
-
-  for (const path of pathsToTry) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const mod = require(path);
-
-      if (typeof mod === 'function') return mod;
-      if (typeof mod?.default === 'function') return mod.default;
-      if (typeof mod?.PdfPrinter === 'function') return mod.PdfPrinter;
-      if (typeof mod?.Printer === 'function') return mod.Printer;
-      if (typeof mod?.default?.default === 'function') return mod.default.default;
-    } catch {
-      // Continua para a próxima tentativa se o caminho não existir
-    }
-  }
-
-  throw new Error(
-    'Não foi possível resolver o construtor da biblioteca pdfmake. Certifica-te de que o pacote "pdfmake" está instalado no projeto.',
-  );
-}
-
 @Injectable()
 export class PdfService {
-  private printer: any;
+  private pdfmake: any;
 
   constructor() {
-    const PdfPrinter = getPdfPrinterClass();
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    this.pdfmake = require('pdfmake');
 
-    const fonts = {
+    this.pdfmake.addFonts({
       Roboto: {
         normal: 'Helvetica',
         bold: 'Helvetica-Bold',
         italics: 'Helvetica-Oblique',
         bolditalics: 'Helvetica-BoldOblique',
       },
-    };
+    });
 
-    this.printer = new PdfPrinter(fonts);
+    // Bloqueia recursos externos por URL.
+    this.pdfmake.setUrlAccessPolicy(() => false);
+
+    // Permite somente as fontes Helvetica utilizadas no PDF.
+    this.pdfmake.setLocalAccessPolicy((path: string) =>
+      [
+        'Helvetica',
+        'Helvetica-Bold',
+        'Helvetica-Oblique',
+        'Helvetica-BoldOblique',
+      ].includes(path),
+    );
   }
 
   /**
-   * Gera um Buffer a partir de qualquer definição de documento personalizada do pdfmake
+   * Gera um Buffer a partir da definição de um documento PDF.
    */
   async gerarBuffer(docDefinition: any): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      const pdfDoc = this.printer.createPdfKitDocument(docDefinition);
-      const chunks: Buffer[] = [];
+    const pdf = this.pdfmake.createPdf(docDefinition);
+    const buffer = await pdf.getBuffer();
 
-      pdfDoc.on('data', (chunk: Buffer) => chunks.push(chunk));
-      pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
-      pdfDoc.on('error', (err: Error) => reject(err));
-
-      pdfDoc.end();
-    });
+    return Buffer.from(buffer);
   }
 
   /**
-   * Gera um PDF formatado em tabela aceitando matrizes ou arrays de objetos
+   * Gera um PDF formatado em tabela,
+   * aceitando matrizes ou arrays de objetos.
    */
   async gerarRelatorioTabela(
     titulo: string,
@@ -81,41 +61,61 @@ export class PdfService {
     );
 
     const widths = colunas.map((col) => {
-      if (typeof col === 'object' && col.width && typeof col.width === 'number') {
+      if (
+        typeof col === 'object' &&
+        col.width &&
+        typeof col.width === 'number'
+      ) {
         return col.width;
       }
+
       return '*';
     });
 
     const linhasFormatadas: string[][] = dados.map((item) => {
       if (Array.isArray(item)) {
         return item.map((celula) =>
-          celula !== null && celula !== undefined ? String(celula) : '',
+          celula !== null && celula !== undefined
+            ? String(celula)
+            : '',
         );
       }
 
       return colunas.map((col) => {
-        const key = typeof col === 'object' && col.key ? col.key : null;
+        const key =
+          typeof col === 'object' && col.key ? col.key : null;
+
         const valor = key && item ? item[key] : '';
-        return valor !== null && valor !== undefined ? String(valor) : '';
+
+        return valor !== null && valor !== undefined
+          ? String(valor)
+          : '';
       });
     });
 
     const docDefinition = {
       pageOrientation: orientacao,
       content: [
-        { text: titulo, style: 'header' },
+        {
+          text: titulo,
+          style: 'header',
+        },
         {
           text: `Emissão: ${new Date().toLocaleString('pt-PT')}`,
           style: 'subheader',
         },
-        { text: '\n' },
+        {
+          text: '\n',
+        },
         {
           table: {
             headerRows: 1,
             widths,
             body: [
-              headers.map((h) => ({ text: h, style: 'tableHeader' })),
+              headers.map((h) => ({
+                text: h,
+                style: 'tableHeader',
+              })),
               ...linhasFormatadas,
             ],
           },
