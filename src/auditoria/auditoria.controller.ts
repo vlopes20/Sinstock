@@ -4,15 +4,19 @@ import {
   Query,
   StreamableFile,
   Header,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Readable } from 'stream';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuditoriaService } from './auditoria.service';
 import { ConsultaAuditoriaDto } from './dto/consulta-auditoria.dto';
 import { ExcelService } from '../common/services/excel.service';
 import { PdfService } from '../common/services/pdf.service';
 
 @ApiTags('Histórico de Auditoria')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('auditoria')
 export class AuditoriaController {
   constructor(
