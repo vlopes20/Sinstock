@@ -5,7 +5,7 @@ export enum PrioridadeChamado {
   BAIXA = 'BAIXA',
   MEDIA = 'MEDIA',
   ALTA = 'ALTA',
-  CRITICA = 'CRÍTICA',
+  CRITICA = 'CRITICA',
 }
 
 export class CriarChamadoDto {

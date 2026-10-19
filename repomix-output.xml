@@ -1,10 +1,10 @@
-This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
 
 <file_summary>
 This section contains a summary of this file.
 
 <purpose>
-This file contains a packed representation of the entire repository's contents.
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
 It is designed to be easily consumable by AI systems for analysis, code review,
 or other automated processes.
 </purpose>
@@ -32,6 +32,7 @@ The content is organized as follows:
 <notes>
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: prisma/generated/**, dist/**, node_modules/**
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
 - Files are sorted by Git change count (files with more changes are at the bottom)
@@ -46,6 +47,10 @@ prisma/
       migration.sql
     20260904190336_add_two_factor/
       migration.sql
+    20261002191650_add_logs_auditoria_estoque/
+      migration.sql
+    20261007172049_ajustando_schema_front_integration/
+      migration.sql
     migration_lock.toml
   schema.prisma
   seed.ts
@@ -56,6 +61,16 @@ src/
     alertas.controller.ts
     alertas.module.ts
     alertas.service.ts
+  auditoria/
+    decorators/
+      audit.decorator.ts
+    dto/
+      consulta-auditoria.dto.ts
+    interceptors/
+      audit-estoque.interceptor.ts
+    auditoria.controller.ts
+    auditoria.module.ts
+    auditoria.service.ts
   auth/
     decorators/
       current-user.decorator.ts
@@ -86,11 +101,35 @@ src/
     categorias.controller.ts
     categorias.module.ts
     categorias.service.ts
+  chamados/
+    dto/
+      criar-chamado.dto.ts
+    chamados.controller.ts
+    chamados.module.ts
+    chamados.service.ts
+  clientes/
+    dto/
+      cliente-filter.dto.ts
+      create-cliente.dto.ts
+      update-cliente.dto.ts
+    clientes.controller.ts
+    clientes.module.ts
+    clientes.service.ts
   common/
     dto/
       paginacao-filtro.dto.ts
     filters/
       prisma-exception.filter.ts
+    services/
+      excel.service.ts
+      pdf.service.ts
+    common.module.ts
+  dashboards/
+    interfaces/
+      dashboard-graficos.interface.ts
+    dashboard.controller.ts
+    dashboard.module.ts
+    dashboard.service.ts
   filiais/
     dto/
       create-filial.dto.ts
@@ -104,6 +143,17 @@ src/
     fornecedores.controller.ts
     fornecedores.module.ts
     fornecedores.service.ts
+  integracoes/
+    dto/
+      consulta-cep.dto.ts
+      consulta-coordenadas.dto.ts
+      consulta-distancia-ceps.dto.ts
+    integracoes.controller.ts
+    integracoes.module.ts
+    integracoes.service.ts
+  mail/
+    mail.module.ts
+    mail.service.ts
   movimentacoes/
     dto/
       create-movimentacao.dto.ts
@@ -127,6 +177,7 @@ src/
   pedidos/
     dto/
       create-checkout.dto.ts
+      create-reserva.dto.ts
     pedidos.controller.ts
     pedidos.module.ts
     pedidos.service.ts
@@ -163,6 +214,7 @@ src/
   usuario/
     dto/
       create-user.dto.ts
+      update-user.dto.ts
     users.controller.ts
     users.module.ts
     users.service.ts
@@ -496,6 +548,69 @@ ALTER TABLE `usuarios` ADD COLUMN `is_two_factor_enabled` BOOLEAN NOT NULL DEFAU
     ADD COLUMN `two_factor_secret` VARCHAR(255) NULL;
 </file>
 
+<file path="prisma/migrations/20261002191650_add_logs_auditoria_estoque/migration.sql">
+-- CreateTable
+CREATE TABLE `logs_auditoria_estoque` (
+    `id` VARCHAR(191) NOT NULL,
+    `usuarioId` VARCHAR(191) NULL,
+    `acao` VARCHAR(191) NOT NULL,
+    `recurso` VARCHAR(191) NOT NULL,
+    `recursoId` VARCHAR(191) NULL,
+    `dadosAnteriores` JSON NULL,
+    `dadosNovos` JSON NULL,
+    `ip` VARCHAR(191) NULL,
+    `userAgent` VARCHAR(191) NULL,
+    `criadoEm` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `logs_auditoria_estoque_usuarioId_idx`(`usuarioId`),
+    INDEX `logs_auditoria_estoque_recurso_recursoId_idx`(`recurso`, `recursoId`),
+    INDEX `logs_auditoria_estoque_criadoEm_idx`(`criadoEm`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `notificacoes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `titulo` VARCHAR(191) NOT NULL,
+    `mensagem` VARCHAR(191) NOT NULL,
+    `tipo` VARCHAR(191) NOT NULL,
+    `lida` BOOLEAN NOT NULL DEFAULT false,
+    `criado_em` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+</file>
+
+<file path="prisma/migrations/20261007172049_ajustando_schema_front_integration/migration.sql">
+/*
+  Warnings:
+
+  - A unique constraint covering the columns `[codigo]` on the table `chamados_suporte` will be added. If there are existing duplicate values, this will fail.
+
+*/
+-- DropForeignKey
+ALTER TABLE `chamados_suporte` DROP FOREIGN KEY `fk_chamados_usuario`;
+
+-- AlterTable
+ALTER TABLE `chamados_suporte` ADD COLUMN `codigo` VARCHAR(50) NULL,
+    ADD COLUMN `email_solicitante` VARCHAR(100) NULL,
+    ADD COLUMN `prioridade` ENUM('BAIXA', 'MEDIA', 'ALTA', 'CRITICA') NULL DEFAULT 'MEDIA',
+    MODIFY `usuario_id` INTEGER NULL,
+    MODIFY `status` ENUM('ABERTO', 'EM_ANDAMENTO', 'RESOLVIDO', 'CANCELADO', 'FECHADO') NULL DEFAULT 'ABERTO';
+
+-- AlterTable
+ALTER TABLE `pedidos_venda` ADD COLUMN `reservado_ate` TIMESTAMP(0) NULL;
+
+-- AlterTable
+ALTER TABLE `saldos_estoque` ADD COLUMN `quantidade_reservada` DECIMAL(10, 3) NOT NULL DEFAULT 0.000;
+
+-- CreateIndex
+CREATE UNIQUE INDEX `uk_chamados_codigo` ON `chamados_suporte`(`codigo`);
+
+-- AddForeignKey
+ALTER TABLE `chamados_suporte` ADD CONSTRAINT `fk_chamados_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+</file>
+
 <file path="prisma/migrations/migration_lock.toml">
 # Please do not edit this file manually
 # It should be added in your version-control system (e.g., Git)
@@ -533,6 +648,177 @@ import { AlertasService } from './alertas.service';
   exports: [AlertasService],
 })
 export class AlertasModule {}
+</file>
+
+<file path="src/auditoria/decorators/audit.decorator.ts">
+import { SetMetadata } from '@nestjs/common';
+
+export const AUDIT_METADATA_KEY = 'audit_metadata';
+
+export interface AuditMetadata {
+  recurso: string;
+  acao: string;
+}
+
+export const Audit = (recurso: string, acao: string) =>
+  SetMetadata(AUDIT_METADATA_KEY, { recurso, acao });
+</file>
+
+<file path="src/auditoria/dto/consulta-auditoria.dto.ts">
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsDate, IsInt, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class ConsultaAuditoriaDto {
+  @ApiPropertyOptional({ description: 'Filtrar por ID do Utilizador' })
+  @IsOptional()
+  @IsString()
+  usuarioId?: string;
+
+  @ApiPropertyOptional({ description: 'Filtrar por Tipo de Ação (ex: SAIDA_ESTOQUE, CRIACAO)' })
+  @IsOptional()
+  @IsString()
+  acao?: string;
+
+  @ApiPropertyOptional({ description: 'Filtrar por Recurso (ex: PRODUTO, REQUISICAO)' })
+  @IsOptional()
+  @IsString()
+  recurso?: string;
+
+  @ApiPropertyOptional({ description: 'Filtrar por ID do Recurso' })
+  @IsOptional()
+  @IsString()
+  recursoId?: string;
+
+  @ApiPropertyOptional({ description: 'Data Inicial (YYYY-MM-DD)' })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  dataInicio?: Date;
+
+  @ApiPropertyOptional({ description: 'Data Final (YYYY-MM-DD)' })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  dataFim?: Date;
+
+  @ApiPropertyOptional({ description: 'Página atual (Paginação)', default: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+
+  @ApiPropertyOptional({ description: 'Itens por página (Paginação)', default: 20 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  limit?: number = 20;
+}
+</file>
+
+<file path="src/auditoria/auditoria.module.ts">
+import { Module, Global } from '@nestjs/common';
+import { AuditoriaService } from './auditoria.service';
+import { AuditoriaController } from './auditoria.controller';
+
+@Global()
+@Module({
+  controllers: [AuditoriaController],
+  providers: [AuditoriaService],
+  exports: [AuditoriaService],
+})
+export class AuditoriaModule {}
+</file>
+
+<file path="src/auditoria/auditoria.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ConsultaAuditoriaDto } from './dto/consulta-auditoria.dto';
+
+export interface CriarLogDto {
+  usuarioId?: string;
+  acao: string;
+  recurso: string;
+  recursoId?: string;
+  dadosAnteriores?: any;
+  dadosNovos?: any;
+  ip?: string;
+  userAgent?: string;
+}
+
+@Injectable()
+export class AuditoriaService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async registrarLog(dados: CriarLogDto) {
+    return this.prisma.logAuditoriaEstoque.create({
+      data: {
+        usuarioId: dados.usuarioId ?? null,
+        acao: dados.acao,
+        recurso: dados.recurso,
+        recursoId: dados.recursoId ?? null,
+        dadosAnteriores: dados.dadosAnteriores
+          ? JSON.parse(JSON.stringify(dados.dadosAnteriores))
+          : undefined,
+        dadosNovos: dados.dadosNovos
+          ? JSON.parse(JSON.stringify(dados.dadosNovos))
+          : undefined,
+        ip: dados.ip ?? null,
+        userAgent: dados.userAgent ?? null,
+      },
+    });
+  }
+
+  async listarHistorico(filtros: ConsultaAuditoriaDto) {
+    const {
+      usuarioId,
+      acao,
+      recurso,
+      recursoId,
+      dataInicio,
+      dataFim,
+      page = 1,
+      limit = 20,
+    } = filtros;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (usuarioId) where.usuarioId = usuarioId;
+    if (acao) where.acao = acao;
+    if (recurso) where.recurso = recurso;
+    if (recursoId) where.recursoId = recursoId;
+
+    if (dataInicio || dataFim) {
+      where.criadoEm = {
+        ...(dataInicio && { gte: dataInicio }),
+        ...(dataFim && { lte: dataFim }),
+      };
+    }
+
+    const [total, items] = await Promise.all([
+      this.prisma.logAuditoriaEstoque.count({ where }),
+      this.prisma.logAuditoriaEstoque.findMany({
+        where,
+        orderBy: { criadoEm: 'desc' },
+        skip,
+        take: limit,
+      }),
+    ]);
+
+    return {
+      data: items,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+}
 </file>
 
 <file path="src/auth/decorators/roles.decorator.ts">
@@ -628,49 +914,6 @@ export class PreAuthStrategy extends PassportStrategy(
 }
 </file>
 
-<file path="src/busca-global/dto/busca-global.dto.ts">
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min, MinLength } from 'class-validator';
-
-export class BuscaGlobalDto {
-  @IsString({ message: 'O termo de busca deve ser um texto.' })
-  @MinLength(2, { message: 'O termo de busca deve ter pelo menos 2 caracteres.' })
-  termo: string;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt({ message: 'O ID da filial deve ser um número inteiro.' })
-  @Min(1, { message: 'O ID da filial deve ser maior que zero.' })
-  filial_id?: number;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt({ message: 'O limite deve ser um número inteiro.' })
-  @Min(1)
-  @Max(50)
-  limite?: number = 10;
-}
-</file>
-
-<file path="src/busca-global/busca-global.controller.ts">
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BuscaGlobalService } from './busca-global.service';
-import { BuscaGlobalDto } from './dto/busca-global.dto';
-
-@ApiTags('Busca Global')
-@Controller('busca-global')
-export class BuscaGlobalController {
-  constructor(private readonly buscaGlobalService: BuscaGlobalService) {}
-
-  @Get()
-  @ApiOperation({ summary: 'Realiza pesquisa multi-critério centralizada no sistema' })
-  buscar(@Query() query: BuscaGlobalDto) {
-    return this.buscaGlobalService.buscar(query);
-  }
-}
-</file>
-
 <file path="src/busca-global/busca-global.module.ts">
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -683,121 +926,6 @@ import { BuscaGlobalService } from './busca-global.service';
   providers: [BuscaGlobalService],
 })
 export class BuscaGlobalModule {}
-</file>
-
-<file path="src/busca-global/busca-global.service.ts">
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { BuscaGlobalDto } from './dto/busca-global.dto';
-
-@Injectable()
-export class BuscaGlobalService {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async buscar(dto: BuscaGlobalDto) {
-    const { termo, filial_id, limite = 10 } = dto;
-
-    const [produtos, fornecedores, lotes, notasFiscais] = await Promise.all([
-      // 1. Busca em Produtos (por nome ou código de barras)
-      this.prisma.produtos.findMany({
-        where: {
-          OR: [
-            { nome: { contains: termo } },
-            { codigo_barras: { contains: termo } },
-          ],
-        },
-        take: limite,
-      }),
-
-      // 2. Busca em Fornecedores (por nome_juridico ou cnpj)
-      this.prisma.fornecedores.findMany({
-        where: {
-          OR: [
-            { nome_juridico: { contains: termo } },
-            { cnpj: { contains: termo } },
-          ],
-        },
-        take: limite,
-      }),
-
-      // 3. Busca em Lotes (por numero_lote e relacionamento com saldos_estoque)
-      this.prisma.lotes.findMany({
-        where: {
-          numero_lote: { contains: termo },
-          ...(filial_id ? { saldos_estoque: { some: { filial_id } } } : {}),
-        },
-        include: {
-          produtos: { select: { nome: true } },
-          saldos_estoque: true,
-        },
-        take: limite,
-      }),
-
-      // 4. Busca em Notas Fiscais de Entrada (por numero_nf)
-      this.prisma.notas_fiscais_entrada.findMany({
-        where: {
-          numero_nf: { contains: termo },
-        },
-        include: {
-          fornecedores: { select: { nome_juridico: true } },
-        },
-        take: limite,
-      }),
-    ]);
-
-    const totalResultados =
-      produtos.length +
-      fornecedores.length +
-      lotes.length +
-      notasFiscais.length;
-
-    return {
-      termo_pesquisado: termo,
-      filtros: {
-        filial_id: filial_id ?? 'todas',
-        limite_por_categoria: limite,
-      },
-      total_resultados: totalResultados,
-      resultados: {
-        produtos: produtos.map((p) => ({
-          id: p.id,
-          nome: p.nome,
-          codigo_barras: p.codigo_barras,
-          estoque_minimo: p.estoque_minimo,
-        })),
-        fornecedores: fornecedores.map((f) => ({
-          id: f.id,
-          nome_juridico: f.nome_juridico,
-          cnpj: f.cnpj,
-          email: f.email,
-          telefone: f.telefone,
-        })),
-        lotes: lotes.map((l) => {
-          const quantidadeTotal = l.saldos_estoque.reduce(
-            (acc, saldo) => acc + Number(saldo.quantidade ?? 0),
-            0,
-          );
-
-          return {
-            id: l.id,
-            numero_lote: l.numero_lote,
-            produto_nome: l.produtos?.nome,
-            quantidade_total: quantidadeTotal,
-            data_validade: l.data_validade,
-          };
-        }),
-        notas_fiscais: notasFiscais.map((nf) => ({
-          id: nf.id,
-          numero_nf: nf.numero_nf,
-          fornecedor_nome: nf.fornecedores?.nome_juridico,
-          total: nf.total,
-          status: nf.status,
-          data_emissao: nf.data_emissao,
-        })),
-      },
-    };
-  }
-}
 </file>
 
 <file path="src/categorias/dto/create-categoria.dto.ts">
@@ -861,6 +989,447 @@ import { PrismaModule } from '../prisma/prisma.module';
   exports: [CategoriasService],
 })
 export class CategoriasModule {}
+</file>
+
+<file path="src/chamados/dto/criar-chamado.dto.ts">
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+export enum PrioridadeChamado {
+  BAIXA = 'BAIXA',
+  MEDIA = 'MEDIA',
+  ALTA = 'ALTA',
+  CRITICA = 'CRÍTICA',
+}
+
+export class CriarChamadoDto {
+  @ApiProperty({ example: 'Problema no leitor de código de barras' })
+  @IsString()
+  @IsNotEmpty()
+  titulo: string;
+
+  @ApiProperty({ example: 'O leitor USB da bancada 2 deixou de bipar itens de stock.' })
+  @IsString()
+  @IsNotEmpty()
+  descricao: string;
+
+  @ApiProperty({ enum: PrioridadeChamado, default: PrioridadeChamado.MEDIA })
+  @IsEnum(PrioridadeChamado)
+  prioridade: PrioridadeChamado;
+
+  @ApiProperty({ example: 'suporte@empresa.com' })
+  @IsString()
+  @IsNotEmpty()
+  emailSolicitante: string;
+}
+</file>
+
+<file path="src/chamados/chamados.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { chamados_suporte_status } from '@prisma/client';
+import { ChamadosService } from './chamados.service';
+import { CriarChamadoDto } from './dto/criar-chamado.dto';
+
+@ApiTags('Chamados')
+@Controller('chamados')
+export class ChamadosController {
+  constructor(private readonly chamadosService: ChamadosService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Criar um novo chamado de suporte' })
+  criar(@Body() criarChamadoDto: CriarChamadoDto) {
+    return this.chamadosService.criar(criarChamadoDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Listar todos os chamados' })
+  listarTodos() {
+    return this.chamadosService.listarTodos();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Buscar chamado por ID' })
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.chamadosService.buscarPorId(id);
+  }
+
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Atualizar o status de um chamado' })
+  atualizarStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: chamados_suporte_status,
+  ) {
+    return this.chamadosService.atualizarStatus(id, status);
+  }
+}
+</file>
+
+<file path="src/chamados/chamados.module.ts">
+import { Module } from '@nestjs/common';
+import { ChamadosController } from './chamados.controller';
+import { ChamadosService } from './chamados.service';
+import { MailModule } from '../mail/mail.module';
+
+@Module({
+  imports: [MailModule],
+  controllers: [ChamadosController],
+  providers: [ChamadosService],
+})
+export class ChamadosModule {}
+</file>
+
+<file path="src/chamados/chamados.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
+import { CriarChamadoDto } from './dto/criar-chamado.dto';
+import { chamados_suporte_status, chamados_suporte_prioridade } from '@prisma/client';
+
+@Injectable()
+export class ChamadosService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService,
+  ) {}
+
+  async criar(dto: CriarChamadoDto) {
+    const codigo = `CHM-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const chamado = await this.prisma.chamados_suporte.create({
+      data: {
+        codigo,
+        assunto: dto.titulo, // Mapeado para a coluna 'assunto' do MySQL
+        descricao: dto.descricao,
+        prioridade: dto.prioridade as chamados_suporte_prioridade,
+        email_solicitante: dto.emailSolicitante, // Mapeado para 'email_solicitante'
+      },
+    });
+
+    if (chamado.email_solicitante) {
+      this.mailService.enviarEmail({
+        para: chamado.email_solicitante,
+        assunto: `[${chamado.codigo}] Chamado Aberto: ${chamado.assunto}`,
+        conteudoHtml: `<p>O seu chamado <strong>${chamado.codigo}</strong> foi registado com sucesso!</p>`,
+      });
+    }
+
+    return chamado;
+  }
+
+  async listarTodos() {
+    return this.prisma.chamados_suporte.findMany({
+      orderBy: { data_abertura: 'desc' },
+    });
+  }
+
+  async atualizarStatus(id: number, status: chamados_suporte_status) {
+    const chamadoExiste = await this.prisma.chamados_suporte.findUnique({
+      where: { id },
+    });
+
+    if (!chamadoExiste) {
+      throw new NotFoundException(`Chamado com ID "${id}" não foi encontrado.`);
+    }
+
+    const chamadoAtualizado = await this.prisma.chamados_suporte.update({
+      where: { id },
+      data: { status },
+    });
+
+    if (chamadoAtualizado.email_solicitante) {
+      this.mailService.enviarEmail({
+        para: chamadoAtualizado.email_solicitante,
+        assunto: `[${chamadoAtualizado.codigo}] Atualização: ${status}`,
+        conteudoHtml: `<p>O estado do seu chamado foi alterado para <strong>${status}</strong>.</p>`,
+      });
+    }
+
+    return chamadoAtualizado;
+  }
+
+  async buscarPorId(id: number) {
+  const chamado = await this.prisma.chamados_suporte.findUnique({
+    where: { id },
+  });
+
+  if (!chamado) {
+    throw new NotFoundException(`Chamado com ID #${id} não encontrado.`);
+  }
+
+  return chamado;
+}
+}
+</file>
+
+<file path="src/clientes/dto/cliente-filter.dto.ts">
+import { PaginacaoFiltroDto } from '../../common/dto/paginacao-filtro.dto';
+
+export class ClienteFilterDto extends PaginacaoFiltroDto {}
+</file>
+
+<file path="src/clientes/dto/create-cliente.dto.ts">
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+
+export class CreateClienteDto {
+  @ApiProperty({ description: 'Nome completo ou razão social do cliente', example: 'João da Silva' })
+  @IsString({ message: 'O nome deve ser um texto.' })
+  @IsNotEmpty({ message: 'O nome do cliente é obrigatório.' })
+  @MaxLength(150, { message: 'O nome pode ter no máximo 150 caracteres.' })
+  nome: string;
+
+  @ApiPropertyOptional({ description: 'CPF ou CNPJ do cliente', example: '123.456.789-00' })
+  @IsString({ message: 'O CPF/CNPJ deve ser um texto.' })
+  @IsOptional()
+  @MaxLength(20, { message: 'O CPF/CNPJ pode ter no máximo 20 caracteres.' })
+  cpf_cnpj?: string;
+
+  @ApiPropertyOptional({ description: 'Telefone de contato', example: '(11) 98765-4321' })
+  @IsString({ message: 'O telefone deve ser um texto.' })
+  @IsOptional()
+  @MaxLength(20, { message: 'O telefone pode ter no máximo 20 caracteres.' })
+  telefone?: string;
+
+  @ApiPropertyOptional({ description: 'Endereço de e-mail do cliente', example: 'joao.silva@email.com' })
+  @IsEmail({}, { message: 'Formato de e-mail inválido.' })
+  @IsOptional()
+  @MaxLength(100, { message: 'O e-mail pode ter no máximo 100 caracteres.' })
+  email?: string;
+}
+</file>
+
+<file path="src/clientes/dto/update-cliente.dto.ts">
+import { PartialType } from '@nestjs/swagger';
+import { CreateClienteDto } from './create-cliente.dto';
+
+export class UpdateClienteDto extends PartialType(CreateClienteDto) {}
+</file>
+
+<file path="src/clientes/clientes.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ClientesService } from './clientes.service';
+import { ClienteFilterDto } from './dto/cliente-filter.dto';
+import { CreateClienteDto } from './dto/create-cliente.dto';
+import { UpdateClienteDto } from './dto/update-cliente.dto';
+
+@ApiTags('Clientes')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('clientes')
+export class ClientesController {
+  constructor(private readonly clientesService: ClientesService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Cadastra um novo cliente' })
+  create(@Body() dto: CreateClienteDto) {
+    return this.clientesService.create(dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Lista os clientes com paginação, busca e ordenação' })
+  findAll(@Query() filterDto: ClienteFilterDto) {
+    return this.clientesService.findAll(filterDto);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Busca os detalhes de um cliente por ID (inclui últimos pedidos)' })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.clientesService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Atualiza os dados de um cliente' })
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateClienteDto,
+  ) {
+    return this.clientesService.update(id, dto);
+  }
+}
+</file>
+
+<file path="src/clientes/clientes.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { ClientesController } from './clientes.controller';
+import { ClientesService } from './clientes.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [ClientesController],
+  providers: [ClientesService],
+  exports: [ClientesService],
+})
+export class ClientesModule {}
+</file>
+
+<file path="src/clientes/clientes.service.ts">
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '../../generated/prisma';
+import { PrismaService } from '../prisma/prisma.service';
+import { ClienteFilterDto } from './dto/cliente-filter.dto';
+import { CreateClienteDto } from './dto/create-cliente.dto';
+import { UpdateClienteDto } from './dto/update-cliente.dto';
+
+@Injectable()
+export class ClientesService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(dto: CreateClienteDto) {
+    try {
+      return await this.prisma.clientes.create({
+        data: {
+          nome: dto.nome,
+          cpf_cnpj: dto.cpf_cnpj || null,
+          telefone: dto.telefone || null,
+          email: dto.email || null,
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail ou CPF/CNPJ informado já está cadastrado.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao cadastrar o cliente.');
+    }
+  }
+
+  async findAll(filterDto: ClienteFilterDto) {
+    const {
+      pagina = 1,
+      limite = 10,
+      busca,
+      ordenar_por = 'criado_em',
+      ordem = 'desc',
+    } = filterDto;
+
+    const skip = (pagina - 1) * limite;
+    const where: Prisma.clientesWhereInput = {};
+
+    if (busca) {
+      where.OR = [
+        { nome: { contains: busca } },
+        { email: { contains: busca } },
+        { cpf_cnpj: { contains: busca } },
+      ];
+    }
+
+    const colunasValidas = ['id', 'nome', 'cpf_cnpj', 'email', 'criado_em'];
+    const campoOrdenacao = colunasValidas.includes(ordenar_por)
+      ? ordenar_por
+      : 'criado_em';
+
+    const [total, data] = await Promise.all([
+      this.prisma.clientes.count({ where }),
+      this.prisma.clientes.findMany({
+        where,
+        skip,
+        take: limite,
+        orderBy: { [campoOrdenacao]: ordem },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limite);
+
+    return {
+      data,
+      meta: {
+        totalItems: total,
+        itemCount: data.length,
+        itemsPerPage: limite,
+        totalPages,
+        currentPage: pagina,
+      },
+    };
+  }
+
+  async findOne(id: number) {
+    const cliente = await this.prisma.clientes.findUnique({
+      where: { id },
+      include: {
+        pedidos_venda: {
+          take: 5,
+          orderBy: { id: 'desc' },
+          select: {
+            id: true,
+            data_venda: true,
+            total: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    if (!cliente) {
+      throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
+    }
+
+    return cliente;
+  }
+
+  async update(id: number, dto: UpdateClienteDto) {
+    await this.findOne(id);
+
+    try {
+      return await this.prisma.clientes.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail ou CPF/CNPJ informado já pertence a outro cliente.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao atualizar o cliente.');
+    }
+  }
+
+  async remove(id: number) {
+    await this.findOne(id);
+
+    try {
+      return await this.prisma.clientes.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2003') {
+          throw new BadRequestException('Não é possível excluir o cliente pois ele possui pedidos vinculados.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao excluir o cliente.');
+    }
+  }
+}
 </file>
 
 <file path="src/common/dto/paginacao-filtro.dto.ts">
@@ -949,6 +1518,119 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
     });
   }
+}
+</file>
+
+<file path="src/common/services/excel.service.ts">
+import { Injectable } from '@nestjs/common';
+import * as ExcelJS from 'exceljs';
+
+export interface ColunaExcel {
+  header: string;
+  key: string;
+  width?: number;
+  format?: string;
+}
+
+@Injectable()
+export class ExcelService {
+  async gerarExcel<T>(
+    nomeAba: string,
+    colunas: ColunaExcel[],
+    dados: T[],
+  ): Promise<Buffer> {
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Sinstock ERP';
+    workbook.created = new Date();
+
+    const worksheet = workbook.addWorksheet(nomeAba);
+
+    // Mapeia e define as colunas da tabela
+    worksheet.columns = colunas.map((col) => ({
+      header: col.header,
+      key: col.key,
+      width: col.width || 20,
+    }));
+
+    // Estilização do Cabeçalho (Linha 1)
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 11 };
+    headerRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '1E293B' }, // Cor Slate-800
+    };
+    headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+    headerRow.height = 25;
+
+    // Inserção dos dados
+    dados.forEach((item) => {
+      worksheet.addRow(item);
+    });
+
+    // Formatação de linhas de dados e bordas
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber > 1) {
+        row.height = 20;
+        row.alignment = { vertical: 'middle', horizontal: 'left' };
+        
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin', color: { argb: 'E2E8F0' } },
+            left: { style: 'thin', color: { argb: 'E2E8F0' } },
+            bottom: { style: 'thin', color: { argb: 'E2E8F0' } },
+            right: { style: 'thin', color: { argb: 'E2E8F0' } },
+          };
+        });
+      }
+    });
+
+    // Gera o ficheiro em memória (Buffer)
+    const buffer = await workbook.xlsx.writeBuffer();
+    return Buffer.from(buffer);
+  }
+}
+</file>
+
+<file path="src/common/common.module.ts">
+import { Module, Global } from '@nestjs/common';
+import { ExcelService } from './services/excel.service';
+import { PdfService } from './services/pdf.service';
+
+@Global()
+@Module({
+  providers: [ExcelService, PdfService],
+  exports: [ExcelService, PdfService],
+})
+export class CommonModule {}
+</file>
+
+<file path="src/dashboards/interfaces/dashboard-graficos.interface.ts">
+export interface GraficoPizzaCategoria {
+  categoria: string;
+  quantidadeTotal: number;
+  valorTotal: number;
+}
+
+export interface GraficoLinhaMovimentacao {
+  data: string; // Formato YYYY-MM-DD
+  entradas: number;
+  saidas: number;
+}
+
+export interface GraficoBarraAlertaStock {
+  produto: string;
+  stockAtual: number;
+  stockMinimo: number;
+}
+
+export interface EventoRealTimeStock {
+  tipo: 'ENTRADA' | 'SAIDA' | 'ALERTA_STOCK';
+  produtoId: string;
+  nomeProduto: string;
+  quantidade: number;
+  stockAtual: number;
+  timestamp: string;
 }
 </file>
 
@@ -1308,18 +1990,151 @@ export class FornecedoresService {
 }
 </file>
 
-<file path="src/movimentacoes/movimentacoes.module.ts">
+<file path="src/integracoes/dto/consulta-cep.dto.ts">
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
+
+export class ConsultaCepDto {
+  @ApiProperty({
+    description: 'CEP para busca (8 dígitos com ou sem hífen)',
+    example: '01001000',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[0-9]{5}-?[0-9]{3}$/, {
+    message: 'O CEP deve conter 8 dígitos no formato 00000000 ou 00000-000.',
+  })
+  cep!: string;
+}
+</file>
+
+<file path="src/integracoes/dto/consulta-coordenadas.dto.ts">
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
+
+export class ConsultaCoordenadasDto {
+  @ApiProperty({ description: 'Logradouro / Nome da rua', example: 'Avenida Paulista' })
+  @IsString()
+  @IsNotEmpty()
+  logradouro!: string;
+
+  @ApiProperty({ description: 'Nome do município', example: 'São Paulo' })
+  @IsString()
+  @IsNotEmpty()
+  cidade!: string;
+
+  @ApiProperty({ description: 'Sigla do estado (2 caracteres)', example: 'SP' })
+  @IsString()
+  @Length(2, 2, { message: 'A UF deve ter exatamente 2 caracteres.' })
+  uf!: string;
+}
+</file>
+
+<file path="src/integracoes/dto/consulta-distancia-ceps.dto.ts">
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString, Matches, IsNumber, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class ConsultaDistanciaCepsDto {
+  @ApiProperty({ description: 'CEP de origem', example: '01001000' })
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[0-9]{5}-?[0-9]{3}$/, {
+    message: 'O CEP de origem deve conter 8 dígitos no formato 00000000 ou 00000-000.',
+  })
+  cep_origem!: string;
+
+  @ApiProperty({ description: 'CEP de destino', example: '04538132' })
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[0-9]{5}-?[0-9]{3}$/, {
+    message: 'O CEP de destino deve conter 8 dígitos no formato 00000000 ou 00000-000.',
+  })
+  cep_destino!: string;
+
+  @ApiPropertyOptional({ description: 'Raio máximo em KM para validação', example: 15 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.1)
+  raio_maximo_km?: number;
+}
+</file>
+
+<file path="src/integracoes/integracoes.module.ts">
 import { Module } from '@nestjs/common';
-import { PrismaModule } from '../prisma/prisma.module';
-import { MovimentacoesController } from './movimentacoes.controller';
-import { MovimentacoesService } from './movimentacoes.service';
+import { HttpModule } from '@nestjs/axios';
+import { IntegracoesService } from './integracoes.service';
+import { IntegracoesController } from './integracoes.controller';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [MovimentacoesController],
-  providers: [MovimentacoesService],
+  imports: [
+    HttpModule.register({
+      timeout: 5000,
+      maxRedirects: 5,
+    }),
+  ],
+  controllers: [IntegracoesController],
+  providers: [IntegracoesService],
+  exports: [IntegracoesService],
 })
-export class MovimentacoesModule {}
+export class IntegracoesModule {}
+</file>
+
+<file path="src/mail/mail.module.ts">
+import { Module } from '@nestjs/common';
+import { MailService } from './mail.service';
+
+@Module({
+  providers: [MailService],
+  exports: [MailService],
+})
+export class MailModule {}
+</file>
+
+<file path="src/mail/mail.service.ts">
+import { Injectable, Logger } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
+
+export interface OpcoesEmail {
+  para: string;
+  assunto: string;
+  conteudoHtml: string;
+}
+
+@Injectable()
+export class MailService {
+  private logger = new Logger(MailService.name);
+  private transporter: nodemailer.Transporter;
+
+  constructor() {
+    // Configuração do servidor SMTP (pode ser carregado via ConfigService / process.env)
+    this.transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.mailtrap.io',
+      port: Number(process.env.SMTP_PORT) || 2525,
+      auth: {
+        user: process.env.SMTP_USER || 'usuario_smtp',
+        pass: process.env.SMTP_PASS || 'senha_smtp',
+      },
+    });
+  }
+
+  async enviarEmail(opcoes: OpcoesEmail): Promise<boolean> {
+    try {
+      await this.transporter.sendMail({
+        from: '"Sinstock ERP" <suporte@sinstock.com>',
+        to: opcoes.para,
+        subject: opcoes.assunto,
+        html: opcoes.conteudoHtml,
+      });
+      this.logger.log(`E-mail enviado com sucesso para: ${opcoes.para}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`Erro ao enviar e-mail para ${opcoes.para}:`, error);
+      return false;
+    }
+  }
+}
 </file>
 
 <file path="src/notas-fiscais-entrada/dto/ajuste-lote.dto.ts">
@@ -2021,31 +2836,28 @@ export class CreateCheckoutDto {
 }
 </file>
 
-<file path="src/pedidos/pedidos.controller.ts">
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateCheckoutDto } from './dto/create-checkout.dto';
-import { PedidosService } from './pedidos.service';
-import { Request } from 'express';
+<file path="src/pedidos/dto/create-reserva.dto.ts">
+import { IsArray, IsInt, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { ItemCheckoutDto } from './create-checkout.dto';
 
-interface RequestWithUser extends Request {
-  user: {
-    userId: number;
-    email: string;
-  };
-}
+export class CreateReservaDto {
+  @IsInt()
+  @IsNotEmpty()
+  filial_id: number;
 
-@UseGuards(JwtAuthGuard)
-@Controller('pedidos')
-export class PedidosController {
-  constructor(private readonly pedidosService: PedidosService) {}
+  @IsInt()
+  @IsOptional()
+  cliente_id?: number;
 
-  @Post('checkout')
-  realizarCheckout(@Body() dto: CreateCheckoutDto, @Req() req: RequestWithUser) {
-    const usuarioId = req.user.userId;
-    
-    return this.pedidosService.processarCheckout(dto, usuarioId);
-  }
+  @IsInt()
+  @IsOptional()
+  minutos_expiracao?: number = 15;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemCheckoutDto)
+  itens: ItemCheckoutDto[];
 }
 </file>
 
@@ -2061,99 +2873,6 @@ import { PedidosService } from './pedidos.service';
   providers: [PedidosService],
 })
 export class PedidosModule {}
-</file>
-
-<file path="src/pedidos/pedidos.service.ts">
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateCheckoutDto } from './dto/create-checkout.dto';
-import { TipoMovimentacao } from '../movimentacoes/dto/create-movimentacao.dto';
-
-@Injectable()
-export class PedidosService {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async processarCheckout(dto: CreateCheckoutDto, usuarioId: number) {
-    if (!dto.itens || dto.itens.length === 0) {
-      throw new BadRequestException('O carrinho de compras não pode estar vazio.');
-    }
-
-    const totalPedido = dto.itens.reduce(
-      (acc, item) => acc + item.quantidade * item.preco_unitario,
-      0,
-    );
-
-    return await this.prisma.$transaction(async (tx) => {
-      const pedido = await tx.pedidos_venda.create({
-        data: {
-          usuario_id: usuarioId,
-          cliente_id: dto.cliente_id || null,
-          filial_id: dto.filial_id,
-          total: totalPedido,
-          status: 'CONCLUIDO',
-        },
-      });
-
-      for (const item of dto.itens) {
-        const saldoRegistro = await tx.saldos_estoque.findFirst({
-          where: {
-            produto_id: item.produto_id,
-            filial_id: dto.filial_id,
-            lote_id: item.lote_id || null,
-          },
-        });
-
-        const saldoAnterior = saldoRegistro ? Number(saldoRegistro.quantidade) : 0;
-
-        if (!saldoRegistro || saldoAnterior < item.quantidade) {
-          throw new BadRequestException(
-            `Estoque insuficiente para o produto ID ${item.produto_id}. Saldo atual: ${saldoAnterior}, Tentativa de venda: ${item.quantidade}.`
-          );
-        }
-
-        const saldoAtualNovo = saldoAnterior - item.quantidade;
-
-        await tx.saldos_estoque.update({
-          where: { id: saldoRegistro.id },
-          data: {
-            quantidade: saldoAtualNovo,
-            atualizado_em: new Date(),
-          },
-        });
-
-        await tx.itens_venda.create({
-          data: {
-            pedido_id: pedido.id,
-            produto_id: item.produto_id,
-            lote_id: item.lote_id || null,
-            quantidade: item.quantidade,
-            preco_unitario: item.preco_unitario,
-          },
-        });
-
-        await tx.logs_movimentacoes.create({
-          data: {
-            produto_id: item.produto_id,
-            filial_id: dto.filial_id,
-            lote_id: item.lote_id || null,
-            usuario_id: usuarioId,
-            tipo_movimentacao: TipoMovimentacao.SAIDA as any,
-            quantidade: item.quantidade,
-            saldo_anterior: saldoAnterior,
-            saldo_atual: saldoAtualNovo,
-            origem_id: pedido.id,
-          },
-        });
-      }
-
-      return {
-        message: 'Checkout processado com sucesso!',
-        pedido_id: pedido.id,
-        total: totalPedido,
-      };
-    });
-  }
-}
 </file>
 
 <file path="src/perfis/dto/create-perfil.dto.ts">
@@ -2264,150 +2983,6 @@ export class RelatorioMovimentacoesDto {
 }
 </file>
 
-<file path="src/relatorios/relatorios.controller.ts">
-import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
-import { RelatoriosService } from './relatorios.service';
-
-@ApiTags('Relatórios')
-@ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
-@Controller('relatorios')
-export class RelatoriosController {
-  constructor(private readonly relatoriosService: RelatoriosService) {}
-
-  @Get('movimentacoes/pdf')
-  @ApiOperation({ summary: 'Gera PDF do extrato de movimentações' })
-  async baixarRelatorioMovimentacoes(
-    @Query() filtros: RelatorioMovimentacoesDto,
-    @Res() res: Response,
-  ) {
-
-    const pdfBuffer = await this.relatoriosService.gerarPdfMovimentacoes(filtros);
-
-
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="relatorio-auditoria-sinstock.pdf"',
-      'Content-Length': pdfBuffer.length,
-    });
-
-
-    res.end(pdfBuffer);
-  }
-}
-</file>
-
-<file path="src/relatorios/relatorios.module.ts">
-import { Module } from '@nestjs/common';
-import { PrismaModule } from '../prisma/prisma.module';
-import { RelatoriosController } from './relatorios.controller';
-import { RelatoriosService } from './relatorios.service';
-
-@Module({
-  imports: [PrismaModule],
-  controllers: [RelatoriosController],
-  providers: [RelatoriosService],
-})
-export class RelatoriosModule {}
-</file>
-
-<file path="src/relatorios/relatorios.service.ts">
-import { Injectable } from '@nestjs/common';
-import PdfDocument from 'pdfkit-table';
-import { PrismaService } from '../prisma/prisma.service';
-import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
-
-@Injectable()
-export class RelatoriosService {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async gerarPdfMovimentacoes(filtros: RelatorioMovimentacoesDto): Promise<Buffer> {
-
-    const where: any = {};
-    if (filtros.filial_id) where.filial_id = filtros.filial_id;
-    if (filtros.produto_id) where.produto_id = filtros.produto_id;
-    if (filtros.data_inicio || filtros.data_fim) {
-      where.data_hora = {};
-      if (filtros.data_inicio) where.data_hora.gte = filtros.data_inicio;
-      if (filtros.data_fim) where.data_hora.lte = filtros.data_fim;
-    }
-
-
-    const movimentacoes = await this.prisma.logs_movimentacoes.findMany({
-      where,
-      include: {
-        produtos: { select: { nome: true } },
-        filiais: { select: { nome: true } },
-        usuarios: { select: { nome: true } },
-      },
-      orderBy: { data_hora: 'desc' },
-    });
-
-
-    return new Promise((resolve, reject) => {
-      try {
-        const doc = new PdfDocument({ margin: 30, size: 'A4' });
-        const buffers: Buffer[] = [];
-
-        doc.on('data', buffers.push.bind(buffers));
-        doc.on('end', () => resolve(Buffer.concat(buffers)));
-
-
-        doc.fontSize(20).text('SINSTOCK - Relatório de Auditoria de Estoque', { align: 'center' });
-        doc.moveDown();
-        doc.fontSize(10).text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, { align: 'right' });
-        doc.moveDown(2);
-
-
-        const table = {
-          title: 'Extrato de Movimentações',
-          headers: ['Data', 'Produto', 'Filial', 'Tipo', 'Qtd', 'Usuário'],
-          rows: movimentacoes.map(mov => [
-            mov.data_hora ? mov.data_hora.toLocaleDateString('pt-BR') : '-',
-            mov.produtos?.nome || 'N/A',
-            mov.filiais?.nome || 'N/A',
-            mov.tipo_movimentacao,
-            Number(mov.quantidade).toString(),
-            mov.usuarios?.nome || 'N/A',
-          ]),
-        };
-
-
-        doc.table(table, { prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10) });
-        doc.end();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
-}
-</file>
-
-<file path="src/saldos-estoque/dto/saldos-estoque-filter.dto.ts">
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
-import { PaginationDto } from '../../common/dto/pagination.dto';
-
-export class SaldosEstoqueFilterDto extends PaginationDto {
-  @ApiPropertyOptional({ description: 'ID da filial para filtragem' })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  filial_id?: number;
-
-  @ApiPropertyOptional({ description: 'ID do produto para filtragem' })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  produto_id?: number;
-}
-</file>
-
 <file path="src/saldos-estoque/saldos-estoque.module.ts">
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -2423,69 +2998,34 @@ import { SaldosEstoqueService } from './saldos-estoque.service';
 export class SaldosEstoqueModule {}
 </file>
 
-<file path="src/saldos-estoque/saldos-estoque.service.ts">
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PrismaService } from '../prisma/prisma.service';
+<file path="src/usuario/dto/update-user.dto.ts">
+import { IsBoolean, IsEmail, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
-@Injectable()
-export class SaldosEstoqueService {
-  constructor(private readonly prisma: PrismaService) {}
+export class UpdateUserDto {
+  @IsString()
+  @IsOptional()
+  nome?: string;
 
-  async findAll(paginationDto: PaginationDto, filialId?: number, produtoId?: number) {
-    const { page = 1, limit = 10 } = paginationDto;
-    const skip = (page - 1) * limit;
+  @IsEmail({}, { message: 'E-mail inválido.' })
+  @IsOptional()
+  email?: string;
 
-    const where: any = {};
-    if (filialId) where.filial_id = filialId;
-    if (produtoId) where.produto_id = produtoId;
+  @IsString()
+  @MinLength(6, { message: 'A senha deve ter pelo menos 6 caracteres.' })
+  @IsOptional()
+  senha?: string;
 
-   
-    const [total, data] = await Promise.all([
-      this.prisma.saldos_estoque.count({ where }),
-      this.prisma.saldos_estoque.findMany({
-        where,
-        skip,
-        take: limit,
-        include: {
-          filiais: { select: { id: true, nome: true } },
-          produtos: { select: { id: true, nome: true } },
-          lotes: true,
-        },
-        orderBy: { atualizado_em: 'desc' },
-      }),
-    ]);
+  @IsInt()
+  @IsOptional()
+  perfil_id?: number;
 
-    const totalPages = Math.ceil(total / limit);
+  @IsString()
+  @IsOptional()
+  telefone?: string;
 
-    return {
-      data,
-      meta: {
-        totalItems: total,
-        itemCount: data.length,
-        itemsPerPage: limit,
-        totalPages,
-        currentPage: page,
-      },
-    };
-  }
-
-  async findOne(id: number) {
-    const saldo = await this.prisma.saldos_estoque.findUnique({
-      where: { id },
-      include: {
-        filiais: { select: { id: true, nome: true } },
-        produtos: { select: { id: true, nome: true } },
-        lotes: true,
-      },
-    });
-
-    if (!saldo) {
-      throw new NotFoundException(`Registro de saldo com ID ${id} não encontrado.`);
-    }
-
-    return saldo;
-  }
+  @IsBoolean()
+  @IsOptional()
+  ativo?: boolean;
 }
 </file>
 
@@ -2698,99 +3238,167 @@ export class AlertasController {
 }
 </file>
 
-<file path="src/alertas/alertas.service.ts">
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
+<file path="src/auditoria/interceptors/audit-estoque.interceptor.ts">
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuditoriaService } from '../auditoria.service';
+import { AUDIT_METADATA_KEY, AuditMetadata } from '../decorators/audit.decorator';
 
 @Injectable()
-export class AlertasService {
-  constructor(private readonly prisma: PrismaService) {}
+export class AuditEstoqueInterceptor implements NestInterceptor {
+  constructor(
+    private readonly auditoriaService: AuditoriaService,
+    private readonly reflector: Reflector,
+  ) {}
 
-  async verificarEstoqueMinimo(filialId?: number) {
-    const saldos = await this.prisma.saldos_estoque.findMany({
-      where: filialId ? { filial_id: filialId } : {},
-      include: {
-        produtos: true,
-      },
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    // Captura os metadados do decorator @Audit()
+    const metadata = this.reflector.get<AuditMetadata>(
+      AUDIT_METADATA_KEY,
+      context.getHandler(),
+    );
+
+    const req = context.switchToHttp().getRequest();
+    const { method, body, params, ip, headers, user } = req;
+
+    const recursoId = params?.id || body?.id || body?.produtoId || null;
+
+    return next.handle().pipe(
+      tap((respostaServidor) => {
+        this.auditoriaService
+          .registrarLog({
+            usuarioId: user?.id || user?.sub || 'SISTEMA',
+            acao: metadata?.acao || method,
+            recurso: metadata?.recurso || 'ESTOQUE',
+            recursoId: recursoId ? String(recursoId) : undefined,
+            dadosAnteriores: req.dadosAnteriores || null,
+            dadosNovos: respostaServidor || body,
+            ip: ip || headers['x-forwarded-for'],
+            userAgent: headers['user-agent'],
+          })
+          .catch((err) => {
+            console.error('Erro ao salvar log de auditoria:', err);
+          });
+      }),
+    );
+  }
+}
+</file>
+
+<file path="src/auditoria/auditoria.controller.ts">
+import {
+  Controller,
+  Get,
+  Query,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Readable } from 'stream';
+import { AuditoriaService } from './auditoria.service';
+import { ConsultaAuditoriaDto } from './dto/consulta-auditoria.dto';
+import { ExcelService } from '../common/services/excel.service';
+import { PdfService } from '../common/services/pdf.service';
+
+@ApiTags('Histórico de Auditoria')
+@Controller('auditoria')
+export class AuditoriaController {
+  constructor(
+    private readonly auditoriaService: AuditoriaService,
+    private readonly excelService: ExcelService,
+    private readonly pdfService: PdfService,
+  ) {}
+
+  @Get('estoque/exportar-excel')
+  @ApiOperation({ summary: 'Exporta logs de auditoria para Excel via Stream' })
+  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header('Content-Disposition', 'attachment; filename="auditoria_estoque.xlsx"')
+  async exportarExcelStream(
+    @Query() query: ConsultaAuditoriaDto,
+  ): Promise<StreamableFile> {
+    const { data: logs } = await this.auditoriaService.listarHistorico({
+      ...query,
+      page: 1,
+      limit: 10000,
     });
 
-    return saldos
-      .filter((saldo) => {
-        const estoqueMinimo = (saldo.produtos as any)?.estoque_minimo ?? 10;
-        return saldo.quantidade <= estoqueMinimo;
-      })
-      .map((saldo) => ({
-        tipo: 'ESTOQUE_BAIXO',
-        produto_id: saldo.produto_id,
-        produto_nome: (saldo.produtos as any)?.nome,
-        filial_id: saldo.filial_id,
-        quantidade_atual: saldo.quantidade,
-        estoque_minimo: (saldo.produtos as any)?.estoque_minimo ?? 10,
-      }));
+    const dadosFormatados = logs.map((log) => ({
+      id: log.id,
+      usuarioId: log.usuarioId || 'SISTEMA',
+      acao: log.acao,
+      recurso: log.recurso,
+      recursoId: log.recursoId || 'N/A',
+      ip: log.ip || 'N/A',
+      criadoEm: new Date(log.criadoEm).toLocaleString('pt-PT'),
+    }));
+
+    const colunas = [
+      { header: 'ID do Log', key: 'id', width: 36 },
+      { header: 'Utilizador', key: 'usuarioId', width: 25 },
+      { header: 'Ação', key: 'acao', width: 20 },
+      { header: 'Recurso', key: 'recurso', width: 20 },
+      { header: 'ID Recurso', key: 'recursoId', width: 20 },
+      { header: 'Endereço IP', key: 'ip', width: 18 },
+      { header: 'Data / Hora', key: 'criadoEm', width: 22 },
+    ];
+
+    const buffer = await this.excelService.gerarExcel(
+      'Auditoria de Stock',
+      colunas,
+      dadosFormatados,
+    );
+
+    const stream = Readable.from(buffer);
+    return new StreamableFile(stream);
   }
 
-  async verificarLotesVencimento(diasAviso = 30, filialId?: number) {
-    const dataLimite = new Date();
-    dataLimite.setDate(dataLimite.getDate() + diasAviso);
-
-    const lotes = await this.prisma.lotes.findMany({
-      where: {
-        data_validade: {
-          lte: dataLimite,
-        },
-        ...(filialId ? { filial_id: filialId } : {}),
-      },
-      include: {
-        produtos: true,
-      },
-      orderBy: { data_validade: 'asc' },
+  @Get('estoque/exportar-pdf')
+  @ApiOperation({ summary: 'Exporta logs de auditoria para PDF via Stream' })
+  @Header('Content-Type', 'application/pdf')
+  @Header('Content-Disposition', 'inline; filename="auditoria_estoque.pdf"')
+  async exportarPdfStream(
+    @Query() query: ConsultaAuditoriaDto,
+  ): Promise<StreamableFile> {
+    const { data: logs } = await this.auditoriaService.listarHistorico({
+      ...query,
+      page: 1,
+      limit: 1000,
     });
 
-    return lotes.map((lote) => {
-      const hoje = new Date();
-      const validade = new Date(lote.data_validade);
-      const diffDias = Math.ceil(
-        (validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24),
-      );
+    const dadosFormatados = logs.map((log) => ({
+      usuarioId: log.usuarioId || 'SISTEMA',
+      acao: log.acao,
+      recurso: log.recurso,
+      recursoId: log.recursoId || 'N/A',
+      ip: log.ip || 'N/A',
+      criadoEm: new Date(log.criadoEm).toLocaleString('pt-PT'),
+    }));
 
-      return {
-        tipo: diffDias < 0 ? 'LOTE_VENCIDO' : 'LOTE_PROXIMO_VENCIMENTO',
-        lote_id: lote.id,
-        numero_lote: lote.numero_lote,
-        produto_id: lote.produto_id,
-        produto_nome: (lote.produtos as any)?.nome,
-        data_validade: lote.data_validade,
-        dias_para_vencer: diffDias,
-      };
-    });
-  }
+    const colunas = [
+      { header: 'Utilizador', key: 'usuarioId', width: 110 },
+      { header: 'Ação', key: 'acao', width: 100 },
+      { header: 'Recurso', key: 'recurso', width: 100 },
+      { header: 'ID Recurso', key: 'recursoId', width: 100 },
+      { header: 'Endereço IP', key: 'ip', width: 90 },
+      { header: 'Data / Hora', key: 'criadoEm', width: '*' },
+    ];
 
-  async obterDashboardAlertas(dto?: ConsultaAlertasDto) {
-    const filialId = dto?.filial_id;
-    const diasVencimento = dto?.dias_vencimento ?? 30;
+    const buffer = await this.pdfService.gerarRelatorioTabela(
+      'Relatório de Auditoria de Stock',
+      colunas,
+      dadosFormatados,
+      'landscape',
+    );
 
-    // Executa as duas consultas em paralelo para melhor performance
-    const [estoqueBaixo, lotesVencendo] = await Promise.all([
-      this.verificarEstoqueMinimo(filialId),
-      this.verificarLotesVencimento(diasVencimento, filialId),
-    ]);
-
-    return {
-      resumo: {
-        total_alertas: estoqueBaixo.length + lotesVencendo.length,
-        total_estoque_baixo: estoqueBaixo.length,
-        total_lotes_vencendo: lotesVencendo.length,
-        parametros_aplicados: {
-          filial_id: filialId ?? 'todas',
-          dias_vencimento: diasVencimento,
-        },
-      },
-      alertas: {
-        estoque_baixo: estoqueBaixo,
-        lotes_vencendo: lotesVencendo,
-      },
-    };
+    const stream = Readable.from(buffer);
+    return new StreamableFile(stream);
   }
 }
 </file>
@@ -2816,6 +3424,168 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty({ message: 'A senha é obrigatória' })
   senha: string;
+}
+</file>
+
+<file path="src/busca-global/dto/busca-global.dto.ts">
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Max, Min, MinLength } from 'class-validator';
+
+export class BuscaGlobalDto {
+  @IsString({ message: 'O termo de busca deve ser um texto.' })
+  @MinLength(2, { message: 'O termo de busca deve ter pelo menos 2 caracteres.' })
+  termo: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O ID da filial deve ser um número inteiro.' })
+  @Min(1, { message: 'O ID da filial deve ser maior que zero.' })
+  filial_id?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'O limite deve ser um número inteiro.' })
+  @Min(1)
+  @Max(50, {message: 'O limite não deve ser superior a 50.'})
+  limite?: number = 10;
+}
+</file>
+
+<file path="src/busca-global/busca-global.controller.ts">
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { BuscaGlobalService } from './busca-global.service';
+import { BuscaGlobalDto } from './dto/busca-global.dto';
+
+@ApiTags('Busca Global')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('busca-global')
+export class BuscaGlobalController {
+  constructor(private readonly buscaGlobalService: BuscaGlobalService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Realiza pesquisa multi-critério centralizada no sistema' })
+  buscar(@Query() query: BuscaGlobalDto) {
+    return this.buscaGlobalService.buscar(query);
+  }
+}
+</file>
+
+<file path="src/busca-global/busca-global.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { BuscaGlobalDto } from './dto/busca-global.dto';
+
+@Injectable()
+export class BuscaGlobalService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async buscar(dto: BuscaGlobalDto) {
+    const termo = dto.termo.trim();
+    const { filial_id, limite = 10 } = dto;
+
+    const [produtos, fornecedores, lotes, notasFiscais] = await Promise.all([
+      // 1. Busca em Produtos (por nome ou código de barras)
+      this.prisma.produtos.findMany({
+        where: {
+          OR: [
+            { nome: { contains: termo } },
+            { codigo_barras: { contains: termo } },
+          ],
+        },
+        take: limite,
+      }),
+
+      // 2. Busca em Fornecedores (por nome_juridico ou cnpj)
+      this.prisma.fornecedores.findMany({
+        where: {
+          OR: [
+            { nome_juridico: { contains: termo } },
+            { cnpj: { contains: termo } },
+          ],
+        },
+        take: limite,
+      }),
+
+      // 3. Busca em Lotes (por numero_lote e relacionamento com saldos_estoque)
+      this.prisma.lotes.findMany({
+        where: {
+          numero_lote: { contains: termo },
+          ...(filial_id ? { saldos_estoque: { some: { filial_id } } } : {}),
+        },
+        include: {
+          produtos: { select: { nome: true } },
+          saldos_estoque: true,
+        },
+        take: limite,
+      }),
+
+      // 4. Busca em Notas Fiscais de Entrada (por numero_nf)
+      this.prisma.notas_fiscais_entrada.findMany({
+        where: {
+          numero_nf: { contains: termo },
+        },
+        include: {
+          fornecedores: { select: { nome_juridico: true } },
+        },
+        take: limite,
+      }),
+    ]);
+
+    const totalResultados =
+      produtos.length +
+      fornecedores.length +
+      lotes.length +
+      notasFiscais.length;
+
+    return {
+      termo_pesquisado: termo,
+      filtros: {
+        filial_id: filial_id ?? 'todas',
+        limite_por_categoria: limite,
+      },
+      total_resultados: totalResultados,
+      resultados: {
+        produtos: produtos.map((p) => ({
+          id: p.id,
+          nome: p.nome,
+          codigo_barras: p.codigo_barras,
+          estoque_minimo: p.estoque_minimo,
+        })),
+        fornecedores: fornecedores.map((f) => ({
+          id: f.id,
+          nome_juridico: f.nome_juridico,
+          cnpj: f.cnpj,
+          email: f.email,
+          telefone: f.telefone,
+        })),
+        lotes: lotes.map((l) => {
+          const quantidadeTotal = l.saldos_estoque.reduce(
+            (acc, saldo) => acc + Number(saldo.quantidade ?? 0),
+            0,
+          );
+
+          return {
+            id: l.id,
+            numero_lote: l.numero_lote,
+            produto_nome: l.produtos?.nome,
+            quantidade_total: quantidadeTotal,
+            data_validade: l.data_validade,
+          };
+        }),
+        notas_fiscais: notasFiscais.map((nf) => ({
+          id: nf.id,
+          numero_nf: nf.numero_nf,
+          fornecedor_nome: nf.fornecedores?.nome_juridico,
+          total: nf.total,
+          status: nf.status,
+          data_emissao: nf.data_emissao,
+        })),
+      },
+    };
+  }
 }
 </file>
 
@@ -2890,6 +3660,608 @@ export class CategoriasService {
       }
       throw error;
     }
+  }
+}
+</file>
+
+<file path="src/common/services/pdf.service.ts">
+import { Injectable } from '@nestjs/common';
+
+export type ColunaDef =
+  | string
+  | { header: string; key?: string; width?: number | string };
+
+@Injectable()
+export class PdfService {
+  private pdfmake: any;
+
+  constructor() {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    this.pdfmake = require('pdfmake');
+
+    this.pdfmake.addFonts({
+      Roboto: {
+        normal: 'Helvetica',
+        bold: 'Helvetica-Bold',
+        italics: 'Helvetica-Oblique',
+        bolditalics: 'Helvetica-BoldOblique',
+      },
+    });
+
+    // Bloqueia recursos externos por URL.
+    this.pdfmake.setUrlAccessPolicy(() => false);
+
+    // Permite somente as fontes Helvetica utilizadas no PDF.
+    this.pdfmake.setLocalAccessPolicy((path: string) =>
+      [
+        'Helvetica',
+        'Helvetica-Bold',
+        'Helvetica-Oblique',
+        'Helvetica-BoldOblique',
+      ].includes(path),
+    );
+  }
+
+  /**
+   * Gera um Buffer a partir da definição de um documento PDF.
+   */
+  async gerarBuffer(docDefinition: any): Promise<Buffer> {
+    const pdf = this.pdfmake.createPdf(docDefinition);
+    const buffer = await pdf.getBuffer();
+
+    return Buffer.from(buffer);
+  }
+
+  /**
+   * Gera um PDF formatado em tabela,
+   * aceitando matrizes ou arrays de objetos.
+   */
+  async gerarRelatorioTabela(
+    titulo: string,
+    colunas: ColunaDef[],
+    dados: (any[] | Record<string, any>)[],
+    orientacao: 'portrait' | 'landscape' = 'portrait',
+  ): Promise<Buffer> {
+    const headers = colunas.map((col) =>
+      typeof col === 'string' ? col : col.header,
+    );
+
+    const widths = colunas.map((col) => {
+      if (
+        typeof col === 'object' &&
+        col.width &&
+        typeof col.width === 'number'
+      ) {
+        return col.width;
+      }
+
+      return '*';
+    });
+
+    const linhasFormatadas: string[][] = dados.map((item) => {
+      if (Array.isArray(item)) {
+        return item.map((celula) =>
+          celula !== null && celula !== undefined
+            ? String(celula)
+            : '',
+        );
+      }
+
+      return colunas.map((col) => {
+        const key =
+          typeof col === 'object' && col.key ? col.key : null;
+
+        const valor = key && item ? item[key] : '';
+
+        return valor !== null && valor !== undefined
+          ? String(valor)
+          : '';
+      });
+    });
+
+    const docDefinition = {
+      pageOrientation: orientacao,
+      content: [
+        {
+          text: titulo,
+          style: 'header',
+        },
+        {
+          text: `Emissão: ${new Date().toLocaleString('pt-PT')}`,
+          style: 'subheader',
+        },
+        {
+          text: '\n',
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths,
+            body: [
+              headers.map((h) => ({
+                text: h,
+                style: 'tableHeader',
+              })),
+              ...linhasFormatadas,
+            ],
+          },
+          layout: 'lightHorizontalLines',
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 6],
+        },
+        subheader: {
+          fontSize: 9,
+          italics: true,
+          color: '#555555',
+          margin: [0, 0, 0, 10],
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 10,
+          fillColor: '#EEEEEE',
+        },
+      },
+      defaultStyle: {
+        font: 'Roboto',
+        fontSize: 9,
+      },
+    };
+
+    return this.gerarBuffer(docDefinition);
+  }
+}
+</file>
+
+<file path="src/dashboards/dashboard.controller.ts">
+import { Controller, Get, MessageEvent, Sse, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { map, Observable } from 'rxjs';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { DashboardService } from './dashboard.service';
+
+@ApiTags('Dashboard & Métricas')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@Controller('dashboard')
+export class DashboardController {
+  constructor(private readonly dashboardService: DashboardService) {}
+
+  @Get('graficos/stock-categoria')
+  @ApiOperation({
+    summary: 'Métricas de estoque agrupadas por categoria (Gráfico de Pizza)',
+  })
+  async getStockPorCategoria() {
+    return this.dashboardService.obterStockPorCategoria();
+  }
+
+  @Get('graficos/movimentacoes-semanal')
+  @ApiOperation({
+    summary:
+      'Histórico de entradas/saídas dos últimos 7 dias (Gráfico de Linhas)',
+  })
+  async getMovimentacoesSemanal() {
+    return this.dashboardService.obterMovimentacoesSeteDias();
+  }
+
+  @Get('graficos/produtos-criticos')
+  @ApiOperation({
+    summary: 'Produtos abaixo do estoque mínimo (Gráfico de Barras)',
+  })
+  async getProdutosCriticos() {
+    return this.dashboardService.obterProdutosCriticos();
+  }
+
+  @Sse('realtime-stream')
+  @ApiOperation({
+    summary: 'Stream SSE de atualizações do estoque em tempo real',
+  })
+  streamStockEvents(): Observable<MessageEvent> {
+    return this.dashboardService.obterStreamRealTime().pipe(
+      map((evento) => ({
+        data: evento,
+      })),
+    );
+  }
+}
+</file>
+
+<file path="src/dashboards/dashboard.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { DashboardController } from './dashboard.controller';
+import { DashboardService } from './dashboard.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [DashboardController],
+  providers: [DashboardService],
+  exports: [DashboardService], // Exportado para permitir a injeção do stream SSE em outros módulos
+})
+export class DashboardModule {}
+</file>
+
+<file path="src/dashboards/dashboard.service.ts">
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Observable, Subject } from 'rxjs';
+import { PrismaService } from '../prisma/prisma.service';
+import {
+  EventoRealTimeStock,
+  GraficoBarraAlertaStock,
+  GraficoLinhaMovimentacao,
+  GraficoPizzaCategoria,
+} from './interfaces/dashboard-graficos.interface';
+
+@Injectable()
+export class DashboardService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  // Canal de eventos reativo para atualizações em tempo real (SSE)
+  private stockEvents$ = new Subject<EventoRealTimeStock>();
+
+  /**
+   * Método chamado pelos serviços de estoque sempre que houver uma movimentação
+   */
+  notificarMovimentacao(evento: EventoRealTimeStock) {
+    this.stockEvents$.next(evento);
+  }
+
+  /**
+   * Retorna o Stream de eventos em tempo real para o endpoint SSE
+   */
+  obterStreamRealTime(): Observable<EventoRealTimeStock> {
+    return this.stockEvents$.asObservable();
+  }
+
+  /**
+   * Agregação 1: Distribuição de Estoque por Categoria (Gráfico de Pizza/Doughnut)
+   */
+  async obterStockPorCategoria(): Promise<GraficoPizzaCategoria[]> {
+    try {
+      const categorias = await this.prisma.categorias.findMany({
+        include: {
+          produtos: {
+            include: {
+              saldos_estoque: true,
+            },
+          },
+        },
+      });
+
+      return categorias.map((cat) => {
+        let quantidadeTotal = 0;
+        let valorTotal = 0;
+
+        for (const prod of cat.produtos) {
+          const saldoProd = prod.saldos_estoque.reduce(
+            (acc, s) => acc + Number(s.quantidade),
+            0,
+          );
+          quantidadeTotal += saldoProd;
+          valorTotal += saldoProd * Number(prod.custo_medio ?? 0);
+        }
+
+        return {
+          categoria: cat.nome,
+          quantidadeTotal,
+          valorTotal: Number(valorTotal.toFixed(2)),
+        };
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao consultar distribuição de estoque por categoria.',
+      );
+    }
+  }
+
+  /**
+   * Agregação 2: Histórico de Entradas e Saídas dos últimos 7 dias (Gráfico de Linha)
+   */
+  async obterMovimentacoesSeteDias(): Promise<GraficoLinhaMovimentacao[]> {
+    try {
+      const seteDiasAtras = new Date();
+      seteDiasAtras.setDate(seteDiasAtras.getDate() - 6);
+      seteDiasAtras.setHours(0, 0, 0, 0);
+
+      const logs = await this.prisma.logs_movimentacoes.findMany({
+        where: {
+          data_hora: { gte: seteDiasAtras },
+        },
+        select: {
+          tipo_movimentacao: true,
+          quantidade: true,
+          data_hora: true,
+        },
+      });
+
+      // Inicializa o mapa com os últimos 7 dias zerados
+      const resultadoMap = new Map<string, { entradas: number; saidas: number }>();
+      for (let i = 0; i < 7; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        const dataIso = d.toISOString().split('T')[0];
+        resultadoMap.set(dataIso, { entradas: 0, saidas: 0 });
+      }
+
+      // Agrupa os logs por data
+      for (const log of logs) {
+        if (!log.data_hora) continue;
+        const dataKey = new Date(log.data_hora).toISOString().split('T')[0];
+
+        if (resultadoMap.has(dataKey)) {
+          const diaAtual = resultadoMap.get(dataKey)!;
+          const qtd = Number(log.quantidade);
+          const tipo = String(log.tipo_movimentacao).toUpperCase();
+
+          if (tipo === 'ENTRADA') diaAtual.entradas += qtd;
+          if (tipo === 'SAIDA') diaAtual.saidas += qtd;
+        }
+      }
+
+      return Array.from(resultadoMap.entries()).map(([data, metricas]) => ({
+        data,
+        entradas: metricas.entradas,
+        saidas: metricas.saidas,
+      }));
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao consultar movimentações dos últimos 7 dias.',
+      );
+    }
+  }
+
+  /**
+   * Agregação 3: Produtos críticos com estoque abaixo do mínimo (Gráfico de Barras)
+   */
+  async obterProdutosCriticos(): Promise<GraficoBarraAlertaStock[]> {
+    try {
+      const saldos = await this.prisma.saldos_estoque.findMany({
+        include: {
+          produtos: true,
+        },
+      });
+
+      const produtoSaldosMap = new Map<number, { produto: any; stockAtual: number }>();
+
+      for (const s of saldos) {
+        if (!s.produtos) continue;
+        const prodId = s.produto_id;
+        const atual = produtoSaldosMap.get(prodId) || {
+          produto: s.produtos,
+          stockAtual: 0,
+        };
+        atual.stockAtual += Number(s.quantidade);
+        produtoSaldosMap.set(prodId, atual);
+      }
+
+      const criticos: GraficoBarraAlertaStock[] = [];
+
+      produtoSaldosMap.forEach(({ produto, stockAtual }) => {
+        const stockMinimo = Number(produto.estoque_minimo ?? 0);
+        if (stockMinimo > 0 && stockAtual <= stockMinimo) {
+          criticos.push({
+            produto: produto.nome,
+            stockAtual,
+            stockMinimo,
+          });
+        }
+      });
+
+      return criticos;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao consultar produtos críticos em estoque.',
+      );
+    }
+  }
+}
+</file>
+
+<file path="src/integracoes/integracoes.controller.ts">
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { IntegracoesService } from './integracoes.service';
+import { ConsultaCepDto } from './dto/consulta-cep.dto';
+import { ConsultaCoordenadasDto } from './dto/consulta-coordenadas.dto';
+import { ConsultaDistanciaCepsDto } from './dto/consulta-distancia-ceps.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+
+@ApiTags('Integrações Externas (CEP e Mapas)')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('integracoes')
+export class IntegracoesController {
+  constructor(private readonly integracoesService: IntegracoesService) {}
+
+  @Get('cep/:cep')
+  @ApiOperation({ summary: 'Busca endereço completo a partir do CEP (ViaCEP)' })
+  buscarPorCep(@Param() params: ConsultaCepDto) {
+    return this.integracoesService.buscarPorCep(params.cep);
+  }
+
+  @Get('coordenadas')
+  @ApiOperation({ summary: 'Obtém latitude e longitude de um endereço (Nominatim/OSM)' })
+  obterCoordenadas(@Query() query: ConsultaCoordenadasDto) {
+    return this.integracoesService.obterCoordenadas(
+      query.logradouro,
+      query.cidade,
+      query.uf,
+    );
+  }
+
+  @Get('distancia-ceps')
+  @ApiOperation({ summary: 'Calcula a distância e raio limite em KM entre dois CEPs' })
+  calcularDistanciaCeps(@Query() query: ConsultaDistanciaCepsDto) {
+    return this.integracoesService.calcularDistanciaEntreCeps(
+      query.cep_origem,
+      query.cep_destino,
+      query.raio_maximo_km,
+    );
+  }
+}
+</file>
+
+<file path="src/integracoes/integracoes.service.ts">
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+
+export interface EnderecoResponse {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  ibge?: string;
+  lat?: string;
+  lon?: string;
+}
+
+@Injectable()
+export class IntegracoesService {
+  constructor(private readonly httpService: HttpService) {}
+
+  async buscarPorCep(cepInput: string): Promise<EnderecoResponse> {
+    const cepLimpo = cepInput.replace(/\D/g, '');
+
+    if (cepLimpo.length !== 8) {
+      throw new BadRequestException('CEP inválido. Deve conter 8 dígitos.');
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`https://viacep.com.br/ws/${cepLimpo}/json/`),
+      );
+
+      if (response.data?.erro) {
+        throw new NotFoundException(`CEP '${cepInput}' não encontrado.`);
+      }
+
+      const { cep, logradouro, complemento, bairro, localidade, uf, ibge } = response.data;
+
+      return {
+        cep,
+        logradouro,
+        complemento,
+        bairro,
+        localidade,
+        uf,
+        ibge,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('Erro ao consultar o serviço externo de CEP.');
+    }
+  }
+
+  async obterCoordenadas(logradouro: string, cidade: string, uf: string) {
+    try {
+      const enderecoFormatado = logradouro.trim() 
+        ? `${logradouro}, ${cidade}, ${uf}, Brasil`
+        : `${cidade}, ${uf}, Brasil`;
+
+      const query = encodeURIComponent(enderecoFormatado);
+      const response = await firstValueFrom(
+        this.httpService.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, {
+          headers: { 'User-Agent': 'Sinstock-ERP/1.0' },
+        }),
+      );
+
+      if (!response.data || response.data.length === 0) {
+        return { lat: null, lon: null };
+      }
+
+      return {
+        lat: response.data[0].lat,
+        lon: response.data[0].lon,
+      };
+    } catch {
+      return { lat: null, lon: null };
+    }
+  }
+
+  calcularDistanciaEmKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(R * c * 100) / 100;
+  }
+
+  async calcularDistanciaEntreCeps(
+    cepOrigem: string,
+    cepDestino: string,
+    raioMaximoKm?: number,
+  ) {
+    const enderecoOrigem = await this.buscarPorCep(cepOrigem);
+    let coordsOrigem = await this.obterCoordenadas(
+      enderecoOrigem.logradouro,
+      enderecoOrigem.localidade,
+      enderecoOrigem.uf,
+    );
+
+    if (!coordsOrigem.lat || !coordsOrigem.lon) {
+      coordsOrigem = await this.obterCoordenadas('', enderecoOrigem.localidade, enderecoOrigem.uf);
+    }
+
+    const enderecoDestino = await this.buscarPorCep(cepDestino);
+    let coordsDestino = await this.obterCoordenadas(
+      enderecoDestino.logradouro,
+      enderecoDestino.localidade,
+      enderecoDestino.uf,
+    );
+
+    if (!coordsDestino.lat || !coordsDestino.lon) {
+      coordsDestino = await this.obterCoordenadas('', enderecoDestino.localidade, enderecoDestino.uf);
+    }
+
+    if (!coordsOrigem.lat || !coordsDestino.lat) {
+      throw new BadRequestException('Não foi possível obter a geolocalização de um dos CEPs informados.');
+    }
+
+    const distanciaKm = this.calcularDistanciaEmKm(
+      Number(coordsOrigem.lat),
+      Number(coordsOrigem.lon),
+      Number(coordsDestino.lat),
+      Number(coordsDestino.lon),
+    );
+
+    const dentroDoRaio = raioMaximoKm !== undefined ? distanciaKm <= raioMaximoKm : undefined;
+
+    return {
+      origem: {
+        cep: enderecoOrigem.cep,
+        cidade: enderecoOrigem.localidade,
+        uf: enderecoOrigem.uf,
+        lat: coordsOrigem.lat,
+        lon: coordsOrigem.lon,
+      },
+      destino: {
+        cep: enderecoDestino.cep,
+        cidade: enderecoDestino.localidade,
+        uf: enderecoDestino.uf,
+        lat: coordsDestino.lat,
+        lon: coordsDestino.lon,
+      },
+      distancia_km: distanciaKm,
+      ...(raioMaximoKm !== undefined && {
+        raio_maximo_km: raioMaximoKm,
+        dentro_do_raio: dentroDoRaio,
+      }),
+    };
   }
 }
 </file>
@@ -2972,6 +4344,500 @@ export class CreateTransferenciaDto {
   @IsOptional()
   @IsString()
   observacao?: string;
+}
+</file>
+
+<file path="src/movimentacoes/movimentacoes.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { MovimentacoesController } from './movimentacoes.controller';
+import { MovimentacoesService } from './movimentacoes.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [MovimentacoesController],
+  providers: [MovimentacoesService],
+  exports: [MovimentacoesService],
+})
+export class MovimentacoesModule {}
+</file>
+
+<file path="src/pedidos/pedidos.controller.ts">
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreateCheckoutDto } from './dto/create-checkout.dto';
+import { CreateReservaDto } from './dto/create-reserva.dto';
+import { PedidosService } from './pedidos.service';
+import { Request } from 'express';
+
+interface RequestWithUser extends Request {
+  user: {
+    userId: number;
+    email: string;
+  };
+}
+
+@UseGuards(JwtAuthGuard)
+@Controller('pedidos')
+export class PedidosController {
+  constructor(private readonly pedidosService: PedidosService) {}
+
+  @Post('checkout')
+  realizarCheckout(@Body() dto: CreateCheckoutDto, @Req() req: RequestWithUser) {
+    return this.pedidosService.processarCheckout(dto, req.user.userId);
+  }
+
+  @Post('reservar')
+  criarReserva(@Body() dto: CreateReservaDto, @Req() req: RequestWithUser) {
+    return this.pedidosService.criarReserva(dto, req.user.userId);
+  }
+
+  @Patch(':id/confirmar')
+  confirmarReserva(@Param('id', ParseIntPipe) id: number, @Req() req: RequestWithUser) {
+    return this.pedidosService.confirmarReserva(id, req.user.userId);
+  }
+
+  @Get()
+  listarTodos() {
+    return this.pedidosService.listarTodos();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.pedidosService.buscarPorId(id);
+  }
+
+  @Patch(':id/cancelar')
+  cancelarPedido(@Param('id', ParseIntPipe) id: number, @Req() req: RequestWithUser) {
+    return this.pedidosService.cancelarPedido(id, req.user.userId);
+  }
+}
+</file>
+
+<file path="src/pedidos/pedidos.service.ts">
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCheckoutDto } from './dto/create-checkout.dto';
+import { CreateReservaDto } from './dto/create-reserva.dto';
+import { TipoMovimentacao } from '../movimentacoes/dto/create-movimentacao.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
+@Injectable()
+export class PedidosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async processarCheckout(dto: CreateCheckoutDto, usuarioId: number) {
+    if (!dto.itens || dto.itens.length === 0) {
+      throw new BadRequestException('O carrinho de compras não pode estar vazio.');
+    }
+
+    const totalPedido = dto.itens.reduce(
+      (acc, item) => acc + item.quantidade * item.preco_unitario,
+      0,
+    );
+
+    return await this.prisma.$transaction(async (tx) => {
+      const pedido = await tx.pedidos_venda.create({
+        data: {
+          usuario_id: usuarioId,
+          cliente_id: dto.cliente_id || null,
+          filial_id: dto.filial_id,
+          total: totalPedido,
+          status: 'CONCLUIDO',
+        },
+      });
+
+      for (const item of dto.itens) {
+        const saldoRegistro = await tx.saldos_estoque.findFirst({
+          where: {
+            produto_id: item.produto_id,
+            filial_id: dto.filial_id,
+            lote_id: item.lote_id || null,
+          },
+        });
+
+        const saldoTotal = saldoRegistro ? Number(saldoRegistro.quantidade) : 0;
+        const saldoReservado = saldoRegistro ? Number(saldoRegistro.quantidade_reservada) : 0;
+        const saldoDisponivel = saldoTotal - saldoReservado;
+
+        if (!saldoRegistro || saldoDisponivel < item.quantidade) {
+          throw new BadRequestException(
+            `Estoque disponível insuficiente para o produto ID ${item.produto_id}. Saldo livre: ${saldoDisponivel}, Tentativa: ${item.quantidade}.`,
+          );
+        }
+
+        const saldoAtualNovo = saldoTotal - item.quantidade;
+
+        await tx.saldos_estoque.update({
+          where: { id: saldoRegistro.id },
+          data: {
+            quantidade: saldoAtualNovo,
+            atualizado_em: new Date(),
+          },
+        });
+
+        await tx.itens_venda.create({
+          data: {
+            pedido_id: pedido.id,
+            produto_id: item.produto_id,
+            lote_id: item.lote_id || null,
+            quantidade: item.quantidade,
+            preco_unitario: item.preco_unitario,
+          },
+        });
+
+        await tx.logs_movimentacoes.create({
+          data: {
+            produto_id: item.produto_id,
+            filial_id: dto.filial_id,
+            lote_id: item.lote_id || null,
+            usuario_id: usuarioId,
+            tipo_movimentacao: TipoMovimentacao.SAIDA as any,
+            quantidade: item.quantidade,
+            saldo_anterior: saldoTotal,
+            saldo_atual: saldoAtualNovo,
+            origem_id: pedido.id,
+          },
+        });
+      }
+
+      return {
+        message: 'Checkout processado com sucesso!',
+        pedido_id: pedido.id,
+        total: totalPedido,
+      };
+    });
+  }
+
+  async criarReserva(dto: CreateReservaDto, usuarioId: number) {
+    if (!dto.itens || dto.itens.length === 0) {
+      throw new BadRequestException('O carrinho não pode estar vazio.');
+    }
+
+    const minutosExpira = dto.minutos_expiracao || 15;
+    const reservadoAte = new Date(Date.now() + minutosExpira * 60 * 1000);
+
+    const totalPedido = dto.itens.reduce(
+      (acc, item) => acc + item.quantidade * item.preco_unitario,
+      0,
+    );
+
+    return await this.prisma.$transaction(async (tx) => {
+      const pedido = await tx.pedidos_venda.create({
+        data: {
+          usuario_id: usuarioId,
+          cliente_id: dto.cliente_id || null,
+          filial_id: dto.filial_id,
+          total: totalPedido,
+          status: 'ORCAMENTO',
+          reservado_ate: reservadoAte,
+        },
+      });
+
+      for (const item of dto.itens) {
+        const saldoRegistro = await tx.saldos_estoque.findFirst({
+          where: {
+            produto_id: item.produto_id,
+            filial_id: dto.filial_id,
+            lote_id: item.lote_id || null,
+          },
+        });
+
+        const saldoTotal = saldoRegistro ? Number(saldoRegistro.quantidade) : 0;
+        const saldoReservado = saldoRegistro ? Number(saldoRegistro.quantidade_reservada) : 0;
+        const saldoDisponivel = saldoTotal - saldoReservado;
+
+        if (!saldoRegistro || saldoDisponivel < item.quantidade) {
+          throw new BadRequestException(
+            `Estoque indisponível para reserva do produto ID ${item.produto_id}. Livre: ${saldoDisponivel}, Solicitado: ${item.quantidade}.`,
+          );
+        }
+
+        await tx.saldos_estoque.update({
+          where: { id: saldoRegistro.id },
+          data: {
+            quantidade_reservada: saldoReservado + item.quantidade,
+            atualizado_em: new Date(),
+          },
+        });
+
+        await tx.itens_venda.create({
+          data: {
+            pedido_id: pedido.id,
+            produto_id: item.produto_id,
+            lote_id: item.lote_id || null,
+            quantidade: item.quantidade,
+            preco_unitario: item.preco_unitario,
+          },
+        });
+      }
+
+      return {
+        message: `Reserva realizada com sucesso! Válida até ${reservadoAte.toISOString()}`,
+        pedido_id: pedido.id,
+        reservado_ate: reservadoAte,
+        total: totalPedido,
+      };
+    });
+  }
+
+  // 3. Confirmar Reserva (Converter ORCAMENTO -> CONCLUIDO)
+  async confirmarReserva(id: number, usuarioId: number) {
+    const pedido = await this.prisma.pedidos_venda.findUnique({
+      where: { id },
+      include: { itens_venda: true },
+    });
+
+    if (!pedido) {
+      throw new NotFoundException(`Pedido com ID ${id} não encontrado.`);
+    }
+
+    if (pedido.status !== 'ORCAMENTO') {
+      throw new BadRequestException(`Apenas pedidos com status 'ORCAMENTO' podem ser confirmados.`);
+    }
+
+    if (pedido.reservado_ate && new Date() > pedido.reservado_ate) {
+      throw new BadRequestException(`A reserva para este pedido expirou em ${pedido.reservado_ate}.`);
+    }
+
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.pedidos_venda.update({
+        where: { id },
+        data: {
+          status: 'CONCLUIDO',
+          reservado_ate: null,
+        },
+      });
+
+      for (const item of pedido.itens_venda) {
+        const saldoRegistro = await tx.saldos_estoque.findFirst({
+          where: {
+            produto_id: item.produto_id,
+            filial_id: pedido.filial_id,
+            lote_id: item.lote_id || null,
+          },
+        });
+
+        if (!saldoRegistro) {
+          throw new BadRequestException(
+            `Registro de estoque não encontrado para o produto ID ${item.produto_id}.`,
+          );
+        }
+
+        const saldoTotal = Number(saldoRegistro.quantidade);
+        const saldoReservado = Number(saldoRegistro.quantidade_reservada);
+        const qtdItem = Number(item.quantidade);
+
+        const novoTotal = saldoTotal - qtdItem;
+        const novoReservado = Math.max(0, saldoReservado - qtdItem);
+
+        await tx.saldos_estoque.update({
+          where: { id: saldoRegistro.id },
+          data: {
+            quantidade: novoTotal,
+            quantidade_reservada: novoReservado,
+            atualizado_em: new Date(),
+          },
+        });
+
+        await tx.logs_movimentacoes.create({
+          data: {
+            produto_id: item.produto_id,
+            filial_id: pedido.filial_id,
+            lote_id: item.lote_id || null,
+            usuario_id: usuarioId,
+            tipo_movimentacao: TipoMovimentacao.SAIDA as any,
+            quantidade: qtdItem,
+            saldo_anterior: saldoTotal,
+            saldo_atual: novoTotal,
+            origem_id: pedido.id,
+          },
+        });
+      }
+
+      return {
+        message: `Reserva do pedido #${id} convertida em venda concluída!`,
+        pedido_id: id,
+        status: 'CONCLUIDO',
+      };
+    });
+  }
+
+  async cancelarPedido(id: number, usuarioId: number) {
+    const pedido = await this.prisma.pedidos_venda.findUnique({
+      where: { id },
+      include: { itens_venda: true },
+    });
+
+    if (!pedido) {
+      throw new NotFoundException(`Pedido com ID ${id} não encontrado.`);
+    }
+
+    if (pedido.status === 'CANCELADO') {
+      throw new BadRequestException('Este pedido já está cancelado.');
+    }
+
+    const eraOrcamento = pedido.status === 'ORCAMENTO';
+
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.pedidos_venda.update({
+        where: { id },
+        data: {
+          status: 'CANCELADO',
+          reservado_ate: null,
+        },
+      });
+
+      for (const item of pedido.itens_venda) {
+        const qtd = Number(item.quantidade);
+
+        const saldoRegistro = await tx.saldos_estoque.findFirst({
+          where: {
+            produto_id: item.produto_id,
+            filial_id: pedido.filial_id,
+            lote_id: item.lote_id || null,
+          },
+        });
+
+        if (saldoRegistro) {
+          if (eraOrcamento) {
+            // Se era reserva, apenas reduz a quantidade reservada
+            const saldoReservado = Number(saldoRegistro.quantidade_reservada);
+            await tx.saldos_estoque.update({
+              where: { id: saldoRegistro.id },
+              data: {
+                quantidade_reservada: Math.max(0, saldoReservado - qtd),
+                atualizado_em: new Date(),
+              },
+            });
+          } else {
+            // Se era CONCLUIDO, estorna a quantidade ao saldo total
+            const saldoAnterior = Number(saldoRegistro.quantidade);
+            const saldoAtualNovo = saldoAnterior + qtd;
+
+            await tx.saldos_estoque.update({
+              where: { id: saldoRegistro.id },
+              data: {
+                quantidade: saldoAtualNovo,
+                atualizado_em: new Date(),
+              },
+            });
+
+            await tx.logs_movimentacoes.create({
+              data: {
+                produto_id: item.produto_id,
+                filial_id: pedido.filial_id,
+                lote_id: item.lote_id || null,
+                usuario_id: usuarioId,
+                tipo_movimentacao: TipoMovimentacao.ENTRADA as any,
+                quantidade: qtd,
+                saldo_anterior: saldoAnterior,
+                saldo_atual: saldoAtualNovo,
+                origem_id: pedido.id,
+              },
+            });
+          }
+        }
+      }
+
+      return {
+        message: `Pedido #${id} cancelado com sucesso!`,
+        pedido_id: id,
+        status: 'CANCELADO',
+      };
+    });
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async limparReservasExpiradas() {
+    const agora = new Date();
+
+    const reservasExpiradas = await this.prisma.pedidos_venda.findMany({
+      where: {
+        status: 'ORCAMENTO',
+        reservado_ate: {
+          lt: agora,
+        },
+      },
+      include: {
+        itens_venda: true,
+      },
+    });
+
+    if (reservasExpiradas.length === 0) return;
+
+    for (const pedido of reservasExpiradas) {
+      await this.prisma.$transaction(async (tx) => {
+        await tx.pedidos_venda.update({
+          where: { id: pedido.id },
+          data: { status: 'CANCELADO' },
+        });
+
+        for (const item of pedido.itens_venda) {
+          const qtd = Number(item.quantidade);
+
+          const saldoRegistro = await tx.saldos_estoque.findFirst({
+            where: {
+              produto_id: item.produto_id,
+              filial_id: pedido.filial_id,
+              lote_id: item.lote_id || null,
+            },
+          });
+
+          if (saldoRegistro) {
+            const saldoReservado = Number(saldoRegistro.quantidade_reservada);
+            await tx.saldos_estoque.update({
+              where: { id: saldoRegistro.id },
+              data: {
+                quantidade_reservada: Math.max(0, saldoReservado - qtd),
+                atualizado_em: new Date(),
+              },
+            });
+          }
+        }
+      });
+      console.log(`[Cron] Reserva do pedido #${pedido.id} expirou e o estoque reservado foi liberado.`);
+    }
+  }
+
+  async listarTodos() {
+    return this.prisma.pedidos_venda.findMany({
+      include: {
+        clientes: { select: { id: true, nome: true, email: true } },
+        filiais: { select: { id: true, nome: true } },
+        usuarios: { select: { id: true, nome: true } },
+        itens_venda: {
+          include: {
+            produtos: { select: { id: true, nome: true, preco_venda: true } },
+          },
+        },
+      },
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async buscarPorId(id: number) {
+    const pedido = await this.prisma.pedidos_venda.findUnique({
+      where: { id },
+      include: {
+        clientes: { select: { id: true, nome: true, email: true, cpf_cnpj: true, telefone: true } },
+        filiais: { select: { id: true, nome: true } },
+        usuarios: { select: { id: true, nome: true, email: true } },
+        itens_venda: {
+          include: {
+            produtos: { select: { id: true, nome: true, codigo_barras: true } },
+            lotes: { select: { id: true, numero_lote: true } },
+          },
+        },
+      },
+    });
+
+    if (!pedido) {
+      throw new NotFoundException(`Pedido com ID ${id} não encontrado.`);
+    }
+
+    return pedido;
+  }
 }
 </file>
 
@@ -3162,6 +5028,103 @@ import { PrismaModule } from '../prisma/prisma.module';
 export class ProdutosModule {}
 </file>
 
+<file path="src/relatorios/relatorios.controller.ts">
+import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Response } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
+import { RelatoriosService } from './relatorios.service';
+
+@ApiTags('Relatórios')
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
+@Controller('relatorios')
+export class RelatoriosController {
+  constructor(private readonly relatoriosService: RelatoriosService) {}
+
+  @Get('movimentacoes/pdf')
+  @ApiOperation({
+    summary: 'Gera e faz o download do PDF de extrato de movimentações',
+    description:
+      'Gera um arquivo PDF contendo o histórico detalhado de movimentações com base nos filtros informados (data, filial, produto).',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Relatório em PDF gerado com sucesso.',
+    content: {
+      'application/pdf': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async baixarRelatorioMovimentacoes(
+    @Query() filtros: RelatorioMovimentacoesDto,
+    @Res() res: Response,
+  ) {
+    const pdfBuffer = await this.relatoriosService.gerarPdfMovimentacoes(filtros);
+
+    const filename = `relatorio-auditoria-sinstock-${
+      new Date().toISOString().split('T')[0]
+    }.pdf`;
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Length': pdfBuffer.length,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    });
+
+    res.end(pdfBuffer);
+  }
+}
+</file>
+
+<file path="src/relatorios/relatorios.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { RelatoriosController } from './relatorios.controller';
+import { RelatoriosService } from './relatorios.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [RelatoriosController],
+  providers: [RelatoriosService],
+  exports: [RelatoriosService], 
+})
+export class RelatoriosModule {}
+</file>
+
+<file path="src/saldos-estoque/dto/saldos-estoque-filter.dto.ts">
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
+import { PaginacaoFiltroDto } from '../../common/dto/paginacao-filtro.dto';
+export class SaldosEstoqueFilterDto extends PaginacaoFiltroDto {
+  @ApiPropertyOptional({ description: 'ID da filial para filtragem' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  filial_id?: number;
+
+  @ApiPropertyOptional({ description: 'ID do produto para filtragem' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  produto_id?: number;
+}
+</file>
+
 <file path="src/usuario/dto/create-user.dto.ts">
 import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
 
@@ -3279,26 +5242,104 @@ npm run test:cov
 - **MariaDB / MySQL:** Banco de dados relacional.
 </file>
 
-<file path="tsconfig.json">
-{
-  "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+<file path="src/alertas/alertas.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ConsultaAlertasDto } from './dto/consulta-alertas.dto';
+
+@Injectable()
+export class AlertasService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async verificarEstoqueMinimo(filialId?: number) {
+    const saldos = await this.prisma.saldos_estoque.findMany({
+      where: filialId ? { filial_id: filialId } : {},
+      include: {
+        produtos: true,
+      },
+    });
+
+
+
+    
+   
+      return saldos
+  .filter((saldo) => {
+    const estoqueMinimo = (saldo.produtos as any)?.estoque_minimo ?? 10;
+
+    return Number(saldo.quantidade) <= Number(estoqueMinimo);
+  })
+  .map((saldo) => ({
+    tipo: 'ESTOQUE_BAIXO',
+    produto_id: saldo.produto_id,
+    produto_nome: (saldo.produtos as any)?.nome,
+    filial_id: saldo.filial_id,
+    quantidade_atual: saldo.quantidade,
+    estoque_minimo: (saldo.produtos as any)?.estoque_minimo ?? 10,
+  }));
+  }
+
+  async verificarLotesVencimento(diasAviso = 30, filialId?: number) {
+    const dataLimite = new Date();
+    dataLimite.setDate(dataLimite.getDate() + diasAviso);
+
+    const lotes = await this.prisma.lotes.findMany({
+      where: {
+        data_validade: {
+          lte: dataLimite,
+        },
+        ...(filialId ? { filial_id: filialId } : {}),
+      },
+      include: {
+        produtos: true,
+      },
+      orderBy: { data_validade: 'asc' },
+    });
+
+    return lotes.map((lote) => {
+      const hoje = new Date();
+      const validade = new Date(lote.data_validade);
+      const diffDias = Math.ceil(
+        (validade.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24),
+      );
+
+      return {
+        tipo: diffDias < 0 ? 'LOTE_VENCIDO' : 'LOTE_PROXIMO_VENCIMENTO',
+        lote_id: lote.id,
+        numero_lote: lote.numero_lote,
+        produto_id: lote.produto_id,
+        produto_nome: (lote.produtos as any)?.nome,
+        data_validade: lote.data_validade,
+        dias_para_vencer: diffDias,
+      };
+    });
+  }
+
+  async obterDashboardAlertas(dto?: ConsultaAlertasDto) {
+    const filialId = dto?.filial_id;
+    const diasVencimento = dto?.dias_vencimento ?? 30;
+
+    // Executa as duas consultas em paralelo para melhor performance
+    const [estoqueBaixo, lotesVencendo] = await Promise.all([
+      this.verificarEstoqueMinimo(filialId),
+      this.verificarLotesVencimento(diasVencimento, filialId),
+    ]);
+
+    return {
+      resumo: {
+        total_alertas: estoqueBaixo.length + lotesVencendo.length,
+        total_estoque_baixo: estoqueBaixo.length,
+        total_lotes_vencendo: lotesVencendo.length,
+        parametros_aplicados: {
+          filial_id: filialId ?? 'todas',
+          dias_vencimento: diasVencimento,
+        },
+      },
+      alertas: {
+        estoque_baixo: estoqueBaixo,
+        lotes_vencendo: lotesVencendo,
+      },
+    };
   }
 }
 </file>
@@ -3393,54 +5434,107 @@ export class TwoFactorService {
 }
 </file>
 
-<file path="src/movimentacoes/movimentacoes.controller.ts">
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { MovimentacoesService } from './movimentacoes.service';
-import { CreateMovimentacaoDto } from './dto/create-movimentacao.dto';
-import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
+<file path="src/relatorios/relatorios.service.ts">
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import PdfDocument from 'pdfkit-table';
+import { PrismaService } from '../prisma/prisma.service';
+import { RelatorioMovimentacoesDto } from './dto/relatorio-movimentacoes.dto';
 
-@ApiTags('Movimentações de Estoque')
-@Controller('movimentacoes')
-export class MovimentacoesController {
-  constructor(private readonly movimentacoesService: MovimentacoesService) {}
+@Injectable()
+export class RelatoriosService {
+  constructor(private readonly prisma: PrismaService) {}
 
-  @Post()
-  @ApiOperation({
-    summary: 'Registra movimentação de estoque (ENTRADA, SAIDA ou AJUSTE)',
-  })
-  registrarMovimentacao(@Body() dto: CreateMovimentacaoDto) {
-    // ID do usuário logado (fixado temporariamente em 1 até a integração do JWT)
-    const usuarioId = 1;
-    return this.movimentacoesService.registrarMovimentacao(dto, usuarioId);
-  }
+  /**
+   * Geração de relatório PDF de auditoria de movimentações com suporte a tabelas
+   */
+  async gerarPdfMovimentacoes(filtros: RelatorioMovimentacoesDto): Promise<Buffer> {
+    try {
+      const where: any = {};
 
-  @Post('transferencia')
-  @ApiOperation({
-    summary: 'Realiza a transferência de estoque entre duas filiais',
-  })
-  transferirSaldo(@Body() dto: CreateTransferenciaDto) {
-    const usuarioId = 1;
-    return this.movimentacoesService.transferirSaldo(dto, usuarioId);
-  }
+      if (filtros.filial_id) where.filial_id = Number(filtros.filial_id);
+      if (filtros.produto_id) where.produto_id = Number(filtros.produto_id);
 
-  @Get('historico')
-  @ApiOperation({
-    summary: 'Lista o histórico de movimentações com filtros opcionais',
-  })
-  @ApiQuery({ name: 'filial_id', required: false, type: Number })
-  @ApiQuery({ name: 'produto_id', required: false, type: Number })
-  @ApiQuery({ name: 'limit', required: false, type: Number })
-  listarHistorico(
-    @Query('filial_id') filialId?: number,
-    @Query('produto_id') produtoId?: number,
-    @Query('limit') limit?: number,
-  ) {
-    return this.movimentacoesService.listarHistorico(
-      filialId ? Number(filialId) : undefined,
-      produtoId ? Number(produtoId) : undefined,
-      limit ? Number(limit) : 50,
-    );
+      if (filtros.data_inicio || filtros.data_fim) {
+        where.data_hora = {};
+
+        if (filtros.data_inicio) {
+          where.data_hora.gte = new Date(filtros.data_inicio);
+        }
+
+        if (filtros.data_fim) {
+          const dataFim = new Date(filtros.data_fim);
+          dataFim.setUTCHours(23, 59, 59, 999);
+          where.data_hora.lte = dataFim;
+        }
+      }
+
+      const movimentacoes = await this.prisma.logs_movimentacoes.findMany({
+        where,
+        include: {
+          produtos: { select: { nome: true } },
+          filiais: { select: { nome: true } },
+          usuarios: { select: { nome: true } },
+        },
+        orderBy: { data_hora: 'desc' },
+      });
+
+      return new Promise(async (resolve, reject) => {
+        try {
+          const doc = new PdfDocument({ margin: 30, size: 'A4' });
+          const buffers: Buffer[] = [];
+
+          doc.on('data', (chunk) => buffers.push(chunk));
+          doc.on('end', () => resolve(Buffer.concat(buffers)));
+          doc.on('error', (err) => reject(err));
+
+          // Cabeçalho do Documento
+          doc
+            .fontSize(18)
+            .fillColor('#1A202C')
+            .text('SINSTOCK - Relatório de Auditoria de Estoque', { align: 'center' });
+          
+          doc.moveDown(0.5);
+          
+          doc
+            .fontSize(9)
+            .fillColor('#718096')
+            .text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, { align: 'right' });
+          
+          doc.moveDown(1.5);
+
+          // Estrutura de dados para o pdfkit-table
+          const table = {
+            title: 'Extrato de Movimentações',
+            headers: ['Data', 'Produto', 'Filial', 'Tipo', 'Qtd', 'Usuário'],
+            rows: movimentacoes.map((mov) => [
+              mov.data_hora
+                ? new Date(mov.data_hora).toLocaleDateString('pt-BR')
+                : '-',
+              mov.produtos?.nome || 'N/A',
+              mov.filiais?.nome || 'N/A',
+              String(mov.tipo_movimentacao),
+              Number(mov.quantidade).toString(),
+              mov.usuarios?.nome || 'N/A',
+            ]),
+          };
+
+          // Renderização assíncrona da tabela
+          await doc.table(table, {
+            prepareHeader: () => doc.font('Helvetica-Bold').fontSize(10).fillColor('#2D3748'),
+            prepareRow: () => doc.font('Helvetica').fontSize(9).fillColor('#4A5568'),
+            padding: 5,
+          });
+
+          doc.end();
+        } catch (pdfError) {
+          reject(pdfError);
+        }
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao processar dados para emissão do relatório em PDF.',
+      );
+    }
   }
 }
 </file>
@@ -3474,8 +5568,333 @@ export class SaldosEstoqueController {
 }
 </file>
 
+<file path="src/saldos-estoque/saldos-estoque.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PaginacaoFiltroDto } from '../common/dto/paginacao-filtro.dto';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class SaldosEstoqueService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findAll(paginationDto: PaginacaoFiltroDto, filialId?: number, produtoId?: number) {
+    const { pagina = 1, limite = 10 } = paginationDto;
+    const skip = (pagina - 1) * limite;
+
+    const where: any = {};
+    if (filialId) where.filial_id = filialId;
+    if (produtoId) where.produto_id = produtoId;
+
+    const [total, rawData] = await Promise.all([
+      this.prisma.saldos_estoque.count({ where }),
+      this.prisma.saldos_estoque.findMany({
+        where,
+        skip,
+        take: limite,
+        include: {
+          filiais: { select: { id: true, nome: true } },
+          produtos: {
+            select: {
+              id: true,
+              nome: true,
+              codigo_barras: true,
+              estoque_minimo: true,
+            },
+          },
+          lotes: true,
+        },
+        orderBy: { atualizado_em: 'desc' },
+      }),
+    ]);
+
+    const formattedData = rawData.map((item) => {
+      const saldoTotal = Number(item.quantidade);
+      const saldoReservado = Number(item.quantidade_reservada);
+      const saldoDisponivel = saldoTotal - saldoReservado;
+      const estoqueMinimo = item.produtos.estoque_minimo
+        ? Number(item.produtos.estoque_minimo)
+        : 0;
+
+      return {
+        ...item,
+        saldo_total: saldoTotal,
+        saldo_reservado: saldoReservado,
+        saldo_disponivel: saldoDisponivel,
+        alerta_estoque_baixo: saldoDisponivel <= estoqueMinimo,
+      };
+    });
+
+    const totalPages = Math.ceil(total / limite);
+
+    return {
+      data: formattedData,
+      meta: {
+        totalItems: total,
+        itemCount: formattedData.length,
+        itemsPerPage: limite,
+        totalPages,
+        currentPage: pagina,
+      },
+    };
+  }
+
+  async findOne(id: number) {
+    const item = await this.prisma.saldos_estoque.findUnique({
+      where: { id },
+      include: {
+        filiais: { select: { id: true, nome: true } },
+        produtos: {
+          select: {
+            id: true,
+            nome: true,
+            codigo_barras: true,
+            estoque_minimo: true,
+          },
+        },
+        lotes: true,
+      },
+    });
+
+    if (!item) {
+      throw new NotFoundException(`Registro de saldo com ID ${id} não encontrado.`);
+    }
+
+    const saldoTotal = Number(item.quantidade);
+    const saldoReservado = Number(item.quantidade_reservada);
+    const saldoDisponivel = saldoTotal - saldoReservado;
+    const estoqueMinimo = item.produtos.estoque_minimo
+      ? Number(item.produtos.estoque_minimo)
+      : 0;
+
+    return {
+      ...item,
+      saldo_total: saldoTotal,
+      saldo_reservado: saldoReservado,
+      saldo_disponivel: saldoDisponivel,
+      alerta_estoque_baixo: saldoDisponivel <= estoqueMinimo,
+    };
+  }
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@prisma/client": ["src/generated/prisma"]
+    }
+  }
+}
+</file>
+
+<file path="src/movimentacoes/movimentacoes.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Ajuste o caminho do guard se necessário
+import { CreateMovimentacaoDto } from './dto/create-movimentacao.dto';
+import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
+import { MovimentacoesService } from './movimentacoes.service';
+
+interface RequestWithUser extends ExpressRequest {
+  user: {
+    userId: number;
+    email: string;
+  };
+}
+
+@ApiTags('Movimentações de Estoque')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@Controller('movimentacoes')
+export class MovimentacoesController {
+  constructor(private readonly movimentacoesService: MovimentacoesService) {}
+
+  @Post()
+  @ApiOperation({
+    summary: 'Registra movimentação de estoque (ENTRADA, SAIDA ou AJUSTE)',
+  })
+  registrarMovimentacao(
+    @Body() dto: CreateMovimentacaoDto,
+    @Request() req: RequestWithUser,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.movimentacoesService.registrarMovimentacao(dto, usuarioId);
+  }
+
+  @Post('transferencia')
+  @ApiOperation({
+    summary: 'Realiza a transferência de estoque entre duas filiais',
+  })
+  transferirSaldo(
+    @Body() dto: CreateTransferenciaDto,
+    @Request() req: RequestWithUser,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.movimentacoesService.transferirSaldo(dto, usuarioId);
+  }
+
+  @Get('historico')
+  @ApiOperation({
+    summary: 'Lista o histórico de movimentações com filtros opcionais',
+  })
+  @ApiQuery({ name: 'filial_id', required: false, type: Number })
+  @ApiQuery({ name: 'produto_id', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  listarHistorico(
+    @Query('filial_id') filialId?: number,
+    @Query('produto_id') produtoId?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.movimentacoesService.listarHistorico(
+      filialId ? Number(filialId) : undefined,
+      produtoId ? Number(produtoId) : undefined,
+      limit ? Number(limit) : 50,
+    );
+  }
+}
+</file>
+
+<file path="src/produtos/produtos.controller.ts">
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ProdutosService } from './produtos.service';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { FiltroProdutosDto } from './dto/filtro-produtos.dto';
+import { BuscaCodigoBarrasDto } from './dto/busca-codigo-barras.dto';
+
+@ApiTags('Produtos')
+@Controller('produtos')
+export class ProdutosController {
+  constructor(private readonly produtosService: ProdutosService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Cadastra um novo produto' })
+  criar(@Body() dto: CreateProdutoDto) {
+    return this.produtosService.criar(dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Listagem de produtos com filtros dinâmicos e paginação' })
+  listar(@Query() query: FiltroProdutosDto) {
+    return this.produtosService.listar(query);
+  }
+
+  @Get('codigo-barras/:codigo')
+  @ApiOperation({ summary: 'Busca expressa de produto por código de barras' })
+  buscarPorCodigoBarras(
+    @Param('codigo') codigo: string,
+    @Query() query: BuscaCodigoBarrasDto,
+  ) {
+    return this.produtosService.buscarPorCodigoBarras(
+      codigo,
+      query.filial_id,
+    );
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Busca um produto pelo ID' })
+  buscarPorId(@Param('id', ParseIntPipe) id: number) {
+    return this.produtosService.buscarPorId(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Atualiza os dados de um produto' })
+  atualizar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateProdutoDto,
+  ) {
+    return this.produtosService.atualizar(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Remove um produto do sistema' })
+  remover(@Param('id', ParseIntPipe) id: number) {
+    return this.produtosService.remover(id);
+  }
+}
+</file>
+
+<file path="src/usuario/users.module.ts">
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
+})
+export class UsersModule {}
+</file>
+
+<file path="prisma.config.ts">
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
+
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'npx ts-node ./prisma/seed.ts',
+  },
+
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
+</file>
+
 <file path="src/movimentacoes/movimentacoes.service.ts">
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateMovimentacaoDto,
@@ -3597,30 +6016,40 @@ export class MovimentacoesService {
     });
   }
 
-  async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
-    if (dto.filial_origem_id === dto.filial_destino_id) {
-      throw new BadRequestException(
-        'A filial de origem e de destino não podem ser iguais.',
-      );
-    }
+    async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
+  if (dto.filial_origem_id === dto.filial_destino_id) {
+    throw new BadRequestException(
+      'A filial de origem e de destino não podem ser iguais.',
+    );
+  }
 
-    return await this.prisma.$transaction(async (tx) => {
-      // ORIGEM: Verifica e decrementa o saldo
-      const saldoOrigem = await tx.saldos_estoque.findFirst({
-        where: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_origem_id,
-          lote_id: dto.lote_id ?? null,
-        },
-      });
+  return await this.prisma.$transaction(async (tx) => {
+  const produto = await tx.produtos.findUnique({
+    where: { id: dto.produto_id },
+  });
 
-      const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
+  if (!produto) {
+    throw new NotFoundException(
+      `Produto com ID ${dto.produto_id} não encontrado.`,
+    );
+  }
 
-      if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
-        throw new BadRequestException(
-          `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
-        );
-      }
+  
+  const saldoOrigem = await tx.saldos_estoque.findFirst({
+    where: {
+      produto_id: dto.produto_id,
+      filial_id: dto.filial_origem_id,
+      lote_id: dto.lote_id ?? null,
+    },
+  });
+
+  const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
+
+  if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
+    throw new BadRequestException(
+      `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
+    );
+  }
 
       const novoSaldoOrigem = qtdOrigemAtual - dto.quantidade;
       await tx.saldos_estoque.update({
@@ -3739,110 +6168,6 @@ export class MovimentacoesService {
     }));
   }
 }
-</file>
-
-<file path="src/produtos/produtos.controller.ts">
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ProdutosService } from './produtos.service';
-import { CreateProdutoDto } from './dto/create-produto.dto';
-import { UpdateProdutoDto } from './dto/update-produto.dto';
-import { FiltroProdutosDto } from './dto/filtro-produtos.dto';
-import { BuscaCodigoBarrasDto } from './dto/busca-codigo-barras.dto';
-
-@ApiTags('Produtos')
-@Controller('produtos')
-export class ProdutosController {
-  constructor(private readonly produtosService: ProdutosService) {}
-
-  @Post()
-  @ApiOperation({ summary: 'Cadastra um novo produto' })
-  criar(@Body() dto: CreateProdutoDto) {
-    return this.produtosService.criar(dto);
-  }
-
-  @Get()
-  @ApiOperation({ summary: 'Listagem de produtos com filtros dinâmicos e paginação' })
-  listar(@Query() query: FiltroProdutosDto) {
-    return this.produtosService.listar(query);
-  }
-
-  @Get('codigo-barras/:codigo')
-  @ApiOperation({ summary: 'Busca expressa de produto por código de barras' })
-  buscarPorCodigoBarras(
-    @Param('codigo') codigo: string,
-    @Query() query: BuscaCodigoBarrasDto,
-  ) {
-    return this.produtosService.buscarPorCodigoBarras(
-      codigo,
-      query.filial_id,
-    );
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Busca um produto pelo ID' })
-  buscarPorId(@Param('id', ParseIntPipe) id: number) {
-    return this.produtosService.buscarPorId(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Atualiza os dados de um produto' })
-  atualizar(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateProdutoDto,
-  ) {
-    return this.produtosService.atualizar(id, dto);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Remove um produto do sistema' })
-  remover(@Param('id', ParseIntPipe) id: number) {
-    return this.produtosService.remover(id);
-  }
-}
-</file>
-
-<file path="src/usuario/users.module.ts">
-import { Module } from '@nestjs/common';
-import { PrismaModule } from '../prisma/prisma.module';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-
-@Module({
-  imports: [PrismaModule],
-  controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService],
-})
-export class UsersModule {}
-</file>
-
-<file path="prisma.config.ts">
-import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
-
-export default defineConfig({
-  schema: 'prisma/schema.prisma',
-
-  migrations: {
-    path: 'prisma/migrations',
-    seed: 'npx ts-node ./prisma/seed.ts',
-  },
-
-  datasource: {
-    url: env('DATABASE_URL'),
-  },
-});
 </file>
 
 <file path="src/produtos/produtos.service.ts">
@@ -4066,10 +6391,714 @@ export class ProdutosService {
 }
 </file>
 
+<file path="src/auth/auth.module.ts">
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from '../usuario/users.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { TwoFactorService } from './two-factor.service';
+import { PreAuthStrategy } from './strategies/pre-auth.strategy';
+
+@Module({
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, TwoFactorService, JwtStrategy, PreAuthStrategy],
+  exports: [AuthService, TwoFactorService],
+})
+export class AuthModule {}
+</file>
+
+<file path="prisma/seed.ts">
+import * as bcrypt from 'bcrypt';
+import 'dotenv/config';
+import * as mysql from 'mysql2/promise';
+
+async function main() {
+  console.log('Iniciando a execução do seed no banco de dados...');
+
+  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+
+  try {
+    // 1. Perfis (Admin e Operador)
+    const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
+    const permissoesOperador = JSON.stringify({ operacoes: true });
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (1, 'Administrador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Administrador', permissoes = ?`,
+      [permissoesAdmin, permissoesAdmin],
+    );
+
+    await connection.execute(
+      `INSERT INTO perfis (id, nome, permissoes) 
+       VALUES (2, 'Operador', ?) 
+       ON DUPLICATE KEY UPDATE nome = 'Operador', permissoes = ?`,
+      [permissoesOperador, permissoesOperador],
+    );
+
+    // 2. Usuário Admin
+    const senhaHash = await bcrypt.hash('123456', 10);
+
+    await connection.execute(
+      `INSERT INTO usuarios (id, nome, email, senha_hash, perfil_id, ativo) 
+       VALUES (1, 'Administrador Sinstock', 'admin@sinstock.com', ?, 1, true) 
+       ON DUPLICATE KEY UPDATE senha_hash = ?, perfil_id = 1, ativo = true`,
+      [senhaHash, senhaHash],
+    );
+
+    // 3. Filiais
+  await connection.execute(
+     `INSERT INTO filiais (id, nome)
+   VALUES (1, 'Filial Matriz')
+   ON DUPLICATE KEY UPDATE nome = 'Filial Matriz'`,
+);
+
+    // 4. Categorias de Produtos
+    await connection.execute(
+      `INSERT INTO categorias (id, nome, descricao) 
+       VALUES (1, 'Limpeza e Higiene', 'Produtos voltados para limpeza geral') 
+       ON DUPLICATE KEY UPDATE nome = 'Limpeza e Higiene'`,
+    );
+
+    // 5. Fornecedores
+    await connection.execute(
+      `INSERT INTO fornecedores (id, nome_juridico, cnpj, telefone, email, cidade, estado) 
+       VALUES (1, 'Distribuidora Sinstock Ltda', '12345678000195', '11999998888', 'contato@distribuidorasinstock.com.br', 'São Paulo', 'SP') 
+       ON DUPLICATE KEY UPDATE nome_juridico = 'Distribuidora Sinstock Ltda', cnpj = '12345678000195'`,
+    );
+    // 6. Produtos
+    await connection.execute(
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo, preco_venda) 
+   VALUES (1, 1, 'Detergente Neutro 500ml', '7891234560001', 20, 5.99) 
+   ON DUPLICATE KEY UPDATE nome = 'Detergente Neutro 500ml', estoque_minimo = 20, preco_venda = 5.99`,
+);
+
+    await connection.execute(
+      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo, preco_venda) 
+    VALUES (2, 1, 'Sabão em Pó 1kg', '7891234560002', 15, 18.90) 
+   ON DUPLICATE KEY UPDATE nome = 'Sabão em Pó 1kg', estoque_minimo = 15, preco_venda = 18.90`,
+    );
+
+    // 7. Lote (Com data de validade próxima para testar a Engine de Alertas)
+    await connection.execute(
+      `INSERT INTO lotes (id, produto_id, numero_lote, data_fabricacao, data_validade) 
+       VALUES (1, 1, 'LOTE-DET-2026-01', '2026-01-10', '2026-10-15') 
+       ON DUPLICATE KEY UPDATE numero_lote = 'LOTE-DET-2026-01'`,
+    );
+
+    // 8. Saldo de Estoque (Abaixo do estoque mínimo para disparar alerta)
+    await connection.execute(
+      `INSERT INTO saldos_estoque (id, produto_id, lote_id, filial_id, quantidade) 
+       VALUES (1, 1, 1, 1, 5) 
+       ON DUPLICATE KEY UPDATE quantidade = 5`,
+    );
+
+    // 9. Nota Fiscal de Entrada
+    await connection.execute(
+      `INSERT INTO notas_fiscais_entrada (id, fornecedor_id, usuario_id, numero_nf, data_emissao, total, status) 
+       VALUES (1, 1, 1, 'NF-100200', '2026-09-01', 1500.00, 'RECEBIDA') 
+       ON DUPLICATE KEY UPDATE numero_nf = 'NF-100200'`,
+    );
+
+    console.log(
+      'Seed concluído com sucesso! Perfis, Usuários, Filiais, Fornecedores, Produtos, Lotes, Estoque e NFs cadastrados.',
+    );
+  } catch (error) {
+    console.error('Erro durante a execução do seed:', error);
+    process.exit(1);
+  } finally {
+    await connection.end();
+  }
+}
+
+main();
+</file>
+
+<file path="src/auth/auth.service.ts">
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UsersService } from '../usuario/users.service';
+import { LoginDto } from './dto/login.dto';
+import { TwoFactorService } from './two-factor.service';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly twoFactorService: TwoFactorService,
+  ) {}
+
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+
+    if (!user || !user.ativo) {
+      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.senha,
+      user.senha_hash,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Credenciais inválidas.');
+    }
+
+    if (user.isTwoFactorEnable) {
+      return {
+        mfaRequired: true,
+        userId: user.id,
+        message: 'Insira o código de 6 dígitos do seu aplicativo autenticador.',
+        preAuthToken: this.jwtService.sign(
+          { sub: user.id, isPreAuth: true },
+          { expiresIn: '5m' },
+        ),
+      };
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      perfil_id: user.perfil_id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        perfil_id: user.perfil_id,
+      },
+    };
+  }
+
+  async authenticateTwoFactor(userId: number, code: string) {
+    const user = await this.usersService.findByIdWithSecrets(userId);
+
+    if (!user || !user.twoFactorSecret || !user.isTwoFactorEnable) {
+      throw new BadRequestException('O 2FA não está ativado para esta conta.');
+    }
+
+    const isValid = this.twoFactorService.verifyTwoFactorCode(
+      code,
+      user.twoFactorSecret,
+    );
+
+    if (!isValid) {
+      throw new UnauthorizedException('Código 2FA inválido ou expirado.');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      perfil_id: user.perfil_id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        perfil_id: user.perfil_id,
+      },
+    };
+  }
+
+  // Método responsável por alimentar o endpoint GET /auth/me
+  async getProfile(userId: number) {
+    const user = await this.usersService.findByIdWithSecrets(userId);
+
+    if (!user || !user.ativo) {
+      throw new UnauthorizedException('Usuário não encontrado ou inativo.');
+    }
+
+    // Oculta dados sensíveis antes de retornar para a aplicação
+    const { senha_hash, twoFactorSecret, token_2fa, token_expiracao, ...usuarioSanitizado } = user;
+
+    return usuarioSanitizado;
+  }
+}
+</file>
+
+<file path="src/usuario/users.controller.ts">
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
+
+@Controller('users')
+@UseGuards(JwtAuthGuard)
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
+  @Get('profile')
+  getProfile(@CurrentUser() user: any) {
+    return this.usersService.findOne(user.userId);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, updateUserDto);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  @Patch(':id/status')
+  toggleStatus(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.toggleStatus(id);
+  }
+}
+</file>
+
+<file path="src/auth/auth.controller.ts">
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { PreAuthGuard } from './guards/pre-auth.guard';
+import { TwoFactorService } from './two-factor.service';
+
+interface RequestWithUser extends ExpressRequest {
+  user: {
+    userId: number;
+    email: string;
+  };
+}
+
+@Controller('auth')
+export class AuthController {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly twoFactorService: TwoFactorService,
+  ) {}
+
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/generate')
+  async generate2FA(@Request() req: RequestWithUser) {
+    return this.twoFactorService.generateTwoFactorSecret(
+      req.user.userId,
+      req.user.email,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/enable')
+  async enable2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
+  }
+
+  @UseGuards(PreAuthGuard)
+  @Post('2fa/authenticate')
+  async authenticate2FA(
+    @Request() req: RequestWithUser,
+    @Body('codigo') codigo: string,
+  ) {
+    const usuarioId = req.user.userId;
+    return this.authService.authenticateTwoFactor(usuarioId, codigo);
+  }
+}
+</file>
+
+<file path="src/usuario/users.service.ts">
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const saltRounds = 10;
+    const senha_hash = await bcrypt.hash(createUserDto.senha, saltRounds);
+
+    try {
+      const user = await this.prisma.usuarios.create({
+        data: {
+          nome: createUserDto.nome,
+          email: createUserDto.email,
+          senha_hash,
+          perfil_id: createUserDto.perfil_id,
+          telefone: createUserDto.telefone,
+        },
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          perfil_id: true,
+          telefone: true,
+          ativo: true,
+          criado_em: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail informado já está em uso.');
+        }
+        if (error.code === 'P2003') {
+          throw new BadRequestException('O perfil_id informado não existe.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao criar o usuário.');
+    }
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.findById(id);
+
+    const dataToUpdate: Prisma.usuariosUpdateInput = {};
+
+    if (updateUserDto.nome !== undefined) dataToUpdate.nome = updateUserDto.nome;
+    if (updateUserDto.email !== undefined) dataToUpdate.email = updateUserDto.email;
+    if (updateUserDto.perfil_id !== undefined) {
+      dataToUpdate.perfis = { connect: { id: updateUserDto.perfil_id } };
+    }
+    if (updateUserDto.telefone !== undefined) dataToUpdate.telefone = updateUserDto.telefone;
+    if (updateUserDto.ativo !== undefined) dataToUpdate.ativo = updateUserDto.ativo;
+
+    if (updateUserDto.senha) {
+      const saltRounds = 10;
+      dataToUpdate.senha_hash = await bcrypt.hash(updateUserDto.senha, saltRounds);
+    }
+
+    try {
+      return await this.prisma.usuarios.update({
+        where: { id },
+        data: dataToUpdate,
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+          perfil_id: true,
+          telefone: true,
+          ativo: true,
+          criado_em: true,
+          atualizado_em: true,
+          perfis: { select: { id: true, nome: true, permissoes: true } },
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException('O e-mail informado já está em uso.');
+        }
+        if (error.code === 'P2003') {
+          throw new BadRequestException('O perfil_id informado não existe.');
+        }
+      }
+      throw new InternalServerErrorException('Erro ao atualizar o usuário.');
+    }
+  }
+
+  async toggleStatus(id: number) {
+    const user = await this.findById(id);
+
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: { ativo: !user.ativo },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        ativo: true,
+      },
+    });
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.usuarios.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        senha_hash: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        token_2fa: true,
+        token_expiracao: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        isTwoFactorEnable: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+    }
+
+    return user;
+  }
+
+  async findOne(id: number) {
+    return this.findById(id);
+  }
+
+  async findAll() {
+    return this.prisma.usuarios.findMany({
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        perfil_id: true,
+        telefone: true,
+        ativo: true,
+        criado_em: true,
+        isTwoFactorEnable: true,
+        perfis: {
+          select: { id: true, nome: true },
+        },
+      },
+      orderBy: { id: 'asc' },
+    });
+  }
+
+  async setTwoFactorSecret(id: number, secret: string) {
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: {
+        twoFactorSecret: secret,
+      },
+    });
+  }
+
+  async enableTwoFactor(id: number) {
+    return this.prisma.usuarios.update({
+      where: { id },
+      data: {
+        isTwoFactorEnable: true,
+      },
+    });
+  }
+
+  async findByIdWithSecrets(id: number) {
+    const user = await this.prisma.usuarios.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        perfil_id: true,
+        ativo: true,
+        criado_em: true,
+        atualizado_em: true,
+        senha_hash: true,
+        twoFactorSecret: true,
+        isTwoFactorEnable: true,
+        token_2fa: true,
+        token_expiracao: true,
+        perfis: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
+    }
+
+    return user;
+  }
+}
+</file>
+
+<file path="src/main.ts">
+import 'dotenv/config';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
+  // 1. Configuração Dinâmica do CORS via .env
+  const rawOrigins = configService.get<string>('CORS_ORIGIN', '*');
+  
+  // Evita erro no navegador quando credentials: true e origin: '*' são usados juntos
+  const allowedOrigins =
+    rawOrigins === '*'
+      ? true
+      : rawOrigins.includes(',')
+        ? rawOrigins.split(',').map((origin) => origin.trim())
+        : rawOrigins;
+
+  app.enableCors({
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
+  // 2. Validação Global dos DTOs com conversão implícita de tipos
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // 3. Tratamento Global de Exceções do Prisma
+  app.useGlobalFilters(new PrismaExceptionFilter());
+
+  // 4. Configuração da Documentação Swagger
+  const config = new DocumentBuilder()
+    .setTitle('Sinstock API')
+    .setDescription(
+      'API REST para Gestão de Estoque, Filiais e Autenticação com 2FA',
+    )
+    .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Insira seu token JWT obtido no login',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  // 5. Inicialização do servidor HTTP na porta definida
+  const port = configService.get<number>('PORT', 3000);
+  await app.listen(port);
+
+  console.log(`🚀 Aplicação rodando em: http://localhost:${port}`);
+  console.log(
+    `📖 Documentação Swagger disponível em: http://localhost:${port}/api`,
+  );
+}
+bootstrap();
+</file>
+
 <file path="prisma/schema.prisma">
 generator client {
   provider     = "prisma-client-js"
-  output       = "../generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -4123,14 +7152,17 @@ model produtos {
 }
 
 model chamados_suporte {
-  id              Int                      @id @default(autoincrement())
-  usuario_id      Int
-  assunto         String                   @db.VarChar(150)
-  descricao       String                   @db.Text
-  status          chamados_suporte_status? @default(ABERTO)
-  data_abertura   DateTime?                @default(now()) @db.Timestamp(0)
-  data_fechamento DateTime?                @db.Timestamp(0)
-  usuarios        usuarios                 @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
+  id                Int                         @id @default(autoincrement())
+  codigo            String?                     @unique(map: "uk_chamados_codigo") @db.VarChar(50)
+  usuario_id        Int?
+  email_solicitante String?                     @db.VarChar(100)
+  assunto           String                      @db.VarChar(150)
+  descricao         String                      @db.Text
+  prioridade        chamados_suporte_prioridade? @default(MEDIA)
+  status            chamados_suporte_status?    @default(ABERTO)
+  data_abertura     DateTime?                   @default(now()) @db.Timestamp(0)
+  data_fechamento   DateTime?                   @db.Timestamp(0)
+  usuarios          usuarios?                   @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
 
   @@index([usuario_id], map: "fk_chamados_usuario")
 }
@@ -4253,17 +7285,18 @@ model notas_fiscais_entrada {
 }
 
 model pedidos_venda {
-  id          Int                   @id @default(autoincrement())
-  usuario_id  Int
-  cliente_id  Int?
-  filial_id   Int
-  data_venda  DateTime?             @default(now()) @db.Timestamp(0)
-  total       Decimal               @db.Decimal(10, 2)
-  status      pedidos_venda_status? @default(CONCLUIDO)
-  itens_venda itens_venda[]
-  clientes    clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
-  filiais     filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
-  usuarios    usuarios              @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_usuario")
+  id            Int                   @id @default(autoincrement())
+  usuario_id    Int
+  cliente_id    Int?
+  filial_id     Int
+  data_venda    DateTime?             @default(now()) @db.Timestamp(0)
+  reservado_ate DateTime?             @db.Timestamp(0)
+  total         Decimal               @db.Decimal(10, 2)
+  status        pedidos_venda_status? @default(CONCLUIDO)
+  itens_venda   itens_venda[]
+  clientes      clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
+  filiais       filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
+  usuarios      usuarios              @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_usuario")
 
   @@index([cliente_id], map: "fk_pedidos_cliente")
   @@index([filial_id], map: "fk_pedidos_filial")
@@ -4271,23 +7304,24 @@ model pedidos_venda {
 }
 
 model perfis {
-  id         Int        @id @default(autoincrement())
-  nome       String     @unique(map: "nome") @db.VarChar(50)
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique(map: "nome") @db.VarChar(50)
   permissoes Json
-  criado_em  DateTime?  @default(now()) @db.Timestamp(0)
-  usuarios   usuarios[]
+  criado_em DateTime?  @default(now()) @db.Timestamp(0)
+  usuarios  usuarios[]
 }
 
 model saldos_estoque {
-  id            Int       @id @default(autoincrement())
-  filial_id     Int
-  produto_id    Int
-  lote_id       Int?
-  quantidade    Decimal   @default(0.000) @db.Decimal(10, 3)
-  atualizado_em DateTime? @default(now()) @db.Timestamp(0)
-  filiais       filiais   @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_saldos_filial")
-  lotes         lotes?    @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_saldos_lote")
-  produtos      produtos  @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_saldos_produto")
+  id                   Int       @id @default(autoincrement())
+  filial_id            Int
+  produto_id           Int
+  lote_id              Int?
+  quantidade           Decimal   @default(0.000) @db.Decimal(10, 3)
+  quantidade_reservada Decimal   @default(0.000) @db.Decimal(10, 3)
+  atualizado_em        DateTime? @default(now()) @db.Timestamp(0)
+  filiais              filiais   @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_saldos_filial")
+  lotes                lotes?    @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_saldos_lote")
+  produtos             produtos  @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_saldos_produto")
 
   @@unique([filial_id, produto_id, lote_id], map: "uk_saldos_filial_produto_lote")
   @@index([lote_id], map: "fk_saldos_lote")
@@ -4303,14 +7337,11 @@ model usuarios {
   senha_hash            String                  @db.VarChar(255)
   token_2fa             String?                 @db.VarChar(100)
   token_expiracao       DateTime?               @db.DateTime(0)
-  
   twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
   isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
-
   ativo                 Boolean?                @default(true)
   criado_em             DateTime?               @default(now()) @db.Timestamp(0)
   atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
-
   chamados_suporte      chamados_suporte[]
   logs_movimentacoes    logs_movimentacoes[]
   notas_fiscais_entrada notas_fiscais_entrada[]
@@ -4318,6 +7349,24 @@ model usuarios {
   perfis                perfis                  @relation(fields: [perfil_id], references: [id], onUpdate: NoAction, map: "fk_usuarios_perfil")
 
   @@index([perfil_id], map: "fk_usuarios_perfil")
+}
+
+model LogAuditoriaEstoque {
+  id              String   @id @default(uuid())
+  usuarioId       String?
+  acao            String
+  recurso         String
+  recursoId       String?
+  dadosAnteriores Json?
+  dadosNovos      Json?
+  ip              String?
+  userAgent       String?
+  criadoEm        DateTime @default(now())
+
+  @@index([usuarioId])
+  @@index([recurso, recursoId])
+  @@index([criadoEm])
+  @@map("logs_auditoria_estoque")
 }
 
 model notificacoes {
@@ -4333,7 +7382,15 @@ enum chamados_suporte_status {
   ABERTO
   EM_ANDAMENTO
   RESOLVIDO
+  CANCELADO
   FECHADO
+}
+
+enum chamados_suporte_prioridade {
+  BAIXA
+  MEDIA
+  ALTA
+  CRITICA
 }
 
 enum logs_movimentacoes_tipo_movimentacao {
@@ -4356,586 +7413,31 @@ enum notas_fiscais_entrada_status {
 }
 </file>
 
-<file path="prisma/seed.ts">
-import * as bcrypt from 'bcrypt';
-import 'dotenv/config';
-import * as mysql from 'mysql2/promise';
-
-async function main() {
-  console.log('Iniciando a execução do seed no banco de dados...');
-
-  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
-
-  try {
-    // 1. Perfis (Admin e Operador)
-    const permissoesAdmin = JSON.stringify({ admin: true, todas: true });
-    const permissoesOperador = JSON.stringify({ operacoes: true });
-
-    await connection.execute(
-      `INSERT INTO perfis (id, nome, permissoes) 
-       VALUES (1, 'Administrador', ?) 
-       ON DUPLICATE KEY UPDATE nome = 'Administrador', permissoes = ?`,
-      [permissoesAdmin, permissoesAdmin],
-    );
-
-    await connection.execute(
-      `INSERT INTO perfis (id, nome, permissoes) 
-       VALUES (2, 'Operador', ?) 
-       ON DUPLICATE KEY UPDATE nome = 'Operador', permissoes = ?`,
-      [permissoesOperador, permissoesOperador],
-    );
-
-    // 2. Usuário Admin
-    const senhaHash = await bcrypt.hash('123456', 10);
-
-    await connection.execute(
-      `INSERT INTO usuarios (id, nome, email, senha_hash, perfil_id, ativo) 
-       VALUES (1, 'Administrador Sinstock', 'admin@sinstock.com', ?, 1, true) 
-       ON DUPLICATE KEY UPDATE senha_hash = ?, perfil_id = 1, ativo = true`,
-      [senhaHash, senhaHash],
-    );
-
-    // 3. Filiais
-    await connection.execute(
-      `INSERT INTO filiais (id, nome, codigo) 
-       VALUES (1, 'Filial Matriz', 'FILIAL-01') 
-       ON DUPLICATE KEY UPDATE nome = 'Filial Matriz'`,
-    );
-
-    // 4. Categorias de Produtos
-    await connection.execute(
-      `INSERT INTO categorias (id, nome, descricao) 
-       VALUES (1, 'Limpeza e Higiene', 'Produtos voltados para limpeza geral') 
-       ON DUPLICATE KEY UPDATE nome = 'Limpeza e Higiene'`,
-    );
-
-    // 5. Fornecedores
-    await connection.execute(
-      `INSERT INTO fornecedores (id, nome_juridico, cnpj, telefone, email, cidade, estado) 
-       VALUES (1, 'Distribuidora Sinstock Ltda', '12345678000195', '11999998888', 'contato@distribuidorasinstock.com.br', 'São Paulo', 'SP') 
-       ON DUPLICATE KEY UPDATE nome_juridico = 'Distribuidora Sinstock Ltda', cnpj = '12345678000195'`,
-    );
-
-    // 6. Produtos
-    await connection.execute(
-      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
-       VALUES (1, 1, 'Detergente Neutro 500ml', '7891234560001', 20) 
-       ON DUPLICATE KEY UPDATE nome = 'Detergente Neutro 500ml', estoque_minimo = 20`,
-    );
-
-    await connection.execute(
-      `INSERT INTO produtos (id, categoria_id, nome, codigo_barras, estoque_minimo) 
-       VALUES (2, 1, 'Sabão em Pó 1kg', '7891234560002', 15) 
-       ON DUPLICATE KEY UPDATE nome = 'Sabão em Pó 1kg', estoque_minimo = 15`,
-    );
-
-    // 7. Lote (Com data de validade próxima para testar a Engine de Alertas)
-    await connection.execute(
-      `INSERT INTO lotes (id, produto_id, numero_lote, data_fabricacao, data_validade) 
-       VALUES (1, 1, 'LOTE-DET-2026-01', '2026-01-10', '2026-10-15') 
-       ON DUPLICATE KEY UPDATE numero_lote = 'LOTE-DET-2026-01'`,
-    );
-
-    // 8. Saldo de Estoque (Abaixo do estoque mínimo para disparar alerta)
-    await connection.execute(
-      `INSERT INTO saldos_estoque (id, produto_id, lote_id, filial_id, quantidade) 
-       VALUES (1, 1, 1, 1, 5) 
-       ON DUPLICATE KEY UPDATE quantidade = 5`,
-    );
-
-    // 9. Nota Fiscal de Entrada
-    await connection.execute(
-      `INSERT INTO notas_fiscais_entrada (id, fornecedor_id, usuario_id, numero_nf, data_emissao, total, status) 
-       VALUES (1, 1, 1, 'NF-100200', '2026-09-01', 1500.00, 'RECEBIDA') 
-       ON DUPLICATE KEY UPDATE numero_nf = 'NF-100200'`,
-    );
-
-    console.log(
-      'Seed concluído com sucesso! Perfis, Usuários, Filiais, Fornecedores, Produtos, Lotes, Estoque e NFs cadastrados.',
-    );
-  } catch (error) {
-    console.error('Erro durante a execução do seed:', error);
-    process.exit(1);
-  } finally {
-    await connection.end();
-  }
-}
-
-main();
-</file>
-
-<file path="src/auth/auth.module.ts">
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { UsersModule } from '../usuario/users.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { TwoFactorService } from './two-factor.service';
-import { PreAuthStrategy } from './strategies/pre-auth.strategy';
-
-@Module({
-  imports: [
-    UsersModule,
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
-      signOptions: { expiresIn: '1d' },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, TwoFactorService, JwtStrategy, PreAuthStrategy],
-  exports: [AuthService, TwoFactorService],
-})
-export class AuthModule {}
-</file>
-
-<file path="src/auth/auth.service.ts">
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../usuario/users.service';
-import { LoginDto } from './dto/login.dto';
-import { TwoFactorService } from './two-factor.service';
-
-@Injectable()
-export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly twoFactorService: TwoFactorService,
-  ) {}
-
-  async login(loginDto: LoginDto) {
-    const user = await this.usersService.findByEmail(loginDto.email);
-
-    if (!user || !user.ativo) {
-      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
-    }
-
-    const isPasswordValid = await bcrypt.compare(
-      loginDto.senha,
-      user.senha_hash,
-    );
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Credenciais inválidas.');
-    }
-
-    if (user.isTwoFactorEnable) {
-      return {
-        mfaRequired: true,
-        userId: user.id,
-        message: 'Insira o código de 6 dígitos do seu aplicativo autenticador.',
-        preAuthToken: this.jwtService.sign(
-          { sub: user.id, isPreAuth: true },
-          { expiresIn: '5m' },
-        ),
-      };
-    }
-
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      perfil_id: user.perfil_id,
-    };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-      usuario: {
-        id: user.id,
-        nome: user.nome,
-        email: user.email,
-        perfil_id: user.perfil_id,
-      },
-    };
-  }
-
-
-  async authenticateTwoFactor(userId: number, code: string) {
-
-    const user = await this.usersService.findByIdWithSecrets(userId);
-
-    if (!user || !user.twoFactorSecret || !user.isTwoFactorEnable) {
-      throw new BadRequestException('O 2FA não está ativado para esta conta.');
-    }
-
-    const isValid = this.twoFactorService.verifyTwoFactorCode(
-      code,
-      user.twoFactorSecret,
-    );
-
-    if (!isValid) {
-      throw new UnauthorizedException('Código 2FA inválido ou expirado.');
-    }
-
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      perfil_id: user.perfil_id,
-    };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-      usuario: {
-        id: user.id,
-        nome: user.nome,
-        email: user.email,
-        perfil_id: user.perfil_id,
-      },
-    };
-}
-}
-</file>
-
-<file path="src/usuario/users.controller.ts">
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from './users.service';
-
-@Controller('users')
-@UseGuards(JwtAuthGuard)
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
-
-  @UseGuards(RolesGuard)
-  @Roles(1)
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get('profile')
-  getProfile(@CurrentUser() user: any) {
-    return this.usersService.findOne(user.userId);
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
-  }
-}
-</file>
-
-<file path="src/auth/auth.controller.ts">
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
-import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { PreAuthGuard } from './guards/pre-auth.guard';
-import { TwoFactorService } from './two-factor.service';
-import { LoginDto } from './dto/login.dto';
-
-interface RequestWithUser extends ExpressRequest {
-  user: {
-    userId: number;
-    email: string;
-  };
-}
-
-@Controller('auth')
-export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly twoFactorService: TwoFactorService,
-  ) {}
-
-  @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('2fa/generate')
-  async generate2FA(@Request() req: RequestWithUser) {
-    return this.twoFactorService.generateTwoFactorSecret(
-      req.user.userId,
-      req.user.email,
-    );
-  }
-
-  @Post('2fa/enable')
-  @UseGuards(JwtAuthGuard)
-  async enable2FA(
-    @Request() req: RequestWithUser,
-    @Body('codigo') codigo: string,
-  ) {
-    const usuarioId = req.user.userId;
-    return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
-  }
-
-  @Post('2fa/authenticate')
-  @UseGuards(PreAuthGuard)
-  async authenticate2FA(
-    @Request() req: RequestWithUser,
-    @Body('codigo') codigo: string,
-  ) {
-    const usuarioId = req.user.userId;
-    return this.authService.authenticateTwoFactor(usuarioId, codigo);
-  }
-}
-</file>
-
-<file path="src/usuario/users.service.ts">
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { Prisma } from '../../generated/prisma';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
-
-@Injectable()
-export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async create(createUserDto: CreateUserDto) {
-    const saltRounds = 10;
-    const senha_hash = await bcrypt.hash(createUserDto.senha, saltRounds);
-
-    try {
-      const user = await this.prisma.usuarios.create({
-        data: {
-          nome: createUserDto.nome,
-          email: createUserDto.email,
-          senha_hash,
-          perfil_id: createUserDto.perfil_id,
-          telefone: createUserDto.telefone,
-        },
-        select: {
-          id: true,
-          nome: true,
-          email: true,
-          perfil_id: true,
-          telefone: true,
-          ativo: true,
-          criado_em: true,
-        },
-      });
-
-      return user;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException('O e-mail informado já está em uso.');
-        }
-        if (error.code === 'P2003') {
-          throw new BadRequestException('O perfil_id informado não existe.');
-        }
-      }
-      throw new InternalServerErrorException('Erro ao criar o usuário.');
-    }
-  }
-
-  async findByEmail(email: string) {
-    return this.prisma.usuarios.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        senha_hash: true,
-        perfil_id: true,
-        telefone: true,
-        ativo: true,
-        criado_em: true,
-        atualizado_em: true,
-        token_2fa: true,
-        token_expiracao: true,
-        twoFactorSecret: true,
-        isTwoFactorEnable: true,
-      },
-    });
-  }
-
-  async findById(id: number) {
-    const user = await this.prisma.usuarios.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        perfil_id: true,
-        telefone: true,
-        ativo: true,
-        criado_em: true,
-        atualizado_em: true,
-        isTwoFactorEnable: true,
-        perfis: true,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
-    }
-
-    return user;
-  }
-
-  async findOne(id: number) {
-    return this.findById(id);
-  }
-
-  async findAll() {
-    return this.prisma.usuarios.findMany({
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        perfil_id: true,
-        telefone: true,
-        ativo: true,
-        criado_em: true,
-        isTwoFactorEnable: true,
-        perfis: {
-          select: { nome: true },
-        },
-      },
-    });
-  }
-
-
-async setTwoFactorSecret(id: number, secret: string) {
-  return this.prisma.usuarios.update({
-    where: { id },
-    data: { 
-      twoFactorSecret: secret 
-    },
-  });
-}
-
-async enableTwoFactor(id: number) {
-  return this.prisma.usuarios.update({
-    where: { id },
-    data: { 
-      isTwoFactorEnable: true 
-    },
-  });
-}
-
-async findByIdWithSecrets(id: number) {
-  const user = await this.prisma.usuarios.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      nome: true,
-      email: true,
-      perfil_id: true,
-      twoFactorSecret: true,
-      isTwoFactorEnable: true,
-    },
-  });
-
-  if (!user) {
-    throw new NotFoundException(`Usuário com ID ${id} não encontrado.`);
-  }
-
-  return user;
-}
-}
-</file>
-
-<file path="src/main.ts">
-import 'dotenv/config';
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
-import { PrismaExceptionFilter } from 'src/common/filters/prisma-exception.filter';
-
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  app.enableCors();
-
-  // Validação Global dos DTOs com conversão implícita
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
-
-  // Tratamento Global de Exceções do Prisma
-  app.useGlobalFilters(new PrismaExceptionFilter());
-
-  // Configuração da Documentação Swagger
-  const config = new DocumentBuilder()
-    .setTitle('Sinstock API')
-    .setDescription(
-      'API REST para Gestão de Estoque, Filiais e Autenticação com 2FA',
-    )
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Insira seu token JWT obtido no login',
-        in: 'header',
-      },
-      'JWT-auth',
-    )
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-
-  await app.listen(3000);
-  console.log('🚀 Aplicação rodando em: http://localhost:3000');
-  console.log(
-    '📖 Documentação Swagger disponível em: http://localhost:3000/api',
-  );
-}
-bootstrap();
-</file>
-
 <file path="src/prisma/prisma.service.ts">
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PrismaClient } from '../../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor() {
-    const connectionString = process.env.DATABASE_URL;
+    let connectionString = process.env.DATABASE_URL;
 
     if (!connectionString) {
       throw new Error('DATABASE_URL não foi definida no arquivo .env');
     }
 
+    // Garante a permissão de recuperação da chave RSA para resolver erros de handshake/pool no MySQL/MariaDB
+    if (!connectionString.includes('allowPublicKeyRetrieval')) {
+      const separador = connectionString.includes('?') ? '&' : '?';
+      connectionString += `${separador}allowPublicKeyRetrieval=true`;
+    }
+
+    // Inicializa o adaptador nativo do MariaDB/MySQL do Prisma 7
     const adapter = new PrismaMariaDb(connectionString);
 
     super({ adapter });
@@ -4949,60 +7451,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     await this.$disconnect();
   }
 }
-</file>
-
-<file path="src/app.module.ts">
-import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { ScheduleModule } from '@nestjs/schedule';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { AlertasModule } from './alertas/alertas.module';
-import { AuthModule } from './auth/auth.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { FiliaisModule } from './filiais/filiais.module';
-import { FornecedoresModule } from './fornecedores/fornecedores.module';
-import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
-import { NotasFiscaisEntradaModule } from './notas-fiscais-entrada/notas-fiscais-entrada.module';
-import { NotificacoesModule } from './notificacoes/notificacoes.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { PedidosModule } from './pedidos/pedidos.module';
-import { ProdutosModule } from './produtos/produtos.module';
-import { RelatoriosModule } from './relatorios/relatorios.module';
-import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
-import { UsersModule } from './usuario/users.module';
-
-@Module({
-  imports: [
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000,
-        limit: 100,
-      },
-    ]),
-    ScheduleModule.forRoot(),
-    PrismaModule,
-    AuthModule,
-    UsersModule,
-    ProdutosModule,
-    CategoriasModule,
-    NotasFiscaisEntradaModule,
-    FornecedoresModule,
-    AlertasModule,
-    NotificacoesModule,
-    FiliaisModule,
-    SaldosEstoqueModule,
-    MovimentacoesModule,
-    RelatoriosModule,
-    PedidosModule
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
-})
-export class AppModule {}
 </file>
 
 <file path="package.json">
@@ -5028,7 +7476,9 @@ export class AppModule {}
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^12.0.1",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^12.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "^12.0.0",
@@ -5039,16 +7489,20 @@ export class AppModule {}
     "@nestjs/throttler": "^6.5.0",
     "@prisma/adapter-mariadb": "^7.10.0",
     "@prisma/client": "^7.9.1",
+    "axios": "^1.20.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "mariadb": "^3.5.4",
     "mysql2": "^3.24.3",
+    "nodemailer": "^10.0.15",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pdfkit": "^0.20.2",
     "pdfkit-table": "^0.2.11",
+    "pdfmake": "^0.3.11",
     "pg": "^8.23.0",
     "prisma": "^7.9.1",
     "qrcode": "^1.5.4",
@@ -5066,8 +7520,10 @@ export class AppModule {}
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
+    "@types/nodemailer": "^8.0.2",
     "@types/passport-jwt": "^4.0.1",
     "@types/pdfkit": "^0.17.6",
+    "@types/pdfmake": "^0.3.3",
     "@types/qrcode": "^1.5.6",
     "@types/speakeasy": "^2.0.10",
     "@types/supertest": "^7.0.0",
@@ -5108,6 +7564,86 @@ export class AppModule {}
     "testEnvironment": "node"
   }
 }
+</file>
+
+<file path="src/app.module.ts">
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AlertasModule } from './alertas/alertas.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
+import { AuthModule } from './auth/auth.module';
+import { BuscaGlobalModule } from './busca-global/busca-global.module';
+import { CategoriasModule } from './categorias/categorias.module';
+import { ChamadosModule } from './chamados/chamados.module';
+import { ClientesModule } from './clientes/clientes.module';
+import { CommonModule } from './common/common.module';
+import { DashboardModule } from './dashboards/dashboard.module';
+import { FiliaisModule } from './filiais/filiais.module';
+import { FornecedoresModule } from './fornecedores/fornecedores.module';
+import { IntegracoesModule } from './integracoes/integracoes.module';
+import { MailModule } from './mail/mail.module';
+import { MovimentacoesModule } from './movimentacoes/movimentacoes.module';
+import { NotasFiscaisEntradaModule } from './notas-fiscais-entrada/notas-fiscais-entrada.module';
+import { NotificacoesModule } from './notificacoes/notificacoes.module';
+import { PedidosModule } from './pedidos/pedidos.module';
+import { PerfisModule } from './perfis/perfis.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { ProdutosModule } from './produtos/produtos.module';
+import { RelatoriosModule } from './relatorios/relatorios.module';
+import { SaldosEstoqueModule } from './saldos-estoque/saldos-estoque.module';
+import { UsersModule } from './usuario/users.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: config.get<number>('THROTTLE_TTL', 60000),
+          limit: config.get<number>('THROTTLE_LIMIT', 100),
+        },
+      ],
+    }),
+    ScheduleModule.forRoot(),
+    PrismaModule,
+    CommonModule,
+    AuditoriaModule,
+    PerfisModule,
+    ClientesModule,
+    AuthModule,
+    IntegracoesModule,
+    BuscaGlobalModule,
+    UsersModule,
+    ProdutosModule,
+    CategoriasModule,
+    NotasFiscaisEntradaModule,
+    FornecedoresModule,
+    AlertasModule,
+    NotificacoesModule,
+    FiliaisModule,
+    SaldosEstoqueModule,
+    MovimentacoesModule,
+    RelatoriosModule,
+    PedidosModule,
+    DashboardModule,
+    MailModule,
+    ChamadosModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
+})
+export class AppModule {}
 </file>
 
 </files>
