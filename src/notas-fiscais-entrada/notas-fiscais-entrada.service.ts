@@ -10,7 +10,7 @@ import { EstornoNotaFiscalDto } from './dto/estorno-nota-fiscal.dto';
 
 @Injectable()
 export class NotasFiscaisEntradaService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async criar(dto: CreateNotaFiscalEntradaDto) {
     return this.prisma.$transaction(async (tx) => {
@@ -124,15 +124,20 @@ export class NotasFiscaisEntradaService {
           }
 
           // Registrar histórico de movimentação
+          const saldoAnterior = saldoExistente ? Number(saldoExistente.quantidade) : 0;
+          const saldoAtual = saldoAnterior + item.quantidade;
+
           await tx.logs_movimentacoes.create({
             data: {
               produto_id: item.produto_id,
+              filial_id: filialId,
               lote_id: loteId ?? null,
               usuario_id: dto.usuario_id,
-              tipo: 'ENTRADA' as any,
+              tipo_movimentacao: 'ENTRADA',
               quantidade: item.quantidade,
-              descricao: `Entrada via NF ${dto.numero_nf}`,
-            } as any,
+              saldo_anterior: saldoAnterior,
+              saldo_atual: saldoAtual,
+            },
           });
         }
       }
