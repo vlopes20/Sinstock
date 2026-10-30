@@ -10,10 +10,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  // 1. Configuração Dinâmica do CORS via .env
   const rawOrigins = configService.get<string>('CORS_ORIGIN', '*');
   
-  // Evita erro no navegador quando credentials: true e origin: '*' são usados juntos
   const allowedOrigins =
     rawOrigins === '*'
       ? true
@@ -22,12 +20,11 @@ async function bootstrap() {
         : rawOrigins;
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: ['http://127.0.0.1:5500','http://localhost:5500'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
-  // 2. Validação Global dos DTOs com conversão implícita de tipos
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -39,10 +36,8 @@ async function bootstrap() {
     }),
   );
 
-  // 3. Tratamento Global de Exceções do Prisma
   app.useGlobalFilters(new PrismaExceptionFilter());
 
-  // 4. Configuração da Documentação Swagger
   const config = new DocumentBuilder()
     .setTitle('Sinstock API')
     .setDescription(
@@ -65,8 +60,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // 5. Inicialização do servidor HTTP na porta definida
-  const port = configService.get<number>('PORT', 300);
+  const port = configService.get<number>('PORT', 3000);
   await app.listen(port);
 
   console.log(`🚀 Aplicação rodando em: http://localhost:${port}`);
