@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,8 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Estoque | SINSTOCK</title>
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/estoque.css" />
+  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/estoque.css" />
+  <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -19,28 +23,18 @@
 
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
       </div>
 
       <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item">
+        <a href="dashboard.html" class="menu-item active">
           <i data-lucide="layout-dashboard"></i>
-          Dashboard
+          Visão Geral
         </a>
 
-        <a href="pedidos.html" class="menu-item">
-          <i data-lucide="shopping-bag"></i>
-          Pedidos
-        </a>
-
-        <a href="estoque.html" class="menu-item active">
+        <a href="estoque.html" class="menu-item">
           <i data-lucide="boxes"></i>
           Estoque
-        </a>
-
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
         </a>
 
         <a href="produtos.html" class="menu-item">
@@ -48,9 +42,9 @@
           Produtos
         </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
         </a>
 
         <a href="relatorios.html" class="menu-item">
@@ -58,9 +52,19 @@
           Relatórios
         </a>
 
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
         <a href="configuracoes.html" class="menu-item">
           <i data-lucide="settings"></i>
           Configurações
+        </a>
+
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
         </a>
       </nav>
 
@@ -83,11 +87,11 @@
 
       <header class="topbar">
         <div class="search-box">
-          <span class="search-icon"> ⌕ </span>
+          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
           <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-          <span class="shortcut"> ⌘ K </span>
+          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
         </div>
 
         <div class="topbar-right">
@@ -104,7 +108,7 @@
 
           <div class="user">
             <div class="avatar">
-              <img src="assets/images/usuario.png" alt="Usuário" />
+              <span aria-label="Usuário de demonstração">DE</span>
             </div>
 
             <span> Vini </span>
@@ -131,7 +135,7 @@
           </div>
 
           <button class="new-movement-button" id="openMovementModal">
-            <span>+</span>
+            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
             Nova movimentação
           </button>
         </div>
@@ -140,9 +144,10 @@
          CARDS
     =============================== -->
 
+        <p id="stockError" class="demo-error" role="alert"></p>
         <div class="stock-summary">
           <article class="stock-summary-card">
-            <div class="stock-card-icon primary">📦</div>
+            <div class="stock-card-icon primary"><i class="converted-icon" data-lucide="package" aria-hidden="true"></i></div>
 
             <div>
               <span>Itens em estoque</span>
@@ -154,7 +159,7 @@
           </article>
 
           <article class="stock-summary-card">
-            <div class="stock-card-icon warning">⚠</div>
+            <div class="stock-card-icon warning"><i class="converted-icon" data-lucide="triangle-alert" aria-hidden="true"></i></div>
 
             <div>
               <span>Estoque baixo</span>
@@ -166,7 +171,7 @@
           </article>
 
           <article class="stock-summary-card">
-            <div class="stock-card-icon danger">!</div>
+            <div class="stock-card-icon danger"><i class="converted-icon" data-lucide="circle-alert" aria-hidden="true"></i></div>
 
             <div>
               <span>Sem estoque</span>
@@ -178,7 +183,7 @@
           </article>
 
           <article class="stock-summary-card">
-            <div class="stock-card-icon success">$</div>
+            <div class="stock-card-icon success"><i class="converted-icon" data-lucide="dollar-sign" aria-hidden="true"></i></div>
 
             <div>
               <span>Valor em estoque</span>
@@ -216,13 +221,13 @@
 
             <div class="stock-toolbar">
               <div class="stock-search">
-                <span>⌕</span>
+                <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
-                <input type="text" id="stockSearch" placeholder="Buscar produto ou código..." />
+                <input type="text" id="stockSearch" aria-label="Buscar produto ou código" placeholder="Buscar produto ou código..." />
               </div>
 
               <div class="stock-filters">
-                <select id="categoryFilter">
+                <select id="categoryFilter" aria-label="Filtrar categoria">
                   <option value="">Todas as categorias</option>
 
                   <option value="alimentos">Alimentos</option>
@@ -232,7 +237,7 @@
                   <option value="limpeza">Limpeza</option>
                 </select>
 
-                <select id="stockStatusFilter">
+                <select id="stockStatusFilter" aria-label="Filtrar situação do estoque">
                   <option value="">Todos os status</option>
 
                   <option value="normal">Normal</option>
@@ -300,9 +305,7 @@
                     </td>
 
                     <td>
-                      <button class="stock-actions-button" data-product="Arroz Tipo 1">
-                        ⋮
-                      </button>
+                      <button class="stock-actions-button" data-product="Arroz Tipo 1"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                     </td>
                   </tr>
 
@@ -341,9 +344,7 @@
                     </td>
 
                     <td>
-                      <button class="stock-actions-button" data-product="Feijão Carioca">
-                        ⋮
-                      </button>
+                      <button class="stock-actions-button" data-product="Feijão Carioca"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                     </td>
                   </tr>
 
@@ -382,9 +383,7 @@
                     </td>
 
                     <td>
-                      <button class="stock-actions-button" data-product="Café Tradicional">
-                        ⋮
-                      </button>
+                      <button class="stock-actions-button" data-product="Café Tradicional"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                     </td>
                   </tr>
 
@@ -423,9 +422,7 @@
                     </td>
 
                     <td>
-                      <button class="stock-actions-button" data-product="Refrigerante Cola">
-                        ⋮
-                      </button>
+                      <button class="stock-actions-button" data-product="Refrigerante Cola"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -439,21 +436,7 @@
             <div class="stock-footer">
               <span> Mostrando 1 a 4 de 1.246 produtos </span>
 
-              <div class="pagination">
-                <button>‹</button>
-
-                <button class="active">1</button>
-
-                <button>2</button>
-
-                <button>3</button>
-
-                <button>...</button>
-
-                <button>312</button>
-
-                <button>›</button>
-              </div>
+              <!-- A demonstração lista seus quatro produtos; não há paginação fictícia. -->
             </div>
           </div>
         </div>
@@ -471,14 +454,14 @@
                 <p>Entradas, saídas e ajustes realizados no estoque.</p>
               </div>
 
-              <select>
-                <option>Todas as movimentações</option>
+              <select id="movementFilter" aria-label="Filtrar movimentações">
+                <option value="">Todas as movimentações</option>
 
-                <option>Entradas</option>
+                <option value="entrada">Entradas</option>
 
-                <option>Saídas</option>
+                <option value="saida">Saídas</option>
 
-                <option>Ajustes</option>
+                <option value="ajuste">Ajustes</option>
               </select>
             </div>
 
@@ -495,61 +478,7 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                  <tr>
-                    <td>02/09/2026 09:32</td>
-
-                    <td>
-                      <strong> Arroz Tipo 1 </strong>
-                    </td>
-
-                    <td>
-                      <span class="movement-type entry"> ↑ Entrada </span>
-                    </td>
-
-                    <td class="movement-positive">+20</td>
-
-                    <td>Compra de fornecedor</td>
-
-                    <td>Gabriel</td>
-                  </tr>
-
-                  <tr>
-                    <td>02/09/2026 08:45</td>
-
-                    <td>
-                      <strong> Refrigerante Cola </strong>
-                    </td>
-
-                    <td>
-                      <span class="movement-type exit"> ↓ Saída </span>
-                    </td>
-
-                    <td class="movement-negative">-4</td>
-
-                    <td>Venda #1048</td>
-
-                    <td>Gabriel</td>
-                  </tr>
-
-                  <tr>
-                    <td>01/09/2026 17:10</td>
-
-                    <td>
-                      <strong> Feijão Carioca </strong>
-                    </td>
-
-                    <td>
-                      <span class="movement-type adjustment"> ↻ Ajuste </span>
-                    </td>
-
-                    <td>-2</td>
-
-                    <td>Correção de inventário</td>
-
-                    <td>Administrador</td>
-                  </tr>
-                </tbody>
+                <tbody id="movementTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -558,12 +487,47 @@
     </main>
   </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="../js/estoque.js"></script>
-  <script src="../js/dashboard.js"></script>
+  <div class="stock-modal-overlay" id="movementModal">
+    <div class="stock-modal">
+      <div class="stock-modal-header">
+        <div><h2>Nova movimentação</h2><p>Demonstração local — não altera o banco de dados.</p></div>
+        <button type="button" id="closeMovementModal" class="close-modal" aria-label="Fechar movimentação"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
+      </div>
+      <form id="movementForm">
+        <p id="movementError" class="demo-error" role="alert" tabindex="-1"></p>
+        <div class="stock-form-row">
+          <div class="stock-form-group"><label for="movementType">Tipo *</label>
+            <select id="movementType"><option value="entrada">Entrada</option><option value="saida">Saída</option><option value="ajuste">Ajuste de contagem</option></select>
+          </div>
+          <div class="stock-form-group"><label for="movementProduct">Produto *</label>
+            <select id="movementProduct" required><option value="">Selecione</option></select>
+          </div>
+        </div>
+        <p id="movementBalance" aria-live="polite"></p>
+        <div class="stock-form-row">
+          <div class="stock-form-group"><label for="movementQuantity" id="movementQuantityLabel">Quantidade de unidades *</label><input id="movementQuantity" type="number" min="1" step="1" required></div>
+          <div class="stock-form-group"><label for="movementDate">Data *</label><input id="movementDate" type="date" required></div>
+        </div>
+        <div class="stock-form-group"><label for="movementReason">Motivo *</label><input id="movementReason" maxlength="200" required placeholder="Ex.: recebimento de mercadoria"></div>
+        <div class="stock-form-row">
+          <div class="stock-form-group"><label for="movementSupplier" id="movementSupplierLabel">Fornecedor *</label><input id="movementSupplier" maxlength="120" required></div>
+          <div class="stock-form-group"><label for="movementReference" id="movementReferenceLabel">Nota fiscal ou pedido *</label><input id="movementReference" maxlength="100" required></div>
+        </div>
+        <div class="stock-modal-footer">
+          <button type="button" id="cancelMovement" class="cancel-button">Cancelar</button>
+          <button type="submit" class="save-movement-button">Salvar demonstração local</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="../js/shared/ui.js"></script>
+  <script src="../assets/vendor/lucide.min.js"></script>
+  <script src="../js/shared/stock-model.js"></script>
+  <script src="../js/pages/estoque.js"></script>
+  <script src="../js/shared/layout.js"></script>
 
   <script>
-    lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   </script>
 </body>
 

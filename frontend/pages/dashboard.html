@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Dashboard | SINSTOCK</title>
-  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -18,18 +22,13 @@
 
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
       </div>
 
       <nav class="sidebar-menu">
         <a href="dashboard.html" class="menu-item active">
           <i data-lucide="layout-dashboard"></i>
-          Dashboard
-        </a>
-
-        <a href="pedidos.html" class="menu-item">
-          <i data-lucide="shopping-bag"></i>
-          Pedidos
+          Visão Geral
         </a>
 
         <a href="estoque.html" class="menu-item">
@@ -37,19 +36,14 @@
           Estoque
         </a>
 
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
-
         <a href="produtos.html" class="menu-item">
           <i data-lucide="package-search"></i>
           Produtos
         </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
         </a>
 
         <a href="relatorios.html" class="menu-item">
@@ -57,9 +51,19 @@
           Relatórios
         </a>
 
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
         <a href="configuracoes.html" class="menu-item">
           <i data-lucide="settings"></i>
           Configurações
+        </a>
+
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
         </a>
       </nav>
 
@@ -82,11 +86,11 @@
 
       <header class="topbar">
         <div class="search-box">
-          <span class="search-icon"> ⌕ </span>
+          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
           <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-          <span class="shortcut"> ⌘ K </span>
+          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
         </div>
 
         <div class="topbar-right">
@@ -103,7 +107,7 @@
 
           <div class="user">
             <div class="avatar">
-              <img src="assets/images/usuario.png" alt="Usuário" />
+              <span aria-label="Usuário de demonstração">DE</span>
             </div>
 
             <span> Vini </span>
@@ -148,14 +152,14 @@
               </p>
             </div>
 
-            <div class="card-trend">↗</div>
+            <div class="card-trend"><i class="converted-icon" data-lucide="trending-up" aria-hidden="true"></i></div>
           </article>
 
           <!-- ESTOQUE -->
 
           <article class="summary-card">
             <div class="card-icon orange">
-              <i data-lucide="scan-box"></i>
+              <i data-lucide="package-check"></i>
             </div>
 
             <div class="card-information">
@@ -166,7 +170,7 @@
               <p>Produtos cadastrados</p>
             </div>
 
-            <div class="card-trend">◇</div>
+            <div class="card-trend"><i class="converted-icon" data-lucide="diamond" aria-hidden="true"></i></div>
           </article>
 
           <!-- VENDAS -->
@@ -188,7 +192,7 @@
               </p>
             </div>
 
-            <div class="card-trend">↗</div>
+            <div class="card-trend"><i class="converted-icon" data-lucide="trending-up" aria-hidden="true"></i></div>
           </article>
         </div>
 
@@ -320,7 +324,7 @@
                 <strong> Alertas rápidos </strong>
               </div>
 
-              <a href="#"> Ver todos </a>
+              <a href="pedidos.html"> Ver todos </a>
             </div>
 
             <!-- ALERTA 1 -->
@@ -334,7 +338,7 @@
                 <span> 8 produtos com estoque abaixo do mínimo. </span>
               </div>
 
-              <span class="arrow"> › </span>
+              <span class="arrow"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></span>
             </div>
 
             <!-- ALERTA 2 -->
@@ -348,7 +352,7 @@
                 <span> 5 pedidos aguardando aprovação. </span>
               </div>
 
-              <span class="arrow"> › </span>
+              <span class="arrow"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></span>
             </div>
 
             <!-- ALERTA 3 -->
@@ -362,7 +366,7 @@
                 <span> 2 pedidos com entrega em atraso. </span>
               </div>
 
-              <span class="arrow"> › </span>
+              <span class="arrow"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></span>
             </div>
           </article>
         </div>
@@ -370,12 +374,13 @@
     </main>
   </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="../js/dashboard.js"></script>
-  <script src="../js/dashboard2.js"></script>
+  <script src="../js/shared/ui.js"></script>
+  <script src="../assets/vendor/lucide.min.js"></script>
+  <script src="../js/shared/layout.js"></script>
+  <script src="../js/pages/dashboard.js"></script>
 
   <script>
-    lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   </script>
 </body>
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,8 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Relatórios | SINSTOCK</title>
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/relatorios.css" />
+  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/relatorios.css" />
+  <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -19,18 +23,13 @@
 
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
       </div>
 
       <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item">
+        <a href="dashboard.html" class="menu-item active">
           <i data-lucide="layout-dashboard"></i>
-          Dashboard
-        </a>
-
-        <a href="pedidos.html" class="menu-item">
-          <i data-lucide="shopping-bag"></i>
-          Pedidos
+          Visão Geral
         </a>
 
         <a href="estoque.html" class="menu-item">
@@ -38,14 +37,19 @@
           Estoque
         </a>
 
+        <a href="produtos.html" class="menu-item">
+          <i data-lucide="package-search"></i>
+          Produtos
+        </a>
+
         <a href="vendas.html" class="menu-item">
           <i data-lucide="badge-dollar-sign"></i>
           Vendas
         </a>
 
-        <a href="produtos.html" class="menu-item">
-          <i data-lucide="package-search"></i>
-          Produtos
+        <a href="relatorios.html" class="menu-item">
+          <i data-lucide="scroll-text"></i>
+          Relatórios
         </a>
 
         <a href="fornecedores.html" class="menu-item">
@@ -53,14 +57,14 @@
           Fornecedores
         </a>
 
-        <a href="relatorios.html" class="menu-item active">
-          <i data-lucide="scroll-text"></i>
-          Relatórios
-        </a>
-
         <a href="configuracoes.html" class="menu-item">
           <i data-lucide="settings"></i>
           Configurações
+        </a>
+
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
         </a>
       </nav>
 
@@ -83,11 +87,11 @@
 
       <header class="topbar">
         <div class="search-box">
-          <span class="search-icon"> ⌕ </span>
+          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
           <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-          <span class="shortcut"> ⌘ K </span>
+          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
         </div>
 
         <div class="topbar-right">
@@ -104,7 +108,7 @@
 
           <div class="user">
             <div class="avatar">
-              <img src="assets/images/usuario.png" alt="Usuário" />
+              <span aria-label="Usuário de demonstração">DE</span>
             </div>
 
             <span> Vini </span>
@@ -131,9 +135,7 @@
           </div>
 
           <div class="reports-header-actions">
-            <button class="export-report-button" id="exportReport">
-              ↓ Exportar CSV
-            </button>
+            <button class="export-report-button" id="exportReport"><i class="converted-icon" data-lucide="download" aria-hidden="true"></i> Exportar CSV</button>
 
             <button class="generate-report-button" id="printReport">
               Gerar relatório
@@ -207,7 +209,7 @@
           <!-- FATURAMENTO -->
 
           <article class="report-summary-card">
-            <div class="report-card-icon revenue">$</div>
+            <div class="report-card-icon revenue"><i class="converted-icon" data-lucide="dollar-sign" aria-hidden="true"></i></div>
 
             <div>
               <span> Faturamento </span>
@@ -223,7 +225,7 @@
           <!-- VENDAS -->
 
           <article class="report-summary-card">
-            <div class="report-card-icon sales">↑</div>
+            <div class="report-card-icon sales"><i class="converted-icon" data-lucide="trending-up" aria-hidden="true"></i></div>
 
             <div>
               <span> Total de vendas </span>
@@ -237,7 +239,7 @@
           <!-- ENTRADAS -->
 
           <article class="report-summary-card">
-            <div class="report-card-icon entry">↓</div>
+            <div class="report-card-icon entry"><i class="converted-icon" data-lucide="arrow-down" aria-hidden="true"></i></div>
 
             <div>
               <span> Entradas no estoque </span>
@@ -251,7 +253,7 @@
           <!-- SAÍDAS -->
 
           <article class="report-summary-card">
-            <div class="report-card-icon exit">↑</div>
+            <div class="report-card-icon exit"><i class="converted-icon" data-lucide="arrow-up" aria-hidden="true"></i></div>
 
             <div>
               <span> Saídas do estoque </span>
@@ -307,43 +309,43 @@
               <div class="report-chart">
                 <div class="report-chart-bars">
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 42%"></div>
+                    <div class="report-bar h-[42%]"></div>
 
                     <span>Seg</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 61%"></div>
+                    <div class="report-bar h-[61%]"></div>
 
                     <span>Ter</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 50%"></div>
+                    <div class="report-bar h-[50%]"></div>
 
                     <span>Qua</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 75%"></div>
+                    <div class="report-bar h-[75%]"></div>
 
                     <span>Qui</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 68%"></div>
+                    <div class="report-bar h-[68%]"></div>
 
                     <span>Sex</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar" style="height: 90%"></div>
+                    <div class="report-bar h-[90%]"></div>
 
                     <span>Sáb</span>
                   </div>
 
                   <div class="report-bar-group">
-                    <div class="report-bar active" style="height: 82%"></div>
+                    <div class="report-bar active h-[82%]"></div>
 
                     <span>Dom</span>
                   </div>
@@ -782,12 +784,13 @@
     </main>
   </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="../js/relatorios.js"></script>
-  <script src="../js/dashboard.js"></script>
+  <script src="../js/shared/ui.js"></script>
+  <script src="../assets/vendor/lucide.min.js"></script>
+  <script src="../js/pages/relatorios.js"></script>
+  <script src="../js/shared/layout.js"></script>
 
   <script>
-    lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   </script>
 </body>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
     <meta charset="UTF-8">
@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Pedidos | SINSTOCK</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/pedidos.css">
+    <link rel="stylesheet" href="../assets/styles/dashboard.css">
+    <link rel="stylesheet" href="../assets/styles/pedidos.css">
 
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -142,8 +145,8 @@
 
                     <div class="user">
 
-                        <div class="avatar">
-                            <img src="assets/images/usuario.png" alt="Usuário">
+                        <div class="avatar flex items-center justify-center bg-[#fde4d5] text-[#773513] font-bold">
+                            <span aria-label="Usuário de demonstração">DE</span>
                         </div>
 
                         <span>
@@ -884,9 +887,9 @@
 
     </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/dashboard.js"></script>
-    <script src="../js/pedidos.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/shared/layout.js"></script>
+    <script src="../js/pages/pedidos.js"></script>
 
     <script>
         lucide.createIcons();

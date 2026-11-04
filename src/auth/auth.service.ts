@@ -18,10 +18,14 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersService.findByEmail(loginDto.email);
+    const user = await this.usersService.findByEmail(
+      loginDto.email.trim().toLowerCase(),
+    );
 
     if (!user || !user.ativo) {
-      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+      throw new UnauthorizedException(
+        'Credenciais inválidas ou usuário inativo.',
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -39,7 +43,7 @@ export class AuthService {
         userId: user.id,
         message: 'Insira o código de 6 dígitos do seu aplicativo autenticador.',
         preAuthToken: this.jwtService.sign(
-          { sub: user.id, isPreAuth: true },
+          { sub: user.id, isPreAuth: true, version: user.auth_version },
           { expiresIn: '5m' },
         ),
       };
@@ -49,6 +53,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       perfil_id: user.perfil_id,
+      version: user.auth_version,
     };
 
     return {
@@ -65,7 +70,12 @@ export class AuthService {
   async authenticateTwoFactor(userId: number, code: string) {
     const user = await this.usersService.findByIdWithSecrets(userId);
 
-    if (!user || !user.twoFactorSecret || !user.isTwoFactorEnable) {
+    if (
+      !user ||
+      !user.ativo ||
+      !user.twoFactorSecret ||
+      !user.isTwoFactorEnable
+    ) {
       throw new BadRequestException('O 2FA não está ativado para esta conta.');
     }
 
@@ -82,6 +92,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       perfil_id: user.perfil_id,
+      version: user.auth_version,
     };
 
     return {
@@ -96,6 +107,11 @@ export class AuthService {
   }
 
   // Método responsável por alimentar o endpoint GET /auth/me
+  async logout(userId: number) {
+    await this.usersService.revokeSessions(userId);
+    return { message: 'Sessões encerradas.' };
+  }
+
   async getProfile(userId: number) {
     const user = await this.usersService.findByIdWithSecrets(userId);
 
@@ -104,7 +120,14 @@ export class AuthService {
     }
 
     // Oculta dados sensíveis antes de retornar para a aplicação
-    const { senha_hash, twoFactorSecret, token_2fa, token_expiracao, ...usuarioSanitizado } = user;
+    const {
+      senha_hash,
+      twoFactorSecret,
+      token_2fa,
+      token_expiracao,
+      auth_version,
+      ...usuarioSanitizado
+    } = user;
 
     return usuarioSanitizado;
   }

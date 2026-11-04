@@ -1,0 +1,1098 @@
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.orders-header {
+    @apply flex;
+    @apply items-center;
+    @apply justify-between;
+
+    @apply mb-[28px];
+}
+
+.orders-header h1 {
+    @apply text-[length:36px];
+
+    @apply text-[#111827];
+
+    @apply mb-[7px];
+}
+
+.orders-header p {
+    @apply text-[length:16px];
+
+    @apply text-[#7c8493];
+}
+
+/* =========================================
+   BOTÃO NOVO PEDIDO
+========================================= */
+
+.new-order-button {
+    @apply h-[50px];
+
+    @apply [padding:0_22px];
+
+    @apply [border:none];
+
+    @apply rounded-[12px];
+
+    @apply [background:#fd6423];
+
+    @apply text-[#ffffff];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[9px];
+
+    @apply text-[length:15px];
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+
+    @apply [transition:0.2s];
+}
+
+.new-order-button span {
+    @apply text-[length:23px];
+
+    @apply [font-weight:300];
+}
+
+.new-order-button:hover {
+    @apply [background:#f85f30];
+
+    @apply [transform:translateY(-1px)];
+}
+
+/* =========================================
+   CARDS DE RESUMO
+========================================= */
+
+.orders-summary {
+    @apply grid;
+
+    @apply grid-cols-[repeat(4,_1fr)];
+
+    @apply gap-[20px];
+
+    @apply mb-[26px];
+}
+
+.order-summary-card {
+    @apply min-h-[120px];
+
+    @apply [background:#ffffff];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[18px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply p-[20px];
+
+    @apply gap-[18px];
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
+}
+
+/* =========================================
+   ÍCONES DOS CARDS
+========================================= */
+
+.summary-icon {
+    @apply w-[60px];
+    @apply h-[60px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[16px];
+
+    @apply text-[length:25px];
+}
+
+.summary-icon.total {
+    @apply text-[#fff0e9];
+
+    @apply [background:#b64e2e];
+}
+
+.summary-icon.pending {
+    @apply text-[#fff5df];
+
+    @apply [background:#dd951a];
+}
+
+.summary-icon.preparing {
+    @apply text-[#eaf2ff];
+
+    @apply [background:#415683];
+}
+
+.summary-icon.completed {
+    @apply text-[#ffffff];
+
+    @apply [background:#499261];
+}
+
+/* =========================================
+   INFORMAÇÕES DOS CARDS
+========================================= */
+
+.summary-information {
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[5px];
+}
+
+.summary-information > span {
+    @apply text-[length:14px];
+
+    @apply text-[#64748b];
+}
+
+.summary-information strong {
+    @apply text-[length:27px];
+
+    @apply text-[#111827];
+}
+
+.summary-information small {
+    @apply text-[length:12px];
+
+    @apply text-[#94a3b8];
+}
+
+.summary-information small.positive {
+    @apply text-[#16a34a];
+}
+
+/* =========================================
+   CARD PRINCIPAL
+========================================= */
+
+.orders-card {
+    @apply w-full;
+
+    @apply [background:#ffffff];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[18px];
+
+    @apply overflow-hidden;
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.orders-toolbar {
+    @apply min-h-[88px];
+
+    @apply [padding:18px_22px];
+
+    @apply flex;
+
+    @apply items-center;
+
+    @apply justify-between;
+
+    @apply gap-[20px];
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+/* =========================================
+   PESQUISA
+========================================= */
+
+.order-search {
+    @apply w-[390px];
+    @apply h-[50px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply [padding:0_16px];
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[11px];
+
+    @apply [background:#ffffff];
+
+    @apply [transition:0.2s];
+}
+
+.order-search:focus-within {
+    @apply border-[#ff7043];
+
+    @apply [box-shadow:0_0_0_3px_rgba(255,_112,_67,_0.08)];
+}
+
+.search-order-icon {
+    @apply mr-[11px];
+
+    @apply text-[length:25px];
+
+    @apply text-[#64748b];
+}
+
+.order-search input {
+    @apply [flex:1];
+
+    @apply h-full;
+
+    @apply [border:none];
+
+    @apply [outline:none];
+
+    @apply [background:transparent];
+
+    @apply text-[#334155];
+
+    @apply text-[length:14px];
+}
+
+.order-search input::placeholder {
+    @apply text-[#9ca3af];
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.order-filters {
+    @apply flex;
+
+    @apply gap-[12px];
+}
+
+.order-filters select {
+    @apply min-w-[170px];
+
+    @apply h-[50px];
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[11px];
+
+    @apply [padding:0_14px];
+
+    @apply [background:#ffffff];
+
+    @apply text-[#475569];
+
+    @apply cursor-pointer;
+
+    @apply [outline:none];
+}
+
+.order-filters select:focus {
+    @apply border-[#ff7043];
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.orders-table-container {
+    @apply w-full;
+
+    @apply overflow-x-auto;
+}
+
+.orders-table {
+    @apply w-full;
+
+    @apply border-collapse;
+}
+
+.orders-table thead {
+    @apply [background:#fafafa];
+}
+
+.orders-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_22px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:13px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.orders-table td {
+    @apply h-[82px];
+
+    @apply [padding:0_22px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:14px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.orders-table tbody tr {
+    @apply [transition:0.2s];
+}
+
+.orders-table tbody tr:hover {
+    @apply [background:#fffaf7];
+}
+
+/* =========================================
+   NÚMERO DO PEDIDO
+========================================= */
+
+.order-number {
+    @apply text-[#ff6234];
+
+    @apply text-[length:14px];
+}
+
+/* =========================================
+   CLIENTE
+========================================= */
+
+.customer {
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[12px];
+}
+
+.customer-avatar {
+    @apply w-[42px];
+    @apply h-[42px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[50%];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#ff6234];
+
+    @apply font-bold;
+
+    @apply text-[length:13px];
+}
+
+.customer > div:last-child {
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[4px];
+}
+
+.customer strong {
+    @apply text-[#111827];
+
+    @apply text-[length:14px];
+}
+
+.customer span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   VALOR
+========================================= */
+
+.order-value {
+    @apply text-[#111827];
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.order-status {
+    @apply inline-flex;
+
+    @apply items-center;
+    @apply justify-center;
+
+    @apply [padding:7px_12px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+/* PENDENTE */
+
+.order-status.pending {
+    @apply text-[#d88600];
+
+    @apply [background:#fff4dc];
+}
+
+/* PREPARANDO */
+
+.order-status.preparing {
+    @apply text-[#2563eb];
+
+    @apply [background:#eaf2ff];
+}
+
+/* ENVIADO */
+
+.order-status.sent {
+    @apply text-[#7c3aed];
+
+    @apply [background:#f1ebff];
+}
+
+/* CONCLUÍDO */
+
+.order-status.completed {
+    @apply text-[#159447];
+
+    @apply [background:#e9f9ef];
+}
+
+/* CANCELADO */
+
+.order-status.cancelled {
+    @apply text-[#e33f4d];
+
+    @apply [background:#ffebed];
+}
+
+/* =========================================
+   BOTÃO DE AÇÕES
+========================================= */
+
+.order-actions {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:22px];
+
+    @apply cursor-pointer;
+
+    @apply [transition:0.2s];
+}
+
+.order-actions:hover {
+    @apply [background:#f3f4f6];
+
+    @apply text-[#111827];
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.orders-footer {
+    @apply min-h-[70px];
+
+    @apply [padding:0_22px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply justify-between;
+
+    @apply text-[#7c8493];
+
+    @apply text-[length:13px];
+}
+
+/* =========================================
+   PAGINAÇÃO
+========================================= */
+
+.pagination {
+    @apply flex;
+
+    @apply gap-[7px];
+}
+
+.pagination button {
+    @apply min-w-[36px];
+    @apply h-[36px];
+
+    @apply [padding:0_8px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[8px];
+
+    @apply [background:#ffffff];
+
+    @apply text-[#475569];
+
+    @apply cursor-pointer;
+}
+
+.pagination button:hover {
+    @apply border-[#ff7043];
+
+    @apply text-[#ff7043];
+}
+
+.pagination button.active {
+    @apply border-[#ff7043];
+
+    @apply [background:#ff7043];
+
+    @apply text-[#ffffff];
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .orders-summary {
+        @apply grid-cols-[repeat(2,_1fr)];
+    }
+
+}
+
+@media (max-width: 950px) {
+
+    .orders-toolbar {
+        @apply flex-col;
+
+        @apply items-stretch;
+    }
+
+    .order-search {
+        @apply w-full;
+    }
+
+    .order-filters {
+        @apply w-full;
+    }
+
+    .order-filters select {
+        @apply [flex:1];
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .orders-header {
+        @apply flex-col;
+
+        @apply items-start;
+
+        @apply gap-[18px];
+    }
+
+    .orders-summary {
+        @apply grid-cols-[1fr];
+    }
+
+    .order-filters {
+        @apply flex-col;
+    }
+
+    .orders-footer {
+        @apply flex-col;
+
+        @apply items-start;
+
+        @apply gap-[15px];
+
+        @apply p-[18px];
+    }
+    /* =========================================
+   MODAL NOVO PEDIDO
+========================================= */
+
+.order-modal-overlay {
+    @apply fixed;
+
+    @apply [inset:0];
+
+    @apply z-[1500];
+
+    @apply hidden;
+
+    @apply items-center;
+    @apply justify-center;
+
+    @apply p-[20px];
+
+    @apply [background:rgba(15,_23,_42,_0.55)];
+}
+
+.order-modal-overlay.active {
+    @apply flex;
+}
+
+.order-modal {
+    @apply w-[min(720px,_100%)];
+
+    @apply max-h-[92vh];
+
+    @apply overflow-y-auto;
+
+    @apply p-[26px];
+
+    @apply [background:#ffffff];
+
+    @apply rounded-[20px];
+
+    @apply [box-shadow:0_25px_70px_rgba(0,_0,_0,_0.2)];
+}
+
+.order-modal-header {
+    @apply flex;
+
+    @apply items-start;
+    @apply justify-between;
+
+    @apply gap-[20px];
+
+    @apply mb-[25px];
+}
+
+.order-modal-header h2 {
+    @apply mb-[5px];
+
+    @apply text-[length:23px];
+
+    @apply text-[#111827];
+}
+
+.order-modal-header p {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:14px];
+}
+
+.close-order-modal {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply shrink-0;
+
+    @apply [border:none];
+
+    @apply rounded-[9px];
+
+    @apply [background:#f3f4f6];
+
+    @apply text-[length:23px];
+
+    @apply cursor-pointer;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.order-form-group {
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[8px];
+
+    @apply mb-[18px];
+}
+
+.order-form-group label {
+    @apply text-[#374151];
+
+    @apply text-[length:14px];
+
+    @apply font-semibold;
+}
+
+.order-form-group input,
+.order-form-group select,
+.order-form-group textarea {
+    @apply w-full;
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[10px];
+
+    @apply [padding:0_14px];
+
+    @apply [outline:none];
+
+    @apply [font-family:inherit];
+}
+
+.order-form-group input,
+.order-form-group select {
+    @apply h-[48px];
+}
+
+.order-form-group textarea {
+    @apply pt-[12px];
+
+    @apply min-h-[90px];
+}
+
+.order-form-group input:focus,
+.order-form-group select:focus,
+.order-form-group textarea:focus {
+    @apply border-[#fd7941];
+}
+
+.order-form-row {
+    @apply grid;
+
+    @apply grid-cols-[repeat(2,_minmax(0,_1fr))];
+
+    @apply gap-[15px];
+}
+
+/* =========================================
+   PRODUTOS
+========================================= */
+
+.order-products-title {
+    @apply flex;
+
+    @apply items-center;
+    @apply justify-between;
+
+    @apply [margin:10px_0_15px];
+}
+
+.order-products-title button {
+    @apply [border:none];
+
+    @apply [background:transparent];
+
+    @apply text-[#fd7941];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+.order-product-row {
+    @apply grid;
+
+    @apply grid-cols-[minmax(190px,_1fr)_80px_110px_40px];
+
+    @apply items-center;
+
+    @apply gap-[10px];
+
+    @apply mb-[10px];
+}
+
+.order-product-row select,
+.order-product-row input {
+    @apply h-[45px];
+
+    @apply [padding:0_10px];
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[9px];
+
+    @apply [outline:none];
+}
+
+.order-product-total {
+    @apply text-[#111827];
+
+    @apply font-semibold;
+
+    @apply text-right;
+}
+
+.remove-order-product {
+    @apply w-[36px];
+    @apply h-[36px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:#ffebed];
+
+    @apply text-[#e43f4c];
+
+    @apply text-[length:18px];
+
+    @apply cursor-pointer;
+}
+
+/* =========================================
+   TOTAL
+========================================= */
+
+.order-total-box {
+    @apply p-[18px];
+
+    @apply mt-[18px];
+
+    @apply [background:#fafafa];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[12px];
+}
+
+.order-total-box > div {
+    @apply flex;
+
+    @apply items-center;
+    @apply justify-between;
+
+    @apply mb-[10px];
+}
+
+.order-total-box > div:last-child {
+    @apply mb-0;
+}
+
+.order-total-final {
+    @apply pt-[12px];
+
+    @apply [border-top:1px_solid_#e5e7eb];
+
+    @apply text-[length:18px];
+}
+
+.order-total-final strong {
+    @apply text-[#fd7941];
+
+    @apply text-[length:22px];
+}
+
+/* =========================================
+   FOOTER MODAL
+========================================= */
+
+.order-modal-footer {
+    @apply flex;
+
+    @apply justify-end;
+
+    @apply gap-[12px];
+
+    @apply mt-[25px];
+}
+
+.cancel-order-button,
+.save-order-button {
+    @apply h-[48px];
+
+    @apply [padding:0_20px];
+
+    @apply rounded-[10px];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+.cancel-order-button {
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+}
+
+.save-order-button {
+    @apply [border:none];
+
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+}
+
+/* =========================================
+   MENU DE AÇÕES
+========================================= */
+
+.order-action-menu {
+    @apply fixed;
+
+    @apply z-[1600];
+
+    @apply w-[205px];
+
+    @apply hidden;
+
+    @apply p-[6px];
+
+    @apply [background:white];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[11px];
+
+    @apply [box-shadow:0_12px_35px_rgba(15,_23,_42,_0.15)];
+}
+
+.order-action-menu.show {
+    @apply block;
+}
+
+.order-action-menu button {
+    @apply w-full;
+
+    @apply min-h-[40px];
+
+    @apply [padding:0_12px];
+
+    @apply [border:none];
+
+    @apply rounded-[7px];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+
+    @apply text-left;
+
+    @apply cursor-pointer;
+}
+
+.order-action-menu button:hover {
+    @apply [background:#f8fafc];
+
+    @apply text-[#fd7941];
+}
+
+.order-action-menu button.danger {
+    @apply text-[#ef4444];
+}
+
+.order-action-menu button.danger:hover {
+    @apply [background:#fff1f2];
+}
+
+/* =========================================
+   TOAST
+========================================= */
+
+.orders-toast {
+    @apply fixed;
+
+    @apply right-[25px];
+    @apply bottom-[25px];
+
+    @apply z-[2000];
+
+    @apply max-w-[350px];
+
+    @apply [padding:14px_18px];
+
+    @apply rounded-[11px];
+
+    @apply [background:#334155];
+
+    @apply text-[white];
+
+    @apply text-[length:13px];
+
+    @apply opacity-[0];
+
+    @apply [transform:translateY(15px)];
+
+    @apply [transition:0.3s];
+
+    @apply [box-shadow:0_12px_35px_rgba(15,_23,_42,_0.2)];
+}
+
+.orders-toast.show {
+    @apply opacity-[1];
+
+    @apply [transform:translateY(0)];
+}
+
+.orders-toast.success {
+    @apply [background:#16a34a];
+}
+
+.orders-toast.warning {
+    @apply [background:#e58a00];
+}
+
+.orders-toast.info {
+    @apply [background:#2563eb];
+}
+
+/* =========================================
+   PAGINAÇÃO DESABILITADA
+========================================= */
+
+.pagination button:disabled {
+    @apply opacity-[0.4];
+
+    @apply cursor-not-allowed;
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 650px) {
+
+    .order-form-row {
+        @apply grid-cols-[1fr];
+    }
+
+    .order-product-row {
+        @apply grid-cols-[minmax(0,_1fr)_65px];
+    }
+
+    .order-product-total {
+        @apply text-left;
+    }
+
+    .orders-toast {
+        @apply left-[15px];
+        @apply right-[15px];
+
+        @apply max-w-[none];
+    }
+
+}
+
+}

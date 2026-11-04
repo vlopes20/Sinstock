@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailModule } from '../mail/mail.module';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PasswordRecoveryService } from './password-recovery.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../usuario/users.module';
@@ -11,14 +15,26 @@ import { PreAuthStrategy } from './strategies/pre-auth.strategy';
 @Module({
   imports: [
     UsersModule,
+    MailModule,
+    PrismaModule,
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
-      signOptions: { expiresIn: '1d' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.getOrThrow<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+      }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, TwoFactorService, JwtStrategy, PreAuthStrategy],
+  providers: [
+    AuthService,
+    TwoFactorService,
+    JwtStrategy,
+    PreAuthStrategy,
+    PasswordRecoveryService,
+  ],
   exports: [AuthService, TwoFactorService],
 })
 export class AuthModule {}

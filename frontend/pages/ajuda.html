@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,8 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Ajuda e Suporte | SINSTOCK</title>
-    <link rel="stylesheet" href="../css/dashboard.css" />
-    <link rel="stylesheet" href="../css/ajuda.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/ajuda.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -19,18 +23,13 @@
 
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+                <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
             </div>
 
             <nav class="sidebar-menu">
-                <a href="dashboard.html" class="menu-item">
+                <a href="dashboard.html" class="menu-item active">
                     <i data-lucide="layout-dashboard"></i>
-                    Dashboard
-                </a>
-
-                <a href="pedidos.html" class="menu-item">
-                    <i data-lucide="shopping-bag"></i>
-                    Pedidos
+                    Visão Geral
                 </a>
 
                 <a href="estoque.html" class="menu-item">
@@ -38,19 +37,14 @@
                     Estoque
                 </a>
 
-                <a href="vendas.html" class="menu-item">
-                    <i data-lucide="badge-dollar-sign"></i>
-                    Vendas
-                </a>
-
                 <a href="produtos.html" class="menu-item">
                     <i data-lucide="package-search"></i>
                     Produtos
                 </a>
 
-                <a href="fornecedores.html" class="menu-item">
-                    <i data-lucide="truck"></i>
-                    Fornecedores
+                <a href="vendas.html" class="menu-item">
+                    <i data-lucide="badge-dollar-sign"></i>
+                    Vendas
                 </a>
 
                 <a href="relatorios.html" class="menu-item">
@@ -58,9 +52,19 @@
                     Relatórios
                 </a>
 
+                <a href="fornecedores.html" class="menu-item">
+                    <i data-lucide="truck"></i>
+                    Fornecedores
+                </a>
+
                 <a href="configuracoes.html" class="menu-item">
                     <i data-lucide="settings"></i>
                     Configurações
+                </a>
+
+                <a href="ajuda.html" class="menu-item">
+                    <i data-lucide="circle-question-mark"></i>
+                    Ajuda e suporte
                 </a>
             </nav>
 
@@ -83,11 +87,13 @@
 
             <header class="topbar">
                 <div class="search-box">
-                    <span class="search-icon"> ⌕ </span>
+                    <span class="search-icon"><i class="converted-icon" data-lucide="search"
+                            aria-hidden="true"></i></span>
 
                     <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-                    <span class="shortcut"> ⌘ K </span>
+                    <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i>
+                        K</span>
                 </div>
 
                 <div class="topbar-right">
@@ -104,7 +110,7 @@
 
                     <div class="user">
                         <div class="avatar">
-                            <img src="assets/images/usuario.png" alt="Usuário" />
+                            <span aria-label="Usuário de demonstração">DE</span>
                         </div>
 
                         <span> Vini </span>
@@ -141,7 +147,7 @@
 
                     <button class="new-ticket-button" id="openTicketModal">
 
-                        <span>+</span>
+                        <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
 
                         Abrir chamado
 
@@ -169,9 +175,7 @@
 
                         <div class="help-search">
 
-                            <span>
-                                ⌕
-                            </span>
+                            <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
                             <input type="text" id="helpSearch" placeholder="Ex: Como registrar uma entrada no estoque?">
 
@@ -191,9 +195,8 @@
 
                     <article class="help-category-card" data-category="estoque">
 
-                        <div class="help-category-icon orange">
-                            📦
-                        </div>
+                        <div class="help-category-icon orange"><i class="converted-icon" data-lucide="package"
+                                aria-hidden="true"></i></div>
 
                         <div>
 
@@ -207,18 +210,16 @@
 
                         </div>
 
-                        <span class="help-arrow">
-                            ›
-                        </span>
+                        <span class="help-arrow"><i class="converted-icon" data-lucide="chevron-right"
+                                aria-hidden="true"></i></span>
 
                     </article>
 
 
                     <article class="help-category-card" data-category="vendas">
 
-                        <div class="help-category-icon green">
-                            $
-                        </div>
+                        <div class="help-category-icon green"><i class="converted-icon" data-lucide="dollar-sign"
+                                aria-hidden="true"></i></div>
 
                         <div>
 
@@ -232,18 +233,16 @@
 
                         </div>
 
-                        <span class="help-arrow">
-                            ›
-                        </span>
+                        <span class="help-arrow"><i class="converted-icon" data-lucide="chevron-right"
+                                aria-hidden="true"></i></span>
 
                     </article>
 
 
                     <article class="help-category-card" data-category="produtos">
 
-                        <div class="help-category-icon blue">
-                            ◇
-                        </div>
+                        <div class="help-category-icon blue"><i class="converted-icon" data-lucide="package-search"
+                                aria-hidden="true"></i></div>
 
                         <div>
 
@@ -257,18 +256,16 @@
 
                         </div>
 
-                        <span class="help-arrow">
-                            ›
-                        </span>
+                        <span class="help-arrow"><i class="converted-icon" data-lucide="chevron-right"
+                                aria-hidden="true"></i></span>
 
                     </article>
 
 
                     <article class="help-category-card" data-category="fornecedores">
 
-                        <div class="help-category-icon purple">
-                            ▱
-                        </div>
+                        <div class="help-category-icon purple"><i class="converted-icon" data-lucide="truck"
+                                aria-hidden="true"></i></div>
 
                         <div>
 
@@ -282,9 +279,8 @@
 
                         </div>
 
-                        <span class="help-arrow">
-                            ›
-                        </span>
+                        <span class="help-arrow"><i class="converted-icon" data-lucide="chevron-right"
+                                aria-hidden="true"></i></span>
 
                     </article>
 
@@ -357,9 +353,8 @@
                                             Como cadastrar um novo produto?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -389,9 +384,8 @@
                                             Como registrar uma entrada no estoque?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -420,9 +414,8 @@
                                             Posso deixar um produto com estoque negativo?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -450,9 +443,8 @@
                                             Como registrar uma nova venda?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -481,9 +473,8 @@
                                             Como gerar um relatório?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -511,9 +502,8 @@
                                             Como alterar as permissões de um usuário?
                                         </span>
 
-                                        <span class="faq-icon">
-                                            +
-                                        </span>
+                                        <span class="faq-icon"><i class="converted-icon" data-lucide="plus"
+                                                aria-hidden="true"></i></span>
 
                                     </button>
 
@@ -629,9 +619,8 @@
                             </div>
 
 
-                            <button class="new-ticket-secondary" id="openTicketFromTickets">
-                                + Novo chamado
-                            </button>
+                            <button class="new-ticket-secondary" id="openTicketFromTickets"><i class="converted-icon"
+                                    data-lucide="plus" aria-hidden="true"></i> Novo chamado</button>
 
                         </div>
 
@@ -696,9 +685,8 @@
 
                                         <td>
 
-                                            <button class="ticket-actions">
-                                                ⋮
-                                            </button>
+                                            <button class="ticket-actions"><i class="converted-icon"
+                                                    data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                                         </td>
 
@@ -745,9 +733,8 @@
 
                                         <td>
 
-                                            <button class="ticket-actions">
-                                                ⋮
-                                            </button>
+                                            <button class="ticket-actions"><i class="converted-icon"
+                                                    data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                                         </td>
 
@@ -794,9 +781,8 @@
 
                                         <td>
 
-                                            <button class="ticket-actions">
-                                                ⋮
-                                            </button>
+                                            <button class="ticket-actions"><i class="converted-icon"
+                                                    data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                                         </td>
 
@@ -824,9 +810,8 @@
 
                         <article class="contact-card">
 
-                            <div class="contact-icon">
-                                ✉
-                            </div>
+                            <div class="contact-icon"><i class="converted-icon" data-lucide="mail"
+                                    aria-hidden="true"></i></div>
 
 
                             <h3>
@@ -849,9 +834,8 @@
 
                         <article class="contact-card">
 
-                            <div class="contact-icon">
-                                ☎
-                            </div>
+                            <div class="contact-icon"><i class="converted-icon" data-lucide="phone"
+                                    aria-hidden="true"></i></div>
 
 
                             <h3>
@@ -874,9 +858,8 @@
 
                         <article class="contact-card">
 
-                            <div class="contact-icon">
-                                ◷
-                            </div>
+                            <div class="contact-icon"><i class="converted-icon" data-lucide="clock"
+                                    aria-hidden="true"></i></div>
 
 
                             <h3>
@@ -997,9 +980,8 @@
                         </div>
 
 
-                        <button type="button" id="closeTicketModal" class="close-ticket-modal">
-                            ×
-                        </button>
+                        <button type="button" id="closeTicketModal" class="close-ticket-modal" aria-label="Fechar"><i
+                                class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
 
                     </div>
 
@@ -1208,12 +1190,13 @@
         </main>
     </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/ajuda.js"></script>
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/pages/ajuda.js"></script>
+    <script src="../js/shared/layout.js"></script>
 
     <script>
-        lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
     </script>
 </body>
 

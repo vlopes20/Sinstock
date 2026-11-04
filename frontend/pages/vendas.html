@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,8 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Vendas | SINSTOCK</title>
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/vendas.css" />
+  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/vendas.css" />
+  <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -20,18 +24,13 @@
 
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
       </div>
 
       <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item">
+        <a href="dashboard.html" class="menu-item active">
           <i data-lucide="layout-dashboard"></i>
-          Dashboard
-        </a>
-
-        <a href="pedidos.html" class="menu-item">
-          <i data-lucide="shopping-bag"></i>
-          Pedidos
+          Visão Geral
         </a>
 
         <a href="estoque.html" class="menu-item">
@@ -39,19 +38,14 @@
           Estoque
         </a>
 
-        <a href="vendas.html" class="menu-item  active">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
-
         <a href="produtos.html" class="menu-item">
           <i data-lucide="package-search"></i>
           Produtos
         </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
         </a>
 
         <a href="relatorios.html" class="menu-item">
@@ -59,9 +53,19 @@
           Relatórios
         </a>
 
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
         <a href="configuracoes.html" class="menu-item">
           <i data-lucide="settings"></i>
           Configurações
+        </a>
+
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
         </a>
       </nav>
 
@@ -84,11 +88,11 @@
 
       <header class="topbar">
         <div class="search-box">
-          <span class="search-icon"> ⌕ </span>
+          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
           <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-          <span class="shortcut"> ⌘ K </span>
+          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
         </div>
 
         <div class="topbar-right">
@@ -105,7 +109,7 @@
 
           <div class="user">
             <div class="avatar">
-              <img src="assets/images/usuario.png" alt="Usuário" />
+              <span aria-label="Usuário de demonstração">DE</span>
             </div>
 
             <span> Vini </span>
@@ -137,7 +141,7 @@
 
 
           <button class="new-sale-button" id="openSaleModal">
-            <span>+</span>
+            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
             Nova venda
           </button>
 
@@ -155,9 +159,7 @@
 
           <article class="sales-summary-card">
 
-            <div class="sales-card-icon revenue">
-              $
-            </div>
+            <div class="sales-card-icon revenue"><i class="converted-icon" data-lucide="dollar-sign" aria-hidden="true"></i></div>
 
             <div class="sales-card-info">
 
@@ -182,9 +184,7 @@
 
           <article class="sales-summary-card">
 
-            <div class="sales-card-icon sales">
-              ↑
-            </div>
+            <div class="sales-card-icon sales"><i class="converted-icon" data-lucide="trending-up" aria-hidden="true"></i></div>
 
             <div class="sales-card-info">
 
@@ -209,9 +209,7 @@
 
           <article class="sales-summary-card">
 
-            <div class="sales-card-icon average">
-              ◇
-            </div>
+            <div class="sales-card-icon average"><i class="converted-icon" data-lucide="receipt" aria-hidden="true"></i></div>
 
             <div class="sales-card-info">
 
@@ -327,7 +325,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 42%"></div>
+                    <div class="sales-bar h-[42%]"></div>
 
                     <span>27 Ago</span>
 
@@ -336,7 +334,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 60%"></div>
+                    <div class="sales-bar h-[60%]"></div>
 
                     <span>28 Ago</span>
 
@@ -345,7 +343,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 49%"></div>
+                    <div class="sales-bar h-[49%]"></div>
 
                     <span>29 Ago</span>
 
@@ -354,7 +352,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 72%"></div>
+                    <div class="sales-bar h-[72%]"></div>
 
                     <span>30 Ago</span>
 
@@ -363,7 +361,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 65%"></div>
+                    <div class="sales-bar h-[65%]"></div>
 
                     <span>31 Ago</span>
 
@@ -372,7 +370,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar" style="height: 81%"></div>
+                    <div class="sales-bar h-[81%]"></div>
 
                     <span>01 Set</span>
 
@@ -381,7 +379,7 @@
 
                   <div class="sales-bar-group">
 
-                    <div class="sales-bar active" style="height: 94%"></div>
+                    <div class="sales-bar active h-[94%]"></div>
 
                     <span>02 Set</span>
 
@@ -431,9 +429,7 @@
 
                   <div class="payment-name">
 
-                    <div class="payment-icon pix">
-                      P
-                    </div>
+                    <div class="payment-icon pix"><i class="converted-icon" data-lucide="qr-code" aria-hidden="true"></i></div>
 
                     <div>
                       <strong>PIX</strong>
@@ -452,7 +448,7 @@
 
                 <div class="payment-progress">
 
-                  <div style="width: 46.9%"></div>
+                  <div class="w-[46.9%]"></div>
 
                 </div>
 
@@ -462,9 +458,7 @@
 
                   <div class="payment-name">
 
-                    <div class="payment-icon card">
-                      C
-                    </div>
+                    <div class="payment-icon card"><i class="converted-icon" data-lucide="credit-card" aria-hidden="true"></i></div>
 
                     <div>
                       <strong>Cartão</strong>
@@ -482,7 +476,7 @@
 
                 <div class="payment-progress">
 
-                  <div style="width: 34.4%"></div>
+                  <div class="w-[34.4%]"></div>
 
                 </div>
 
@@ -492,9 +486,7 @@
 
                   <div class="payment-name">
 
-                    <div class="payment-icon cash">
-                      $
-                    </div>
+                    <div class="payment-icon cash"><i class="converted-icon" data-lucide="banknote" aria-hidden="true"></i></div>
 
                     <div>
                       <strong>Dinheiro</strong>
@@ -512,7 +504,7 @@
 
                 <div class="payment-progress">
 
-                  <div style="width: 18.7%"></div>
+                  <div class="w-[18.7%]"></div>
 
                 </div>
 
@@ -542,7 +534,7 @@
 
               <div class="sales-search">
 
-                <span>⌕</span>
+                <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
                 <input type="text" id="salesSearch" placeholder="Buscar venda, cliente ou código...">
 
@@ -676,9 +668,7 @@
 
                     <td>
 
-                      <button class="sale-actions">
-                        ⋮
-                      </button>
+                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                     </td>
 
@@ -737,9 +727,7 @@
 
                     <td>
 
-                      <button class="sale-actions">
-                        ⋮
-                      </button>
+                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                     </td>
 
@@ -798,9 +786,7 @@
 
                     <td>
 
-                      <button class="sale-actions">
-                        ⋮
-                      </button>
+                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                     </td>
 
@@ -859,9 +845,7 @@
 
                     <td>
 
-                      <button class="sale-actions">
-                        ⋮
-                      </button>
+                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
 
                     </td>
 
@@ -885,7 +869,7 @@
 
               <div class="sales-pagination">
 
-                <button>‹</button>
+                <button aria-label="Anterior"><i class="converted-icon" data-lucide="chevron-left" aria-hidden="true"></i></button>
 
                 <button class="active">
                   1
@@ -899,7 +883,7 @@
 
                 <button>82</button>
 
-                <button>›</button>
+                <button aria-label="Próximo"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></button>
 
               </div>
 
@@ -929,9 +913,7 @@
             </div>
 
 
-            <button class="close-sale-modal" id="closeSaleModal">
-              ×
-            </button>
+            <button class="close-sale-modal" id="closeSaleModal" aria-label="Fechar"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
 
           </div>
 
@@ -979,9 +961,7 @@
                 Produtos
               </strong>
 
-              <button type="button" id="addSaleProduct">
-                + Adicionar produto
-              </button>
+              <button type="button" id="addSaleProduct"><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i> Adicionar produto</button>
 
             </div>
 
@@ -1019,9 +999,7 @@
                 </div>
 
 
-                <button type="button" class="remove-sale-product">
-                  ×
-                </button>
+                <button type="button" class="remove-sale-product" aria-label="Remover produto"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
 
               </div>
 
@@ -1151,12 +1129,13 @@
 
 
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/shared/ui.js"></script>
+  <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/shared/layout.js"></script>
     <script>
-      lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     </script>
-    <script src="../js/vendas.js"></script>
+    <script src="../js/pages/vendas.js"></script>
 </body>
 
 </html>

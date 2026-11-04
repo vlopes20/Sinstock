@@ -23,7 +23,7 @@ export class UsersService {
       const user = await this.prisma.usuarios.create({
         data: {
           nome: createUserDto.nome,
-          email: createUserDto.email,
+          email: createUserDto.email.trim().toLowerCase(),
           senha_hash,
           perfil_id: createUserDto.perfil_id,
           telefone: createUserDto.telefone,
@@ -58,17 +58,25 @@ export class UsersService {
 
     const dataToUpdate: Prisma.usuariosUpdateInput = {};
 
-    if (updateUserDto.nome !== undefined) dataToUpdate.nome = updateUserDto.nome;
-    if (updateUserDto.email !== undefined) dataToUpdate.email = updateUserDto.email;
+    if (updateUserDto.nome !== undefined)
+      dataToUpdate.nome = updateUserDto.nome;
+    if (updateUserDto.email !== undefined)
+      dataToUpdate.email = updateUserDto.email.trim().toLowerCase();
     if (updateUserDto.perfil_id !== undefined) {
       dataToUpdate.perfis = { connect: { id: updateUserDto.perfil_id } };
     }
-    if (updateUserDto.telefone !== undefined) dataToUpdate.telefone = updateUserDto.telefone;
-    if (updateUserDto.ativo !== undefined) dataToUpdate.ativo = updateUserDto.ativo;
+    if (updateUserDto.telefone !== undefined)
+      dataToUpdate.telefone = updateUserDto.telefone;
+    if (updateUserDto.ativo !== undefined)
+      dataToUpdate.ativo = updateUserDto.ativo;
 
     if (updateUserDto.senha) {
       const saltRounds = 10;
-      dataToUpdate.senha_hash = await bcrypt.hash(updateUserDto.senha, saltRounds);
+      dataToUpdate.senha_hash = await bcrypt.hash(
+        updateUserDto.senha,
+        saltRounds,
+      );
+      dataToUpdate.auth_version = { increment: 1 };
     }
 
     try {
@@ -123,6 +131,7 @@ export class UsersService {
         nome: true,
         email: true,
         senha_hash: true,
+        auth_version: true,
         perfil_id: true,
         telefone: true,
         ativo: true,
@@ -140,6 +149,13 @@ export class UsersService {
           },
         },
       },
+    });
+  }
+
+  async revokeSessions(id: number) {
+    await this.prisma.usuarios.update({
+      where: { id },
+      data: { auth_version: { increment: 1 } },
     });
   }
 
@@ -227,6 +243,7 @@ export class UsersService {
         criado_em: true,
         atualizado_em: true,
         senha_hash: true,
+        auth_version: true,
         twoFactorSecret: true,
         isTwoFactorEnable: true,
         token_2fa: true,

@@ -1,4 +1,18 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
+import {
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  TwoFactorCodeDto,
+} from './dto/recovery.dto';
+import { PasswordRecoveryService } from './password-recovery.service';
 import { Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -18,11 +32,37 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly twoFactorService: TwoFactorService,
+    private readonly recovery: PasswordRecoveryService,
   ) {}
 
   @Post('login')
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@Request() req: RequestWithUser) {
+    return this.authService.getProfile(req.user.userId);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Request() req: RequestWithUser) {
+    return this.authService.logout(req.user.userId);
+  }
+
+  @Post('forgot-password')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.recovery.request(dto.email);
+  }
+
+  @Post('reset-password')
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.recovery.reset(dto.token, dto.senha);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,19 +78,20 @@ export class AuthController {
   @Post('2fa/enable')
   async enable2FA(
     @Request() req: RequestWithUser,
-    @Body('codigo') codigo: string,
+    @Body() dto: TwoFactorCodeDto,
   ) {
     const usuarioId = req.user.userId;
-    return this.twoFactorService.enableTwoFactor(usuarioId, codigo);
+    return this.twoFactorService.enableTwoFactor(usuarioId, dto.codigo);
   }
 
   @UseGuards(PreAuthGuard)
   @Post('2fa/authenticate')
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   async authenticate2FA(
     @Request() req: RequestWithUser,
-    @Body('codigo') codigo: string,
+    @Body() dto: TwoFactorCodeDto,
   ) {
     const usuarioId = req.user.userId;
-    return this.authService.authenticateTwoFactor(usuarioId, codigo);
+    return this.authService.authenticateTwoFactor(usuarioId, dto.codigo);
   }
 }

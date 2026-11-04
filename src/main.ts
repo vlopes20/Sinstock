@@ -4,14 +4,16 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { mountFrontend } from './common/frontend.setup';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   const rawOrigins = configService.get<string>('CORS_ORIGIN', '*');
-  
+
   const allowedOrigins =
     rawOrigins === '*'
       ? true
@@ -20,10 +22,13 @@ async function bootstrap() {
         : rawOrigins;
 
   app.enableCors({
-    origin: ['http://127.0.0.1:5500','http://localhost:5500'],
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
+
+  // Serve only public assets, never node_modules, source styles or tooling.
+  mountFrontend(app);
 
   app.useGlobalPipes(
     new ValidationPipe({

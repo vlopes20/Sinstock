@@ -241,6 +241,8 @@ model usuarios {
   twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
   isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
   ativo                 Boolean?                @default(true)
+  auth_version          Int                     @default(0)
+  passwordResets        PasswordResetToken[]
   criado_em             DateTime?               @default(now()) @db.Timestamp(0)
   atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
   chamados_suporte      chamados_suporte[]
@@ -250,6 +252,18 @@ model usuarios {
   perfis                perfis                  @relation(fields: [perfil_id], references: [id], onUpdate: NoAction, map: "fk_usuarios_perfil")
 
   @@index([perfil_id], map: "fk_usuarios_perfil")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique @db.VarChar(64)
+  expiresAt DateTime @db.DateTime(3)
+  usedAt    DateTime? @db.DateTime(3)
+  user      usuarios @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 model LogAuditoriaEstoque {

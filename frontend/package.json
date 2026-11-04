@@ -1,0 +1,19 @@
+{
+  "name": "sinstock-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-css.cjs",
+    "watch": "node scripts/build-css.cjs --watch",
+    "check": "node scripts/build-css.cjs --check && node scripts/check-links.cjs",
+    "check:links": "node scripts/check-links.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "lucide": "0.468.0"
+  }
+}

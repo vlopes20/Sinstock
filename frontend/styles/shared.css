@@ -1,0 +1,62 @@
+/* Complementos compartilhados. Mantém as cores e os componentes existentes. */
+:focus-visible { @apply [outline:3px_solid_#a53d12]; @apply [outline-offset:3px]; }
+.skip-link { @apply fixed; @apply top-[-100px]; @apply left-[12px]; @apply z-[2000]; @apply p-[12px]; @apply [background:white]; @apply text-[#111827]; }
+.skip-link:focus { @apply top-[12px]; }
+.demo-notice { @apply [padding:12px_18px]; @apply [background:#fff3e9]; @apply [border-bottom:1px_solid_#f1d5be]; @apply text-[#713519]; @apply [font:14px/1.5_Arial,_sans-serif]; }
+.demo-notice a { @apply text-[inherit]; @apply [font-weight:bold]; }
+.avatar { @apply flex; @apply items-center; @apply justify-center; @apply [background:#fde4d5]; @apply text-[#773513]; @apply [font-weight:bold]; }
+.mobile-menu-toggle, .mobile-menu-close { @apply hidden; }
+.sidebar { @apply overflow-y-auto; }
+.sidebar-menu { @apply shrink-0; }
+.menu-backdrop { @apply hidden; }
+.shared-toast { @apply fixed; @apply bottom-[20px]; @apply left-[50%]; @apply [transform:translateX(-50%)]; @apply w-[max-content]; @apply max-w-[calc(100vw_-_32px)]; @apply [padding:14px_20px]; @apply [background:#29313d]; @apply text-[white]; @apply rounded-[10px]; @apply z-[2000]; @apply [font:15px/1.5_Arial,_sans-serif]; @apply [box-shadow:0_5px_24px_#0003]; }
+.shared-toast:empty { @apply hidden; }
+.shared-dropdown { @apply fixed; @apply top-[85px]; @apply right-[20px]; @apply z-[100]; @apply [background:white]; @apply [border:1px_solid_#ddd]; @apply rounded-[12px]; @apply p-[16px]; @apply w-[260px]; @apply max-w-[calc(100vw_-_32px)]; @apply [box-shadow:0_8px_28px_#0002]; }
+.shared-dropdown[hidden] { @apply hidden; }
+.shared-dropdown a, .shared-dropdown button { @apply block; @apply p-[12px]; @apply text-[#333]; @apply text-left; @apply [background:white]; @apply [border:0]; @apply [font:inherit]; }
+.demo-error { @apply text-[#a12424]; @apply [background:#fff0f0]; @apply p-[12px]; @apply rounded-[8px]; @apply [margin:12px_0]; }
+.demo-error:empty { @apply hidden; }
+.stock-empty { @apply p-[24px]; @apply text-center; @apply text-[#64748b]; }
+.stock-modal { @apply max-h-[calc(100dvh_-_32px)]; @apply overflow-y-auto; }
+.stock-modal-overlay { @apply z-[200]; @apply p-[16px]; }
+.stock-form-group small { @apply text-[#64748b]; @apply leading-[1.5]; }
+.stock-form-group input, .stock-form-group select { @apply min-w-[0]; @apply w-full; }
+.demo-login-link { @apply block; @apply mt-[18px]; @apply text-center; @apply text-[#9b3712]; @apply font-semibold; }
+[aria-disabled="true"] { @apply cursor-not-allowed; @apply opacity-[.6]; }
+@media (max-width: 850px) {
+    .mobile-menu-toggle, .mobile-menu-close { @apply inline-flex; @apply items-center; @apply justify-center; @apply [border:1px_solid_#ddd]; @apply rounded-[8px]; @apply [background:white]; @apply text-[#333]; @apply min-w-[44px]; @apply min-h-[44px]; @apply cursor-pointer; @apply text-[length:22px]; }
+    .mobile-menu-close { @apply absolute; @apply right-[12px]; @apply top-[12px]; }
+    .sidebar .sidebar-logo img { @apply max-w-[180px]; }
+    .sidebar { @apply hidden; @apply w-[min(310px,_85vw)]; @apply z-[501]; }
+    .sidebar.mobile-open { @apply flex; }
+    .menu-backdrop.is-open { @apply block; @apply fixed; @apply [inset:0]; @apply [background:#0008]; @apply z-[500]; @apply [border:none]; @apply w-full; @apply h-full; }
+    .topbar { @apply gap-[10px]; }
+    .search-box { @apply min-w-[0]; @apply [padding-inline:10px]; }
+    .topbar-right { @apply gap-[10px]; }
+    .demo-notice { @apply text-[length:13px]; }
+}
+@media (max-width: 480px) {
+    .topbar .user { @apply gap-0; }
+    .topbar .user-arrow { @apply hidden; }
+    .topbar .search-icon { @apply hidden; }
+    .topbar .avatar { @apply w-[34px]; @apply h-[34px]; }
+    .stock-form-row { @apply grid-cols-[1fr]; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { @apply [animation-duration:.01ms] !important; @apply [transition-duration:.01ms] !important; @apply [scroll-behavior:auto] !important; }
+}
+@media print { .demo-notice, .shared-toast, .mobile-menu-toggle, .menu-backdrop, .shared-dropdown { @apply hidden !important; } }
+
+/* Icons converted to Lucide */
+svg.converted-icon {
+    @apply w-[1em];
+    @apply h-[1em];
+    @apply shrink-0;
+    @apply [vertical-align:middle];
+    @apply pointer-events-none;
+}
+.shortcut {
+    @apply inline-flex;
+    @apply items-center;
+    @apply gap-[4px];
+}

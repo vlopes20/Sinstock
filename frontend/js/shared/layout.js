@@ -21,7 +21,8 @@ function atualizarData() {
     const mes = meses[hoje.getMonth()];
     const ano = hoje.getFullYear();
 
-    document.getElementById("dataAtual").textContent =
+    const date = document.getElementById("dataAtual");
+    if (date) date.textContent =
         `${dia} de ${mes} de ${ano}`;
 }
 
@@ -29,4 +30,4 @@ atualizarData();
 
 setInterval(atualizarData, 60000);
 
-lucide.createIcons();
+if (window.lucide) window.lucide.createIcons();

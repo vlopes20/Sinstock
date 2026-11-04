@@ -442,11 +442,11 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="user-dropdown-header">
 
                 <strong>
-                    Gabriel
+                    Minha conta
                 </strong>
 
                 <span>
-                    Administrador
+                    Usuário conectado
                 </span>
 
             </div>
@@ -570,33 +570,7 @@ document.addEventListener("DOMContentLoaded", function () {
        7. LOGOUT
     ====================================================== */
 
-    function logout() {
-
-        /*
-        =============================================
-        QUANDO O LOGIN REAL ESTIVER FUNCIONANDO:
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("usuario");
-
-        =============================================
-        */
-
-
-        localStorage.removeItem(
-            "token"
-        );
-
-
-        localStorage.removeItem(
-            "usuario"
-        );
-
-
-        window.location.href =
-            "../index.html";
-
-    }
+    function logout() { SinstockSession.logout(); }
 
 
     /* =====================================================

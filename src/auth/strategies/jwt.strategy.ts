@@ -1,15 +1,23 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../../usuario/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(
+    config: ConfigService,
+    private readonly users: UsersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey:
-        process.env.JWT_SECRET || 'sinstock_chave_super_secreta_jwt_2026',
+      secretOrKey: config.getOrThrow<string>('JWT_SECRET'),
     });
   }
 
@@ -20,10 +28,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       );
     }
 
+    if (!Number.isInteger(payload.sub)) throw new UnauthorizedException();
+    const user = await this.users
+      .findByIdWithSecrets(payload.sub)
+      .catch((error) => {
+        if (error instanceof NotFoundException) return null;
+        throw error;
+      });
+    if (!user?.ativo || payload.version !== user.auth_version)
+      throw new UnauthorizedException('Sessão expirada. Entre novamente.');
+
     return {
       userId: payload.sub,
-      email: payload.email,
-      perfil_id: payload.perfil_id,
+      email: user.email,
+      perfil_id: user.perfil_id,
     };
   }
 }

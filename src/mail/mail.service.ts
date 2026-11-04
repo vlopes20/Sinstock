@@ -27,7 +27,7 @@ export class MailService {
   async enviarEmail(opcoes: OpcoesEmail): Promise<boolean> {
     try {
       await this.transporter.sendMail({
-        from: '"Sinstock ERP" <suporte@sinstock.com>',
+        from: process.env.SMTP_FROM || '"Sinstock ERP" <suporte@sinstock.com>',
         to: opcoes.para,
         subject: opcoes.assunto,
         html: opcoes.conteudoHtml,

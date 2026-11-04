@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="invisible" data-auth-required="user">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,8 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Fornecedores | SINSTOCK</title>
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/fornecedores.css" />
+  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+  <link rel="stylesheet" href="../assets/styles/fornecedores.css" />
+  <link rel="stylesheet" href="../assets/styles/shared.css" />
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/api.js"></script>
+  <script src="../js/auth/session.js"></script>
 </head>
 
 <body>
@@ -19,18 +23,13 @@
 
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
       </div>
 
       <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item">
+        <a href="dashboard.html" class="menu-item active">
           <i data-lucide="layout-dashboard"></i>
-          Dashboard
-        </a>
-
-        <a href="pedidos.html" class="menu-item">
-          <i data-lucide="shopping-bag"></i>
-          Pedidos
+          Visão Geral
         </a>
 
         <a href="estoque.html" class="menu-item">
@@ -38,19 +37,14 @@
           Estoque
         </a>
 
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
-
         <a href="produtos.html" class="menu-item">
           <i data-lucide="package-search"></i>
           Produtos
         </a>
 
-        <a href="fornecedores.html" class="menu-item active">
-          <i data-lucide="truck"></i>
-          Fornecedores
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
         </a>
 
         <a href="relatorios.html" class="menu-item">
@@ -58,9 +52,19 @@
           Relatórios
         </a>
 
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
         <a href="configuracoes.html" class="menu-item">
           <i data-lucide="settings"></i>
           Configurações
+        </a>
+
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
         </a>
       </nav>
 
@@ -83,11 +87,11 @@
 
       <header class="topbar">
         <div class="search-box">
-          <span class="search-icon"> ⌕ </span>
+          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
           <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
 
-          <span class="shortcut"> ⌘ K </span>
+          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
         </div>
 
         <div class="topbar-right">
@@ -104,7 +108,7 @@
 
           <div class="user">
             <div class="avatar">
-              <img src="assets/images/usuario.png" alt="Usuário" />
+              <span aria-label="Usuário de demonstração">DE</span>
             </div>
 
             <span> Vini </span>
@@ -131,7 +135,7 @@
           </div>
 
           <button class="new-supplier-button" id="openSupplierModal">
-            <span>+</span>
+            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
             Novo fornecedor
           </button>
         </div>
@@ -207,7 +211,7 @@
 
           <div class="suppliers-toolbar">
             <div class="supplier-search">
-              <span>⌕</span>
+              <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
 
               <input type="text" id="supplierSearch" placeholder="Buscar fornecedor, CNPJ ou contato..." />
             </div>
@@ -287,7 +291,7 @@
                   </td>
 
                   <td>
-                    <button class="supplier-actions" data-id="1">⋮</button>
+                    <button class="supplier-actions" data-id="1"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                   </td>
                 </tr>
 
@@ -322,7 +326,7 @@
                   </td>
 
                   <td>
-                    <button class="supplier-actions" data-id="2">⋮</button>
+                    <button class="supplier-actions" data-id="2"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                   </td>
                 </tr>
 
@@ -357,7 +361,7 @@
                   </td>
 
                   <td>
-                    <button class="supplier-actions" data-id="3">⋮</button>
+                    <button class="supplier-actions" data-id="3"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                   </td>
                 </tr>
 
@@ -392,7 +396,7 @@
                   </td>
 
                   <td>
-                    <button class="supplier-actions" data-id="4">⋮</button>
+                    <button class="supplier-actions" data-id="4"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
                   </td>
                 </tr>
               </tbody>
@@ -407,7 +411,7 @@
             <span> Mostrando 1 a 4 de 42 fornecedores </span>
 
             <div class="suppliers-pagination">
-              <button>‹</button>
+              <button aria-label="Anterior"><i class="converted-icon" data-lucide="chevron-left" aria-hidden="true"></i></button>
 
               <button class="active">1</button>
 
@@ -419,7 +423,7 @@
 
               <button>11</button>
 
-              <button>›</button>
+              <button aria-label="Próximo"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></button>
             </div>
           </div>
         </div>
@@ -435,9 +439,7 @@
               <p>Informe os dados comerciais do fornecedor.</p>
             </div>
 
-            <button type="button" class="close-supplier-modal" id="closeSupplierModal">
-              ×
-            </button>
+            <button type="button" class="close-supplier-modal" id="closeSupplierModal" aria-label="Fechar"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
           </div>
 
           <!-- FORM -->
@@ -628,12 +630,13 @@
     </main>
   </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="../js/fornecedores.js"></script>
-  <script src="../js/dashboard.js"></script>
+  <script src="../js/shared/ui.js"></script>
+  <script src="../assets/vendor/lucide.min.js"></script>
+  <script src="../js/pages/fornecedores.js"></script>
+  <script src="../js/shared/layout.js"></script>
 
   <script>
-    lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   </script>
 </body>
 
