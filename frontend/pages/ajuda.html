@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Ajuda e Suporte | SINSTOCK</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/ajuda.css" />
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+
+                <a href="pedidos.html" class="menu-item">
+                    <i data-lucide="shopping-bag"></i>
+                    Pedidos
+                </a>
+
+                <a href="estoque.html" class="menu-item">
+                    <i data-lucide="boxes"></i>
+                    Estoque
+                </a>
+
+                <a href="vendas.html" class="menu-item">
+                    <i data-lucide="badge-dollar-sign"></i>
+                    Vendas
+                </a>
+
+                <a href="produtos.html" class="menu-item">
+                    <i data-lucide="package-search"></i>
+                    Produtos
+                </a>
+
+                <a href="fornecedores.html" class="menu-item">
+                    <i data-lucide="truck"></i>
+                    Fornecedores
+                </a>
+
+                <a href="relatorios.html" class="menu-item">
+                    <i data-lucide="scroll-text"></i>
+                    Relatórios
+                </a>
+
+                <a href="configuracoes.html" class="menu-item">
+                    <i data-lucide="settings"></i>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="ajuda.html" class="menu-item active">
+                    <i data-lucide="circle-question-mark"></i>
+                    Ajuda e suporte
+                </a>
+            </div>
+        </aside>
+
+        <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+        <main class="main-content">
+            <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+            <header class="topbar">
+                <div class="search-box">
+                    <span class="search-icon"> ⌕ </span>
+
+                    <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+
+                    <span class="shortcut"> ⌘ K </span>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="date">
+                        <i data-lucide="calendar-days"></i>
+                        <span id="dataAtual"></span>
+                    </div>
+
+                    <div class="notification">
+                        <i data-lucide="bell"></i>
+
+                        <span class="notification-number"> 1 </span>
+                    </div>
+
+                    <div class="user">
+                        <div class="avatar">
+                            <img src="assets/images/usuario.png" alt="Usuário" />
+                        </div>
+
+                        <span> Vini </span>
+
+                        <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+            <section class="content">
+
+                <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+                <div class="help-header">
+
+                    <div>
+
+                        <h1>
+                            Ajuda e Suporte
+                        </h1>
+
+                        <p>
+                            Encontre respostas para suas dúvidas ou entre em contato com o suporte.
+                        </p>
+
+                    </div>
+
+
+                    <button class="new-ticket-button" id="openTicketModal">
+
+                        <span>+</span>
+
+                        Abrir chamado
+
+                    </button>
+
+                </div>
+
+
+                <!-- =====================================
+         PESQUISA PRINCIPAL
+    ====================================== -->
+
+                <div class="help-search-card">
+
+                    <div class="help-search-content">
+
+                        <h2>
+                            Como podemos ajudar?
+                        </h2>
+
+                        <p>
+                            Pesquise por funcionalidades, dúvidas ou problemas.
+                        </p>
+
+
+                        <div class="help-search">
+
+                            <span>
+                                ⌕
+                            </span>
+
+                            <input type="text" id="helpSearch" placeholder="Ex: Como registrar uma entrada no estoque?">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================
+         ATALHOS
+    ====================================== -->
+
+                <div class="help-categories">
+
+
+                    <article class="help-category-card" data-category="estoque">
+
+                        <div class="help-category-icon orange">
+                            📦
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Estoque
+                            </h3>
+
+                            <p>
+                                Entradas, saídas, ajustes e saldo dos produtos.
+                            </p>
+
+                        </div>
+
+                        <span class="help-arrow">
+                            ›
+                        </span>
+
+                    </article>
+
+
+                    <article class="help-category-card" data-category="vendas">
+
+                        <div class="help-category-icon green">
+                            $
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Vendas
+                            </h3>
+
+                            <p>
+                                Registro de vendas, pagamentos e cancelamentos.
+                            </p>
+
+                        </div>
+
+                        <span class="help-arrow">
+                            ›
+                        </span>
+
+                    </article>
+
+
+                    <article class="help-category-card" data-category="produtos">
+
+                        <div class="help-category-icon blue">
+                            ◇
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Produtos
+                            </h3>
+
+                            <p>
+                                Cadastro, alteração, preços e categorias.
+                            </p>
+
+                        </div>
+
+                        <span class="help-arrow">
+                            ›
+                        </span>
+
+                    </article>
+
+
+                    <article class="help-category-card" data-category="fornecedores">
+
+                        <div class="help-category-icon purple">
+                            ▱
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Fornecedores
+                            </h3>
+
+                            <p>
+                                Cadastros, contatos e fornecedores dos produtos.
+                            </p>
+
+                        </div>
+
+                        <span class="help-arrow">
+                            ›
+                        </span>
+
+                    </article>
+
+                </div>
+
+
+                <!-- =====================================
+         ABAS
+    ====================================== -->
+
+                <div class="help-tabs">
+
+                    <button class="help-tab active" data-tab="helpCenter">
+                        Central de ajuda
+                    </button>
+
+
+                    <button class="help-tab" data-tab="tickets">
+                        Meus chamados
+                    </button>
+
+
+                    <button class="help-tab" data-tab="contact">
+                        Contato
+                    </button>
+
+                </div>
+
+
+                <!-- =====================================================
+         CENTRAL DE AJUDA
+    ====================================================== -->
+
+                <div class="help-tab-content active" id="helpCenter">
+
+                    <div class="help-layout">
+
+
+                        <!-- FAQ -->
+
+                        <div class="faq-card">
+
+                            <div class="help-section-header">
+
+                                <div>
+
+                                    <h2>
+                                        Perguntas frequentes
+                                    </h2>
+
+                                    <p>
+                                        Encontre respostas rápidas sobre o SINSTOCK.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="faq-list" id="faqList">
+
+
+                                <!-- FAQ 1 -->
+
+                                <div class="faq-item" data-category="produtos">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Como cadastrar um novo produto?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Acesse a página Produtos e clique em
+                                            <strong>Novo produto</strong>.
+                                            Preencha nome, SKU, categoria, preços,
+                                            fornecedor e demais informações e clique
+                                            em Salvar produto.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FAQ 2 -->
+
+                                <div class="faq-item" data-category="estoque">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Como registrar uma entrada no estoque?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Acesse Estoque, clique em
+                                            <strong>Nova movimentação</strong>,
+                                            selecione Entrada, escolha o produto,
+                                            informe a quantidade e o motivo da operação.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FAQ 3 -->
+
+                                <div class="faq-item" data-category="estoque">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Posso deixar um produto com estoque negativo?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Quando o bloqueio de estoque negativo estiver
+                                            habilitado, o sistema deverá impedir saídas
+                                            superiores ao saldo disponível.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FAQ 4 -->
+
+                                <div class="faq-item" data-category="vendas">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Como registrar uma nova venda?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Na página Vendas, clique em
+                                            <strong>Nova venda</strong>.
+                                            Adicione os produtos, quantidades, forma
+                                            de pagamento e finalize a operação.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FAQ 5 -->
+
+                                <div class="faq-item" data-category="relatorios">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Como gerar um relatório?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Acesse Relatórios, escolha o período,
+                                            aplique os filtros desejados e utilize
+                                            as opções de exportação ou geração do relatório.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FAQ 6 -->
+
+                                <div class="faq-item" data-category="usuarios">
+
+                                    <button class="faq-question">
+
+                                        <span>
+                                            Como alterar as permissões de um usuário?
+                                        </span>
+
+                                        <span class="faq-icon">
+                                            +
+                                        </span>
+
+                                    </button>
+
+
+                                    <div class="faq-answer">
+
+                                        <p>
+                                            Acesse Configurações, entre na aba
+                                            Usuários e permissões e altere quais
+                                            funcionalidades cada perfil poderá acessar.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- MENSAGEM SEM RESULTADOS -->
+
+                            <div class="no-help-results" id="noHelpResults">
+
+                                Nenhum resultado encontrado.
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- LATERAL -->
+
+                        <aside class="help-side-card">
+
+                            <div class="support-illustration">
+                                ?
+                            </div>
+
+
+                            <h2>
+                                Não encontrou o que precisava?
+                            </h2>
+
+
+                            <p>
+                                Entre em contato com nosso suporte e descreva o problema.
+                            </p>
+
+
+                            <button class="contact-support-button" id="openTicketFromHelp">
+                                Falar com suporte
+                            </button>
+
+
+                            <div class="support-info">
+
+                                <div>
+
+                                    <span>
+                                        Tempo médio de resposta
+                                    </span>
+
+                                    <strong>
+                                        Até 24 horas
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Atendimento
+                                    </span>
+
+                                    <strong>
+                                        Seg. a Sex.
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </aside>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================================
+         CHAMADOS
+    ====================================================== -->
+
+                <div class="help-tab-content" id="tickets">
+
+                    <div class="tickets-card">
+
+
+                        <div class="tickets-header">
+
+                            <div>
+
+                                <h2>
+                                    Meus chamados
+                                </h2>
+
+                                <p>
+                                    Acompanhe solicitações enviadas ao suporte.
+                                </p>
+
+                            </div>
+
+
+                            <button class="new-ticket-secondary" id="openTicketFromTickets">
+                                + Novo chamado
+                            </button>
+
+                        </div>
+
+
+                        <div class="tickets-table-container">
+
+                            <table class="tickets-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Chamado</th>
+                                        <th>Assunto</th>
+                                        <th>Categoria</th>
+                                        <th>Prioridade</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="ticketsTableBody">
+
+
+                                    <tr>
+
+                                        <td>
+                                            <strong class="ticket-code">
+                                                #SUP-0024
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Divergência no estoque
+                                        </td>
+
+                                        <td>
+                                            Estoque
+                                        </td>
+
+                                        <td>
+
+                                            <span class="priority high">
+                                                Alta
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+                                            02/09/2026
+                                        </td>
+
+                                        <td>
+
+                                            <span class="ticket-status analysis">
+                                                Em análise
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <button class="ticket-actions">
+                                                ⋮
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong class="ticket-code">
+                                                #SUP-0023
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+                                            Dúvida sobre relatórios
+                                        </td>
+
+                                        <td>
+                                            Relatórios
+                                        </td>
+
+                                        <td>
+
+                                            <span class="priority normal">
+                                                Normal
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+                                            29/08/2026
+                                        </td>
+
+                                        <td>
+
+                                            <span class="ticket-status solved">
+                                                Resolvido
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <button class="ticket-actions">
+                                                ⋮
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong class="ticket-code">
+                                                #SUP-0022
+                                            </strong>
+
+                                        </td>
+
+                                        <td>
+                                            Problema ao cadastrar fornecedor
+                                        </td>
+
+                                        <td>
+                                            Fornecedores
+                                        </td>
+
+                                        <td>
+
+                                            <span class="priority low">
+                                                Baixa
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+                                            25/08/2026
+                                        </td>
+
+                                        <td>
+
+                                            <span class="ticket-status solved">
+                                                Resolvido
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <button class="ticket-actions">
+                                                ⋮
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================================
+         CONTATO
+    ====================================================== -->
+
+                <div class="help-tab-content" id="contact">
+
+                    <div class="contact-grid">
+
+
+                        <article class="contact-card">
+
+                            <div class="contact-icon">
+                                ✉
+                            </div>
+
+
+                            <h3>
+                                E-mail
+                            </h3>
+
+
+                            <p>
+                                Entre em contato com nossa equipe de suporte.
+                            </p>
+
+
+                            <strong>
+                                suporte@sinstock.com
+                            </strong>
+
+                        </article>
+
+
+
+                        <article class="contact-card">
+
+                            <div class="contact-icon">
+                                ☎
+                            </div>
+
+
+                            <h3>
+                                Telefone
+                            </h3>
+
+
+                            <p>
+                                Atendimento em horário comercial.
+                            </p>
+
+
+                            <strong>
+                                (11) 4000-0000
+                            </strong>
+
+                        </article>
+
+
+
+                        <article class="contact-card">
+
+                            <div class="contact-icon">
+                                ◷
+                            </div>
+
+
+                            <h3>
+                                Horário
+                            </h3>
+
+
+                            <p>
+                                Segunda a sexta-feira.
+                            </p>
+
+
+                            <strong>
+                                08:00 às 18:00
+                            </strong>
+
+                        </article>
+
+                    </div>
+
+
+                    <!-- SISTEMA -->
+
+                    <div class="system-information-card">
+
+                        <div>
+
+                            <h2>
+                                Informações do sistema
+                            </h2>
+
+                            <p>
+                                Informações que podem ser úteis em um atendimento.
+                            </p>
+
+                        </div>
+
+
+                        <div class="system-information-grid">
+
+                            <div>
+
+                                <span>
+                                    Sistema
+                                </span>
+
+                                <strong>
+                                    SINSTOCK
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Versão
+                                </span>
+
+                                <strong>
+                                    1.0.0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Ambiente
+                                </span>
+
+                                <strong>
+                                    Produção
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong class="system-online">
+                                    ● Operacional
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+            <div class="ticket-modal-overlay" id="ticketModal">
+
+                <div class="ticket-modal">
+
+
+                    <!-- CABEÇALHO -->
+
+                    <div class="ticket-modal-header">
+
+                        <div>
+
+                            <h2>
+                                Abrir chamado
+                            </h2>
+
+                            <p>
+                                Descreva sua dúvida ou problema.
+                            </p>
+
+                        </div>
+
+
+                        <button type="button" id="closeTicketModal" class="close-ticket-modal">
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <form id="ticketForm">
+
+
+                        <!-- ASSUNTO -->
+
+                        <div class="ticket-form-group">
+
+                            <label for="ticketSubject">
+                                Assunto *
+                            </label>
+
+                            <input type="text" id="ticketSubject" placeholder="Resuma o problema" required>
+
+                        </div>
+
+
+                        <!-- CATEGORIA / PRIORIDADE -->
+
+                        <div class="ticket-form-row">
+
+                            <div class="ticket-form-group">
+
+                                <label for="ticketCategory">
+                                    Categoria *
+                                </label>
+
+                                <select id="ticketCategory" required>
+
+                                    <option value="">
+                                        Selecione
+                                    </option>
+
+                                    <option value="Estoque">
+                                        Estoque
+                                    </option>
+
+                                    <option value="Produtos">
+                                        Produtos
+                                    </option>
+
+                                    <option value="Vendas">
+                                        Vendas
+                                    </option>
+
+                                    <option value="Pedidos">
+                                        Pedidos
+                                    </option>
+
+                                    <option value="Fornecedores">
+                                        Fornecedores
+                                    </option>
+
+                                    <option value="Relatórios">
+                                        Relatórios
+                                    </option>
+
+                                    <option value="Usuários">
+                                        Usuários
+                                    </option>
+
+                                    <option value="Outro">
+                                        Outro
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="ticket-form-group">
+
+                                <label for="ticketPriority">
+                                    Prioridade
+                                </label>
+
+                                <select id="ticketPriority">
+
+                                    <option value="Baixa">
+                                        Baixa
+                                    </option>
+
+                                    <option value="Normal" selected>
+                                        Normal
+                                    </option>
+
+                                    <option value="Alta">
+                                        Alta
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIÇÃO -->
+
+                        <div class="ticket-form-group">
+
+                            <label for="ticketDescription">
+                                Descrição *
+                            </label>
+
+                            <textarea id="ticketDescription" rows="6"
+                                placeholder="Explique o que aconteceu, o que estava tentando fazer e, se possível, informe a mensagem de erro."
+                                required></textarea>
+
+                        </div>
+
+
+                        <!-- PÁGINA -->
+
+                        <div class="ticket-form-group">
+
+                            <label for="ticketPage">
+                                Onde ocorreu?
+                            </label>
+
+                            <select id="ticketPage">
+
+                                <option value="">
+                                    Não se aplica
+                                </option>
+
+                                <option>
+                                    Dashboard
+                                </option>
+
+                                <option>
+                                    Pedidos
+                                </option>
+
+                                <option>
+                                    Estoque
+                                </option>
+
+                                <option>
+                                    Vendas
+                                </option>
+
+                                <option>
+                                    Produtos
+                                </option>
+
+                                <option>
+                                    Fornecedores
+                                </option>
+
+                                <option>
+                                    Relatórios
+                                </option>
+
+                                <option>
+                                    Configurações
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- ANEXO -->
+
+                        <div class="ticket-form-group">
+
+                            <label for="ticketAttachment">
+                                Anexo
+                            </label>
+
+                            <div class="file-input">
+
+                                <input type="file" id="ticketAttachment" accept=".png,.jpg,.jpeg,.pdf">
+
+                            </div>
+
+                            <small>
+                                Opcional. PNG, JPG ou PDF.
+                            </small>
+
+                        </div>
+
+
+                        <div class="ticket-modal-footer">
+
+                            <button type="button" id="cancelTicket" class="cancel-ticket-button">
+                                Cancelar
+                            </button>
+
+
+                            <button type="submit" class="send-ticket-button">
+                                Enviar chamado
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../js/ajuda.js"></script>
+    <script src="../js/dashboard.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

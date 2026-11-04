@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Estoque | SINSTOCK</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/estoque.css" />
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="pedidos.html" class="menu-item">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="estoque.html" class="menu-item active">
+          <i data-lucide="boxes"></i>
+          Estoque
+        </a>
+
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
+        </a>
+
+        <a href="produtos.html" class="menu-item">
+          <i data-lucide="package-search"></i>
+          Produtos
+        </a>
+
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
+        <a href="relatorios.html" class="menu-item">
+          <i data-lucide="scroll-text"></i>
+          Relatórios
+        </a>
+
+        <a href="configuracoes.html" class="menu-item">
+          <i data-lucide="settings"></i>
+          Configurações
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
+        </a>
+      </div>
+    </aside>
+
+    <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+    <main class="main-content">
+      <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+      <header class="topbar">
+        <div class="search-box">
+          <span class="search-icon"> ⌕ </span>
+
+          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+
+          <span class="shortcut"> ⌘ K </span>
+        </div>
+
+        <div class="topbar-right">
+          <div class="date">
+            <i data-lucide="calendar-days"></i>
+            <span id="dataAtual"></span>
+          </div>
+
+          <div class="notification">
+            <i data-lucide="bell"></i>
+
+            <span class="notification-number"> 1 </span>
+          </div>
+
+          <div class="user">
+            <div class="avatar">
+              <img src="assets/images/usuario.png" alt="Usuário" />
+            </div>
+
+            <span> Vini </span>
+
+            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+      <section class="content">
+        <!-- ==============================
+         CABEÇALHO
+    =============================== -->
+
+        <div class="stock-header">
+          <div>
+            <h1>Estoque</h1>
+
+            <p>Acompanhe saldos, entradas e saídas dos seus produtos.</p>
+          </div>
+
+          <button class="new-movement-button" id="openMovementModal">
+            <span>+</span>
+            Nova movimentação
+          </button>
+        </div>
+
+        <!-- ==============================
+         CARDS
+    =============================== -->
+
+        <div class="stock-summary">
+          <article class="stock-summary-card">
+            <div class="stock-card-icon primary">📦</div>
+
+            <div>
+              <span>Itens em estoque</span>
+
+              <strong>8.432</strong>
+
+              <small> Unidades disponíveis </small>
+            </div>
+          </article>
+
+          <article class="stock-summary-card">
+            <div class="stock-card-icon warning">⚠</div>
+
+            <div>
+              <span>Estoque baixo</span>
+
+              <strong>8</strong>
+
+              <small> Produtos abaixo do mínimo </small>
+            </div>
+          </article>
+
+          <article class="stock-summary-card">
+            <div class="stock-card-icon danger">!</div>
+
+            <div>
+              <span>Sem estoque</span>
+
+              <strong>3</strong>
+
+              <small> Produtos indisponíveis </small>
+            </div>
+          </article>
+
+          <article class="stock-summary-card">
+            <div class="stock-card-icon success">$</div>
+
+            <div>
+              <span>Valor em estoque</span>
+
+              <strong>R$ 82.450,90</strong>
+
+              <small> Valor pelo custo dos produtos </small>
+            </div>
+          </article>
+        </div>
+
+        <!-- ==============================
+         ABAS
+    =============================== -->
+
+        <div class="stock-tabs">
+          <button class="stock-tab active" data-tab="inventory">
+            Visão geral
+          </button>
+
+          <button class="stock-tab" data-tab="movements">
+            Movimentações
+          </button>
+        </div>
+
+        <!-- ==================================================
+         VISÃO GERAL DO ESTOQUE
+    =================================================== -->
+
+        <div class="stock-tab-content active" id="inventory">
+          <div class="stock-card">
+            <!-- ==============================
+                 FILTROS
+            =============================== -->
+
+            <div class="stock-toolbar">
+              <div class="stock-search">
+                <span>⌕</span>
+
+                <input type="text" id="stockSearch" placeholder="Buscar produto ou código..." />
+              </div>
+
+              <div class="stock-filters">
+                <select id="categoryFilter">
+                  <option value="">Todas as categorias</option>
+
+                  <option value="alimentos">Alimentos</option>
+
+                  <option value="bebidas">Bebidas</option>
+
+                  <option value="limpeza">Limpeza</option>
+                </select>
+
+                <select id="stockStatusFilter">
+                  <option value="">Todos os status</option>
+
+                  <option value="normal">Normal</option>
+
+                  <option value="baixo">Estoque baixo</option>
+
+                  <option value="sem-estoque">Sem estoque</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ==============================
+                 TABELA
+            =============================== -->
+
+            <div class="stock-table-container">
+              <table class="stock-table">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Categoria</th>
+                    <th>Estoque atual</th>
+                    <th>Estoque mínimo</th>
+                    <th>Custo unitário</th>
+                    <th>Valor estoque</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody id="stockTableBody">
+                  <!-- ARROZ -->
+
+                  <tr data-category="alimentos" data-status="normal">
+                    <td>
+                      <div class="stock-product">
+                        <div class="stock-product-image">A</div>
+
+                        <div>
+                          <strong>Arroz Tipo 1</strong>
+                          <span>Pacote 5kg</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>#00124</td>
+
+                    <td>Alimentos</td>
+
+                    <td>
+                      <strong class="stock-quantity"> 32 </strong>
+                    </td>
+
+                    <td>10</td>
+
+                    <td>R$ 25,90</td>
+
+                    <td>
+                      <strong> R$ 828,80 </strong>
+                    </td>
+
+                    <td>
+                      <span class="stock-status normal"> Normal </span>
+                    </td>
+
+                    <td>
+                      <button class="stock-actions-button" data-product="Arroz Tipo 1">
+                        ⋮
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- FEIJÃO -->
+
+                  <tr data-category="alimentos" data-status="baixo">
+                    <td>
+                      <div class="stock-product">
+                        <div class="stock-product-image">F</div>
+
+                        <div>
+                          <strong>Feijão Carioca</strong>
+                          <span>Pacote 1kg</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>#00125</td>
+
+                    <td>Alimentos</td>
+
+                    <td>
+                      <strong class="stock-quantity low"> 4 </strong>
+                    </td>
+
+                    <td>10</td>
+
+                    <td>R$ 8,50</td>
+
+                    <td>
+                      <strong> R$ 34,00 </strong>
+                    </td>
+
+                    <td>
+                      <span class="stock-status low"> Estoque baixo </span>
+                    </td>
+
+                    <td>
+                      <button class="stock-actions-button" data-product="Feijão Carioca">
+                        ⋮
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- CAFÉ -->
+
+                  <tr data-category="alimentos" data-status="sem-estoque">
+                    <td>
+                      <div class="stock-product">
+                        <div class="stock-product-image">C</div>
+
+                        <div>
+                          <strong>Café Tradicional</strong>
+                          <span>Pacote 500g</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>#00126</td>
+
+                    <td>Alimentos</td>
+
+                    <td>
+                      <strong class="stock-quantity out"> 0 </strong>
+                    </td>
+
+                    <td>8</td>
+
+                    <td>R$ 17,90</td>
+
+                    <td>
+                      <strong> R$ 0,00 </strong>
+                    </td>
+
+                    <td>
+                      <span class="stock-status out"> Sem estoque </span>
+                    </td>
+
+                    <td>
+                      <button class="stock-actions-button" data-product="Café Tradicional">
+                        ⋮
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- REFRIGERANTE -->
+
+                  <tr data-category="bebidas" data-status="normal">
+                    <td>
+                      <div class="stock-product">
+                        <div class="stock-product-image">R</div>
+
+                        <div>
+                          <strong>Refrigerante Cola</strong>
+                          <span>Garrafa 2L</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>#00127</td>
+
+                    <td>Bebidas</td>
+
+                    <td>
+                      <strong class="stock-quantity"> 58 </strong>
+                    </td>
+
+                    <td>15</td>
+
+                    <td>R$ 7,20</td>
+
+                    <td>
+                      <strong> R$ 417,60 </strong>
+                    </td>
+
+                    <td>
+                      <span class="stock-status normal"> Normal </span>
+                    </td>
+
+                    <td>
+                      <button class="stock-actions-button" data-product="Refrigerante Cola">
+                        ⋮
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ==============================
+                 RODAPÉ
+            =============================== -->
+
+            <div class="stock-footer">
+              <span> Mostrando 1 a 4 de 1.246 produtos </span>
+
+              <div class="pagination">
+                <button>‹</button>
+
+                <button class="active">1</button>
+
+                <button>2</button>
+
+                <button>3</button>
+
+                <button>...</button>
+
+                <button>312</button>
+
+                <button>›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================================================
+         MOVIMENTAÇÕES
+    =================================================== -->
+
+        <div class="stock-tab-content" id="movements">
+          <div class="stock-card">
+            <div class="movement-header">
+              <div>
+                <h2>Histórico de movimentações</h2>
+
+                <p>Entradas, saídas e ajustes realizados no estoque.</p>
+              </div>
+
+              <select>
+                <option>Todas as movimentações</option>
+
+                <option>Entradas</option>
+
+                <option>Saídas</option>
+
+                <option>Ajustes</option>
+              </select>
+            </div>
+
+            <div class="stock-table-container">
+              <table class="stock-table movement-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Motivo</th>
+                    <th>Responsável</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>02/09/2026 09:32</td>
+
+                    <td>
+                      <strong> Arroz Tipo 1 </strong>
+                    </td>
+
+                    <td>
+                      <span class="movement-type entry"> ↑ Entrada </span>
+                    </td>
+
+                    <td class="movement-positive">+20</td>
+
+                    <td>Compra de fornecedor</td>
+
+                    <td>Gabriel</td>
+                  </tr>
+
+                  <tr>
+                    <td>02/09/2026 08:45</td>
+
+                    <td>
+                      <strong> Refrigerante Cola </strong>
+                    </td>
+
+                    <td>
+                      <span class="movement-type exit"> ↓ Saída </span>
+                    </td>
+
+                    <td class="movement-negative">-4</td>
+
+                    <td>Venda #1048</td>
+
+                    <td>Gabriel</td>
+                  </tr>
+
+                  <tr>
+                    <td>01/09/2026 17:10</td>
+
+                    <td>
+                      <strong> Feijão Carioca </strong>
+                    </td>
+
+                    <td>
+                      <span class="movement-type adjustment"> ↻ Ajuste </span>
+                    </td>
+
+                    <td>-2</td>
+
+                    <td>Correção de inventário</td>
+
+                    <td>Administrador</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/estoque.js"></script>
+  <script src="../js/dashboard.js"></script>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

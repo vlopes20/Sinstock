@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Configurações | SINSTOCK</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/configuracoes.css" />
+
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+
+                <a href="pedidos.html" class="menu-item">
+                    <i data-lucide="shopping-bag"></i>
+                    Pedidos
+                </a>
+
+                <a href="estoque.html" class="menu-item">
+                    <i data-lucide="boxes"></i>
+                    Estoque
+                </a>
+
+                <a href="vendas.html" class="menu-item">
+                    <i data-lucide="badge-dollar-sign"></i>
+                    Vendas
+                </a>
+
+                <a href="produtos.html" class="menu-item">
+                    <i data-lucide="package-search"></i>
+                    Produtos
+                </a>
+
+                <a href="fornecedores.html" class="menu-item">
+                    <i data-lucide="truck"></i>
+                    Fornecedores
+                </a>
+
+                <a href="relatorios.html" class="menu-item">
+                    <i data-lucide="scroll-text"></i>
+                    Relatórios
+                </a>
+
+                <a href="configuracoes.html" class="menu-item active">
+                    <i data-lucide="settings"></i>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="ajuda.html" class="menu-item">
+                    <i data-lucide="circle-question-mark"></i>
+                    Ajuda e suporte
+                </a>
+            </div>
+        </aside>
+
+        <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+        <main class="main-content">
+            <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+            <header class="topbar">
+                <div class="search-box">
+                    <span class="search-icon"> ⌕ </span>
+
+                    <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+
+                    <span class="shortcut"> ⌘ K </span>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="date">
+                        <i data-lucide="calendar-days"></i>
+                        <span id="dataAtual"></span>
+                    </div>
+
+                    <div class="notification">
+                        <i data-lucide="bell"></i>
+
+                        <span class="notification-number"> 1 </span>
+                    </div>
+
+                    <div class="user">
+                        <div class="avatar">
+                            <img src="assets/images/usuario.png" alt="Usuário" />
+                        </div>
+
+                        <span> Vini </span>
+
+                        <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+            <section class="content">
+
+                <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+                <div class="settings-header">
+
+                    <div>
+                        <h1>Configurações</h1>
+
+                        <p>
+                            Gerencie as preferências e configurações do SINSTOCK.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================
+         ABAS
+    ====================================== -->
+
+                <div class="settings-tabs">
+
+                    <button class="settings-tab active" data-tab="generalSettings">
+                        Geral
+                    </button>
+
+
+                    <button class="settings-tab" data-tab="usersSettings">
+                        Usuários e permissões
+                    </button>
+
+
+                    <button class="settings-tab" data-tab="stockSettings">
+                        Estoque e alertas
+                    </button>
+
+
+                    <button class="settings-tab" data-tab="securitySettings">
+                        Segurança
+                    </button>
+
+
+                    <button class="settings-tab" data-tab="systemSettings">
+                        Sistema
+                    </button>
+
+                </div>
+
+
+                <!-- =====================================
+         GERAL
+    ====================================== -->
+
+                <div class="settings-content active" id="generalSettings">
+
+                    <form class="settings-card" id="companyForm">
+
+                        <div class="settings-card-header">
+
+                            <div>
+                                <h2>Dados da empresa</h2>
+
+                                <p>
+                                    Informações principais utilizadas pelo sistema.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-body">
+
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyName">
+                                        Nome da empresa
+                                    </label>
+
+                                    <input type="text" id="companyName" placeholder="Nome da empresa">
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyCnpj">
+                                        CNPJ
+                                    </label>
+
+                                    <input type="text" id="companyCnpj" placeholder="00.000.000/0000-00" maxlength="18">
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyEmail">
+                                        E-mail
+                                    </label>
+
+                                    <input type="email" id="companyEmail" placeholder="empresa@email.com">
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyPhone">
+                                        Telefone
+                                    </label>
+
+                                    <input type="tel" id="companyPhone" placeholder="(11) 99999-9999">
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label for="companyAddress">
+                                    Endereço
+                                </label>
+
+                                <input type="text" id="companyAddress" placeholder="Rua, número e complemento">
+
+                            </div>
+
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyCity">
+                                        Cidade
+                                    </label>
+
+                                    <input type="text" id="companyCity">
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="companyState">
+                                        Estado
+                                    </label>
+
+                                    <select id="companyState">
+
+                                        <option value="">
+                                            Selecione
+                                        </option>
+
+                                        <option>SP</option>
+                                        <option>RJ</option>
+                                        <option>MG</option>
+                                        <option>PR</option>
+                                        <option>SC</option>
+                                        <option>RS</option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-footer">
+
+                            <button type="submit" class="save-settings-button">
+                                Salvar alterações
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =====================================
+         USUÁRIOS
+    ====================================== -->
+
+                <div class="settings-content" id="usersSettings">
+
+                    <div class="settings-card">
+
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Usuários do sistema
+                                </h2>
+
+                                <p>
+                                    Controle quem pode acessar o SINSTOCK.
+                                </p>
+
+                            </div>
+
+
+                            <button class="add-user-button" id="openUserModal">
+                                + Novo usuário
+                            </button>
+
+                        </div>
+
+
+                        <div class="settings-table-container">
+
+                            <table class="settings-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Usuário</th>
+                                        <th>E-mail</th>
+                                        <th>Perfil</th>
+                                        <th>Status</th>
+                                        <th>Último acesso</th>
+                                        <th></th>
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="usersTableBody">
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="settings-user">
+
+                                                <div class="settings-avatar">
+                                                    GL
+                                                </div>
+
+                                                <strong>
+                                                    Gabriel Lima
+                                                </strong>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            gabriel@sinstock.com
+                                        </td>
+
+
+                                        <td>
+
+                                            <span class="role-badge admin">
+                                                Administrador
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <span class="user-status active">
+                                                Ativo
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+                                            Hoje, 21:34
+                                        </td>
+
+
+                                        <td>
+
+                                            <button class="user-action-button">
+                                                ⋮
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="settings-user">
+
+                                                <div class="settings-avatar">
+                                                    VR
+                                                </div>
+
+                                                <strong>
+                                                    Vinicius Rodrigues
+                                                </strong>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            vinicius@sinstock.com
+                                        </td>
+
+
+                                        <td>
+
+                                            <span class="role-badge stock">
+                                                Estoquista
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <span class="user-status active">
+                                                Ativo
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+                                            Hoje, 18:20
+                                        </td>
+
+
+                                        <td>
+
+                                            <button class="user-action-button">
+                                                ⋮
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PERMISSÕES -->
+
+                    <div class="settings-card permissions-card">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Perfis e permissões
+                                </h2>
+
+                                <p>
+                                    Defina quais áreas cada perfil pode acessar.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="permissions-table-container">
+
+                            <table class="permissions-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Funcionalidade</th>
+                                        <th>Administrador</th>
+                                        <th>Estoquista</th>
+                                        <th>Vendedor</th>
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    <tr>
+                                        <td>Dashboard</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox" checked></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Produtos</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Estoque</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Vendas</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox"></td>
+                                        <td><input type="checkbox" checked></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Fornecedores</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Relatórios</td>
+                                        <td><input type="checkbox" checked></td>
+                                        <td><input type="checkbox"></td>
+                                        <td><input type="checkbox"></td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                        <div class="settings-card-footer">
+
+                            <button type="button" class="save-settings-button" id="savePermissions">
+                                Salvar permissões
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =====================================
+         ESTOQUE E ALERTAS
+    ====================================== -->
+
+                <div class="settings-content" id="stockSettings">
+
+                    <form class="settings-card" id="stockSettingsForm">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Configurações de estoque
+                                </h2>
+
+                                <p>
+                                    Defina regras e alertas para o controle de produtos.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-list">
+
+
+                            <div class="setting-row">
+
+                                <div>
+
+                                    <strong>
+                                        Alertar estoque baixo
+                                    </strong>
+
+                                    <span>
+                                        Mostrar alerta quando o saldo atingir o estoque mínimo.
+                                    </span>
+
+                                </div>
+
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="lowStockAlert" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+
+
+                            <div class="setting-row">
+
+                                <div>
+
+                                    <strong>
+                                        Bloquear estoque negativo
+                                    </strong>
+
+                                    <span>
+                                        Impedir saídas maiores que o saldo disponível.
+                                    </span>
+
+                                </div>
+
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="negativeStockBlock" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+
+
+                            <div class="setting-row">
+
+                                <div>
+
+                                    <strong>
+                                        Alerta de validade
+                                    </strong>
+
+                                    <span>
+                                        Avisar quando produtos estiverem próximos do vencimento.
+                                    </span>
+
+                                </div>
+
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="expirationAlert" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-body">
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="expirationDays">
+                                        Alertar validade com antecedência
+                                    </label>
+
+                                    <div class="input-suffix">
+
+                                        <input type="number" id="expirationDays" min="1" value="30">
+
+                                        <span>
+                                            dias
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="defaultMinimumStock">
+                                        Estoque mínimo padrão
+                                    </label>
+
+                                    <input type="number" id="defaultMinimumStock" min="0" value="10">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-footer">
+
+                            <button type="submit" class="save-settings-button">
+                                Salvar configurações
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =====================================
+         SEGURANÇA
+    ====================================== -->
+
+                <div class="settings-content" id="securitySettings">
+
+                    <form class="settings-card" id="passwordForm">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Alterar senha
+                                </h2>
+
+                                <p>
+                                    Atualize a senha utilizada para acessar sua conta.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-body">
+
+                            <div class="settings-form-group">
+
+                                <label for="currentPassword">
+                                    Senha atual
+                                </label>
+
+                                <input type="password" id="currentPassword" required>
+
+                            </div>
+
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="newPassword">
+                                        Nova senha
+                                    </label>
+
+                                    <input type="password" id="newPassword" minlength="8" required>
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="confirmPassword">
+                                        Confirmar nova senha
+                                    </label>
+
+                                    <input type="password" id="confirmPassword" minlength="8" required>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-footer">
+
+                            <button type="submit" class="save-settings-button">
+                                Alterar senha
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <div class="settings-card">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Sessões e acesso
+                                </h2>
+
+                                <p>
+                                    Configurações de segurança da conta.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-list">
+
+
+                            <div class="setting-row">
+
+                                <div>
+
+                                    <strong>
+                                        Encerrar sessão automaticamente
+                                    </strong>
+
+                                    <span>
+                                        Desconectar usuários após período de inatividade.
+                                    </span>
+
+                                </div>
+
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="automaticLogout" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div>
+
+                                    <strong>
+                                        Registrar atividades
+                                    </strong>
+
+                                    <span>
+                                        Manter histórico de alterações importantes realizadas pelos usuários.
+                                    </span>
+
+                                </div>
+
+
+                                <label class="switch">
+
+                                    <input type="checkbox" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =====================================
+         SISTEMA
+    ====================================== -->
+
+                <div class="settings-content" id="systemSettings">
+
+                    <form class="settings-card" id="systemForm">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Preferências do sistema
+                                </h2>
+
+                                <p>
+                                    Defina idioma, moeda e outras preferências.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-body">
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="systemLanguage">
+                                        Idioma
+                                    </label>
+
+                                    <select id="systemLanguage">
+
+                                        <option value="pt-BR">
+                                            Português (Brasil)
+                                        </option>
+
+                                        <option value="en">
+                                            English
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="systemCurrency">
+                                        Moeda
+                                    </label>
+
+                                    <select id="systemCurrency">
+
+                                        <option value="BRL">
+                                            Real Brasileiro (R$)
+                                        </option>
+
+                                        <option value="USD">
+                                            Dólar (US$)
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="settings-form-row">
+
+                                <div class="settings-form-group">
+
+                                    <label for="dateFormat">
+                                        Formato de data
+                                    </label>
+
+                                    <select id="dateFormat">
+
+                                        <option value="dd/mm/yyyy">
+                                            DD/MM/AAAA
+                                        </option>
+
+                                        <option value="yyyy-mm-dd">
+                                            AAAA-MM-DD
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="settings-form-group">
+
+                                    <label for="itemsPerPage">
+                                        Registros por página
+                                    </label>
+
+                                    <select id="itemsPerPage">
+
+                                        <option>10</option>
+                                        <option selected>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-card-footer">
+
+                            <button type="submit" class="save-settings-button">
+                                Salvar preferências
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <!-- ÁREA PERIGOSA -->
+
+                    <div class="settings-card danger-zone">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <h2>
+                                    Dados do sistema
+                                </h2>
+
+                                <p>
+                                    Operações administrativas relacionadas aos dados.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-row">
+
+                            <div>
+
+                                <strong>
+                                    Exportar dados
+                                </strong>
+
+                                <span>
+                                    Gere uma cópia dos dados cadastrados no sistema.
+                                </span>
+
+                            </div>
+
+
+                            <button type="button" class="secondary-settings-button" id="exportSystemData">
+                                Exportar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+            <div class="user-modal-overlay" id="userModal">
+
+                <div class="user-modal">
+
+                    <div class="user-modal-header">
+
+                        <div>
+
+                            <h2>
+                                Novo usuário
+                            </h2>
+
+                            <p>
+                                Cadastre um novo usuário no sistema.
+                            </p>
+
+                        </div>
+
+
+                        <button type="button" id="closeUserModal" class="close-user-modal">
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <form id="userForm">
+
+                        <div class="settings-form-group">
+
+                            <label for="newUserName">
+                                Nome *
+                            </label>
+
+                            <input type="text" id="newUserName" required>
+
+                        </div>
+
+
+                        <div class="settings-form-group">
+
+                            <label for="newUserEmail">
+                                E-mail *
+                            </label>
+
+                            <input type="email" id="newUserEmail" required>
+
+                        </div>
+
+
+                        <div class="settings-form-row">
+
+                            <div class="settings-form-group">
+
+                                <label for="newUserRole">
+                                    Perfil
+                                </label>
+
+                                <select id="newUserRole">
+
+                                    <option value="Administrador">
+                                        Administrador
+                                    </option>
+
+                                    <option value="Estoquista">
+                                        Estoquista
+                                    </option>
+
+                                    <option value="Vendedor">
+                                        Vendedor
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label for="newUserStatus">
+                                    Status
+                                </label>
+
+                                <select id="newUserStatus">
+
+                                    <option value="Ativo">
+                                        Ativo
+                                    </option>
+
+                                    <option value="Inativo">
+                                        Inativo
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-form-group">
+
+                            <label for="newUserPassword">
+                                Senha temporária *
+                            </label>
+
+                            <input type="password" id="newUserPassword" minlength="8" required>
+
+                        </div>
+
+
+                        <div class="user-modal-footer">
+
+                            <button type="button" class="cancel-settings-button" id="cancelUser">
+                                Cancelar
+                            </button>
+
+
+                            <button type="submit" class="save-settings-button">
+                                Cadastrar usuário
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../js/configuracoes.js"></script>
+    <script src="../js/dashboard.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

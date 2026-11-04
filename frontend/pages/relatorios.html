@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Relatórios | SINSTOCK</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/relatorios.css" />
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="pedidos.html" class="menu-item">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="estoque.html" class="menu-item">
+          <i data-lucide="boxes"></i>
+          Estoque
+        </a>
+
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
+        </a>
+
+        <a href="produtos.html" class="menu-item">
+          <i data-lucide="package-search"></i>
+          Produtos
+        </a>
+
+        <a href="fornecedores.html" class="menu-item">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
+        <a href="relatorios.html" class="menu-item active">
+          <i data-lucide="scroll-text"></i>
+          Relatórios
+        </a>
+
+        <a href="configuracoes.html" class="menu-item">
+          <i data-lucide="settings"></i>
+          Configurações
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
+        </a>
+      </div>
+    </aside>
+
+    <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+    <main class="main-content">
+      <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+      <header class="topbar">
+        <div class="search-box">
+          <span class="search-icon"> ⌕ </span>
+
+          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+
+          <span class="shortcut"> ⌘ K </span>
+        </div>
+
+        <div class="topbar-right">
+          <div class="date">
+            <i data-lucide="calendar-days"></i>
+            <span id="dataAtual"></span>
+          </div>
+
+          <div class="notification">
+            <i data-lucide="bell"></i>
+
+            <span class="notification-number"> 1 </span>
+          </div>
+
+          <div class="user">
+            <div class="avatar">
+              <img src="assets/images/usuario.png" alt="Usuário" />
+            </div>
+
+            <span> Vini </span>
+
+            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+      <section class="content">
+        <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+        <div class="reports-header">
+          <div>
+            <h1>Relatórios</h1>
+
+            <p>Analise vendas, estoque e movimentações da empresa.</p>
+          </div>
+
+          <div class="reports-header-actions">
+            <button class="export-report-button" id="exportReport">
+              ↓ Exportar CSV
+            </button>
+
+            <button class="generate-report-button" id="printReport">
+              Gerar relatório
+            </button>
+          </div>
+        </div>
+
+        <!-- =====================================
+         FILTROS
+    ====================================== -->
+
+        <div class="reports-filters-card">
+          <div class="report-filter-group">
+            <label for="periodFilter"> Período </label>
+
+            <select id="periodFilter">
+              <option value="7">Últimos 7 dias</option>
+
+              <option value="30" selected>Últimos 30 dias</option>
+
+              <option value="month">Este mês</option>
+
+              <option value="year">Este ano</option>
+
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+
+          <div class="report-filter-group">
+            <label for="startDate"> Data inicial </label>
+
+            <input type="date" id="startDate" />
+          </div>
+
+          <div class="report-filter-group">
+            <label for="endDate"> Data final </label>
+
+            <input type="date" id="endDate" />
+          </div>
+
+          <div class="report-filter-group">
+            <label for="reportCategory"> Categoria </label>
+
+            <select id="reportCategory">
+              <option value="">Todas</option>
+
+              <option value="alimentos">Alimentos</option>
+
+              <option value="bebidas">Bebidas</option>
+
+              <option value="limpeza">Limpeza</option>
+            </select>
+          </div>
+
+          <div class="filter-buttons">
+            <button class="clear-filter-button" id="clearReportFilters">
+              Limpar
+            </button>
+
+            <button class="apply-filter-button" id="applyReportFilters">
+              Aplicar
+            </button>
+          </div>
+        </div>
+
+        <!-- =====================================
+         CARDS
+    ====================================== -->
+
+        <div class="reports-summary">
+          <!-- FATURAMENTO -->
+
+          <article class="report-summary-card">
+            <div class="report-card-icon revenue">$</div>
+
+            <div>
+              <span> Faturamento </span>
+
+              <strong id="reportRevenue"> R$ 84.620,30 </strong>
+
+              <small class="report-positive">
+                +9,3% comparado ao período anterior
+              </small>
+            </div>
+          </article>
+
+          <!-- VENDAS -->
+
+          <article class="report-summary-card">
+            <div class="report-card-icon sales">↑</div>
+
+            <div>
+              <span> Total de vendas </span>
+
+              <strong id="reportSales"> 328 </strong>
+
+              <small class="report-positive"> +12% no período </small>
+            </div>
+          </article>
+
+          <!-- ENTRADAS -->
+
+          <article class="report-summary-card">
+            <div class="report-card-icon entry">↓</div>
+
+            <div>
+              <span> Entradas no estoque </span>
+
+              <strong> 1.540 </strong>
+
+              <small> Unidades recebidas </small>
+            </div>
+          </article>
+
+          <!-- SAÍDAS -->
+
+          <article class="report-summary-card">
+            <div class="report-card-icon exit">↑</div>
+
+            <div>
+              <span> Saídas do estoque </span>
+
+              <strong> 1.280 </strong>
+
+              <small> Unidades retiradas </small>
+            </div>
+          </article>
+        </div>
+
+        <!-- =====================================
+         ABAS
+    ====================================== -->
+
+        <div class="reports-tabs">
+          <button class="report-tab active" data-report-tab="generalReport">
+            Visão geral
+          </button>
+
+          <button class="report-tab" data-report-tab="salesReport">
+            Vendas
+          </button>
+
+          <button class="report-tab" data-report-tab="stockReport">
+            Estoque
+          </button>
+
+          <button class="report-tab" data-report-tab="movementsReport">
+            Movimentações
+          </button>
+        </div>
+
+        <!-- =====================================================
+         VISÃO GERAL
+    ====================================================== -->
+
+        <div class="report-tab-content active" id="generalReport">
+          <div class="reports-grid">
+            <!-- GRÁFICO -->
+
+            <article class="report-chart-card">
+              <div class="report-section-header">
+                <div>
+                  <h2>Faturamento por período</h2>
+
+                  <p>Evolução das vendas nos últimos dias.</p>
+                </div>
+
+                <strong> R$ 84.620,30 </strong>
+              </div>
+
+              <div class="report-chart">
+                <div class="report-chart-bars">
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 42%"></div>
+
+                    <span>Seg</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 61%"></div>
+
+                    <span>Ter</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 50%"></div>
+
+                    <span>Qua</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 75%"></div>
+
+                    <span>Qui</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 68%"></div>
+
+                    <span>Sex</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar" style="height: 90%"></div>
+
+                    <span>Sáb</span>
+                  </div>
+
+                  <div class="report-bar-group">
+                    <div class="report-bar active" style="height: 82%"></div>
+
+                    <span>Dom</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- PRODUTOS MAIS VENDIDOS -->
+
+            <article class="ranking-card">
+              <div class="report-section-header">
+                <div>
+                  <h2>Produtos mais vendidos</h2>
+
+                  <p>Ranking por unidades vendidas.</p>
+                </div>
+              </div>
+
+              <div class="product-ranking">
+                <div class="ranking-item">
+                  <div class="ranking-position">1</div>
+
+                  <div class="ranking-info">
+                    <strong> Arroz Tipo 1 </strong>
+
+                    <span> Alimentos </span>
+                  </div>
+
+                  <strong> 132 </strong>
+                </div>
+
+                <div class="ranking-item">
+                  <div class="ranking-position">2</div>
+
+                  <div class="ranking-info">
+                    <strong> Feijão Carioca </strong>
+
+                    <span> Alimentos </span>
+                  </div>
+
+                  <strong> 108 </strong>
+                </div>
+
+                <div class="ranking-item">
+                  <div class="ranking-position">3</div>
+
+                  <div class="ranking-info">
+                    <strong> Café Tradicional </strong>
+
+                    <span> Alimentos </span>
+                  </div>
+
+                  <strong> 92 </strong>
+                </div>
+
+                <div class="ranking-item">
+                  <div class="ranking-position">4</div>
+
+                  <div class="ranking-info">
+                    <strong> Refrigerante Cola </strong>
+
+                    <span> Bebidas </span>
+                  </div>
+
+                  <strong> 81 </strong>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- =====================================
+             RESUMO POR CATEGORIA
+        ====================================== -->
+
+          <div class="report-table-card">
+            <div class="report-table-header">
+              <div>
+                <h2>Desempenho por categoria</h2>
+
+                <p>Resumo de vendas por categoria de produto.</p>
+              </div>
+            </div>
+
+            <div class="report-table-container">
+              <table class="report-table" id="generalReportTable">
+                <thead>
+                  <tr>
+                    <th>Categoria</th>
+                    <th>Produtos</th>
+                    <th>Unidades vendidas</th>
+                    <th>Faturamento</th>
+                    <th>Participação</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>
+                      <strong>Alimentos</strong>
+                    </td>
+
+                    <td>486</td>
+
+                    <td>830</td>
+
+                    <td>R$ 49.830,20</td>
+
+                    <td>
+                      <span class="percentage-badge"> 58,9% </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>Bebidas</strong>
+                    </td>
+
+                    <td>310</td>
+
+                    <td>420</td>
+
+                    <td>R$ 24.350,10</td>
+
+                    <td>
+                      <span class="percentage-badge"> 28,8% </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>Limpeza</strong>
+                    </td>
+
+                    <td>215</td>
+
+                    <td>188</td>
+
+                    <td>R$ 10.440,00</td>
+
+                    <td>
+                      <span class="percentage-badge"> 12,3% </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+         RELATÓRIO DE VENDAS
+    ====================================================== -->
+
+        <div class="report-tab-content" id="salesReport">
+          <div class="report-table-card">
+            <div class="report-table-header">
+              <div>
+                <h2>Relatório de vendas</h2>
+
+                <p>Vendas registradas no período selecionado.</p>
+              </div>
+            </div>
+
+            <div class="report-table-container">
+              <table class="report-table" id="salesReportTable">
+                <thead>
+                  <tr>
+                    <th>Venda</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Itens</th>
+                    <th>Pagamento</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>
+                      <strong>#2048</strong>
+                    </td>
+
+                    <td>03/09/2026</td>
+
+                    <td>João Lima</td>
+
+                    <td>4</td>
+
+                    <td>PIX</td>
+
+                    <td>
+                      <strong> R$ 250,90 </strong>
+                    </td>
+
+                    <td>
+                      <span class="report-status success"> Concluída </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>#2047</strong>
+                    </td>
+
+                    <td>03/09/2026</td>
+
+                    <td>Maria Souza</td>
+
+                    <td>2</td>
+
+                    <td>Cartão</td>
+
+                    <td>
+                      <strong> R$ 180,00 </strong>
+                    </td>
+
+                    <td>
+                      <span class="report-status success"> Concluída </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>#2046</strong>
+                    </td>
+
+                    <td>02/09/2026</td>
+
+                    <td>Carlos Pereira</td>
+
+                    <td>5</td>
+
+                    <td>Dinheiro</td>
+
+                    <td>
+                      <strong> R$ 490,50 </strong>
+                    </td>
+
+                    <td>
+                      <span class="report-status cancelled"> Cancelada </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+         RELATÓRIO DE ESTOQUE
+    ====================================================== -->
+
+        <div class="report-tab-content" id="stockReport">
+          <div class="report-table-card">
+            <div class="report-table-header">
+              <div>
+                <h2>Relatório de estoque</h2>
+
+                <p>Situação atual dos produtos armazenados.</p>
+              </div>
+            </div>
+
+            <div class="report-table-container">
+              <table class="report-table" id="stockReportTable">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Categoria</th>
+                    <th>Atual</th>
+                    <th>Mínimo</th>
+                    <th>Custo</th>
+                    <th>Valor total</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>
+                      <strong>Arroz Tipo 1</strong>
+                    </td>
+
+                    <td>#00124</td>
+
+                    <td>Alimentos</td>
+
+                    <td>32</td>
+
+                    <td>10</td>
+
+                    <td>R$ 25,90</td>
+
+                    <td>R$ 828,80</td>
+
+                    <td>
+                      <span class="report-status success"> Normal </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>Feijão Carioca</strong>
+                    </td>
+
+                    <td>#00125</td>
+
+                    <td>Alimentos</td>
+
+                    <td>4</td>
+
+                    <td>10</td>
+
+                    <td>R$ 8,50</td>
+
+                    <td>R$ 34,00</td>
+
+                    <td>
+                      <span class="report-status warning">
+                        Estoque baixo
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <strong>Café Tradicional</strong>
+                    </td>
+
+                    <td>#00126</td>
+
+                    <td>Alimentos</td>
+
+                    <td>0</td>
+
+                    <td>8</td>
+
+                    <td>R$ 17,90</td>
+
+                    <td>R$ 0,00</td>
+
+                    <td>
+                      <span class="report-status cancelled">
+                        Sem estoque
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+         MOVIMENTAÇÕES
+    ====================================================== -->
+
+        <div class="report-tab-content" id="movementsReport">
+          <div class="report-table-card">
+            <div class="report-table-header">
+              <div>
+                <h2>Relatório de movimentações</h2>
+
+                <p>Histórico de entradas, saídas e ajustes.</p>
+              </div>
+            </div>
+
+            <div class="report-table-container">
+              <table class="report-table" id="movementsReportTable">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Motivo</th>
+                    <th>Responsável</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>03/09/2026</td>
+
+                    <td>Arroz Tipo 1</td>
+
+                    <td>
+                      <span class="movement-report entry"> Entrada </span>
+                    </td>
+
+                    <td class="positive-number">+20</td>
+
+                    <td>Compra de fornecedor</td>
+
+                    <td>Gabriel</td>
+                  </tr>
+
+                  <tr>
+                    <td>03/09/2026</td>
+
+                    <td>Feijão Carioca</td>
+
+                    <td>
+                      <span class="movement-report exit"> Saída </span>
+                    </td>
+
+                    <td class="negative-number">-3</td>
+
+                    <td>Venda #2048</td>
+
+                    <td>Gabriel</td>
+                  </tr>
+
+                  <tr>
+                    <td>02/09/2026</td>
+
+                    <td>Café Tradicional</td>
+
+                    <td>
+                      <span class="movement-report adjustment"> Ajuste </span>
+                    </td>
+
+                    <td>-2</td>
+
+                    <td>Correção de inventário</td>
+
+                    <td>Administrador</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/relatorios.js"></script>
+  <script src="../js/dashboard.js"></script>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Fornecedores | SINSTOCK</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/fornecedores.css" />
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="pedidos.html" class="menu-item">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="estoque.html" class="menu-item">
+          <i data-lucide="boxes"></i>
+          Estoque
+        </a>
+
+        <a href="vendas.html" class="menu-item">
+          <i data-lucide="badge-dollar-sign"></i>
+          Vendas
+        </a>
+
+        <a href="produtos.html" class="menu-item">
+          <i data-lucide="package-search"></i>
+          Produtos
+        </a>
+
+        <a href="fornecedores.html" class="menu-item active">
+          <i data-lucide="truck"></i>
+          Fornecedores
+        </a>
+
+        <a href="relatorios.html" class="menu-item">
+          <i data-lucide="scroll-text"></i>
+          Relatórios
+        </a>
+
+        <a href="configuracoes.html" class="menu-item">
+          <i data-lucide="settings"></i>
+          Configurações
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="ajuda.html" class="menu-item">
+          <i data-lucide="circle-question-mark"></i>
+          Ajuda e suporte
+        </a>
+      </div>
+    </aside>
+
+    <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+    <main class="main-content">
+      <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+      <header class="topbar">
+        <div class="search-box">
+          <span class="search-icon"> ⌕ </span>
+
+          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+
+          <span class="shortcut"> ⌘ K </span>
+        </div>
+
+        <div class="topbar-right">
+          <div class="date">
+            <i data-lucide="calendar-days"></i>
+            <span id="dataAtual"></span>
+          </div>
+
+          <div class="notification">
+            <i data-lucide="bell"></i>
+
+            <span class="notification-number"> 1 </span>
+          </div>
+
+          <div class="user">
+            <div class="avatar">
+              <img src="assets/images/usuario.png" alt="Usuário" />
+            </div>
+
+            <span> Vini </span>
+
+            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+      <section class="content">
+        <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+        <div class="suppliers-header">
+          <div>
+            <h1>Fornecedores</h1>
+
+            <p>Gerencie seus fornecedores e contatos comerciais.</p>
+          </div>
+
+          <button class="new-supplier-button" id="openSupplierModal">
+            <span>+</span>
+            Novo fornecedor
+          </button>
+        </div>
+
+        <!-- =====================================
+         CARDS
+    ====================================== -->
+
+        <div class="suppliers-summary">
+          <article class="supplier-summary-card">
+            <div class="supplier-card-icon total">
+              <i data-lucide="clipboard-clock"></i>
+            </div>
+
+            <div>
+              <span>Total de fornecedores</span>
+
+              <strong>42</strong>
+
+              <small> Fornecedores cadastrados </small>
+            </div>
+          </article>
+
+          <article class="supplier-summary-card">
+            <div class="supplier-card-icon active">
+              <i data-lucide="clipboard-clock"></i>
+            </div>
+
+            <div>
+              <span>Fornecedores ativos</span>
+
+              <strong>38</strong>
+
+              <small> Disponíveis para compras </small>
+            </div>
+          </article>
+
+          <article class="supplier-summary-card">
+            <div class="supplier-card-icon pending">
+              <i data-lucide="clipboard-clock"></i>
+            </div>
+
+            <div>
+              <span>Pedidos pendentes</span>
+
+              <strong>7</strong>
+
+              <small> Aguardando entrega </small>
+            </div>
+          </article>
+
+          <article class="supplier-summary-card">
+            <div class="supplier-card-icon delayed">
+              <i data-lucide="clipboard-clock"></i>
+            </div>
+
+            <div>
+              <span>Entregas atrasadas</span>
+
+              <strong>2</strong>
+
+              <small> Necessitam atenção </small>
+            </div>
+          </article>
+        </div>
+
+        <!-- =====================================
+         CARD PRINCIPAL
+    ====================================== -->
+
+        <div class="suppliers-card">
+          <!-- FILTROS -->
+
+          <div class="suppliers-toolbar">
+            <div class="supplier-search">
+              <span>⌕</span>
+
+              <input type="text" id="supplierSearch" placeholder="Buscar fornecedor, CNPJ ou contato..." />
+            </div>
+
+            <div class="supplier-filters">
+              <select id="supplierCategoryFilter">
+                <option value="">Todas as categorias</option>
+
+                <option value="alimentos">Alimentos</option>
+
+                <option value="bebidas">Bebidas</option>
+
+                <option value="limpeza">Limpeza</option>
+
+                <option value="embalagens">Embalagens</option>
+              </select>
+
+              <select id="supplierStatusFilter">
+                <option value="">Todos os status</option>
+
+                <option value="ativo">Ativo</option>
+
+                <option value="inativo">Inativo</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- =====================================
+             TABELA
+        ====================================== -->
+
+          <div class="suppliers-table-container">
+            <table class="suppliers-table">
+              <thead>
+                <tr>
+                  <th>Fornecedor</th>
+                  <th>CNPJ</th>
+                  <th>Contato</th>
+                  <th>Telefone</th>
+                  <th>Categoria</th>
+                  <th>Prazo médio</th>
+                  <th>Último pedido</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody id="suppliersTableBody">
+                <!-- FORNECEDOR 1 -->
+
+                <tr data-category="alimentos" data-status="ativo">
+                  <td>
+                    <div class="supplier-info">
+                      <div class="supplier-avatar">DA</div>
+
+                      <div>
+                        <strong>Distribuidora ABC</strong>
+                        <span>contato@abc.com.br</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>12.345.678/0001-90</td>
+
+                  <td>Carlos Silva</td>
+
+                  <td>(11) 99999-1234</td>
+
+                  <td>Alimentos</td>
+
+                  <td>3 dias</td>
+
+                  <td>30/08/2026</td>
+
+                  <td>
+                    <span class="supplier-status active"> Ativo </span>
+                  </td>
+
+                  <td>
+                    <button class="supplier-actions" data-id="1">⋮</button>
+                  </td>
+                </tr>
+
+                <!-- FORNECEDOR 2 -->
+
+                <tr data-category="alimentos" data-status="ativo">
+                  <td>
+                    <div class="supplier-info">
+                      <div class="supplier-avatar">AB</div>
+
+                      <div>
+                        <strong>Alimentos Brasil</strong>
+                        <span>vendas@alimentosbrasil.com</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>23.456.789/0001-10</td>
+
+                  <td>Mariana Souza</td>
+
+                  <td>(11) 98888-4321</td>
+
+                  <td>Alimentos</td>
+
+                  <td>5 dias</td>
+
+                  <td>28/08/2026</td>
+
+                  <td>
+                    <span class="supplier-status active"> Ativo </span>
+                  </td>
+
+                  <td>
+                    <button class="supplier-actions" data-id="2">⋮</button>
+                  </td>
+                </tr>
+
+                <!-- FORNECEDOR 3 -->
+
+                <tr data-category="bebidas" data-status="ativo">
+                  <td>
+                    <div class="supplier-info">
+                      <div class="supplier-avatar">BN</div>
+
+                      <div>
+                        <strong>Bebidas Nacional</strong>
+                        <span>comercial@bebidasnacional.com</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>34.567.890/0001-21</td>
+
+                  <td>Ricardo Alves</td>
+
+                  <td>(21) 97777-8899</td>
+
+                  <td>Bebidas</td>
+
+                  <td>2 dias</td>
+
+                  <td>01/09/2026</td>
+
+                  <td>
+                    <span class="supplier-status active"> Ativo </span>
+                  </td>
+
+                  <td>
+                    <button class="supplier-actions" data-id="3">⋮</button>
+                  </td>
+                </tr>
+
+                <!-- FORNECEDOR 4 -->
+
+                <tr data-category="limpeza" data-status="inativo">
+                  <td>
+                    <div class="supplier-info">
+                      <div class="supplier-avatar">LP</div>
+
+                      <div>
+                        <strong>Limpeza Premium</strong>
+                        <span>contato@limpezapremium.com</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>45.678.901/0001-32</td>
+
+                  <td>Fernanda Lima</td>
+
+                  <td>(11) 96666-2222</td>
+
+                  <td>Limpeza</td>
+
+                  <td>7 dias</td>
+
+                  <td>15/07/2026</td>
+
+                  <td>
+                    <span class="supplier-status inactive"> Inativo </span>
+                  </td>
+
+                  <td>
+                    <button class="supplier-actions" data-id="4">⋮</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- =====================================
+             RODAPÉ
+        ====================================== -->
+
+          <div class="suppliers-footer">
+            <span> Mostrando 1 a 4 de 42 fornecedores </span>
+
+            <div class="suppliers-pagination">
+              <button>‹</button>
+
+              <button class="active">1</button>
+
+              <button>2</button>
+
+              <button>3</button>
+
+              <button>...</button>
+
+              <button>11</button>
+
+              <button>›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="supplier-modal-overlay" id="supplierModal">
+        <div class="supplier-modal">
+          <!-- CABEÇALHO -->
+
+          <div class="supplier-modal-header">
+            <div>
+              <h2 id="supplierModalTitle">Novo fornecedor</h2>
+
+              <p>Informe os dados comerciais do fornecedor.</p>
+            </div>
+
+            <button type="button" class="close-supplier-modal" id="closeSupplierModal">
+              ×
+            </button>
+          </div>
+
+          <!-- FORM -->
+
+          <form id="supplierForm">
+            <input type="hidden" id="supplierId" />
+
+            <!-- RAZÃO SOCIAL -->
+
+            <div class="supplier-form-group">
+              <label for="companyName"> Razão social * </label>
+
+              <input type="text" id="companyName" placeholder="Ex: Distribuidora ABC Ltda." required />
+            </div>
+
+            <!-- NOME FANTASIA -->
+
+            <div class="supplier-form-group">
+              <label for="tradeName"> Nome fantasia * </label>
+
+              <input type="text" id="tradeName" placeholder="Ex: Distribuidora ABC" required />
+            </div>
+
+            <!-- CNPJ + IE -->
+
+            <div class="supplier-form-row">
+              <div class="supplier-form-group">
+                <label for="supplierCnpj"> CNPJ * </label>
+
+                <input type="text" id="supplierCnpj" placeholder="00.000.000/0000-00" maxlength="18" required />
+              </div>
+
+              <div class="supplier-form-group">
+                <label for="stateRegistration"> Inscrição estadual </label>
+
+                <input type="text" id="stateRegistration" placeholder="Inscrição estadual" />
+              </div>
+            </div>
+
+            <!-- CONTATO -->
+
+            <div class="supplier-form-group">
+              <label for="contactPerson"> Pessoa de contato </label>
+
+              <input type="text" id="contactPerson" placeholder="Ex: Carlos Silva" />
+            </div>
+
+            <!-- EMAIL + TELEFONE -->
+
+            <div class="supplier-form-row">
+              <div class="supplier-form-group">
+                <label for="supplierEmail"> E-mail * </label>
+
+                <input type="email" id="supplierEmail" placeholder="contato@empresa.com" required />
+              </div>
+
+              <div class="supplier-form-group">
+                <label for="supplierPhone"> Telefone * </label>
+
+                <input type="tel" id="supplierPhone" placeholder="(11) 99999-9999" required />
+              </div>
+            </div>
+
+            <!-- CATEGORIA + PRAZO -->
+
+            <div class="supplier-form-row">
+              <div class="supplier-form-group">
+                <label for="supplierCategory"> Categoria principal * </label>
+
+                <select id="supplierCategory" required>
+                  <option value="">Selecione</option>
+
+                  <option value="alimentos">Alimentos</option>
+
+                  <option value="bebidas">Bebidas</option>
+
+                  <option value="limpeza">Limpeza</option>
+
+                  <option value="embalagens">Embalagens</option>
+                </select>
+              </div>
+
+              <div class="supplier-form-group">
+                <label for="deliveryTime"> Prazo médio de entrega </label>
+
+                <div class="supplier-input-suffix">
+                  <input type="number" id="deliveryTime" min="0" placeholder="0" />
+
+                  <span> dias </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONDIÇÃO DE PAGAMENTO -->
+
+            <div class="supplier-form-group">
+              <label for="paymentTerms"> Condição de pagamento </label>
+
+              <select id="paymentTerms">
+                <option value="">Selecione</option>
+
+                <option>À vista</option>
+
+                <option>7 dias</option>
+
+                <option>15 dias</option>
+
+                <option>30 dias</option>
+
+                <option>30 / 60 dias</option>
+              </select>
+            </div>
+
+            <!-- ENDEREÇO -->
+
+            <div class="supplier-form-group">
+              <label for="supplierAddress"> Endereço </label>
+
+              <input type="text" id="supplierAddress" placeholder="Rua, número e complemento" />
+            </div>
+
+            <!-- CIDADE / UF / CEP -->
+
+            <div class="supplier-address-row">
+              <div class="supplier-form-group">
+                <label for="supplierCity"> Cidade </label>
+
+                <input type="text" id="supplierCity" placeholder="Cidade" />
+              </div>
+
+              <div class="supplier-form-group state-field">
+                <label for="supplierState"> UF </label>
+
+                <select id="supplierState">
+                  <option value="">UF</option>
+
+                  <option>SP</option>
+                  <option>RJ</option>
+                  <option>MG</option>
+                  <option>PR</option>
+                  <option>SC</option>
+                  <option>RS</option>
+                </select>
+              </div>
+
+              <div class="supplier-form-group">
+                <label for="supplierZip"> CEP </label>
+
+                <input type="text" id="supplierZip" placeholder="00000-000" />
+              </div>
+            </div>
+
+            <!-- STATUS -->
+
+            <div class="supplier-form-group">
+              <label for="supplierStatus"> Status </label>
+
+              <select id="supplierStatus">
+                <option value="ativo">Ativo</option>
+
+                <option value="inativo">Inativo</option>
+              </select>
+            </div>
+
+            <!-- OBSERVAÇÕES -->
+
+            <div class="supplier-form-group">
+              <label for="supplierNotes"> Observações </label>
+
+              <textarea id="supplierNotes" rows="3"
+                placeholder="Informações adicionais sobre o fornecedor..."></textarea>
+            </div>
+
+            <!-- BOTÕES -->
+
+            <div class="supplier-modal-footer">
+              <button type="button" class="cancel-supplier-button" id="cancelSupplier">
+                Cancelar
+              </button>
+
+              <button type="submit" class="save-supplier-button">
+                Salvar fornecedor
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/fornecedores.js"></script>
+  <script src="../js/dashboard.js"></script>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1230 @@
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+
+.orders-header h1 {
+    font-size: 36px;
+
+    color: #111827;
+
+    margin-bottom: 7px;
+}
+
+
+.orders-header p {
+    font-size: 16px;
+
+    color: #7c8493;
+}
+
+
+/* =========================================
+   BOTÃO NOVO PEDIDO
+========================================= */
+
+.new-order-button {
+    height: 50px;
+
+    padding: 0 22px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #fd6423;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.new-order-button span {
+    font-size: 23px;
+
+    font-weight: 300;
+}
+
+
+.new-order-button:hover {
+    background: #f85f30;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   CARDS DE RESUMO
+========================================= */
+
+.orders-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 26px;
+}
+
+
+.order-summary-card {
+    min-height: 120px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 20px;
+
+    gap: 18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================
+   ÍCONES DOS CARDS
+========================================= */
+
+.summary-icon {
+    width: 60px;
+    height: 60px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    font-size: 25px;
+}
+
+
+.summary-icon.total {
+    color: #fff0e9;
+
+    background: #b64e2e;
+}
+
+
+.summary-icon.pending {
+    color: #fff5df;
+
+    background: #dd951a;
+}
+
+
+.summary-icon.preparing {
+    color: #eaf2ff;
+
+    background: #415683;
+}
+
+
+.summary-icon.completed {
+    color: #ffffff;
+
+    background: #499261;
+}
+
+
+/* =========================================
+   INFORMAÇÕES DOS CARDS
+========================================= */
+
+.summary-information {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.summary-information > span {
+    font-size: 14px;
+
+    color: #64748b;
+}
+
+
+.summary-information strong {
+    font-size: 27px;
+
+    color: #111827;
+}
+
+
+.summary-information small {
+    font-size: 12px;
+
+    color: #94a3b8;
+}
+
+
+.summary-information small.positive {
+    color: #16a34a;
+}
+
+
+/* =========================================
+   CARD PRINCIPAL
+========================================= */
+
+.orders-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 20px
+        rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.orders-toolbar {
+    min-height: 88px;
+
+    padding: 18px 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* =========================================
+   PESQUISA
+========================================= */
+
+.order-search {
+    width: 390px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    transition: 0.2s;
+}
+
+
+.order-search:focus-within {
+    border-color: #ff7043;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255, 112, 67, 0.08);
+}
+
+
+.search-order-icon {
+    margin-right: 11px;
+
+    font-size: 25px;
+
+    color: #64748b;
+}
+
+
+.order-search input {
+    flex: 1;
+
+    height: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #334155;
+
+    font-size: 14px;
+}
+
+
+.order-search input::placeholder {
+    color: #9ca3af;
+}
+
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.order-filters {
+    display: flex;
+
+    gap: 12px;
+}
+
+
+.order-filters select {
+    min-width: 170px;
+
+    height: 50px;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 11px;
+
+    padding: 0 14px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+.order-filters select:focus {
+    border-color: #ff7043;
+}
+
+
+/* =========================================
+   TABELA
+========================================= */
+
+.orders-table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.orders-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+.orders-table thead {
+    background: #fafafa;
+}
+
+
+.orders-table th {
+    height: 52px;
+
+    padding: 0 22px;
+
+    text-align: left;
+
+    color: #687386;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.orders-table td {
+    height: 82px;
+
+    padding: 0 22px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+
+.orders-table tbody tr {
+    transition: 0.2s;
+}
+
+
+.orders-table tbody tr:hover {
+    background: #fffaf7;
+}
+
+
+/* =========================================
+   NÚMERO DO PEDIDO
+========================================= */
+
+.order-number {
+    color: #ff6234;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   CLIENTE
+========================================= */
+
+.customer {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.customer-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff0e9;
+
+    color: #ff6234;
+
+    font-weight: 700;
+
+    font-size: 13px;
+}
+
+
+.customer > div:last-child {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.customer strong {
+    color: #111827;
+
+    font-size: 14px;
+}
+
+
+.customer span {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   VALOR
+========================================= */
+
+.order-value {
+    color: #111827;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.order-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* PENDENTE */
+
+.order-status.pending {
+    color: #d88600;
+
+    background: #fff4dc;
+}
+
+
+/* PREPARANDO */
+
+.order-status.preparing {
+    color: #2563eb;
+
+    background: #eaf2ff;
+}
+
+
+/* ENVIADO */
+
+.order-status.sent {
+    color: #7c3aed;
+
+    background: #f1ebff;
+}
+
+
+/* CONCLUÍDO */
+
+.order-status.completed {
+    color: #159447;
+
+    background: #e9f9ef;
+}
+
+
+/* CANCELADO */
+
+.order-status.cancelled {
+    color: #e33f4d;
+
+    background: #ffebed;
+}
+
+
+/* =========================================
+   BOTÃO DE AÇÕES
+========================================= */
+
+.order-actions {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #64748b;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.order-actions:hover {
+    background: #f3f4f6;
+
+    color: #111827;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.orders-footer {
+    min-height: 70px;
+
+    padding: 0 22px;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: #7c8493;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   PAGINAÇÃO
+========================================= */
+
+.pagination {
+    display: flex;
+
+    gap: 7px;
+}
+
+
+.pagination button {
+    min-width: 36px;
+    height: 36px;
+
+    padding: 0 8px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    cursor: pointer;
+}
+
+
+.pagination button:hover {
+    border-color: #ff7043;
+
+    color: #ff7043;
+}
+
+
+.pagination button.active {
+    border-color: #ff7043;
+
+    background: #ff7043;
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .orders-summary {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    .orders-toolbar {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .order-search {
+        width: 100%;
+    }
+
+
+    .order-filters {
+        width: 100%;
+    }
+
+
+    .order-filters select {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .orders-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 18px;
+    }
+
+
+    .orders-summary {
+        grid-template-columns: 1fr;
+    }
+
+
+    .order-filters {
+        flex-direction: column;
+    }
+
+
+    .orders-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+        padding: 18px;
+    }
+    /* =========================================
+   MODAL NOVO PEDIDO
+========================================= */
+
+.order-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1500;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(15, 23, 42, 0.55);
+}
+
+
+.order-modal-overlay.active {
+    display: flex;
+}
+
+
+.order-modal {
+    width: min(720px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.2);
+}
+
+
+.order-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.order-modal-header h2 {
+    margin-bottom: 5px;
+
+    font-size: 23px;
+
+    color: #111827;
+}
+
+
+.order-modal-header p {
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+.close-order-modal {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #f3f4f6;
+
+    font-size: 23px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.order-form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+}
+
+
+.order-form-group label {
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.order-form-group input,
+.order-form-group select,
+.order-form-group textarea {
+    width: 100%;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 10px;
+
+    padding: 0 14px;
+
+    outline: none;
+
+    font-family: inherit;
+}
+
+
+.order-form-group input,
+.order-form-group select {
+    height: 48px;
+}
+
+
+.order-form-group textarea {
+    padding-top: 12px;
+
+    min-height: 90px;
+}
+
+
+.order-form-group input:focus,
+.order-form-group select:focus,
+.order-form-group textarea:focus {
+    border-color: #fd7941;
+}
+
+
+.order-form-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* =========================================
+   PRODUTOS
+========================================= */
+
+.order-products-title {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin:
+        10px
+        0
+        15px;
+}
+
+
+.order-products-title button {
+    border: none;
+
+    background: transparent;
+
+    color: #fd7941;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.order-product-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(190px, 1fr)
+        80px
+        110px
+        40px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+
+.order-product-row select,
+.order-product-row input {
+    height: 45px;
+
+    padding: 0 10px;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 9px;
+
+    outline: none;
+}
+
+
+.order-product-total {
+    color: #111827;
+
+    font-weight: 600;
+
+    text-align: right;
+}
+
+
+.remove-order-product {
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #ffebed;
+
+    color: #e43f4c;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   TOTAL
+========================================= */
+
+.order-total-box {
+    padding: 18px;
+
+    margin-top: 18px;
+
+    background: #fafafa;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+}
+
+
+.order-total-box > div {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+
+.order-total-box > div:last-child {
+    margin-bottom: 0;
+}
+
+
+.order-total-final {
+    padding-top: 12px;
+
+    border-top: 1px solid #e5e7eb;
+
+    font-size: 18px;
+}
+
+
+.order-total-final strong {
+    color: #fd7941;
+
+    font-size: 22px;
+}
+
+
+/* =========================================
+   FOOTER MODAL
+========================================= */
+
+.order-modal-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+
+.cancel-order-button,
+.save-order-button {
+    height: 48px;
+
+    padding: 0 20px;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.cancel-order-button {
+    border: 1px solid #e5e7eb;
+
+    background: white;
+
+    color: #475569;
+}
+
+
+.save-order-button {
+    border: none;
+
+    background: #fd7941;
+
+    color: white;
+}
+
+
+/* =========================================
+   MENU DE AÇÕES
+========================================= */
+
+.order-action-menu {
+    position: fixed;
+
+    z-index: 1600;
+
+    width: 205px;
+
+    display: none;
+
+    padding: 6px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 11px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(15, 23, 42, 0.15);
+}
+
+
+.order-action-menu.show {
+    display: block;
+}
+
+
+.order-action-menu button {
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 0 12px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #475569;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.order-action-menu button:hover {
+    background: #f8fafc;
+
+    color: #fd7941;
+}
+
+
+.order-action-menu button.danger {
+    color: #ef4444;
+}
+
+
+.order-action-menu button.danger:hover {
+    background: #fff1f2;
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+.orders-toast {
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 2000;
+
+    max-width: 350px;
+
+    padding: 14px 18px;
+
+    border-radius: 11px;
+
+    background: #334155;
+
+    color: white;
+
+    font-size: 13px;
+
+    opacity: 0;
+
+    transform: translateY(15px);
+
+    transition: 0.3s;
+
+    box-shadow:
+        0 12px 35px
+        rgba(15, 23, 42, 0.2);
+}
+
+
+.orders-toast.show {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+.orders-toast.success {
+    background: #16a34a;
+}
+
+
+.orders-toast.warning {
+    background: #e58a00;
+}
+
+
+.orders-toast.info {
+    background: #2563eb;
+}
+
+
+/* =========================================
+   PAGINAÇÃO DESABILITADA
+========================================= */
+
+.pagination button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 650px) {
+
+    .order-form-row {
+        grid-template-columns: 1fr;
+    }
+
+
+    .order-product-row {
+        grid-template-columns:
+            minmax(0, 1fr)
+            65px;
+    }
+
+
+    .order-product-total {
+        text-align: left;
+    }
+
+
+    .orders-toast {
+        left: 15px;
+        right: 15px;
+
+        max-width: none;
+    }
+
+}
+
+}

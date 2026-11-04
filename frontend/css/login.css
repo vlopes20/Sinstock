@@ -1,0 +1,588 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #ffffff;
+    color: #111827;
+}
+
+
+/* =========================
+   PÁGINA
+========================= */
+
+.login-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns:
+        42% 58%;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   LADO ESQUERDO
+========================= */
+
+.login-left {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 0 70px;
+
+    background: #ffffff;
+
+    z-index: 2;
+}
+
+
+/* IDIOMA */
+
+.language {
+    position: absolute;
+
+    top: 28px;
+    left: 35px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    color: #111827;
+}
+
+
+/* CONTAINER */
+
+.login-container {
+    width: 100%;
+    max-width: 445px;
+
+    margin-top: 225px;
+}
+
+
+/* CABEÇALHO */
+
+.login-header {
+    margin-bottom: 45px;
+}
+
+.login-header h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #111827;
+}
+
+.login-header p {
+    color: #6b7280;
+    font-size: 15px;
+
+    display: none;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.form-group {
+    margin-bottom: 28px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 17px;
+    font-weight: 400;
+
+    color: #374151;
+}
+
+
+/* INPUT */
+
+.input-box {
+    width: 100%;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    transition: 0.2s;
+}
+
+.input-box:focus-within {
+    border-color: #ff6200;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255, 98, 0, 0.1);
+}
+
+
+/* ICON */
+
+.input-icon {
+    width: 26px;
+    height: 26px;
+
+    margin-left: 20px;
+
+    color: #6b7280;
+
+    flex-shrink: 0;
+}
+
+
+/* INPUT REAL */
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    padding:
+        0
+        55px
+        0
+        18px;
+
+    font-size: 17px;
+
+    color: #111827;
+}
+
+.input-box input::placeholder {
+    color: #9ca3af;
+}
+
+
+/* BOTÃO OLHO */
+
+.password-toggle {
+    position: absolute;
+
+    right: 18px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px;
+}
+
+.password-toggle svg {
+    width: 25px;
+    height: 25px;
+
+    color: #6b7280;
+}
+
+.password-toggle:hover svg {
+    color: #ff6200;
+}
+
+
+/* =========================
+   ESQUECI SENHA
+========================= */
+
+.forgot-password {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: -12px;
+    margin-bottom: 70px;
+}
+
+.forgot-password a {
+    color: #ff5a00;
+
+    font-size: 16px;
+
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    color: #df4e00;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   BOTÃO LOGIN
+========================= */
+
+.login-button {
+    width: 100%;
+    height: 66px;
+
+    border: none;
+
+    border-radius: 40px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff5800,
+            #ff6800
+        );
+
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(255, 94, 0, 0.25);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   ERROS
+========================= */
+
+.error-message {
+    display: block;
+
+    margin-top: 6px;
+
+    min-height: 15px;
+
+    font-size: 13px;
+
+    color: #e11d48;
+}
+
+.input-box.error {
+    border-color: #e11d48;
+}
+
+
+/* =========================
+   MENSAGEM LOGIN
+========================= */
+
+.login-message {
+    text-align: center;
+
+    margin-bottom: 15px;
+
+    min-height: 18px;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   LADO DIREITO
+========================= */
+
+.login-right {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 60%;
+    height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff842c 0%,
+            #e05c0f 50%,
+            #b83d00 100%
+        );
+
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        46% 100%
+    );
+
+    overflow: hidden;
+
+    z-index: 2;
+}
+
+
+/* CORTE DIAGONAL */
+
+.login-page {
+    width: 100%;
+    min-height: 100vh;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #ffffff;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    position: absolute;
+
+    right: 16px;
+    top: -10px;
+
+    z-index: 5;
+}
+
+.logo img {
+    width: 300px;
+    height: 155px;
+
+}
+
+
+/* =========================
+   ILUSTRAÇÃO
+========================= */
+
+.illustration-container {
+    position: absolute;
+    top: 130px;
+    right: 100px;
+
+    width: 61%;
+    height: 96vh;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+.illustration-container img {
+    width: 120%;
+    height: 90%;
+
+    object-fit: contain;
+
+    object-position: center;
+}
+
+
+/* =========================
+   CÍRCULOS
+========================= */
+
+.background-circle {
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+}
+
+.circle-one {
+    width: 800px;
+    height: 800px;
+
+    right: 40px;
+    top: 80px;
+}
+
+.circle-two {
+    width: 1050px;
+    height: 1050px;
+
+    right: -100px;
+    top: 30px;
+}
+
+
+/* =========================
+   PONTINHOS
+========================= */
+
+.dots {
+    position: absolute;
+
+    top: 180px;
+    right: 35px;
+
+    width: 50px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 4px);
+
+    gap: 13px;
+}
+
+.dots span {
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.5);
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .login-page {
+        grid-template-columns:
+            50% 50%;
+    }
+
+    .login-left {
+        padding:
+            70px
+            50px;
+    }
+
+    .login-right::before {
+        display: none;
+    }
+
+    .logo img {
+        width: 190px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .login-page {
+        display: block;
+    }
+
+    .login-right {
+        display: none;
+    }
+
+    .login-left {
+        width: 100%;
+        min-height: 100vh;
+
+        padding:
+            110px
+            30px
+            50px;
+    }
+
+    .language {
+        top: 30px;
+        left: 30px;
+    }
+
+    .login-container {
+        max-width: 450px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .login-header h1 {
+        font-size: 34px;
+    }
+
+    .input-box {
+        height: 62px;
+    }
+
+    .login-button {
+        height: 62px;
+
+        font-size: 19px;
+    }
+
+    .forgot-password {
+        margin-bottom: 50px;
+    }
+
+}
