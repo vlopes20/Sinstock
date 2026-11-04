@@ -27,7 +27,7 @@ interface RequestWithUser extends ExpressRequest {
 }
 
 @ApiTags('Movimentações de Estoque')
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
 @Controller('movimentacoes')
 export class MovimentacoesController {
