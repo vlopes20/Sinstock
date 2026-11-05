@@ -1,0 +1,11 @@
+{
+  "note": "Referencias sem ID literal encontrado no HTML ou templates dos scripts; revisar criacao dinamica e guards antes de classificar como defeito.",
+  "mismatches": [
+    {
+      "page": "frontend/pages/estoque.html",
+      "id": "movementObservation",
+      "file": "frontend/js/pages/estoque.js",
+      "line": 339
+    }
+  ]
+}

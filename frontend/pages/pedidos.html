@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pedidos | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/pedidos.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item">
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+          </a>
+
+          <a href="pedidos.html" class="menu-item active">
+            <i data-lucide="shopping-bag"></i>
+            Pedidos
+          </a>
+
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a href="#" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <a href="#" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main class="main-content">
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"> ⌕ </span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
+
+            <span class="shortcut"> ⌘ K </span>
+          </div>
+
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div class="notification">
+              <i data-lucide="bell"></i>
+
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div
+                class="avatar flex items-center justify-center bg-[#fde4d5] text-[#773513] font-bold"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section class="content">
+          <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+          <div class="orders-header">
+            <div>
+              <h1>Pedidos</h1>
+
+              <p>Acompanhe e gerencie os pedidos cadastrados.</p>
+            </div>
+
+            <button type="button" class="new-order-button" id="openOrderModal">
+              <span>+</span>
+              Novo pedido
+            </button>
+          </div>
+
+          <!-- =====================================
+         CARDS
+    ====================================== -->
+
+          <div class="catalog-tools">
+            <label>Filial<select id="ordersBranch"></select></label
+            ><button type="button" data-catalog="clientes">
+              Gerenciar clientes
+            </button>
+          </div>
+          <div class="orders-summary">
+            <!-- TOTAL -->
+
+            <article class="order-summary-card">
+              <div class="summary-icon total">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information">
+                <span> Total de pedidos </span>
+
+                <strong>—</strong>
+
+                <small class="positive"> No período selecionado </small>
+              </div>
+            </article>
+
+            <!-- PENDENTES -->
+
+            <article class="order-summary-card">
+              <div class="summary-icon pending">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information">
+                <span>Reservas abertas</span>
+
+                <strong>—</strong>
+
+                <small> Reservas abertas </small>
+              </div>
+            </article>
+
+            <!-- PREPARANDO -->
+
+            <article class="order-summary-card">
+              <div class="summary-icon preparing">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information">
+                <span> Em separação </span>
+
+                <strong>—</strong>
+
+                <small> Sendo preparados </small>
+              </div>
+            </article>
+
+            <!-- CONCLUÍDOS -->
+
+            <article class="order-summary-card">
+              <div class="summary-icon completed">✓</div>
+
+              <div class="summary-information">
+                <span>Vendas confirmadas</span>
+
+                <strong>—</strong>
+
+                <small> Finalizados </small>
+              </div>
+            </article>
+          </div>
+
+          <!-- =====================================
+         CARD PRINCIPAL
+    ====================================== -->
+
+          <div class="orders-card">
+            <!-- =====================================
+             FILTROS
+        ====================================== -->
+
+            <div class="orders-toolbar">
+              <!-- BUSCA -->
+
+              <div class="order-search">
+                <span class="search-order-icon"> ⌕ </span>
+
+                <input
+                  type="text"
+                  placeholder="Buscar por pedido ou cliente..."
+                />
+              </div>
+
+              <!-- FILTROS -->
+
+              <div class="order-filters">
+                <select id="orderStatus" aria-label="Status comercial">
+                  <option value="">Todos os status comerciais</option>
+                  <option value="ORCAMENTO">Reservado</option>
+                  <option value="CONCLUIDO">Confirmado</option>
+                  <option value="CANCELADO">Cancelado</option></select
+                ><select id="orderDelivery" aria-label="Atendimento">
+                  <option value="">Todos os atendimentos</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="EM_SEPARACAO">Em separação</option>
+                  <option value="ENVIADO">Enviado</option>
+                  <option value="ENTREGUE">Entregue</option></select
+                ><select id="orderPeriod" aria-label="Período">
+                  <option value="">Todos os períodos</option>
+                  <option value="1">Últimas 24 horas</option>
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30">Últimos 30 dias</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- =====================================
+             TABELA
+        ====================================== -->
+
+            <div class="orders-table-container">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>Pedido</th>
+
+                    <th>Cliente</th>
+
+                    <th>Data</th>
+
+                    <th>Valor</th>
+
+                    <th>Pagamento</th>
+
+                    <th>Status</th>
+
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td colspan="7">Carregando...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- =====================================
+             RODAPÉ DA TABELA
+        ====================================== -->
+
+            <div class="orders-footer">
+              <span>Carregando...</span>
+
+              <div class="pagination"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
+    <script src="../js/shared/layout.js"></script>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/services/commerce.js"></script>
+    <script src="../js/pages/pedidos.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

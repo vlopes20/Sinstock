@@ -1,0 +1,466 @@
+{
+  "date": "2026-11-04",
+  "scope": "Consultas GET e login; nenhum cadastro, alteracao de estoque ou envio de email executado.",
+  "swaggerOperations": [
+    "GET /auditoria/estoque/exportar-excel",
+    "GET /auditoria/estoque/exportar-pdf",
+    "POST /perfis",
+    "GET /perfis",
+    "GET /perfis/{id}",
+    "POST /clientes",
+    "GET /clientes",
+    "GET /clientes/{id}",
+    "PATCH /clientes/{id}",
+    "POST /auth/login",
+    "GET /auth/me",
+    "POST /auth/logout",
+    "POST /auth/forgot-password",
+    "POST /auth/reset-password",
+    "POST /auth/2fa/generate",
+    "POST /auth/2fa/enable",
+    "POST /auth/2fa/authenticate",
+    "POST /users",
+    "GET /users",
+    "GET /users/profile",
+    "GET /users/{id}",
+    "PATCH /users/{id}",
+    "PATCH /users/{id}/status",
+    "GET /integracoes/cep/{cep}",
+    "GET /integracoes/coordenadas",
+    "GET /integracoes/distancia-ceps",
+    "GET /busca-global",
+    "POST /produtos",
+    "GET /produtos",
+    "GET /produtos/codigo-barras/{codigo}",
+    "GET /produtos/{id}",
+    "PATCH /produtos/{id}",
+    "DELETE /produtos/{id}",
+    "POST /categorias",
+    "GET /categorias",
+    "GET /categorias/{id}",
+    "PATCH /categorias/{id}",
+    "DELETE /categorias/{id}",
+    "POST /notas-fiscais-entrada",
+    "GET /notas-fiscais-entrada",
+    "GET /notas-fiscais-entrada/{id}",
+    "PATCH /notas-fiscais-entrada/{id}/estorno",
+    "PATCH /notas-fiscais-entrada/lotes/{loteId}",
+    "POST /fornecedores",
+    "GET /fornecedores",
+    "GET /fornecedores/{id}",
+    "PATCH /fornecedores/{id}",
+    "DELETE /fornecedores/{id}",
+    "GET /alertas",
+    "GET /alertas/estoque-baixo",
+    "GET /alertas/vencimentos",
+    "GET /notificacoes",
+    "PATCH /notificacoes/{id}/ler",
+    "POST /notificacoes/executar-varredura",
+    "POST /filiais",
+    "GET /filiais",
+    "GET /filiais/{id}",
+    "PATCH /filiais/{id}",
+    "DELETE /filiais/{id}",
+    "GET /saldos-estoque",
+    "GET /saldos-estoque/{id}",
+    "POST /movimentacoes",
+    "POST /movimentacoes/transferencia",
+    "GET /movimentacoes/historico",
+    "GET /relatorios/movimentacoes/pdf",
+    "POST /pedidos/checkout",
+    "POST /pedidos/reservar",
+    "PATCH /pedidos/{id}/confirmar",
+    "GET /pedidos",
+    "GET /pedidos/{id}",
+    "PATCH /pedidos/{id}/cancelar",
+    "GET /dashboard/graficos/stock-categoria",
+    "GET /dashboard/graficos/movimentacoes-semanal",
+    "GET /dashboard/graficos/produtos-criticos",
+    "GET /dashboard/realtime-stream",
+    "POST /chamados",
+    "GET /chamados",
+    "GET /chamados/{id}",
+    "PATCH /chamados/{id}/status"
+  ],
+  "unauthorizedProductsStatus": 401,
+  "results": [
+    {
+      "route": "/auth/me",
+      "status": 200,
+      "shape": {
+        "id": "number",
+        "nome": "string",
+        "email": "string",
+        "telefone": "null",
+        "perfil_id": "number",
+        "ativo": "boolean",
+        "criado_em": "string",
+        "atualizado_em": "string",
+        "isTwoFactorEnable": "boolean",
+        "perfis": {
+          "id": "number",
+          "nome": "string",
+          "permissoes": {
+            "admin": "boolean",
+            "todas": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "route": "/users/profile",
+      "status": 200,
+      "shape": {
+        "id": "number",
+        "nome": "string",
+        "email": "string",
+        "perfil_id": "number",
+        "telefone": "null",
+        "ativo": "boolean",
+        "criado_em": "string",
+        "atualizado_em": "string",
+        "isTwoFactorEnable": "boolean",
+        "perfis": {
+          "id": "number",
+          "nome": "string",
+          "permissoes": {
+            "admin": "boolean",
+            "todas": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "route": "/users",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 1,
+        "item": {
+          "id": "number",
+          "nome": "string",
+          "email": "string",
+          "perfil_id": "number",
+          "telefone": "null",
+          "ativo": "boolean",
+          "criado_em": "string",
+          "isTwoFactorEnable": "boolean",
+          "perfis": {
+            "id": "number",
+            "nome": "string"
+          }
+        }
+      }
+    },
+    {
+      "route": "/perfis",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 2,
+        "item": {
+          "id": "number",
+          "nome": "string",
+          "permissoes": {
+            "admin": "boolean",
+            "todas": "boolean"
+          },
+          "criado_em": "string",
+          "_count": {
+            "usuarios": "number"
+          }
+        }
+      }
+    },
+    {
+      "route": "/categorias",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/fornecedores",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/clientes",
+      "status": 200,
+      "shape": {
+        "data": {
+          "type": "array",
+          "count": 0,
+          "item": "empty"
+        },
+        "meta": {
+          "totalItems": "number",
+          "itemCount": "number",
+          "itemsPerPage": "number",
+          "totalPages": "number",
+          "currentPage": "number"
+        }
+      }
+    },
+    {
+      "route": "/filiais",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/produtos",
+      "status": 200,
+      "shape": {
+        "dados": {
+          "type": "array",
+          "count": 0,
+          "item": "empty"
+        },
+        "meta": {
+          "total": "number",
+          "pagina": "number",
+          "limite": "number",
+          "totalPages": "number",
+          "hasNextPage": "boolean",
+          "hasPreviousPage": "boolean"
+        }
+      }
+    },
+    {
+      "route": "/saldos-estoque",
+      "status": 200,
+      "shape": {
+        "data": {
+          "type": "array",
+          "count": 0,
+          "item": "empty"
+        },
+        "meta": {
+          "totalItems": "number",
+          "itemCount": "number",
+          "itemsPerPage": "number",
+          "totalPages": "number",
+          "currentPage": "number"
+        }
+      }
+    },
+    {
+      "route": "/pedidos",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/movimentacoes/historico",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/notas-fiscais-entrada",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/alertas",
+      "status": 200,
+      "shape": {
+        "resumo": {
+          "total_alertas": "number",
+          "total_estoque_baixo": "number",
+          "total_lotes_vencendo": "number",
+          "parametros_aplicados": {
+            "filial_id": "string",
+            "dias_vencimento": "number"
+          }
+        },
+        "alertas": {
+          "estoque_baixo": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          },
+          "lotes_vencendo": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          }
+        }
+      }
+    },
+    {
+      "route": "/alertas/estoque-baixo",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/alertas/vencimentos",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/alertas/vencimentos?filial_id=1",
+      "status": 500,
+      "shape": {
+        "statusCode": "number",
+        "message": "string"
+      }
+    },
+    {
+      "route": "/alertas?filial_id=1",
+      "status": 500,
+      "shape": {
+        "statusCode": "number",
+        "message": "string"
+      }
+    },
+    {
+      "route": "/dashboard/graficos/stock-categoria",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/dashboard/graficos/movimentacoes-semanal",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 7,
+        "item": {
+          "data": "string",
+          "entradas": "number",
+          "saidas": "number"
+        }
+      }
+    },
+    {
+      "route": "/dashboard/graficos/produtos-criticos",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/notificacoes",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/chamados",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/busca-global?termo=teste",
+      "status": 200,
+      "shape": {
+        "termo_pesquisado": "string",
+        "filtros": {
+          "filial_id": "string",
+          "limite_por_categoria": "number"
+        },
+        "total_resultados": "number",
+        "resultados": {
+          "produtos": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          },
+          "fornecedores": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          },
+          "lotes": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          },
+          "notas_fiscais": {
+            "type": "array",
+            "count": 0,
+            "item": "empty"
+          }
+        }
+      }
+    },
+    {
+      "route": "/produtos?apenas_estoque_baixo=false",
+      "status": 200,
+      "shape": {
+        "dados": {
+          "type": "array",
+          "count": 0,
+          "item": "empty"
+        },
+        "meta": {
+          "total": "number",
+          "pagina": "number",
+          "limite": "number",
+          "totalPages": "number",
+          "hasNextPage": "boolean",
+          "hasPreviousPage": "boolean"
+        }
+      }
+    },
+    {
+      "route": "/movimentacoes/historico?limit=-1",
+      "status": 200,
+      "shape": {
+        "type": "array",
+        "count": 0,
+        "item": "empty"
+      }
+    },
+    {
+      "route": "/filiais/2147483647",
+      "status": 404,
+      "shape": {
+        "message": "string",
+        "error": "string",
+        "statusCode": "number"
+      }
+    }
+  ]
+}

@@ -1,0 +1,692 @@
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.settings-header {
+    @apply mb-[25px];
+}
+
+.settings-header h1 {
+    @apply text-[length:clamp(28px,_2.5vw,_36px)];
+
+    @apply mb-[7px];
+
+    @apply text-[#111827];
+}
+
+.settings-header p {
+    @apply text-[#7c8493];
+
+    @apply text-[length:16px];
+}
+
+/* =========================================
+   ABAS
+========================================= */
+
+.settings-tabs {
+    @apply flex;
+
+    @apply gap-[8px];
+
+    @apply mb-[20px];
+
+    @apply pb-[2px];
+
+    @apply overflow-x-auto;
+}
+
+.settings-tab {
+    @apply [padding:11px_17px];
+
+    @apply [border:none];
+
+    @apply rounded-[10px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:14px];
+    @apply font-semibold;
+
+    @apply whitespace-nowrap;
+
+    @apply cursor-pointer;
+}
+
+.settings-tab:hover {
+    @apply [background:#f8fafc];
+}
+
+.settings-tab.active {
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+}
+
+.settings-content {
+    @apply hidden;
+}
+
+.settings-content.active {
+    @apply block;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.settings-card {
+    @apply w-full;
+
+    @apply mb-[22px];
+
+    @apply [background:#ffffff];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[18px];
+
+    @apply overflow-hidden;
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
+}
+
+.settings-card-header {
+    @apply min-h-[85px];
+
+    @apply [padding:20px_24px];
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-between;
+
+    @apply gap-[20px];
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.settings-card-header h2 {
+    @apply mb-[5px];
+
+    @apply text-[#111827];
+
+    @apply text-[length:18px];
+}
+
+.settings-card-header p {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:13px];
+}
+
+.settings-card-body {
+    @apply p-[24px];
+}
+
+.settings-card-footer {
+    @apply [padding:18px_24px];
+
+    @apply flex;
+    @apply justify-end;
+
+    @apply [border-top:1px_solid_#e5e7eb];
+
+    @apply [background:#fafafa];
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.settings-form-row {
+    @apply grid;
+
+    @apply grid-cols-[repeat(2,_minmax(0,_1fr))];
+
+    @apply gap-[18px];
+}
+
+.settings-form-group {
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[8px];
+
+    @apply mb-[18px];
+}
+
+.settings-form-group label {
+    @apply text-[#374151];
+
+    @apply text-[length:14px];
+
+    @apply font-semibold;
+}
+
+.settings-form-group input,
+.settings-form-group select,
+.settings-form-group textarea {
+    @apply w-full;
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[10px];
+
+    @apply [padding:0_14px];
+
+    @apply [background:white];
+
+    @apply text-[#334155];
+
+    @apply [font-family:inherit];
+
+    @apply text-[length:14px];
+
+    @apply [outline:none];
+}
+
+.settings-form-group input,
+.settings-form-group select {
+    @apply h-[48px];
+}
+
+.settings-form-group textarea {
+    @apply min-h-[100px];
+
+    @apply pt-[12px];
+}
+
+.settings-form-group input:focus,
+.settings-form-group select:focus,
+.settings-form-group textarea:focus {
+    @apply border-[#fd7941];
+
+    @apply [box-shadow:0_0_0_3px_rgba(253,_121,_65,_0.08)];
+}
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+.save-settings-button {
+    @apply min-h-[46px];
+
+    @apply [padding:0_20px];
+
+    @apply [border:none];
+
+    @apply rounded-[10px];
+
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+
+    @apply text-[length:14px];
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+
+    @apply [transition:0.2s];
+}
+
+.save-settings-button:hover {
+    @apply [background:#f2672f];
+}
+
+.add-user-button {
+    @apply h-[44px];
+
+    @apply [padding:0_16px];
+
+    @apply [border:none];
+
+    @apply rounded-[10px];
+
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+.secondary-settings-button {
+    @apply min-h-[42px];
+
+    @apply [padding:0_16px];
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[9px];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.settings-table-container,
+.permissions-table-container {
+    @apply w-full;
+
+    @apply overflow-x-auto;
+}
+
+.settings-table,
+.permissions-table {
+    @apply w-full;
+
+    @apply min-w-[700px];
+
+    @apply border-collapse;
+}
+
+.settings-table thead,
+.permissions-table thead {
+    @apply [background:#fafafa];
+}
+
+.settings-table th,
+.permissions-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_22px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.settings-table td,
+.permissions-table td {
+    @apply h-[75px];
+
+    @apply [padding:0_22px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:13px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.permissions-table th:not(:first-child),
+.permissions-table td:not(:first-child) {
+    @apply text-center;
+}
+
+/* =========================================
+   USUÁRIO
+========================================= */
+
+.settings-user {
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[12px];
+}
+
+.settings-avatar {
+    @apply w-[42px];
+    @apply h-[42px];
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply shrink-0;
+
+    @apply rounded-[50%];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply font-bold;
+}
+
+.role-badge,
+.user-status {
+    @apply inline-flex;
+
+    @apply [padding:7px_11px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+.role-badge.admin {
+    @apply text-[#7c3aed];
+
+    @apply [background:#f2edff];
+}
+
+.role-badge.stock {
+    @apply text-[#2563eb];
+
+    @apply [background:#eaf2ff];
+}
+
+.user-status.active {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.user-status.inactive {
+    @apply text-[#64748b];
+
+    @apply [background:#f1f5f9];
+}
+
+.user-action-button {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:22px];
+
+    @apply cursor-pointer;
+}
+
+/* =========================================
+   CONFIGURAÇÕES EM LISTA
+========================================= */
+
+.settings-list {
+    @apply w-full;
+}
+
+.setting-row {
+    @apply min-h-[90px];
+
+    @apply [padding:20px_24px];
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-between;
+
+    @apply gap-[30px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.setting-row:last-child {
+    @apply [border-bottom:none];
+}
+
+.setting-row > div {
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[6px];
+}
+
+.setting-row strong {
+    @apply text-[#111827];
+
+    @apply text-[length:14px];
+}
+
+.setting-row span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:13px];
+}
+
+/* =========================================
+   SWITCH
+========================================= */
+
+.switch {
+    @apply relative;
+
+    @apply w-[48px];
+    @apply h-[26px];
+
+    @apply shrink-0;
+}
+
+.switch input {
+    @apply hidden;
+}
+
+.slider {
+    @apply absolute;
+
+    @apply [inset:0];
+
+    @apply rounded-[30px];
+
+    @apply [background:#d1d5db];
+
+    @apply cursor-pointer;
+
+    @apply [transition:0.25s];
+}
+
+.slider::before {
+    @apply [content:""];
+
+    @apply absolute;
+
+    @apply w-[20px];
+    @apply h-[20px];
+
+    @apply left-[3px];
+    @apply top-[3px];
+
+    @apply rounded-[50%];
+
+    @apply [background:white];
+
+    @apply [transition:0.25s];
+
+    @apply [box-shadow:0_1px_4px_rgba(0,_0,_0,_0.2)];
+}
+
+.switch input:checked + .slider {
+    @apply [background:#fd7941];
+}
+
+.switch input:checked + .slider::before {
+    @apply [transform:translateX(22px)];
+}
+
+/* =========================================
+   INPUT COM SUFIXO
+========================================= */
+
+.input-suffix {
+    @apply relative;
+}
+
+.input-suffix input {
+    @apply pr-[60px];
+}
+
+.input-suffix span {
+    @apply absolute;
+
+    @apply top-[50%];
+    @apply right-[14px];
+
+    @apply [transform:translateY(-50%)];
+
+    @apply text-[#94a3b8];
+
+    @apply text-[length:13px];
+}
+
+/* =========================================
+   MODAL USUÁRIO
+========================================= */
+
+.user-modal-overlay {
+    @apply fixed;
+
+    @apply [inset:0];
+
+    @apply z-[1000];
+
+    @apply hidden;
+
+    @apply items-center;
+    @apply justify-center;
+
+    @apply p-[20px];
+
+    @apply [background:rgba(15,_23,_42,_0.55)];
+}
+
+.user-modal-overlay.active {
+    @apply flex;
+}
+
+.user-modal {
+    @apply w-[min(600px,_100%)];
+
+    @apply max-h-[90vh];
+
+    @apply overflow-y-auto;
+
+    @apply p-[26px];
+
+    @apply rounded-[20px];
+
+    @apply [background:white];
+
+    @apply [box-shadow:0_25px_70px_rgba(0,_0,_0,_0.2)];
+}
+
+.user-modal-header {
+    @apply flex;
+
+    @apply justify-between;
+
+    @apply gap-[20px];
+
+    @apply mb-[25px];
+}
+
+.user-modal-header h2 {
+    @apply mb-[5px];
+
+    @apply text-[length:23px];
+}
+
+.user-modal-header p {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:14px];
+}
+
+.close-user-modal {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[9px];
+
+    @apply [background:#f3f4f6];
+
+    @apply text-[length:23px];
+
+    @apply cursor-pointer;
+}
+
+.user-modal-footer {
+    @apply flex;
+
+    @apply justify-end;
+
+    @apply gap-[12px];
+
+    @apply mt-[25px];
+}
+
+.cancel-settings-button {
+    @apply h-[46px];
+
+    @apply [padding:0_18px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[10px];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 800px) {
+
+    .settings-form-row {
+        @apply grid-cols-[1fr];
+    }
+
+    .settings-card-header {
+        @apply items-start;
+    }
+
+    .setting-row {
+        @apply gap-[15px];
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .settings-card-header {
+        @apply flex-col;
+    }
+
+    .add-user-button {
+        @apply w-full;
+    }
+
+    .settings-card-body {
+        @apply p-[18px];
+    }
+
+    .setting-row {
+        @apply p-[18px];
+    }
+
+}

@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+
+.auth-page { @apply min-h-svh; }
+.auth-page .auth-panel {
+    @apply min-w-0 min-h-svh [padding:96px_clamp(20px,_4vw,_70px)_40px];
+}
+.auth-page .auth-content { @apply min-w-0 py-0; }
+.auth-content h1 { @apply text-[length:clamp(28px,_3vw,_36px)] [overflow-wrap:anywhere]; }
+.auth-content :is(input, select, textarea) { @apply min-w-0 max-w-full; }
+.auth-content :is(p, a) { @apply [overflow-wrap:anywhere]; }
+.auth-page .auth-illustration {
+    @apply left-[42%] right-0 w-[58%] h-[calc(100svh_-_130px)];
+}
+.auth-page .auth-illustration img { @apply w-full h-full; }
+@media (max-width: 1279px) {
+    .auth-page { @apply grid-cols-1; }
+    .auth-page .auth-artwork, .auth-page .auth-illustration { @apply hidden; }
+}
+@media (max-width: 600px) {
+    .auth-page .auth-language { @apply top-6 left-6; }
+    .auth-content :is(input, select) { @apply text-base; }
+    .auth-content button[type="submit"] { @apply h-auto min-h-14 py-3 px-4 text-lg; }
+    .auth-content #otpContainer { @apply gap-[6px]; }
+    .auth-content .otp-input { @apply min-w-0 h-12 text-xl; }
+}
+@tailwind utilities;

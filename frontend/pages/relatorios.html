@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Relatórios | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/relatorios.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main class="main-content">
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
+
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div class="notification">
+              <i data-lucide="bell"></i>
+
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section class="content">
+          <div class="reports-header">
+            <div>
+              <h1>Relatórios</h1>
+              <p>Dados reais de vendas, estoque, validade e movimentações.</p>
+            </div>
+            <div class="reports-header-actions">
+              <select id="reportFormat" aria-label="Formato de exportação">
+                <option value="csv">CSV</option>
+                <option value="xlsx">XLSX</option>
+                <option value="pdf">PDF</option></select
+              ><button
+                id="exportReport"
+                class="export-report-button"
+                type="button"
+              >
+                Exportar</button
+              ><button
+                id="printReport"
+                class="generate-report-button"
+                type="button"
+              >
+                Imprimir
+              </button>
+            </div>
+          </div>
+          <div class="reports-filters">
+            <div class="report-filter-group">
+              <label for="reportType">Relatório</label
+              ><select id="reportType">
+                <option value="categorias">Vendas por categoria</option>
+                <option value="vendas">Vendas confirmadas</option>
+                <option value="estoque">Estoque atual</option>
+                <option value="movimentacoes">Movimentações</option>
+                <option value="mais-vendidos">Mais vendidos</option>
+                <option value="menos-vendidos">Menos vendidos</option>
+                <option value="vencidos">Vencidos com saldo</option>
+                <option value="vencimento">Validade em até sete dias</option>
+                <option value="sem-movimento">Sem movimento recente</option>
+              </select>
+            </div>
+            <div class="report-filter-group">
+              <label for="reportBranch">Filial</label
+              ><select id="reportBranch"></select>
+            </div>
+            <div class="report-filter-group">
+              <label for="reportCategory">Categoria</label
+              ><select id="reportCategory"></select>
+            </div>
+            <div class="report-filter-group">
+              <label for="startDate">Data inicial</label
+              ><input id="startDate" type="date" />
+            </div>
+            <div class="report-filter-group">
+              <label for="endDate">Data final</label
+              ><input id="endDate" type="date" />
+            </div>
+            <div class="report-filter-group">
+              <label for="reportIdleDays">Dias sem movimento</label
+              ><input
+                id="reportIdleDays"
+                type="number"
+                min="1"
+                max="3650"
+                value="30"
+              />
+            </div>
+            <div class="filter-buttons">
+              <button id="clearReportFilters" type="button">Limpar</button
+              ><button
+                id="applyReportFilters"
+                class="apply-filter-button"
+                type="button"
+              >
+                Aplicar
+              </button>
+            </div>
+          </div>
+          <p id="reportError" role="alert"></p>
+          <article class="report-table-card">
+            <h2 id="reportTitle">Carregando relatório...</h2>
+            <p id="reportContext" class="catalog-note"></p>
+            <div class="report-table-container">
+              <table class="report-table" id="liveReportTable">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="reports-footer">
+              <span id="reportCount"></span>
+              <div id="reportPagination" class="catalog-pagination"></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/pages/relatorios.js"></script>
+    <script src="../js/shared/layout.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,422 @@
+generator client {
+  provider     = "prisma-client-js"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model categorias {
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique(map: "nome") @db.VarChar(100)
+  descricao String?    @db.Text
+  criado_em DateTime?  @default(now()) @db.Timestamp(0)
+  produtos  produtos[]
+}
+
+model fornecedores {
+  id                    Int                     @id @default(autoincrement())
+  nome_juridico         String                  @db.VarChar(150)
+  cnpj                  String                  @unique(map: "cnpj") @db.VarChar(20)
+  telefone              String?                 @db.VarChar(20)
+  email                 String?                 @db.VarChar(100)
+  cep                   String?                 @db.VarChar(10)
+  cidade                String?                 @db.VarChar(100)
+  estado                String?                 @db.Char(2)
+  endereco              String?                 @db.VarChar(255)
+  latitude              Decimal?                @db.Decimal(10, 8)
+  longitude             Decimal?                @db.Decimal(11, 8)
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  nome_fantasia         String?                 @db.VarChar(150)
+  inscricao_estadual     String?                 @db.VarChar(30)
+  contato               String?                 @db.VarChar(100)
+  categoria             String?                 @db.VarChar(100)
+  prazo_entrega         Int?                    @default(0)
+  condicao_pagamento    String?                 @db.VarChar(100)
+  ativo                 Boolean                 @default(true)
+  observacoes           String?                 @db.Text
+  produtos              produtos[]
+  notas_fiscais_entrada notas_fiscais_entrada[]
+}
+
+model produtos {
+  id                 Int                  @id @default(autoincrement())
+  categoria_id       Int
+  nome               String               @db.VarChar(150)
+  marca              String?              @db.VarChar(100)
+  codigo_barras      String?              @unique(map: "codigo_barras") @db.VarChar(100)
+  estoque_minimo     Decimal?             @default(0.000) @db.Decimal(10, 3)
+  preco_venda        Decimal              @db.Decimal(10, 2)
+  custo_medio        Decimal?             @default(0.00) @db.Decimal(10, 2)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  atualizado_em      DateTime?            @default(now()) @db.Timestamp(0)
+  descricao          String?              @db.Text
+  sku                String?              @unique @db.VarChar(100)
+  unidade            String               @default("UN") @db.VarChar(20)
+  ativo              Boolean              @default(true)
+  observacao         String?              @db.Text
+  fornecedor_id      Int?
+  fornecedores       fornecedores?        @relation(fields: [fornecedor_id], references: [id], onDelete: Restrict)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  lotes              lotes[]
+  categorias         categorias           @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "fk_categoria")
+  saldos_estoque     saldos_estoque[]
+
+  @@index([categoria_id], map: "fk_produtos_categoria")
+}
+
+model chamados_suporte {
+  id                Int                         @id @default(autoincrement())
+  codigo            String?                     @unique(map: "uk_chamados_codigo") @db.VarChar(50)
+  usuario_id        Int?
+  email_solicitante String?                     @db.VarChar(100)
+  assunto           String                      @db.VarChar(150)
+  descricao         String                      @db.Text
+  prioridade        chamados_suporte_prioridade? @default(MEDIA)
+  status            chamados_suporte_status?    @default(ABERTO)
+  data_abertura     DateTime?                   @default(now()) @db.Timestamp(0)
+  data_fechamento   DateTime?                   @db.Timestamp(0)
+  categoria         String?                     @db.VarChar(100)
+  pagina            String?                     @db.VarChar(100)
+  mensagens         mensagens_chamado[]
+  anexos            AnexoChamado[]
+  usuarios          usuarios?                   @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
+
+  @@index([usuario_id], map: "fk_chamados_usuario")
+}
+
+model clientes {
+  id            Int             @id @default(autoincrement())
+  nome          String          @db.VarChar(150)
+  cpf_cnpj      String?         @db.VarChar(20)
+  telefone      String?         @db.VarChar(20)
+  email         String?         @db.VarChar(100)
+  criado_em     DateTime?       @default(now()) @db.Timestamp(0)
+  pedidos_venda pedidos_venda[]
+}
+
+model faq {
+  id       Int      @id @default(autoincrement())
+  pergunta String   @db.VarChar(255)
+  resposta String   @db.Text
+  ordem    Int?     @default(0)
+  ativo    Boolean? @default(true)
+}
+
+model filiais {
+  id                 Int                  @id @default(autoincrement())
+  nome               String               @db.VarChar(100)
+  endereco           String?              @db.VarChar(255)
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  logs_movimentacoes logs_movimentacoes[]
+  pedidos_venda      pedidos_venda[]
+  saldos_estoque     saldos_estoque[]
+  notas_fiscais     notas_fiscais_entrada[]
+}
+
+model itens_entrada {
+  id                    Int                   @id @default(autoincrement())
+  nota_fiscal_id        Int
+  produto_id            Int
+  lote_id               Int?
+  quantidade            Decimal               @db.Decimal(10, 3)
+  custo_unitario        Decimal               @db.Decimal(10, 2)
+  lotes                 lotes?                @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_entrada_lote")
+  notas_fiscais_entrada notas_fiscais_entrada @relation(fields: [nota_fiscal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_entrada_nf")
+  produtos              produtos              @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_entrada_produto")
+
+  @@index([lote_id], map: "fk_itens_entrada_lote")
+  @@index([nota_fiscal_id], map: "fk_itens_entrada_nf")
+  @@index([produto_id], map: "fk_itens_entrada_produto")
+}
+
+model itens_venda {
+  id             Int           @id @default(autoincrement())
+  pedido_id      Int
+  produto_id     Int
+  lote_id        Int?
+  quantidade     Decimal       @db.Decimal(10, 3)
+  preco_unitario Decimal       @db.Decimal(10, 2)
+  lotes          lotes?        @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_itens_venda_lote")
+  pedidos_venda  pedidos_venda @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_itens_venda_pedido")
+  produtos       produtos      @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_itens_venda_produto")
+
+  @@index([lote_id], map: "fk_itens_venda_lote")
+  @@index([pedido_id], map: "fk_itens_venda_pedido")
+  @@index([produto_id], map: "fk_itens_venda_produto")
+}
+
+model logs_movimentacoes {
+  id                BigInt                               @id @default(autoincrement())
+  produto_id        Int
+  filial_id         Int
+  lote_id           Int?
+  usuario_id        Int
+  tipo_movimentacao logs_movimentacoes_tipo_movimentacao
+  quantidade        Decimal                              @db.Decimal(10, 3)
+  saldo_anterior    Decimal                              @db.Decimal(10, 3)
+  saldo_atual       Decimal                              @db.Decimal(10, 3)
+  origem_id         Int?
+  data_hora         DateTime?                            @default(now()) @db.Timestamp(0)
+  observacao        String?                              @db.Text
+  referencia        String?                              @db.VarChar(100)
+  filiais           filiais                              @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_logs_filial")
+  lotes             lotes?                               @relation(fields: [lote_id], references: [id], onUpdate: NoAction, map: "fk_logs_lote")
+  produtos          produtos                             @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_logs_produto")
+  usuarios          usuarios                             @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_logs_usuario")
+
+  @@index([filial_id], map: "fk_logs_filial")
+  @@index([lote_id], map: "fk_logs_lote")
+  @@index([produto_id], map: "fk_logs_produto")
+  @@index([usuario_id], map: "fk_logs_usuario")
+  @@index([data_hora], map: "idx_logs_data")
+}
+
+model lotes {
+  id                 Int                  @id @default(autoincrement())
+  produto_id         Int
+  numero_lote        String               @db.VarChar(50)
+  data_fabricacao    DateTime?            @db.Date
+  data_validade      DateTime             @db.Date
+  criado_em          DateTime?            @default(now()) @db.Timestamp(0)
+  itens_entrada      itens_entrada[]
+  itens_venda        itens_venda[]
+  logs_movimentacoes logs_movimentacoes[]
+  produtos           produtos             @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_lotes_produto")
+  saldos_estoque     saldos_estoque[]
+
+  @@unique([produto_id, numero_lote], map: "uk_lotes_produto_numero")
+}
+
+model notas_fiscais_entrada {
+  id               Int                           @id @default(autoincrement())
+  fornecedor_id    Int
+  usuario_id       Int
+  numero_nf        String                        @db.VarChar(50)
+  observacao       String?                       @db.Text
+  data_emissao     DateTime                      @db.Date
+  data_recebimento DateTime?                     @default(now()) @db.Timestamp(0)
+  total            Decimal                       @db.Decimal(10, 2)
+  status           notas_fiscais_entrada_status? @default(RECEBIDA)
+  filial_id        Int?
+  filiais          filiais?                     @relation(fields: [filial_id], references: [id], onDelete: Restrict)
+  itens_entrada    itens_entrada[]
+  fornecedores     fornecedores                  @relation(fields: [fornecedor_id], references: [id], onUpdate: NoAction, map: "fk_nf_fornecedor")
+  usuarios         usuarios                      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_nf_usuario")
+
+  @@index([fornecedor_id], map: "fk_nf_fornecedor")
+  @@index([usuario_id], map: "fk_nf_usuario")
+}
+
+model pedidos_venda {
+  id            Int                   @id @default(autoincrement())
+  usuario_id    Int
+  cliente_id    Int?
+  filial_id     Int
+  data_venda    DateTime?             @default(now()) @db.Timestamp(0)
+  reservado_ate DateTime?             @db.Timestamp(0)
+  total         Decimal               @db.Decimal(10, 2)
+  status        pedidos_venda_status? @default(CONCLUIDO)
+  pagamento     String?               @db.VarChar(50)
+  desconto      Decimal               @default(0) @db.Decimal(10, 2)
+  observacao    String?               @db.Text
+  atendimento   String                @default("PENDENTE") @db.VarChar(30)
+  itens_venda   itens_venda[]
+  clientes      clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
+  filiais       filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
+  usuarios      usuarios              @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_usuario")
+
+  @@index([cliente_id], map: "fk_pedidos_cliente")
+  @@index([filial_id], map: "fk_pedidos_filial")
+  @@index([usuario_id], map: "fk_pedidos_usuario")
+}
+
+model perfis {
+  id        Int        @id @default(autoincrement())
+  nome      String     @unique(map: "nome") @db.VarChar(50)
+  permissoes Json
+  criado_em DateTime?  @default(now()) @db.Timestamp(0)
+  usuarios  usuarios[]
+}
+
+model saldos_estoque {
+  id                   Int       @id @default(autoincrement())
+  filial_id            Int
+  produto_id           Int
+  lote_id              Int?
+  quantidade           Decimal   @default(0.000) @db.Decimal(10, 3)
+  quantidade_reservada Decimal   @default(0.000) @db.Decimal(10, 3)
+  atualizado_em        DateTime? @default(now()) @db.Timestamp(0)
+  filiais              filiais   @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_saldos_filial")
+  lotes                lotes?    @relation(fields: [lote_id], references: [id], onDelete: Restrict, onUpdate: NoAction, map: "fk_saldos_lote")
+  produtos             produtos  @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_saldos_produto")
+
+  @@unique([filial_id, produto_id, lote_id], map: "uk_saldos_filial_produto_lote")
+  @@index([lote_id], map: "fk_saldos_lote")
+  @@index([produto_id], map: "fk_saldos_produto")
+}
+
+model usuarios {
+  id                    Int                     @id @default(autoincrement())
+  perfil_id             Int
+  nome                  String                  @db.VarChar(100)
+  email                 String                  @unique(map: "email") @db.VarChar(100)
+  telefone              String?                 @db.VarChar(20)
+  senha_hash            String                  @db.VarChar(255)
+  token_2fa             String?                 @db.VarChar(100)
+  token_expiracao       DateTime?               @db.DateTime(0)
+  twoFactorSecret       String?                 @map("two_factor_secret") @db.VarChar(255)
+  isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
+  ativo                 Boolean?                @default(true)
+  auth_version          Int                     @default(0)
+  two_factor_method     String                  @default("TOTP") @db.VarChar(10)
+  ultimo_acesso         DateTime?               @db.Timestamp(0)
+  preferencias          Json?
+  desafiosEmail         EmailLoginChallenge[]
+  leiturasNotificacao   LeituraNotificacao[]
+  anexosSuporte         AnexoChamado[]
+  mensagensSuporte      mensagens_chamado[]
+  passwordResets        PasswordResetToken[]
+  criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
+  chamados_suporte      chamados_suporte[]
+  logs_movimentacoes    logs_movimentacoes[]
+  notas_fiscais_entrada notas_fiscais_entrada[]
+  pedidos_venda         pedidos_venda[]
+  perfis                perfis                  @relation(fields: [perfil_id], references: [id], onUpdate: NoAction, map: "fk_usuarios_perfil")
+
+  @@index([perfil_id], map: "fk_usuarios_perfil")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique @db.VarChar(64)
+  expiresAt DateTime @db.DateTime(3)
+  usedAt    DateTime? @db.DateTime(3)
+  user      usuarios @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model LogAuditoriaEstoque {
+  id              String   @id @default(uuid())
+  usuarioId       String?
+  acao            String
+  recurso         String
+  recursoId       String?
+  dadosAnteriores Json?
+  dadosNovos      Json?
+  ip              String?
+  userAgent       String?
+  criadoEm        DateTime @default(now())
+
+  @@index([usuarioId])
+  @@index([recurso, recursoId])
+  @@index([criadoEm])
+  @@map("logs_auditoria_estoque")
+}
+
+model notificacoes {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  mensagem  String
+  tipo      String
+  lida      Boolean  @default(false)
+  criado_em DateTime @default(now())
+  chave     String? @unique @db.VarChar(100)
+  leituras  LeituraNotificacao[]
+}
+
+model LeituraNotificacao {
+  notificacao_id Int
+  usuario_id Int
+  lida_em DateTime @default(now())
+  notificacao notificacoes @relation(fields: [notificacao_id], references: [id], onDelete: Cascade)
+  usuario usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  @@id([notificacao_id, usuario_id])
+  @@index([usuario_id])
+  @@map("leituras_notificacoes")
+}
+
+model EmailLoginChallenge {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  userId    Int
+  codeHash  String   @db.VarChar(64)
+  expiresAt DateTime @db.DateTime(3)
+  usedAt    DateTime? @db.DateTime(3)
+  attempts  Int      @default(0)
+  user      usuarios @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+  @@map("email_login_challenges")
+}
+
+model configuracoes {
+  chave       String   @id @db.VarChar(50)
+  valor       Json
+  atualizado  DateTime @updatedAt
+}
+
+model mensagens_chamado {
+  id         Int      @id @default(autoincrement())
+  chamado_id Int
+  usuario_id Int
+  mensagem   String   @db.Text
+  criado_em  DateTime @default(now())
+  chamado    chamados_suporte @relation(fields: [chamado_id], references: [id], onDelete: Restrict)
+  autor      usuarios @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  @@index([chamado_id, criado_em])
+}
+
+model AnexoChamado {
+  id String @id @default(uuid()) @db.VarChar(36)
+  chamado_id Int
+  usuario_id Int
+  nome String @db.VarChar(255)
+  mime String @db.VarChar(100)
+  tamanho Int
+  conteudo Bytes @db.LongBlob
+  criado_em DateTime @default(now())
+  chamado chamados_suporte @relation(fields: [chamado_id], references: [id], onDelete: Restrict)
+  usuario usuarios @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  @@index([chamado_id])
+  @@map("anexos_chamado")
+}
+
+enum chamados_suporte_status {
+  ABERTO
+  EM_ANDAMENTO
+  RESOLVIDO
+  CANCELADO
+  FECHADO
+}
+
+enum chamados_suporte_prioridade {
+  BAIXA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+enum logs_movimentacoes_tipo_movimentacao {
+  ENTRADA
+  SAIDA
+  TRANSFERENCIA
+  AJUSTE
+}
+
+enum pedidos_venda_status {
+  ORCAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum notas_fiscais_entrada_status {
+  PENDENTE
+  RECEBIDA
+  CANCELADA
+}

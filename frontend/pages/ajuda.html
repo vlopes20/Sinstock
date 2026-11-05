@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Ajuda e Suporte | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/ajuda.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item active">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main class="main-content">
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
+
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div class="notification">
+              <i data-lucide="bell"></i>
+
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section class="content">
+          <div class="help-header">
+            <div>
+              <h1>Ajuda e suporte</h1>
+              <p>Consulte as orientações e acompanhe suas solicitações.</p>
+            </div>
+            <button
+              class="new-ticket-button"
+              id="openTicketModal"
+              type="button"
+            >
+              Novo chamado
+            </button>
+          </div>
+          <div class="help-tabs">
+            <button class="help-tab active" data-tab="helpCenter">
+              Central de ajuda</button
+            ><button class="help-tab" data-tab="tickets">Chamados</button
+            ><button class="help-tab" data-tab="contact">Contato</button>
+          </div>
+          <p id="helpError" role="alert"></p>
+          <div class="help-tab-content active" id="helpCenter">
+            <div class="help-card">
+              <div class="catalog-tools">
+                <label
+                  >Pesquisar orientações<input
+                    type="search"
+                    id="helpSearch"
+                    placeholder="Como registrar uma entrada?" /></label
+                ><button type="button" id="newFaq" data-admin-only>
+                  Nova orientação
+                </button>
+              </div>
+              <div class="faq-list" id="faqList"></div>
+            </div>
+          </div>
+          <div class="help-tab-content" id="tickets">
+            <div class="help-card">
+              <div class="catalog-tools">
+                <label
+                  >Buscar chamado<input
+                    id="ticketSearch"
+                    type="search" /></label
+                ><label
+                  >Status<select id="ticketStatusFilter">
+                    <option value="">Todos</option>
+                    <option value="ABERTO">Aberto</option>
+                    <option value="EM_ANDAMENTO">Em andamento</option>
+                    <option value="RESOLVIDO">Resolvido</option>
+                    <option value="FECHADO">Fechado</option>
+                    <option value="CANCELADO">Cancelado</option>
+                  </select></label
+                >
+              </div>
+              <div class="tickets-table-container">
+                <table class="tickets-table">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Assunto</th>
+                      <th>Solicitante</th>
+                      <th>Prioridade</th>
+                      <th>Status</th>
+                      <th>Abertura</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ticketsTableBody"></tbody>
+                </table>
+              </div>
+              <div class="catalog-pagination" id="ticketPagination"></div>
+            </div>
+          </div>
+          <div class="help-tab-content" id="contact">
+            <div class="help-card">
+              <h2>Contato com o suporte</h2>
+              <p>
+                Abra um chamado para manter o histórico e conversar com a
+                administração.
+              </p>
+              <div id="supportContact"></div>
+              <button type="button" id="openTicketFromHelp">
+                Abrir chamado
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/pages/ajuda.js"></script>
+    <script src="../js/shared/layout.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

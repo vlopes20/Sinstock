@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main class="main-content">
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
+
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div class="notification">
+              <i data-lucide="bell"></i>
+
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section class="content">
+          <div class="welcome">
+            <h1 id="dashboardWelcome">Resumo do sistema</h1>
+            <p>Estoque atual e desempenho no período selecionado.</p>
+          </div>
+          <div class="catalog-tools">
+            <label>Filial<select id="dashboardBranch"></select></label
+            ><label
+              >Período<select id="dashboardPeriod">
+                <option value="7">Últimos 7 dias</option>
+                <option value="30">Últimos 30 dias</option>
+                <option value="90">Últimos 90 dias</option>
+              </select></label
+            ><button type="button" id="refreshDashboard">Atualizar</button>
+          </div>
+          <p id="dashboardError" role="alert"></p>
+          <div class="summary-cards">
+            <article class="summary-card">
+              <div class="card-information">
+                <span class="card-title">Pedidos no período</span
+                ><strong id="dashboardOrders">—</strong>
+                <p>Inclui reservas e cancelamentos</p>
+              </div>
+            </article>
+            <article class="summary-card">
+              <div class="card-information">
+                <span class="card-title">Estoque disponível</span
+                ><strong id="dashboardStock">—</strong>
+                <p>Quantidade física menos reservas</p>
+              </div>
+            </article>
+            <article class="summary-card">
+              <div class="card-information">
+                <span class="card-title">Vendas confirmadas</span
+                ><strong id="dashboardRevenue">—</strong>
+                <p>Faturamento no período</p>
+              </div>
+            </article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-card">
+              <div class="card-header">
+                <h2>Vendas por dia</h2>
+                <button type="button" id="showSalesData">Ver dados</button>
+              </div>
+              <div class="chart">
+                <div class="chart-area" id="dashboardChart">
+                  <p>Carregando...</p>
+                </div>
+              </div>
+              <div class="chart-total">
+                <span>Total do período</span>
+                <div class="total-value">
+                  <strong id="dashboardTotal">—</strong>
+                </div>
+              </div>
+            </article>
+            <article class="alerts-card">
+              <div class="alerts-header"><strong>Alertas atuais</strong></div>
+              <div id="dashboardAlerts"></div>
+            </article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-card">
+              <div class="card-header"><h2>Estoque por categoria</h2></div>
+              <div class="catalog-table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Categoria</th>
+                      <th>Disponível</th>
+                      <th>Valor físico</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardCategories"></tbody>
+                </table>
+              </div>
+            </article>
+            <article class="chart-card">
+              <div class="card-header"><h2>Movimentações recentes</h2></div>
+              <div class="catalog-table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Operação</th>
+                      <th>Quantidade</th>
+                      <th>Responsável</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardRecent"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/shared/layout.js"></script>
+    <script src="../js/pages/dashboard.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

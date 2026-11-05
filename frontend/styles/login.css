@@ -1,0 +1,551 @@
+@tailwind base;
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    @apply m-0;
+    @apply p-0;
+    @apply box-border;
+}
+
+html,
+body {
+    @apply w-full;
+    @apply min-h-full;
+}
+
+body {
+    @apply [font-family:Inter,_Arial,_Helvetica,_sans-serif];
+
+    @apply [background:#ffffff];
+    @apply text-[#111827];
+}
+
+/* =========================
+   PÁGINA
+========================= */
+
+.login-page {
+    @apply w-full;
+    @apply min-h-screen;
+
+    @apply grid;
+
+    @apply grid-cols-[42%_58%];
+
+    @apply overflow-hidden;
+}
+
+/* =========================
+   LADO ESQUERDO
+========================= */
+
+.login-left {
+    @apply relative;
+    @apply w-full;
+    @apply min-h-screen;
+
+    @apply flex;
+    @apply items-start;
+    @apply justify-center;
+
+    @apply [padding:0_70px];
+
+    @apply [background:#ffffff];
+
+    @apply z-[2];
+}
+
+/* IDIOMA */
+
+.language {
+    @apply absolute;
+
+    @apply top-[28px];
+    @apply left-[35px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[10px];
+
+    @apply text-[length:16px];
+    @apply font-medium;
+
+    @apply cursor-pointer;
+
+    @apply text-[#111827];
+}
+
+/* CONTAINER */
+
+.login-container {
+    @apply w-full;
+    @apply max-w-[445px];
+
+    @apply mt-[225px];
+}
+
+/* CABEÇALHO */
+
+.login-header {
+    @apply mb-[45px];
+}
+
+.login-header h1 {
+    @apply text-[length:40px];
+    @apply font-extrabold;
+    @apply tracking-[-1px];
+    @apply text-[#111827];
+}
+
+.login-header p {
+    @apply text-[#6b7280];
+    @apply text-[length:15px];
+
+    @apply hidden;
+}
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.form-group {
+    @apply mb-[28px];
+}
+
+.form-group label {
+    @apply block;
+
+    @apply mb-[10px];
+
+    @apply text-[length:17px];
+    @apply font-normal;
+
+    @apply text-[#374151];
+}
+
+/* INPUT */
+
+.input-box {
+    @apply w-full;
+    @apply h-[68px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply relative;
+
+    @apply [border:1px_solid_#d1d5db];
+
+    @apply rounded-[8px];
+
+    @apply [background:#ffffff];
+
+    @apply [transition:0.2s];
+}
+
+.input-box:focus-within {
+    @apply border-[#ff6200];
+
+    @apply [box-shadow:0_0_0_3px_rgba(255,_98,_0,_0.1)];
+}
+
+/* ICON */
+
+.input-icon {
+    @apply w-[26px];
+    @apply h-[26px];
+
+    @apply ml-[20px];
+
+    @apply text-[#6b7280];
+
+    @apply shrink-0;
+}
+
+/* INPUT REAL */
+
+.input-box input {
+    @apply w-full;
+    @apply h-full;
+
+    @apply [border:none];
+    @apply [outline:none];
+
+    @apply [background:transparent];
+
+    @apply [padding:0_55px_0_18px];
+
+    @apply text-[length:17px];
+
+    @apply text-[#111827];
+}
+
+.input-box input::placeholder {
+    @apply text-[#9ca3af];
+}
+
+/* BOTÃO OLHO */
+
+.password-toggle {
+    @apply absolute;
+
+    @apply right-[18px];
+
+    @apply top-[50%];
+
+    @apply [transform:translateY(-50%)];
+
+    @apply [border:none];
+    @apply [background:transparent];
+
+    @apply cursor-pointer;
+
+    @apply flex;
+
+    @apply items-center;
+    @apply justify-center;
+
+    @apply p-[5px];
+}
+
+.password-toggle svg {
+    @apply w-[25px];
+    @apply h-[25px];
+
+    @apply text-[#6b7280];
+}
+
+.password-toggle:hover svg {
+    @apply text-[#ff6200];
+}
+
+/* =========================
+   ESQUECI SENHA
+========================= */
+
+.forgot-password {
+    @apply flex;
+    @apply justify-end;
+
+    @apply mt-[-12px];
+    @apply mb-[70px];
+}
+
+.forgot-password a {
+    @apply text-[#ff5a00];
+
+    @apply text-[length:16px];
+
+    @apply no-underline;
+}
+
+.forgot-password a:hover {
+    @apply text-[#df4e00];
+
+    @apply underline;
+}
+
+/* =========================
+   BOTÃO LOGIN
+========================= */
+
+.login-button {
+    @apply w-full;
+    @apply h-[66px];
+
+    @apply [border:none];
+
+    @apply rounded-[40px];
+
+    @apply [background:linear-gradient(_90deg,_#ff5800,_#ff6800_)];
+
+    @apply text-[#ffffff];
+
+    @apply text-[length:21px];
+    @apply font-bold;
+
+    @apply cursor-pointer;
+
+    @apply [transition:0.2s];
+}
+
+.login-button:hover {
+    @apply [transform:translateY(-2px)];
+
+    @apply [box-shadow:0_12px_25px_rgba(255,_94,_0,_0.25)];
+}
+
+.login-button:active {
+    @apply [transform:translateY(0)];
+}
+
+/* =========================
+   ERROS
+========================= */
+
+.error-message {
+    @apply block;
+
+    @apply mt-[6px];
+
+    @apply min-h-[15px];
+
+    @apply text-[length:13px];
+
+    @apply text-[#e11d48];
+}
+
+.input-box.error {
+    @apply border-[#e11d48];
+}
+
+/* =========================
+   MENSAGEM LOGIN
+========================= */
+
+.login-message {
+    @apply text-center;
+
+    @apply mb-[15px];
+
+    @apply min-h-[18px];
+
+    @apply text-[length:14px];
+}
+
+/* =========================
+   LADO DIREITO
+========================= */
+
+.login-right {
+    @apply absolute;
+
+    @apply top-0;
+    @apply right-0;
+
+    @apply w-[60%];
+    @apply h-screen;
+
+    @apply [background:linear-gradient(_135deg,_#ff842c_0%,_#e05c0f_50%,_#b83d00_100%_)];
+
+    @apply [clip-path:polygon(_0_0,_100%_0,_100%_100%,_46%_100%_)];
+
+    @apply overflow-hidden;
+
+    @apply z-[2];
+}
+
+/* CORTE DIAGONAL */
+
+.login-page {
+    @apply w-full;
+    @apply min-h-screen;
+
+    @apply relative;
+
+    @apply overflow-hidden;
+
+    @apply [background:#ffffff];
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    @apply absolute;
+
+    @apply right-[16px];
+    @apply top-[-10px];
+
+    @apply z-[5];
+}
+
+.logo img {
+    @apply w-[300px];
+    @apply h-[155px];
+
+}
+
+/* =========================
+   ILUSTRAÇÃO
+========================= */
+
+.illustration-container {
+    @apply absolute;
+    @apply top-[130px];
+    @apply right-[100px];
+
+    @apply w-[61%];
+    @apply h-[96vh];
+
+    @apply z-[2];
+
+    @apply pointer-events-none;
+}
+
+.illustration-container img {
+    @apply w-[120%];
+    @apply h-[90%];
+
+    @apply object-contain;
+
+    @apply [object-position:center];
+}
+
+/* =========================
+   CÍRCULOS
+========================= */
+
+.background-circle {
+    @apply absolute;
+
+    @apply rounded-[50%];
+
+    @apply [border:1px_solid_rgba(255,_255,_255,_0.13)];
+}
+
+.circle-one {
+    @apply w-[800px];
+    @apply h-[800px];
+
+    @apply right-[40px];
+    @apply top-[80px];
+}
+
+.circle-two {
+    @apply w-[1050px];
+    @apply h-[1050px];
+
+    @apply right-[-100px];
+    @apply top-[30px];
+}
+
+/* =========================
+   PONTINHOS
+========================= */
+
+.dots {
+    @apply absolute;
+
+    @apply top-[180px];
+    @apply right-[35px];
+
+    @apply w-[50px];
+
+    @apply grid;
+
+    @apply grid-cols-[repeat(3,_4px)];
+
+    @apply gap-[13px];
+}
+
+.dots span {
+    @apply w-[4px];
+    @apply h-[4px];
+
+    @apply rounded-[50%];
+
+    @apply [background:rgba(255,_255,_255,_0.5)];
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .login-page {
+        @apply grid-cols-[50%_50%];
+    }
+
+    .login-left {
+        @apply [padding:70px_50px];
+    }
+
+    .login-right::before {
+        @apply hidden;
+    }
+
+    .logo img {
+        @apply w-[190px];
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .login-page {
+        @apply block;
+    }
+
+    .login-right {
+        @apply hidden;
+    }
+
+    .login-left {
+        @apply w-full;
+        @apply min-h-screen;
+
+        @apply [padding:110px_30px_50px];
+    }
+
+    .language {
+        @apply top-[30px];
+        @apply left-[30px];
+    }
+
+    .login-container {
+        @apply max-w-[450px];
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .login-header h1 {
+        @apply text-[length:34px];
+    }
+
+    .input-box {
+        @apply h-[62px];
+    }
+
+    .login-button {
+        @apply h-[62px];
+
+        @apply text-[length:19px];
+    }
+
+    .forgot-password {
+        @apply mb-[50px];
+    }
+
+}
+/* Keep the form readable on tablets and on short, landscape viewports. */
+.login-page { @apply relative min-h-svh; }
+.login-left { @apply min-h-svh items-center [padding:96px_clamp(24px,_4vw,_70px)_48px]; }
+.login-container { @apply min-w-0 mt-0; }
+.input-box input { @apply min-w-0; }
+.login-message { @apply [overflow-wrap:anywhere]; }
+.illustration-container { @apply right-0 w-[58%] h-[calc(100svh_-_130px)]; }
+.illustration-container img { @apply w-full h-full; }
+@media (max-width: 1279px) {
+    .login-page { @apply block; }
+    .login-right, .illustration-container, .dots { @apply hidden; }
+    .login-left { @apply w-full; }
+    .login-container { @apply max-w-[445px]; }
+}
+@media (max-width: 600px) {
+    .language { @apply top-6 left-6; }
+    .login-header { @apply mb-7; }
+    .login-header h1 { @apply text-[length:clamp(28px,_8vw,_34px)]; }
+    .input-box input { @apply text-base; }
+    .forgot-password { @apply mb-7; }
+    .login-button, .input-box { @apply h-14; }
+}
+@tailwind utilities;
