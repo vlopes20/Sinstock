@@ -2,11 +2,11 @@ import 'dotenv/config';
 import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: 'backend/prisma/schema.prisma',
 
   migrations: {
-    path: 'prisma/migrations',
-    seed: 'node scripts/bootstrap-admin.cjs',
+    path: 'backend/prisma/migrations',
+    seed: 'node backend/scripts/bootstrap-admin.cjs',
   },
 
   datasource: {

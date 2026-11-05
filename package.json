@@ -19,8 +19,8 @@
     "test": "jest",
     "test:auth": "node --test --test-concurrency=1 test/auth.integration.cjs",
     "test:stock": "node --test --test-concurrency=1 test/stock.integration.cjs",
-    "smtp:verify": "node scripts/verify-smtp.cjs",
-    "auth:bootstrap": "node scripts/bootstrap-admin.cjs",
+    "smtp:verify": "node backend/scripts/verify-smtp.cjs",
+    "auth:bootstrap": "node backend/scripts/bootstrap-admin.cjs",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -95,7 +95,7 @@
     "typescript-eslint": "^8.20.0"
   },
   "prisma": {
-    "seed": "node scripts/bootstrap-admin.cjs"
+    "seed": "node backend/scripts/bootstrap-admin.cjs"
   },
   "jest": {
     "moduleFileExtensions": [
