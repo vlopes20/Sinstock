@@ -49,7 +49,9 @@ As oito operações consumidas são:
 
 As outras 71 operações não possuem chamada explícita na interface atual. Isso é uma medida de cobertura de chamadas, **não uma porcentagem de conclusão do produto**: algumas rotas são de suporte ou não precisam de tela própria.
 
-## 3. Estrutura do projeto
+## 3. Estrutura do projeto no diagnóstico original
+
+A árvore abaixo registra a organização anterior. A estrutura vigente, os caminhos corrigidos e a estratégia única de geração do Prisma estão em [arquitetura](arquitetura.md).
 
 ```text
 backend-sinstock/
@@ -202,7 +204,7 @@ Não é correto afirmar que a tela de estoque tem movimentação local funcional
 
 ### P0 — Recebimento/estorno de NF não preserva integralmente filial e lote
 
-Fonte: [notas-fiscais-entrada.service.ts](../src/notas-fiscais-entrada/notas-fiscais-entrada.service.ts), métodos `criar`, `estornar`, `ajustarLote`.
+Fonte: [notas-fiscais-entrada.service.ts](../backend/src/notas-fiscais-entrada/notas-fiscais-entrada.service.ts), métodos `criar`, `estornar`, `ajustarLote`.
 
 - O recebimento procura o saldo por produto/filial sem filtrar lote e cria saldo sem `lote_id`, embora o item de entrada e seu log possam ter lote.
 - O estorno procura saldo apenas por produto, sem filial/lote.
@@ -214,7 +216,7 @@ São incompatibilidades verificadas no código/schema; não executei recebimento
 
 ### P0 — Operações de estoque precisam respeitar reserva e concorrência
 
-Fontes: [movimentacoes.service.ts](../src/movimentacoes/movimentacoes.service.ts) e [pedidos.service.ts](../src/pedidos/pedidos.service.ts).
+Fontes: [movimentacoes.service.ts](../backend/src/movimentacoes/movimentacoes.service.ts) e [pedidos.service.ts](../backend/src/pedidos/pedidos.service.ts).
 
 - Saída manual e transferência comparam o saldo total e não descontam `quantidade_reservada`; ajuste pode reduzir o total abaixo do reservado.
 - Diversos fluxos leem o saldo e depois gravam valores absolutos. A existência de `$transaction` não demonstra, por si, que duas requisições concorrentes não perdem atualizações.
@@ -224,7 +226,7 @@ Reserva ignorada é evidência de código. Corridas concorrentes são riscos ide
 
 ### P1 — Alertas filtrados por filial falham
 
-Fonte: [alertas.service.ts](../src/alertas/alertas.service.ts), `verificarLotesVencimento`.
+Fonte: [alertas.service.ts](../backend/src/alertas/alertas.service.ts), `verificarLotesVencimento`.
 
 `lotes` não possui `filial_id`; a filial deve ser relacionada via `saldos_estoque`. Reproduzido: `GET /alertas/vencimentos?filial_id=1` e `GET /alertas?filial_id=1` retornam 500. As consultas sem filtro retornam 200.
 
@@ -238,7 +240,7 @@ A alteração de senha funcional é a recuperação por link. O formulário de a
 
 ### P1 — Campos dos produtos não cabem no contrato atual
 
-Fonte: [CreateProdutoDto](../src/produtos/dto/create-produto.dto.ts), modelo `produtos` e handler de cadastro.
+Fonte: [CreateProdutoDto](../backend/src/produtos/dto/create-produto.dto.ts), modelo `produtos` e handler de cadastro.
 
 - Correspondem: `nome`; `categoria → categoria_id`; `codigoBarras → codigo_barras`; `custo → custo_medio`; `preco → preco_venda`; `estoqueMinimo → estoque_minimo`.
 - Faltam no contrato: descrição, SKU, unidade, status ativo/inativo, observação e vínculo direto com fornecedor.
@@ -250,13 +252,13 @@ Com `forbidNonWhitelisted=true`, enviar o objeto atual inteiro não funciona: ca
 
 ### P1 — Fornecedores possuem campos e filtros sem persistência
 
-Fonte: [CreateFornecedorDto](../src/fornecedores/dto/create-fornecedor.dto.ts) e [fornecedores.js](../frontend/js/pages/fornecedores.js).
+Fonte: [CreateFornecedorDto](../backend/src/fornecedores/dto/create-fornecedor.dto.ts) e [fornecedores.js](../frontend/js/pages/fornecedores.js).
 
 `razaoSocial` deve mapear para `nome_juridico`, `uf` para `estado`; a máscara de CNPJ precisa de normalização consistente. Nome fantasia, inscrição estadual, contato, categoria, prazo, condição de pagamento, status e observações não estão no contrato atual. A listagem não possui paginação/filtros de servidor.
 
 ### P1 — Pedidos e vendas não compartilham o mesmo contrato funcional
 
-Fontes: [pedidos.js](../frontend/js/pages/pedidos.js), [vendas.js](../frontend/js/pages/vendas.js), [CreateCheckoutDto](../src/pedidos/dto/create-checkout.dto.ts) e enum `pedidos_venda_status`.
+Fontes: [pedidos.js](../frontend/js/pages/pedidos.js), [vendas.js](../frontend/js/pages/vendas.js), [CreateCheckoutDto](../backend/src/pedidos/dto/create-checkout.dto.ts) e enum `pedidos_venda_status`.
 
 - UI: pendente, em separação, enviado, concluído e cancelado. Backend: `ORCAMENTO`, `CONCLUIDO`, `CANCELADO`.
 - `ORCAMENTO` representa reserva com expiração; não pode ser tratado automaticamente como pedido pendente sem decidir a regra.

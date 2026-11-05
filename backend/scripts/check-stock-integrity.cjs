@@ -1,4 +1,4 @@
-require('dotenv').config({ quiet: true });
+require('./project-paths.cjs');
 const mysql = require('mysql2/promise');
 async function main() {
   const connection = await mysql.createConnection(process.env.DATABASE_URL);

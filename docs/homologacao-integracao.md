@@ -29,8 +29,8 @@ Comandos reproduzíveis:
     npm.cmd run test:stock
     npm.cmd run check:frontend
     npm.cmd --prefix frontend run check:responsive
-    node scripts/check-stock-integrity.cjs
-    npm.cmd exec -- prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
+    npm.cmd run stock:check
+    npm.cmd exec -- prisma migrate diff --from-config-datasource --to-schema backend/prisma/schema.prisma --exit-code
 
 O teste de estoque cria/remove apenas um banco sinstock_test_* aleatório. Nenhuma movimentação de teste foi lançada no banco principal.
 

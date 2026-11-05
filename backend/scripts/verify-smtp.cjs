@@ -1,5 +1,8 @@
-require('dotenv').config({ quiet: true });
-require('ts-node/register/transpile-only');
+const { projectRoot } = require('./project-paths.cjs');
+require('ts-node').register({
+  transpileOnly: true,
+  project: require('node:path').join(projectRoot, 'tsconfig.json'),
+});
 const nodemailer = require('nodemailer');
 const { getSmtpConfig } = require('../src/mail/smtp.config');
 

@@ -4,7 +4,7 @@ Este manual considera a estrutura atual deste repositório, com o código do ser
 
 ## 1. Preparar o computador
 
-Tenha Node.js 24 (com npm) e MySQL Server instalados. O README registra validação anterior com MySQL 8.4; nesta máquina foi encontrado o serviço `MySQL80` em execução. A compatibilidade da instalação atual ainda precisa ser verificada ao aplicar as migrações.
+Tenha Node.js 24 (com npm) e MySQL Server instalados. O README registra validação anterior com MySQL 8.4; nesta máquina foi encontrado o serviço `MySQL80` em execução. A suíte de integração foi validada com um banco temporário na instalação atual.
 
 Abra o PowerShell e entre na pasta do projeto:
 
@@ -64,31 +64,18 @@ node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))"
 
 Com SMTP desativado, os fluxos que enviam e-mail ficam indisponíveis, incluindo recuperação de senha e segundo fator por e-mail. Para configurá-los, consulte [SMTP](smtp.md).
 
-## 4. Ajustar os caminhos do Prisma
+## 4. Conferir a estrutura
 
-Na versão inspecionada, `prisma.config.ts` ainda aponta para pastas na raiz que foram movidas para `backend/`. Antes de executar as migrações, abra esse arquivo e ajuste estas três propriedades:
-
-```typescript
-schema: 'backend/prisma/schema.prisma',
-```
-
-Dentro de `migrations`:
-
-```typescript
-path: 'backend/prisma/migrations',
-seed: 'node backend/scripts/bootstrap-admin.cjs',
-```
-
-Mantenha as outras linhas do arquivo. Esse ajuste é feito uma única vez e só é necessário enquanto os caminhos antigos estiverem presentes.
+As configurações já apontam para `backend/src/` e `backend/prisma/`. Não é necessário editar os caminhos manualmente. Execute os comandos npm na raiz, onde está o `package.json`. A estrutura está descrita em [arquitetura](arquitetura.md).
 
 ## 5. Criar a estrutura do banco e o primeiro administrador
 
 Na raiz do projeto, execute um comando por vez. Se algum falhar, resolva o erro antes de continuar:
 
 ```powershell
-npm.cmd exec -- prisma generate
-npm.cmd exec -- prisma migrate deploy
-node backend/scripts/bootstrap-admin.cjs
+npm.cmd run db:generate
+npm.cmd run db:migrate
+npm.cmd run auth:bootstrap
 npm.cmd run build:frontend
 ```
 
@@ -101,11 +88,10 @@ O bootstrap cria o primeiro administrador local e salva o e-mail e a senha em `.
 Permaneça na raiz do projeto e execute:
 
 ```powershell
-npm.cmd run build
 npm.cmd run start:prod
 ```
 
-Esses comandos compilam o servidor com os metadados de injeção exigidos pelo NestJS e iniciam o resultado. Não use `tsx` para iniciar esta aplicação: ele não emite esses metadados. Os caminhos do NestJS foram corrigidos para `backend/src/`. Para desenvolver com recompilação automática, você também pode usar `npm.cmd run start:dev`.
+O comando `start:prod` executa o build automaticamente antes de iniciar o servidor; você também pode usá-lo sozinho. A compilação gera os metadados de injeção exigidos pelo NestJS. Não use `tsx` para iniciar esta aplicação: ele não emite esses metadados. Os caminhos do NestJS foram corrigidos para `backend/src/`. Para desenvolver com recompilação automática, você também pode usar `npm.cmd run start:dev`.
 
 Mantenha o terminal aberto enquanto usa o sistema. Aguarde a mensagem de aplicação rodando na porta 3000.
 
@@ -140,7 +126,7 @@ npm.cmd run start:prod
 
 3. Acesse **http://localhost:3000/frontend/** e faça login.
 
-Para encerrar o servidor, pressione **Ctrl+C** no terminal. Para iniciá-lo novamente, repita o comando acima. Se alterar o código do servidor, execute `npm.cmd run build` antes de iniciar. O servidor não inicia automaticamente quando o Windows é ligado.
+Para encerrar o servidor, pressione **Ctrl+C** no terminal. Para iniciá-lo novamente, repita o comando acima; ele recompila o servidor automaticamente. O servidor não inicia automaticamente quando o Windows é ligado.
 
 ## 9. Problemas comuns
 

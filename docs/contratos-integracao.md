@@ -70,4 +70,4 @@ Referência funcional: [requisitos-documentacao.md](requisitos-documentacao.md).
 
 npm run test:stock cria um banco MySQL com nome aleatório sinstock_test_*, aplica todas as migrações e remove esse banco ao terminar. Usa HTTP, JWT, Prisma e MySQL reais; SMTP substituído. Inclui concorrência e CRUD no navegador. Não utiliza o banco principal para testar movimentações.
 
-node scripts/check-stock-integrity.cjs consulta saldos inválidos, duplicados e lotes incompatíveis no banco configurado, sem alterar dados.
+npm.cmd run stock:check consulta saldos inválidos, duplicados e lotes incompatíveis no banco configurado, sem alterar dados.

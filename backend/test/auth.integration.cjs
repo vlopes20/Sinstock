@@ -14,7 +14,7 @@ const { PerfisModule } = require('../src/perfis/perfis.module');
 const { PrismaService } = require('../src/prisma/prisma.service');
 const { MailService } = require('../src/mail/mail.service');
 const { mountFrontend } = require('../src/common/frontend.setup');
-const { chromium } = require('../frontend/node_modules/playwright');
+const { chromium } = require('./helpers/playwright.cjs');
 
 // Real Nest controllers, services, bcrypt, JWT, guards and HTTP transport.
 // Persistence and SMTP are isolated to avoid changing accounts or sending mail.

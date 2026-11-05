@@ -2,6 +2,12 @@
 
 Sistema de estoque com frontend HTML/JavaScript, NestJS, Prisma e MySQL. O frontend é servido pela API em http://localhost:3000/frontend/; a documentação HTTP fica em http://localhost:3000/api.
 
+## Organização
+
+`backend/src/` contém a API, `backend/prisma/` contém o schema e as migrações, `backend/test/` contém os testes de integração e `frontend/` contém a interface. Configurações e comandos npm ficam na raiz. A API compilada é gerada em `dist/main.js`.
+
+Consulte a [arquitetura de pastas e comandos](docs/arquitetura.md) e o [manual de acesso local](docs/manual-acesso-local.md).
+
 ## Execução local
 
 Ambiente validado: Node.js 24 e MySQL 8.4. Instale as dependências na raiz e no frontend:
@@ -11,12 +17,13 @@ Ambiente validado: Node.js 24 e MySQL 8.4. Instale as dependências na raiz e no
 
 Se ainda não existir .env, copie .env.example e configure DATABASE_URL, JWT_SECRET e SMTP. Preserve o .env já configurado nesta máquina.
 
-    npm.cmd exec -- prisma generate
-    npm.cmd exec -- prisma migrate deploy
+    npm.cmd run db:generate
+    npm.cmd run db:migrate
     npm.cmd run auth:bootstrap
     npm.cmd run build:frontend
-    npm.cmd run build
     npm.cmd run start:prod
+
+`start:prod` compila a API automaticamente antes de iniciar. Mantenha somente uma instância na porta 3000; para reiniciar, encerre a anterior com Ctrl+C.
 
 O bootstrap cria somente o primeiro administrador local. Não altera usuários nem senhas existentes. As credenciais iniciais ficam no arquivo local ignorado .tmp/admin-local.json.
 
@@ -44,6 +51,8 @@ O sistema exige comunicação com o servidor para gravar operações. O cadastro
 ## Verificação
 
     npm.cmd run build
+    npm.cmd run check:architecture
+    npm.cmd run typecheck
     npm.cmd test -- --runInBand
     npm.cmd run test:auth
     npm.cmd run test:stock

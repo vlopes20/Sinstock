@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { environmentFile } from './common/project-paths';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -32,6 +33,7 @@ import { ConfiguracoesModule } from './configuracoes/configuracoes.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: environmentFile,
     }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],

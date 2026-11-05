@@ -1,4 +1,4 @@
-require('dotenv').config({ quiet: true });
+const { projectRoot } = require('./project-paths.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { randomBytes } = require('node:crypto');
@@ -50,7 +50,7 @@ async function main() {
       ['Administrador local', email, await bcrypt.hash(senha, 10)],
     );
     // Never print credentials into CI or tool logs. This ignored file is for the local developer.
-    const destination = path.resolve('.tmp/admin-local.json');
+    const destination = path.join(projectRoot, '.tmp/admin-local.json');
     await fs.mkdir(path.dirname(destination), { recursive: true });
     await fs.writeFile(
       destination,

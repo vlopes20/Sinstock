@@ -10,21 +10,28 @@
     "build:frontend": "npm --prefix frontend run build",
     "watch:frontend": "npm --prefix frontend run watch",
     "check:frontend": "npm --prefix frontend run check",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"backend/src/**/*.ts\" \"backend/test/**/*.cjs\" \"backend/scripts/**/*.cjs\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/src/main.js",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "prestart:prod": "npm run build",
+    "start:prod": "node dist/main.js",
+    "lint": "eslint \"backend/src/**/*.ts\"",
     "test": "jest",
-    "test:auth": "node --test --test-concurrency=1 test/auth.integration.cjs",
-    "test:stock": "node --test --test-concurrency=1 test/stock.integration.cjs",
+    "test:auth": "node --test --test-concurrency=1 backend/test/auth.integration.cjs",
+    "test:stock": "node --test --test-concurrency=1 backend/test/stock.integration.cjs",
+    "stock:check": "node backend/scripts/check-stock-integrity.cjs",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "typecheck": "tsc --noEmit --incremental false",
+    "check:architecture": "node --test scripts/architecture.test.cjs",
     "smtp:verify": "node backend/scripts/verify-smtp.cjs",
     "auth:bootstrap": "node backend/scripts/bootstrap-admin.cjs",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand",
+    "test:e2e": "npm run test:auth && npm run test:stock"
   },
   "dependencies": {
     "@nestjs/axios": "^12.0.1",
@@ -94,16 +101,13 @@
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
-  "prisma": {
-    "seed": "node backend/scripts/bootstrap-admin.cjs"
-  },
   "jest": {
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "backend/src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -111,7 +115,7 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "../../coverage",
     "testEnvironment": "node"
   }
 }

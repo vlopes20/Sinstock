@@ -597,7 +597,7 @@ test(
   'catalog screens persist real CRUD, survive reload and keep failed forms open',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -807,7 +807,7 @@ test(
   'stock screen registers receipts, transfers, lot adjustments and estorno with real balances',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -968,7 +968,7 @@ test(
       ],
     });
     const before = Number((await stock(otherBranch.id)).quantidade);
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -1204,7 +1204,7 @@ test(
   'dashboard, notification drawer and global search render API results in the browser',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -1393,7 +1393,7 @@ test(
   'report screen applies filters and downloads all three formats',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -1877,7 +1877,7 @@ test(
       codigo_barras: code,
       preco_venda: 8,
     });
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -1939,7 +1939,7 @@ test(
   'settings screen persists company, users, permissions and personal preferences',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -2047,7 +2047,7 @@ test(
   'help screen creates a ticket with attachment, sends messages and maintains a FAQ entry',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -2131,7 +2131,7 @@ test(
   'nearby supplier screen supports GPS and a city fallback',
   { timeout: 120000 },
   async () => {
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
@@ -2194,7 +2194,7 @@ test(
         (row) => row.produto_id === item.id,
       ),
     );
-    const { chromium } = require('../frontend/node_modules/playwright');
+    const { chromium } = require('./helpers/playwright.cjs');
     const browser = await chromium.launch({
       headless: true,
       executablePath:
