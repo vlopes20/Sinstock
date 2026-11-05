@@ -1,28 +1,13 @@
-import { IsBoolean, IsEmail, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
-
-export class UpdateUserDto {
-  @IsString()
-  @IsOptional()
-  nome?: string;
-
-  @IsEmail({}, { message: 'E-mail inválido.' })
-  @IsOptional()
-  email?: string;
-
-  @IsString()
-  @MinLength(6, { message: 'A senha deve ter pelo menos 6 caracteres.' })
-  @IsOptional()
-  senha?: string;
-
-  @IsInt()
-  @IsOptional()
-  perfil_id?: number;
-
-  @IsString()
-  @IsOptional()
-  telefone?: string;
-
+import { PartialType } from '@nestjs/mapped-types';
+import { Transform } from 'class-transformer';
+import { IsBoolean, ValidateIf } from 'class-validator';
+import { parseBoolean } from '../../common/boolean.transform';
+import { CreateUserDto } from './create-user.dto';
+export class UpdateUserDto extends PartialType(CreateUserDto, {
+  skipNullProperties: false,
+}) {
+  @ValidateIf((_, value) => value !== undefined)
+  @Transform(({ obj, key }) => parseBoolean(obj[key]))
   @IsBoolean()
-  @IsOptional()
   ativo?: boolean;
 }

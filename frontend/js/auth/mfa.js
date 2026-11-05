@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const token = sessionStorage.getItem('sinstock.preAuth');
+  let token = sessionStorage.getItem('sinstock.preAuth');
   if (!token) {
     location.replace(SinstockConfig.url('index.html'));
     return;
@@ -8,6 +8,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('codeForm');
   const error = document.getElementById('codeError');
   const submit = form.querySelector('[type="submit"]');
+  const emailMethod = sessionStorage.getItem('sinstock.mfaMethod') === 'EMAIL';
+  const instruction = document.querySelector('.auth-content p, main p');
+  if (instruction)
+    instruction.textContent = emailMethod
+      ? 'Digite o código de seis dígitos enviado ao seu e-mail. Ele vale por cinco minutos.'
+      : 'Digite o código de seis dígitos do seu aplicativo autenticador.';
+  if (emailMethod) {
+    const resend = document.createElement('button');
+    resend.type = 'button';
+    resend.textContent = 'Reenviar código';
+    resend.className = 'mt-4 text-sm underline';
+    form.append(resend);
+    resend.onclick = async () => {
+      resend.disabled = true;
+      error.textContent = '';
+      try {
+        const result = await SinstockAPI.request('/auth/2fa/email/resend', {
+          method: 'POST',
+          auth: false,
+          token,
+        });
+        token = result.preAuthToken;
+        sessionStorage.setItem('sinstock.preAuth', token);
+        error.textContent =
+          'Novo código enviado. Confira sua caixa de entrada e o spam.';
+      } catch (err) {
+        error.textContent = err.message;
+      } finally {
+        resend.disabled = false;
+      }
+    };
+  }
   let pending = false;
   inputs.forEach((input, index) => {
     input.addEventListener('input', () => {

@@ -17,6 +17,11 @@ export class BuscaGlobalService {
           OR: [
             { nome: { contains: termo } },
             { codigo_barras: { contains: termo } },
+            { marca: { contains: termo } },
+            { sku: { contains: termo } },
+            { categorias: { nome: { contains: termo } } },
+            { fornecedores: { nome_juridico: { contains: termo } } },
+            { fornecedores: { nome_fantasia: { contains: termo } } },
           ],
         },
         take: limite,
@@ -27,6 +32,7 @@ export class BuscaGlobalService {
         where: {
           OR: [
             { nome_juridico: { contains: termo } },
+            { nome_fantasia: { contains: termo } },
             { cnpj: { contains: termo } },
           ],
         },
@@ -41,7 +47,7 @@ export class BuscaGlobalService {
         },
         include: {
           produtos: { select: { nome: true } },
-          saldos_estoque: true,
+          saldos_estoque: { where: { filial_id } },
         },
         take: limite,
       }),
@@ -50,6 +56,7 @@ export class BuscaGlobalService {
       this.prisma.notas_fiscais_entrada.findMany({
         where: {
           numero_nf: { contains: termo },
+          filial_id,
         },
         include: {
           fornecedores: { select: { nome_juridico: true } },
@@ -101,6 +108,7 @@ export class BuscaGlobalService {
         }),
         notas_fiscais: notasFiscais.map((nf) => ({
           id: nf.id,
+          filial_id: nf.filial_id,
           numero_nf: nf.numero_nf,
           fornecedor_nome: nf.fornecedores?.nome_juridico,
           total: nf.total,

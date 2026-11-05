@@ -28,6 +28,15 @@ model fornecedores {
   latitude              Decimal?                @db.Decimal(10, 8)
   longitude             Decimal?                @db.Decimal(11, 8)
   criado_em             DateTime?               @default(now()) @db.Timestamp(0)
+  nome_fantasia         String?                 @db.VarChar(150)
+  inscricao_estadual     String?                 @db.VarChar(30)
+  contato               String?                 @db.VarChar(100)
+  categoria             String?                 @db.VarChar(100)
+  prazo_entrega         Int?                    @default(0)
+  condicao_pagamento    String?                 @db.VarChar(100)
+  ativo                 Boolean                 @default(true)
+  observacoes           String?                 @db.Text
+  produtos              produtos[]
   notas_fiscais_entrada notas_fiscais_entrada[]
 }
 
@@ -42,6 +51,13 @@ model produtos {
   custo_medio        Decimal?             @default(0.00) @db.Decimal(10, 2)
   criado_em          DateTime?            @default(now()) @db.Timestamp(0)
   atualizado_em      DateTime?            @default(now()) @db.Timestamp(0)
+  descricao          String?              @db.Text
+  sku                String?              @unique @db.VarChar(100)
+  unidade            String               @default("UN") @db.VarChar(20)
+  ativo              Boolean              @default(true)
+  observacao         String?              @db.Text
+  fornecedor_id      Int?
+  fornecedores       fornecedores?        @relation(fields: [fornecedor_id], references: [id], onDelete: Restrict)
   itens_entrada      itens_entrada[]
   itens_venda        itens_venda[]
   logs_movimentacoes logs_movimentacoes[]
@@ -63,6 +79,10 @@ model chamados_suporte {
   status            chamados_suporte_status?    @default(ABERTO)
   data_abertura     DateTime?                   @default(now()) @db.Timestamp(0)
   data_fechamento   DateTime?                   @db.Timestamp(0)
+  categoria         String?                     @db.VarChar(100)
+  pagina            String?                     @db.VarChar(100)
+  mensagens         mensagens_chamado[]
+  anexos            AnexoChamado[]
   usuarios          usuarios?                   @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_chamados_usuario")
 
   @@index([usuario_id], map: "fk_chamados_usuario")
@@ -94,6 +114,7 @@ model filiais {
   logs_movimentacoes logs_movimentacoes[]
   pedidos_venda      pedidos_venda[]
   saldos_estoque     saldos_estoque[]
+  notas_fiscais     notas_fiscais_entrada[]
 }
 
 model itens_entrada {
@@ -140,6 +161,8 @@ model logs_movimentacoes {
   saldo_atual       Decimal                              @db.Decimal(10, 3)
   origem_id         Int?
   data_hora         DateTime?                            @default(now()) @db.Timestamp(0)
+  observacao        String?                              @db.Text
+  referencia        String?                              @db.VarChar(100)
   filiais           filiais                              @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_logs_filial")
   lotes             lotes?                               @relation(fields: [lote_id], references: [id], onUpdate: NoAction, map: "fk_logs_lote")
   produtos          produtos                             @relation(fields: [produto_id], references: [id], onUpdate: NoAction, map: "fk_logs_produto")
@@ -173,10 +196,13 @@ model notas_fiscais_entrada {
   fornecedor_id    Int
   usuario_id       Int
   numero_nf        String                        @db.VarChar(50)
+  observacao       String?                       @db.Text
   data_emissao     DateTime                      @db.Date
   data_recebimento DateTime?                     @default(now()) @db.Timestamp(0)
   total            Decimal                       @db.Decimal(10, 2)
   status           notas_fiscais_entrada_status? @default(RECEBIDA)
+  filial_id        Int?
+  filiais          filiais?                     @relation(fields: [filial_id], references: [id], onDelete: Restrict)
   itens_entrada    itens_entrada[]
   fornecedores     fornecedores                  @relation(fields: [fornecedor_id], references: [id], onUpdate: NoAction, map: "fk_nf_fornecedor")
   usuarios         usuarios                      @relation(fields: [usuario_id], references: [id], onUpdate: NoAction, map: "fk_nf_usuario")
@@ -194,6 +220,10 @@ model pedidos_venda {
   reservado_ate DateTime?             @db.Timestamp(0)
   total         Decimal               @db.Decimal(10, 2)
   status        pedidos_venda_status? @default(CONCLUIDO)
+  pagamento     String?               @db.VarChar(50)
+  desconto      Decimal               @default(0) @db.Decimal(10, 2)
+  observacao    String?               @db.Text
+  atendimento   String                @default("PENDENTE") @db.VarChar(30)
   itens_venda   itens_venda[]
   clientes      clientes?             @relation(fields: [cliente_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_cliente")
   filiais       filiais               @relation(fields: [filial_id], references: [id], onUpdate: NoAction, map: "fk_pedidos_filial")
@@ -242,6 +272,13 @@ model usuarios {
   isTwoFactorEnable     Boolean                 @default(false) @map("is_two_factor_enabled")
   ativo                 Boolean?                @default(true)
   auth_version          Int                     @default(0)
+  two_factor_method     String                  @default("TOTP") @db.VarChar(10)
+  ultimo_acesso         DateTime?               @db.Timestamp(0)
+  preferencias          Json?
+  desafiosEmail         EmailLoginChallenge[]
+  leiturasNotificacao   LeituraNotificacao[]
+  anexosSuporte         AnexoChamado[]
+  mensagensSuporte      mensagens_chamado[]
   passwordResets        PasswordResetToken[]
   criado_em             DateTime?               @default(now()) @db.Timestamp(0)
   atualizado_em         DateTime?               @default(now()) @db.Timestamp(0)
@@ -291,6 +328,63 @@ model notificacoes {
   tipo      String
   lida      Boolean  @default(false)
   criado_em DateTime @default(now())
+  chave     String? @unique @db.VarChar(100)
+  leituras  LeituraNotificacao[]
+}
+
+model LeituraNotificacao {
+  notificacao_id Int
+  usuario_id Int
+  lida_em DateTime @default(now())
+  notificacao notificacoes @relation(fields: [notificacao_id], references: [id], onDelete: Cascade)
+  usuario usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  @@id([notificacao_id, usuario_id])
+  @@index([usuario_id])
+  @@map("leituras_notificacoes")
+}
+
+model EmailLoginChallenge {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  userId    Int
+  codeHash  String   @db.VarChar(64)
+  expiresAt DateTime @db.DateTime(3)
+  usedAt    DateTime? @db.DateTime(3)
+  attempts  Int      @default(0)
+  user      usuarios @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+  @@map("email_login_challenges")
+}
+
+model configuracoes {
+  chave       String   @id @db.VarChar(50)
+  valor       Json
+  atualizado  DateTime @updatedAt
+}
+
+model mensagens_chamado {
+  id         Int      @id @default(autoincrement())
+  chamado_id Int
+  usuario_id Int
+  mensagem   String   @db.Text
+  criado_em  DateTime @default(now())
+  chamado    chamados_suporte @relation(fields: [chamado_id], references: [id], onDelete: Restrict)
+  autor      usuarios @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  @@index([chamado_id, criado_em])
+}
+
+model AnexoChamado {
+  id String @id @default(uuid()) @db.VarChar(36)
+  chamado_id Int
+  usuario_id Int
+  nome String @db.VarChar(255)
+  mime String @db.VarChar(100)
+  tamanho Int
+  conteudo Bytes @db.LongBlob
+  criado_em DateTime @default(now())
+  chamado chamados_suporte @relation(fields: [chamado_id], references: [id], onDelete: Restrict)
+  usuario usuarios @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
+  @@index([chamado_id])
+  @@map("anexos_chamado")
 }
 
 enum chamados_suporte_status {

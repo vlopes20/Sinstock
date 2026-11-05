@@ -1,22 +1,5 @@
-import { IsArray, IsInt, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { ItemCheckoutDto } from './create-checkout.dto';
-
-export class CreateReservaDto {
-  @IsInt()
-  @IsNotEmpty()
-  filial_id: number;
-
-  @IsInt()
-  @IsOptional()
-  cliente_id?: number;
-
-  @IsInt()
-  @IsOptional()
-  minutos_expiracao?: number = 15;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ItemCheckoutDto)
-  itens: ItemCheckoutDto[];
+import { IsInt, IsOptional, Max, Min } from 'class-validator';
+import { CreateCheckoutDto } from './create-checkout.dto';
+export class CreateReservaDto extends CreateCheckoutDto {
+  @IsOptional() @IsInt() @Min(1) @Max(1440) minutos_expiracao = 15;
 }

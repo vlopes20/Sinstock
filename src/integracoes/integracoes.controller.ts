@@ -4,11 +4,16 @@ import { IntegracoesService } from './integracoes.service';
 import { ConsultaCepDto } from './dto/consulta-cep.dto';
 import { ConsultaCoordenadasDto } from './dto/consulta-coordenadas.dto';
 import { ConsultaDistanciaCepsDto } from './dto/consulta-distancia-ceps.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
 
 @ApiTags('Integrações Externas (CEP e Mapas)')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@PermissionResource('fornecedores')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('integracoes')
 export class IntegracoesController {
   constructor(private readonly integracoesService: IntegracoesService) {}
@@ -20,7 +25,9 @@ export class IntegracoesController {
   }
 
   @Get('coordenadas')
-  @ApiOperation({ summary: 'Obtém latitude e longitude de um endereço (Nominatim/OSM)' })
+  @ApiOperation({
+    summary: 'Obtém latitude e longitude de um endereço (Nominatim/OSM)',
+  })
   obterCoordenadas(@Query() query: ConsultaCoordenadasDto) {
     return this.integracoesService.obterCoordenadas(
       query.logradouro,
@@ -30,7 +37,9 @@ export class IntegracoesController {
   }
 
   @Get('distancia-ceps')
-  @ApiOperation({ summary: 'Calcula a distância e raio limite em KM entre dois CEPs' })
+  @ApiOperation({
+    summary: 'Calcula a distância e raio limite em KM entre dois CEPs',
+  })
   calcularDistanciaCeps(@Query() query: ConsultaDistanciaCepsDto) {
     return this.integracoesService.calcularDistanciaEntreCeps(
       query.cep_origem,

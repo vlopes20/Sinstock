@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,6 +21,16 @@ export interface EnderecoResponse {
 @Injectable()
 export class IntegracoesService {
   constructor(private readonly httpService: HttpService) {}
+  private geocodeQueue: Promise<unknown> = Promise.resolve();
+  private lastGeocode = 0;
+  private readonly geocodeCache = new Map<
+    string,
+    { expires: number; value: { lat: string | null; lon: string | null } }
+  >();
+  private readonly pendingGeocodes = new Map<
+    string,
+    Promise<{ lat: string | null; lon: string | null }>
+  >();
 
   async buscarPorCep(cepInput: string): Promise<EnderecoResponse> {
     const cepLimpo = cepInput.replace(/\D/g, '');
@@ -34,7 +48,8 @@ export class IntegracoesService {
         throw new NotFoundException(`CEP '${cepInput}' não encontrado.`);
       }
 
-      const { cep, logradouro, complemento, bairro, localidade, uf, ibge } = response.data;
+      const { cep, logradouro, complemento, bairro, localidade, uf, ibge } =
+        response.data;
 
       return {
         cep,
@@ -46,24 +61,72 @@ export class IntegracoesService {
         ibge,
       };
     } catch (error) {
-      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
         throw error;
       }
-      throw new BadRequestException('Erro ao consultar o serviço externo de CEP.');
+      throw new BadRequestException(
+        'Erro ao consultar o serviço externo de CEP.',
+      );
     }
   }
 
   async obterCoordenadas(logradouro: string, cidade: string, uf: string) {
+    const key = [logradouro, cidade, uf]
+      .join('|')
+      .trim()
+      .toLocaleLowerCase('pt-BR');
+    const cached = this.geocodeCache.get(key);
+    if (cached && cached.expires > Date.now()) return cached.value;
+    if (this.pendingGeocodes.has(key)) return this.pendingGeocodes.get(key)!;
+    if (this.pendingGeocodes.size >= 5)
+      throw new BadRequestException(
+        'A busca de endereços está ocupada. Tente novamente em alguns segundos.',
+      );
+    const task = this.geocodeQueue.then(async () => {
+      const wait = Math.max(0, 1100 - (Date.now() - this.lastGeocode));
+      if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
+      this.lastGeocode = Date.now();
+      return this.fetchCoordinates(logradouro, cidade, uf);
+    });
+    this.geocodeQueue = task.catch(() => undefined);
+    this.pendingGeocodes.set(key, task);
     try {
-      const enderecoFormatado = logradouro.trim() 
+      const value = await task;
+      if (value.lat && value.lon) {
+        if (this.geocodeCache.size >= 1000)
+          this.geocodeCache.delete(this.geocodeCache.keys().next().value!);
+        this.geocodeCache.set(key, {
+          expires: Date.now() + 7 * 86400000,
+          value,
+        });
+      }
+      return value;
+    } finally {
+      this.pendingGeocodes.delete(key);
+    }
+  }
+
+  private async fetchCoordinates(
+    logradouro: string,
+    cidade: string,
+    uf: string,
+  ) {
+    try {
+      const enderecoFormatado = logradouro.trim()
         ? `${logradouro}, ${cidade}, ${uf}, Brasil`
         : `${cidade}, ${uf}, Brasil`;
 
       const query = encodeURIComponent(enderecoFormatado);
       const response = await firstValueFrom(
-        this.httpService.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`, {
-          headers: { 'User-Agent': 'Sinstock-ERP/1.0' },
-        }),
+        this.httpService.get(
+          `${(process.env.NOMINATIM_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '')}/search?format=json&limit=1&q=${query}`,
+          {
+            headers: { 'User-Agent': 'Sinstock-ERP/1.0' },
+          },
+        ),
       );
 
       if (!response.data || response.data.length === 0) {
@@ -79,7 +142,12 @@ export class IntegracoesService {
     }
   }
 
-  calcularDistanciaEmKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  calcularDistanciaEmKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
     const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -106,7 +174,11 @@ export class IntegracoesService {
     );
 
     if (!coordsOrigem.lat || !coordsOrigem.lon) {
-      coordsOrigem = await this.obterCoordenadas('', enderecoOrigem.localidade, enderecoOrigem.uf);
+      coordsOrigem = await this.obterCoordenadas(
+        '',
+        enderecoOrigem.localidade,
+        enderecoOrigem.uf,
+      );
     }
 
     const enderecoDestino = await this.buscarPorCep(cepDestino);
@@ -117,11 +189,17 @@ export class IntegracoesService {
     );
 
     if (!coordsDestino.lat || !coordsDestino.lon) {
-      coordsDestino = await this.obterCoordenadas('', enderecoDestino.localidade, enderecoDestino.uf);
+      coordsDestino = await this.obterCoordenadas(
+        '',
+        enderecoDestino.localidade,
+        enderecoDestino.uf,
+      );
     }
 
     if (!coordsOrigem.lat || !coordsDestino.lat) {
-      throw new BadRequestException('Não foi possível obter a geolocalização de um dos CEPs informados.');
+      throw new BadRequestException(
+        'Não foi possível obter a geolocalização de um dos CEPs informados.',
+      );
     }
 
     const distanciaKm = this.calcularDistanciaEmKm(
@@ -131,7 +209,8 @@ export class IntegracoesService {
       Number(coordsDestino.lon),
     );
 
-    const dentroDoRaio = raioMaximoKm !== undefined ? distanciaKm <= raioMaximoKm : undefined;
+    const dentroDoRaio =
+      raioMaximoKm !== undefined ? distanciaKm <= raioMaximoKm : undefined;
 
     return {
       origem: {

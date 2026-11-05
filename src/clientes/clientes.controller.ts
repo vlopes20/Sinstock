@@ -1,6 +1,11 @@
 import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
+import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -18,10 +23,16 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @ApiTags('Clientes')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@PermissionResource('clientes')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('clientes')
 export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.clientesService.remove(id);
+  }
 
   @Post()
   @ApiOperation({ summary: 'Cadastra um novo cliente' })
@@ -30,23 +41,24 @@ export class ClientesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Lista os clientes com paginação, busca e ordenação' })
+  @ApiOperation({
+    summary: 'Lista os clientes com paginação, busca e ordenação',
+  })
   findAll(@Query() filterDto: ClienteFilterDto) {
     return this.clientesService.findAll(filterDto);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Busca os detalhes de um cliente por ID (inclui últimos pedidos)' })
+  @ApiOperation({
+    summary: 'Busca os detalhes de um cliente por ID (inclui últimos pedidos)',
+  })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.clientesService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza os dados de um cliente' })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateClienteDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateClienteDto) {
     return this.clientesService.update(id, dto);
   }
 }

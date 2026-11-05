@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { TwoFactorService } from './two-factor.service';
 import { PreAuthStrategy } from './strategies/pre-auth.strategy';
+import { EmailChallengeService } from './email-challenge.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PreAuthStrategy } from './strategies/pre-auth.strategy';
     JwtStrategy,
     PreAuthStrategy,
     PasswordRecoveryService,
+    EmailChallengeService,
   ],
   exports: [AuthService, TwoFactorService],
 })

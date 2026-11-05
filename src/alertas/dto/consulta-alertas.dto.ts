@@ -11,7 +11,12 @@ export class ConsultaAlertasDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt({ message: 'Os dias de vencimento devem ser um número inteiro.' })
-  @Min(1, { message: 'O parâmetro de dias para vencimento deve ser de pelo menos 1 dia.' })
-  @Max(365, { message: 'O parâmetro de dias para vencimento não pode exceder 365 dias.' })
-  dias_vencimento?: number = 30; // Valor padrão de 30 dias se omitido
+  @Min(1, {
+    message:
+      'O parâmetro de dias para vencimento deve ser de pelo menos 1 dia.',
+  })
+  @Max(365, {
+    message: 'O parâmetro de dias para vencimento não pode exceder 365 dias.',
+  })
+  dias_vencimento?: number;
 }

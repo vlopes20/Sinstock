@@ -1,278 +1,173 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
+import { StockService } from '../common/services/stock.service';
+import { NotasFiscaisEntradaService } from '../notas-fiscais-entrada/notas-fiscais-entrada.service';
 import {
   CreateMovimentacaoDto,
   TipoMovimentacao,
 } from './dto/create-movimentacao.dto';
 import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
+import { HistoricoMovimentacoesDto } from './dto/historico-movimentacoes.dto';
 
 @Injectable()
 export class MovimentacoesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly stock: StockService,
+    private readonly receipts: NotasFiscaisEntradaService,
+  ) {}
 
   async registrarMovimentacao(dto: CreateMovimentacaoDto, usuarioId: number) {
-    return await this.prisma.$transaction(async (tx) => {
-      // 1. Localiza o registro de saldo atual na filial e lote informados
-      const saldoRegistro = await tx.saldos_estoque.findFirst({
-        where: {
-          produto_id: dto.produto_id,
+    if (dto.tipo !== TipoMovimentacao.AJUSTE && dto.quantidade <= 0)
+      throw new BadRequestException('Informe uma quantidade positiva.');
+    if (dto.tipo === TipoMovimentacao.ENTRADA) {
+      if (
+        !dto.fornecedor_id ||
+        !dto.referencia ||
+        dto.custo_unitario === undefined
+      )
+        throw new BadRequestException(
+          'A entrada exige fornecedor, número da nota/pedido de compra e custo unitário.',
+        );
+      const nota = await this.receipts.criar(
+        {
           filial_id: dto.filial_id,
-          lote_id: dto.lote_id ?? null,
-        },
-      });
-
-      const saldoAnterior = saldoRegistro
-        ? Number(saldoRegistro.quantidade)
-        : 0;
-      let saldoAtualNovo = 0;
-
-      // ENTRADA
-      if (dto.tipo === TipoMovimentacao.ENTRADA) {
-        saldoAtualNovo = saldoAnterior + dto.quantidade;
-
-        if (saldoRegistro) {
-          await tx.saldos_estoque.update({
-            where: { id: saldoRegistro.id },
-            data: {
-              quantidade: saldoAtualNovo,
-              atualizado_em: new Date(),
-            },
-          });
-        } else {
-          await tx.saldos_estoque.create({
-            data: {
+          fornecedor_id: dto.fornecedor_id,
+          numero_nf: dto.referencia,
+          data_emissao: new Date().toISOString(),
+          status: 'RECEBIDA',
+          observacao: dto.observacao,
+          itens: [
+            {
               produto_id: dto.produto_id,
-              filial_id: dto.filial_id,
-              lote_id: dto.lote_id ?? null,
-              quantidade: saldoAtualNovo,
+              lote_id: dto.lote_id,
+              lote: dto.lote,
+              quantidade: dto.quantidade,
+              custo_unitario: dto.custo_unitario,
             },
-          });
-        }
-      }
+          ],
+        },
+        usuarioId,
+      );
+      return {
+        message: 'Entrada registrada com documento de origem.',
+        nota_fiscal: nota,
+      };
+    }
+    if (!dto.observacao?.trim())
+      throw new BadRequestException('Informe o motivo da saída ou ajuste.');
+    return this.stock.write([dto.produto_id], async (tx) => {
+      const key = {
+        produto_id: dto.produto_id,
+        filial_id: dto.filial_id,
+        lote_id: dto.lote_id ?? null,
+      };
+      const existing = await this.stock.balance(tx, key);
+      const delta =
+        dto.tipo === TipoMovimentacao.AJUSTE
+          ? new Prisma.Decimal(dto.quantidade).minus(existing?.quantidade ?? 0)
+          : new Prisma.Decimal(dto.quantidade).negated();
+      const change = await this.stock.change(tx, key, delta);
+      const log = await this.stock.log(tx, {
+        ...key,
+        usuario_id: usuarioId,
+        tipo_movimentacao: dto.tipo,
+        quantidade: delta.abs(),
+        saldo_anterior: change.before,
+        saldo_atual: change.after,
+        observacao: dto.observacao,
+        referencia: dto.referencia,
+      });
+      return { message: 'Movimentação registrada.', log };
+    });
+  }
 
-      // SAÍDA
-      if (dto.tipo === TipoMovimentacao.SAIDA) {
-        if (!saldoRegistro || saldoAnterior < dto.quantidade) {
-          throw new BadRequestException(
-            `Estoque insuficiente. Saldo atual: ${saldoAnterior}, Tentativa de saída: ${dto.quantidade}.`,
-          );
-        }
-
-        saldoAtualNovo = saldoAnterior - dto.quantidade;
-
-        await tx.saldos_estoque.update({
-          where: { id: saldoRegistro.id },
-          data: {
-            quantidade: saldoAtualNovo,
-            atualizado_em: new Date(),
-          },
+  async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
+    if (dto.filial_origem_id === dto.filial_destino_id)
+      throw new BadRequestException('Escolha filiais diferentes.');
+    return this.stock.write([dto.produto_id], async (tx) => {
+      const reference = 'TRANSFERENCIA:' + randomUUID();
+      const origin = {
+        produto_id: dto.produto_id,
+        filial_id: dto.filial_origem_id,
+        lote_id: dto.lote_id ?? null,
+      };
+      const destination = { ...origin, filial_id: dto.filial_destino_id };
+      const from = await this.stock.change(
+        tx,
+        origin,
+        new Prisma.Decimal(dto.quantidade).negated(),
+      );
+      const to = await this.stock.change(tx, destination, dto.quantidade);
+      for (const [key, change] of [
+        [origin, from],
+        [destination, to],
+      ] as const) {
+        await this.stock.log(tx, {
+          ...key,
+          usuario_id: usuarioId,
+          tipo_movimentacao: 'TRANSFERENCIA',
+          quantidade: dto.quantidade,
+          saldo_anterior: change.before,
+          saldo_atual: change.after,
+          referencia: reference,
+          observacao: dto.observacao,
         });
       }
-
-      // AJUSTE (Inventário/Ajuste manual)
-      if (dto.tipo === TipoMovimentacao.AJUSTE) {
-        saldoAtualNovo = dto.quantidade;
-
-        if (saldoRegistro) {
-          await tx.saldos_estoque.update({
-            where: { id: saldoRegistro.id },
-            data: {
-              quantidade: saldoAtualNovo,
-              atualizado_em: new Date(),
-            },
-          });
-        } else {
-          await tx.saldos_estoque.create({
-            data: {
-              produto_id: dto.produto_id,
-              filial_id: dto.filial_id,
-              lote_id: dto.lote_id ?? null,
-              quantidade: saldoAtualNovo,
-            },
-          });
-        }
-      }
-
-      // 2. Grava o log de movimentação
-      const log = await tx.logs_movimentacoes.create({
-        data: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_id,
-          lote_id: dto.lote_id ?? null,
-          usuario_id: usuarioId,
-          tipo_movimentacao: dto.tipo as any,
-          quantidade: dto.quantidade,
-          saldo_anterior: saldoAnterior,
-          saldo_atual: saldoAtualNovo,
-        },
-      });
-
       return {
-        message: `Movimentação de ${dto.tipo} registrada com sucesso!`,
-        log: {
-          ...log,
-          id: log.id.toString(),
-          quantidade: Number(log.quantidade),
-          saldo_anterior: Number(log.saldo_anterior),
-          saldo_atual: Number(log.saldo_atual),
-        },
+        message: 'Transferência concluída.',
+        referencia: reference,
+        origem: from.row,
+        destino: to.row,
       };
     });
   }
 
-    async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
-  if (dto.filial_origem_id === dto.filial_destino_id) {
-    throw new BadRequestException(
-      'A filial de origem e de destino não podem ser iguais.',
-    );
-  }
-
-  return await this.prisma.$transaction(async (tx) => {
-  const produto = await tx.produtos.findUnique({
-    where: { id: dto.produto_id },
-  });
-
-  if (!produto) {
-    throw new NotFoundException(
-      `Produto com ID ${dto.produto_id} não encontrado.`,
-    );
-  }
-
-  
-  const saldoOrigem = await tx.saldos_estoque.findFirst({
-    where: {
+  async listarHistorico(dto: HistoricoMovimentacoesDto) {
+    if (
+      dto.data_inicio &&
+      dto.data_fim &&
+      new Date(dto.data_inicio) > new Date(dto.data_fim)
+    )
+      throw new BadRequestException('Período inválido.');
+    const where: Prisma.logs_movimentacoesWhereInput = {
+      filial_id: dto.filial_id,
       produto_id: dto.produto_id,
-      filial_id: dto.filial_origem_id,
-      lote_id: dto.lote_id ?? null,
-    },
-  });
-
-  const qtdOrigemAtual = saldoOrigem ? Number(saldoOrigem.quantidade) : 0;
-
-  if (!saldoOrigem || qtdOrigemAtual < dto.quantidade) {
-    throw new BadRequestException(
-      `Estoque insuficiente na filial de origem (ID: ${dto.filial_origem_id}). Saldo atual: ${qtdOrigemAtual}, Tentativa: ${dto.quantidade}.`,
-    );
-  }
-
-      const novoSaldoOrigem = qtdOrigemAtual - dto.quantidade;
-      await tx.saldos_estoque.update({
-        where: { id: saldoOrigem.id },
-        data: {
-          quantidade: novoSaldoOrigem,
-          atualizado_em: new Date(),
+      tipo_movimentacao: dto.tipo,
+      ...(dto.data_inicio || dto.data_fim
+        ? {
+            data_hora: {
+              gte: dto.data_inicio ? new Date(dto.data_inicio) : undefined,
+              lte: dto.data_fim ? new Date(dto.data_fim) : undefined,
+            },
+          }
+        : {}),
+    };
+    const [total, rows] = await Promise.all([
+      this.prisma.logs_movimentacoes.count({ where }),
+      this.prisma.logs_movimentacoes.findMany({
+        where,
+        orderBy: { id: 'desc' },
+        take: dto.limit,
+        skip: (dto.pagina - 1) * dto.limit,
+        include: {
+          produtos: { select: { id: true, nome: true, codigo_barras: true } },
+          filiais: true,
+          usuarios: { select: { id: true, nome: true } },
+          lotes: { select: { id: true, numero_lote: true } },
         },
-      });
-
-      // DESTINO: Verifica e incrementa o saldo
-      const saldoDestino = await tx.saldos_estoque.findFirst({
-        where: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_destino_id,
-          lote_id: dto.lote_id ?? null,
-        },
-      });
-
-      const qtdDestinoAtual = saldoDestino
-        ? Number(saldoDestino.quantidade)
-        : 0;
-      const novoSaldoDestino = qtdDestinoAtual + dto.quantidade;
-
-      if (saldoDestino) {
-        await tx.saldos_estoque.update({
-          where: { id: saldoDestino.id },
-          data: {
-            quantidade: novoSaldoDestino,
-            atualizado_em: new Date(),
-          },
-        });
-      } else {
-        await tx.saldos_estoque.create({
-          data: {
-            produto_id: dto.produto_id,
-            filial_id: dto.filial_destino_id,
-            lote_id: dto.lote_id ?? null,
-            quantidade: novoSaldoDestino,
-          },
-        });
-      }
-
-      // AUDITORIA: Registra logs de saída e entrada
-      const logSaida = await tx.logs_movimentacoes.create({
-        data: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_origem_id,
-          lote_id: dto.lote_id ?? null,
-          usuario_id: usuarioId,
-          tipo_movimentacao: TipoMovimentacao.SAIDA as any,
-          quantidade: dto.quantidade,
-          saldo_anterior: qtdOrigemAtual,
-          saldo_atual: novoSaldoOrigem,
-          origem_id: dto.filial_destino_id,
-        },
-      });
-
-      const logEntrada = await tx.logs_movimentacoes.create({
-        data: {
-          produto_id: dto.produto_id,
-          filial_id: dto.filial_destino_id,
-          lote_id: dto.lote_id ?? null,
-          usuario_id: usuarioId,
-          tipo_movimentacao: TipoMovimentacao.ENTRADA as any,
-          quantidade: dto.quantidade,
-          saldo_anterior: qtdDestinoAtual,
-          saldo_atual: novoSaldoDestino,
-          origem_id: dto.filial_origem_id,
-        },
-      });
-
-      return {
-        message: 'Transferência entre unidades realizada com sucesso!',
-        detalhes: {
-          produto_id: dto.produto_id,
-          quantidade_transferida: dto.quantidade,
-          origem: {
-            filial_id: dto.filial_origem_id,
-            saldo_anterior: qtdOrigemAtual,
-            saldo_atual: novoSaldoOrigem,
-            log_id: logSaida.id.toString(),
-          },
-          destino: {
-            filial_id: dto.filial_destino_id,
-            saldo_anterior: qtdDestinoAtual,
-            saldo_atual: novoSaldoDestino,
-            log_id: logEntrada.id.toString(),
-          },
-        },
-      };
-    });
-  }
-
-  async listarHistorico(filialId?: number, produtoId?: number, limit = 50) {
-    const logs = await this.prisma.logs_movimentacoes.findMany({
-      where: {
-        ...(filialId && { filial_id: filialId }),
-        ...(produtoId && { produto_id: produtoId }),
+      }),
+    ]);
+    return {
+      dados: rows.map((row) => ({ ...row, id: String(row.id) })),
+      meta: {
+        total,
+        pagina: dto.pagina,
+        limite: dto.limit,
+        totalPages: Math.ceil(total / dto.limit),
       },
-      orderBy: { id: 'desc' },
-      take: limit,
-      include: {
-        produtos: { select: { id: true, nome: true, codigo_barras: true } },
-        usuarios: { select: { id: true, nome: true, email: true } },
-        lotes: { select: { id: true, numero_lote: true } },
-      },
-    });
-
-    return logs.map((log) => ({
-      ...log,
-      id: log.id.toString(),
-      quantidade: Number(log.quantidade),
-      saldo_anterior: Number(log.saldo_anterior),
-      saldo_atual: Number(log.saldo_atual),
-    }));
+    };
   }
 }

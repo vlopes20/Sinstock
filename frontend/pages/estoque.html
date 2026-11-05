@@ -1,534 +1,586 @@
 <!doctype html>
 <html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estoque | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/estoque.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
 
-  <title>Estoque | SINSTOCK</title>
-  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
-  <link rel="stylesheet" href="../assets/styles/estoque.css" />
-  <link rel="stylesheet" href="../assets/styles/shared.css" />
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-</head>
-
-<body>
-  <div class="dashboard">
-    <!-- =====================================
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
              MENU LATERAL
         ====================================== -->
 
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
-      </div>
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
 
-      <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item active">
-          <i data-lucide="layout-dashboard"></i>
-          Visão Geral
-        </a>
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
 
-        <a href="estoque.html" class="menu-item">
-          <i data-lucide="boxes"></i>
-          Estoque
-        </a>
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
 
-        <a href="produtos.html" class="menu-item">
-          <i data-lucide="package-search"></i>
-          Produtos
-        </a>
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
 
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
 
-        <a href="relatorios.html" class="menu-item">
-          <i data-lucide="scroll-text"></i>
-          Relatórios
-        </a>
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
-        </a>
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
 
-        <a href="configuracoes.html" class="menu-item">
-          <i data-lucide="settings"></i>
-          Configurações
-        </a>
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
 
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </nav>
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
 
-      <div class="sidebar-bottom">
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </div>
-    </aside>
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
 
-    <!-- =====================================
+      <!-- =====================================
              CONTEÚDO
         ====================================== -->
 
-    <main class="main-content">
-      <!-- =====================================
+      <main class="main-content">
+        <!-- =====================================
                  TOPO
             ====================================== -->
 
-      <header class="topbar">
-        <div class="search-box">
-          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
 
-          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
 
-          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
-        </div>
-
-        <div class="topbar-right">
-          <div class="date">
-            <i data-lucide="calendar-days"></i>
-            <span id="dataAtual"></span>
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
           </div>
 
-          <div class="notification">
-            <i data-lucide="bell"></i>
-
-            <span class="notification-number"> 1 </span>
-          </div>
-
-          <div class="user">
-            <div class="avatar">
-              <span aria-label="Usuário de demonstração">DE</span>
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
             </div>
 
-            <span> Vini </span>
+            <div class="notification">
+              <i data-lucide="bell"></i>
 
-            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- =====================================
+        <!-- =====================================
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-      <section class="content">
-        <!-- ==============================
+        <section class="content">
+          <!-- ==============================
          CABEÇALHO
     =============================== -->
 
-        <div class="stock-header">
-          <div>
-            <h1>Estoque</h1>
+          <div class="stock-header">
+            <div>
+              <h1>Estoque</h1>
 
-            <p>Acompanhe saldos, entradas e saídas dos seus produtos.</p>
+              <p>Acompanhe saldos, entradas e saídas dos seus produtos.</p>
+            </div>
+
+            <button class="new-movement-button" id="openMovementModal">
+              <span
+                ><i
+                  class="converted-icon"
+                  data-lucide="plus"
+                  aria-hidden="true"
+                ></i
+              ></span>
+              Nova movimentação
+            </button>
           </div>
 
-          <button class="new-movement-button" id="openMovementModal">
-            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
-            Nova movimentação
-          </button>
-        </div>
-
-        <!-- ==============================
+          <!-- ==============================
          CARDS
     =============================== -->
 
-        <p id="stockError" class="demo-error" role="alert"></p>
-        <div class="stock-summary">
-          <article class="stock-summary-card">
-            <div class="stock-card-icon primary"><i class="converted-icon" data-lucide="package" aria-hidden="true"></i></div>
+          <p id="stockError" class="demo-error" role="alert"></p>
+          <div class="catalog-tools">
+            <label for="stockBranch">Filial</label
+            ><select id="stockBranch" required></select
+            ><button type="button" data-catalog="filiais">
+              Gerenciar filiais</button
+            ><button type="button" id="refreshStock">Atualizar</button>
+          </div>
+          <div class="stock-summary">
+            <article class="stock-summary-card">
+              <div class="stock-card-icon primary">
+                <i
+                  class="converted-icon"
+                  data-lucide="package"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-            <div>
-              <span>Itens em estoque</span>
+              <div>
+                <span>Itens em estoque</span>
 
-              <strong>8.432</strong>
+                <strong>—</strong>
 
-              <small> Unidades disponíveis </small>
-            </div>
-          </article>
+                <small> Unidades disponíveis </small>
+              </div>
+            </article>
 
-          <article class="stock-summary-card">
-            <div class="stock-card-icon warning"><i class="converted-icon" data-lucide="triangle-alert" aria-hidden="true"></i></div>
+            <article class="stock-summary-card">
+              <div class="stock-card-icon warning">
+                <i
+                  class="converted-icon"
+                  data-lucide="triangle-alert"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-            <div>
-              <span>Estoque baixo</span>
+              <div>
+                <span>Estoque baixo</span>
 
-              <strong>8</strong>
+                <strong>—</strong>
 
-              <small> Produtos abaixo do mínimo </small>
-            </div>
-          </article>
+                <small> Produtos abaixo do mínimo </small>
+              </div>
+            </article>
 
-          <article class="stock-summary-card">
-            <div class="stock-card-icon danger"><i class="converted-icon" data-lucide="circle-alert" aria-hidden="true"></i></div>
+            <article class="stock-summary-card">
+              <div class="stock-card-icon danger">
+                <i
+                  class="converted-icon"
+                  data-lucide="circle-alert"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-            <div>
-              <span>Sem estoque</span>
+              <div>
+                <span>Sem estoque</span>
 
-              <strong>3</strong>
+                <strong>—</strong>
 
-              <small> Produtos indisponíveis </small>
-            </div>
-          </article>
+                <small> Produtos indisponíveis </small>
+              </div>
+            </article>
 
-          <article class="stock-summary-card">
-            <div class="stock-card-icon success"><i class="converted-icon" data-lucide="dollar-sign" aria-hidden="true"></i></div>
+            <article class="stock-summary-card">
+              <div class="stock-card-icon success">
+                <i
+                  class="converted-icon"
+                  data-lucide="dollar-sign"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-            <div>
-              <span>Valor em estoque</span>
+              <div>
+                <span>Valor em estoque</span>
 
-              <strong>R$ 82.450,90</strong>
+                <strong>—</strong>
 
-              <small> Valor pelo custo dos produtos </small>
-            </div>
-          </article>
-        </div>
+                <small> Valor pelo custo dos produtos </small>
+              </div>
+            </article>
+          </div>
 
-        <!-- ==============================
+          <!-- ==============================
          ABAS
     =============================== -->
 
-        <div class="stock-tabs">
-          <button class="stock-tab active" data-tab="inventory">
-            Visão geral
-          </button>
+          <div class="stock-tabs">
+            <button class="stock-tab active" data-tab="inventory">
+              Visão geral
+            </button>
 
-          <button class="stock-tab" data-tab="movements">
-            Movimentações
-          </button>
-        </div>
+            <button class="stock-tab" data-tab="movements">
+              Movimentações
+            </button>
+            <button class="stock-tab" data-tab="receipts">Recebimentos</button>
+          </div>
 
-        <!-- ==================================================
+          <!-- ==================================================
          VISÃO GERAL DO ESTOQUE
     =================================================== -->
 
-        <div class="stock-tab-content active" id="inventory">
-          <div class="stock-card">
-            <!-- ==============================
+          <div class="stock-tab-content active" id="inventory">
+            <div class="stock-card">
+              <!-- ==============================
                  FILTROS
             =============================== -->
 
-            <div class="stock-toolbar">
-              <div class="stock-search">
-                <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
+              <div class="stock-toolbar">
+                <div class="stock-search">
+                  <span
+                    ><i
+                      class="converted-icon"
+                      data-lucide="search"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
 
-                <input type="text" id="stockSearch" aria-label="Buscar produto ou código" placeholder="Buscar produto ou código..." />
+                  <input
+                    type="text"
+                    id="stockSearch"
+                    aria-label="Buscar produto ou código"
+                    placeholder="Buscar produto ou código..."
+                  />
+                </div>
+
+                <div class="stock-filters">
+                  <select id="categoryFilter" aria-label="Filtrar categoria">
+                    <option value="">Todas as categorias</option>
+                  </select>
+
+                  <select
+                    id="stockStatusFilter"
+                    aria-label="Filtrar situação do estoque"
+                  >
+                    <option value="">Todos os status</option>
+                    <option value="sem-movimento">
+                      Sem movimento há 30 dias
+                    </option>
+
+                    <option value="normal">Normal</option>
+
+                    <option value="baixo">Estoque baixo</option>
+
+                    <option value="sem-estoque">Sem estoque</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="stock-filters">
-                <select id="categoryFilter" aria-label="Filtrar categoria">
-                  <option value="">Todas as categorias</option>
-
-                  <option value="alimentos">Alimentos</option>
-
-                  <option value="bebidas">Bebidas</option>
-
-                  <option value="limpeza">Limpeza</option>
-                </select>
-
-                <select id="stockStatusFilter" aria-label="Filtrar situação do estoque">
-                  <option value="">Todos os status</option>
-
-                  <option value="normal">Normal</option>
-
-                  <option value="baixo">Estoque baixo</option>
-
-                  <option value="sem-estoque">Sem estoque</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- ==============================
+              <!-- ==============================
                  TABELA
             =============================== -->
 
-            <div class="stock-table-container">
-              <table class="stock-table">
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>SKU</th>
-                    <th>Categoria</th>
-                    <th>Estoque atual</th>
-                    <th>Estoque mínimo</th>
-                    <th>Custo unitário</th>
-                    <th>Valor estoque</th>
-                    <th>Status</th>
-                    <th></th>
-                  </tr>
-                </thead>
+              <div class="stock-table-container">
+                <table class="stock-table">
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>SKU</th>
+                      <th>Categoria</th>
+                      <th>Estoque atual</th>
+                      <th>Estoque mínimo</th>
+                      <th>Custo unitário</th>
+                      <th>Valor estoque</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
 
-                <tbody id="stockTableBody">
-                  <!-- ARROZ -->
+                  <tbody id="stockTableBody">
+                    <tr>
+                      <td colspan="9">Carregando...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-                  <tr data-category="alimentos" data-status="normal">
-                    <td>
-                      <div class="stock-product">
-                        <div class="stock-product-image">A</div>
-
-                        <div>
-                          <strong>Arroz Tipo 1</strong>
-                          <span>Pacote 5kg</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>#00124</td>
-
-                    <td>Alimentos</td>
-
-                    <td>
-                      <strong class="stock-quantity"> 32 </strong>
-                    </td>
-
-                    <td>10</td>
-
-                    <td>R$ 25,90</td>
-
-                    <td>
-                      <strong> R$ 828,80 </strong>
-                    </td>
-
-                    <td>
-                      <span class="stock-status normal"> Normal </span>
-                    </td>
-
-                    <td>
-                      <button class="stock-actions-button" data-product="Arroz Tipo 1"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                    </td>
-                  </tr>
-
-                  <!-- FEIJÃO -->
-
-                  <tr data-category="alimentos" data-status="baixo">
-                    <td>
-                      <div class="stock-product">
-                        <div class="stock-product-image">F</div>
-
-                        <div>
-                          <strong>Feijão Carioca</strong>
-                          <span>Pacote 1kg</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>#00125</td>
-
-                    <td>Alimentos</td>
-
-                    <td>
-                      <strong class="stock-quantity low"> 4 </strong>
-                    </td>
-
-                    <td>10</td>
-
-                    <td>R$ 8,50</td>
-
-                    <td>
-                      <strong> R$ 34,00 </strong>
-                    </td>
-
-                    <td>
-                      <span class="stock-status low"> Estoque baixo </span>
-                    </td>
-
-                    <td>
-                      <button class="stock-actions-button" data-product="Feijão Carioca"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                    </td>
-                  </tr>
-
-                  <!-- CAFÉ -->
-
-                  <tr data-category="alimentos" data-status="sem-estoque">
-                    <td>
-                      <div class="stock-product">
-                        <div class="stock-product-image">C</div>
-
-                        <div>
-                          <strong>Café Tradicional</strong>
-                          <span>Pacote 500g</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>#00126</td>
-
-                    <td>Alimentos</td>
-
-                    <td>
-                      <strong class="stock-quantity out"> 0 </strong>
-                    </td>
-
-                    <td>8</td>
-
-                    <td>R$ 17,90</td>
-
-                    <td>
-                      <strong> R$ 0,00 </strong>
-                    </td>
-
-                    <td>
-                      <span class="stock-status out"> Sem estoque </span>
-                    </td>
-
-                    <td>
-                      <button class="stock-actions-button" data-product="Café Tradicional"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                    </td>
-                  </tr>
-
-                  <!-- REFRIGERANTE -->
-
-                  <tr data-category="bebidas" data-status="normal">
-                    <td>
-                      <div class="stock-product">
-                        <div class="stock-product-image">R</div>
-
-                        <div>
-                          <strong>Refrigerante Cola</strong>
-                          <span>Garrafa 2L</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>#00127</td>
-
-                    <td>Bebidas</td>
-
-                    <td>
-                      <strong class="stock-quantity"> 58 </strong>
-                    </td>
-
-                    <td>15</td>
-
-                    <td>R$ 7,20</td>
-
-                    <td>
-                      <strong> R$ 417,60 </strong>
-                    </td>
-
-                    <td>
-                      <span class="stock-status normal"> Normal </span>
-                    </td>
-
-                    <td>
-                      <button class="stock-actions-button" data-product="Refrigerante Cola"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- ==============================
+              <!-- ==============================
                  RODAPÉ
             =============================== -->
 
-            <div class="stock-footer">
-              <span> Mostrando 1 a 4 de 1.246 produtos </span>
-
-              <!-- A demonstração lista seus quatro produtos; não há paginação fictícia. -->
+              <div class="stock-footer">
+                <span>Carregando...</span>
+                <div class="catalog-pagination" id="stockPagination"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- ==================================================
+          <!-- ==================================================
          MOVIMENTAÇÕES
     =================================================== -->
 
-        <div class="stock-tab-content" id="movements">
-          <div class="stock-card">
-            <div class="movement-header">
-              <div>
-                <h2>Histórico de movimentações</h2>
+          <div class="stock-tab-content" id="movements">
+            <div class="stock-card">
+              <div class="movement-header">
+                <div>
+                  <h2>Histórico de movimentações</h2>
 
-                <p>Entradas, saídas e ajustes realizados no estoque.</p>
+                  <p>Entradas, saídas e ajustes realizados no estoque.</p>
+                </div>
+
+                <select id="movementFilter" aria-label="Filtrar movimentações">
+                  <option value="">Todas as movimentações</option>
+
+                  <option value="entrada">Entradas</option>
+
+                  <option value="saida">Saídas</option>
+
+                  <option value="ajuste">Ajustes</option>
+                  <option value="transferencia">Transferências</option>
+                </select>
               </div>
 
-              <select id="movementFilter" aria-label="Filtrar movimentações">
-                <option value="">Todas as movimentações</option>
+              <div class="stock-table-container">
+                <table class="stock-table movement-table">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Produto</th>
+                      <th>Tipo</th>
+                      <th>Quantidade</th>
+                      <th>Motivo</th>
+                      <th>Responsável</th>
+                    </tr>
+                  </thead>
 
-                <option value="entrada">Entradas</option>
+                  <tbody id="movementTableBody"></tbody>
+                </table>
+              </div>
+              <div class="catalog-pagination" id="historyPagination"></div>
+            </div>
+          </div>
+          <div class="stock-tab-content" id="receipts">
+            <div class="stock-card">
+              <div class="stock-toolbar">
+                <input
+                  id="receiptSearch"
+                  aria-label="Buscar nota fiscal"
+                  placeholder="Buscar nota ou fornecedor"
+                /><select id="receiptStatus" aria-label="Status do recebimento">
+                  <option value="">Todos os status</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="RECEBIDA">Recebida</option>
+                  <option value="CANCELADA">Cancelada</option>
+                </select>
+              </div>
+              <div class="stock-table-container">
+                <table class="stock-table">
+                  <thead>
+                    <tr>
+                      <th>Documento</th>
+                      <th>Fornecedor</th>
+                      <th>Filial</th>
+                      <th>Emissão</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="receiptsBody"></tbody>
+                </table>
+              </div>
+              <div class="catalog-pagination" id="receiptPagination"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
-                <option value="saida">Saídas</option>
-
-                <option value="ajuste">Ajustes</option>
+    <div class="stock-modal-overlay" id="movementModal">
+      <div class="stock-modal">
+        <div class="stock-modal-header">
+          <div>
+            <h2>Nova movimentação</h2>
+            <p>
+              Operações registradas no servidor com identificação do
+              responsável.
+            </p>
+          </div>
+          <button
+            type="button"
+            id="closeMovementModal"
+            class="close-modal"
+            aria-label="Fechar movimentação"
+          >
+            <i class="converted-icon" data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form id="movementForm">
+          <p
+            id="movementError"
+            class="demo-error"
+            role="alert"
+            tabindex="-1"
+          ></p>
+          <div class="stock-form-row">
+            <div class="stock-form-group">
+              <label for="movementType">Tipo *</label>
+              <select id="movementType">
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+                <option value="ajuste">Ajuste de contagem</option>
+                <option value="transferencia">Transferência</option>
               </select>
             </div>
-
-            <div class="stock-table-container">
-              <table class="stock-table movement-table">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Produto</th>
-                    <th>Tipo</th>
-                    <th>Quantidade</th>
-                    <th>Motivo</th>
-                    <th>Responsável</th>
-                  </tr>
-                </thead>
-
-                <tbody id="movementTableBody"></tbody>
-              </table>
+            <div class="stock-form-group">
+              <label for="movementProduct">Produto *</label>
+              <select id="movementProduct" required>
+                <option value="">Selecione</option></select
+              ><button type="button" id="scanMovementProduct">
+                Ler pela câmera
+              </button>
             </div>
           </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div class="stock-modal-overlay" id="movementModal">
-    <div class="stock-modal">
-      <div class="stock-modal-header">
-        <div><h2>Nova movimentação</h2><p>Demonstração local — não altera o banco de dados.</p></div>
-        <button type="button" id="closeMovementModal" class="close-modal" aria-label="Fechar movimentação"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
+          <div class="stock-form-row">
+            <div class="stock-form-group">
+              <label for="movementBranch">Filial de origem *</label
+              ><select id="movementBranch" required></select>
+            </div>
+            <div class="stock-form-group">
+              <label for="movementLot">Lote</label
+              ><select id="movementLot">
+                <option value="">Sem lote</option>
+              </select>
+            </div>
+          </div>
+          <div class="stock-form-group" data-transfer-only>
+            <label for="movementDestination">Filial de destino *</label
+            ><select id="movementDestination"></select>
+          </div>
+          <p id="movementBalance" aria-live="polite"></p>
+          <div class="stock-form-row">
+            <div class="stock-form-group">
+              <label for="movementQuantity" id="movementQuantityLabel"
+                >Quantidade de unidades *</label
+              ><input
+                id="movementQuantity"
+                type="number"
+                min="0.001"
+                step="0.001"
+                required
+              />
+            </div>
+            <div class="stock-form-group">
+              <label for="movementDate">Data *</label
+              ><input id="movementDate" type="date" required />
+            </div>
+          </div>
+          <div class="stock-form-group">
+            <label for="movementReason">Motivo *</label
+            ><input
+              id="movementReason"
+              maxlength="200"
+              required
+              placeholder="Ex.: recebimento de mercadoria"
+            />
+          </div>
+          <div class="stock-form-row">
+            <div class="stock-form-group">
+              <label for="movementSupplier" id="movementSupplierLabel"
+                >Fornecedor *</label
+              ><select id="movementSupplier" required></select>
+            </div>
+            <div class="stock-form-group">
+              <label for="movementReference" id="movementReferenceLabel"
+                >Nota fiscal ou pedido *</label
+              ><input id="movementReference" maxlength="50" required />
+            </div>
+          </div>
+          <div data-entry-only>
+            <div class="stock-form-row">
+              <div class="stock-form-group">
+                <label for="movementCost">Custo unitário *</label
+                ><input id="movementCost" type="number" min="0" step="0.01" />
+              </div>
+              <div class="stock-form-group">
+                <label for="movementReceiptStatus">Recebimento</label
+                ><select id="movementReceiptStatus">
+                  <option value="RECEBIDA">Receber agora</option>
+                  <option value="PENDENTE">Registrar como pendente</option>
+                </select>
+              </div>
+            </div>
+            <div class="stock-form-row">
+              <div class="stock-form-group">
+                <label for="movementNewLot">Novo lote (opcional)</label
+                ><input id="movementNewLot" maxlength="50" />
+              </div>
+              <div class="stock-form-group">
+                <label for="movementExpiry">Validade do novo lote</label
+                ><input id="movementExpiry" type="date" />
+              </div>
+            </div>
+          </div>
+          <div class="stock-modal-footer">
+            <button type="button" id="cancelMovement" class="cancel-button">
+              Cancelar
+            </button>
+            <button type="submit" class="save-movement-button">
+              Salvar movimentação
+            </button>
+          </div>
+        </form>
       </div>
-      <form id="movementForm">
-        <p id="movementError" class="demo-error" role="alert" tabindex="-1"></p>
-        <div class="stock-form-row">
-          <div class="stock-form-group"><label for="movementType">Tipo *</label>
-            <select id="movementType"><option value="entrada">Entrada</option><option value="saida">Saída</option><option value="ajuste">Ajuste de contagem</option></select>
-          </div>
-          <div class="stock-form-group"><label for="movementProduct">Produto *</label>
-            <select id="movementProduct" required><option value="">Selecione</option></select>
-          </div>
-        </div>
-        <p id="movementBalance" aria-live="polite"></p>
-        <div class="stock-form-row">
-          <div class="stock-form-group"><label for="movementQuantity" id="movementQuantityLabel">Quantidade de unidades *</label><input id="movementQuantity" type="number" min="1" step="1" required></div>
-          <div class="stock-form-group"><label for="movementDate">Data *</label><input id="movementDate" type="date" required></div>
-        </div>
-        <div class="stock-form-group"><label for="movementReason">Motivo *</label><input id="movementReason" maxlength="200" required placeholder="Ex.: recebimento de mercadoria"></div>
-        <div class="stock-form-row">
-          <div class="stock-form-group"><label for="movementSupplier" id="movementSupplierLabel">Fornecedor *</label><input id="movementSupplier" maxlength="120" required></div>
-          <div class="stock-form-group"><label for="movementReference" id="movementReferenceLabel">Nota fiscal ou pedido *</label><input id="movementReference" maxlength="100" required></div>
-        </div>
-        <div class="stock-modal-footer">
-          <button type="button" id="cancelMovement" class="cancel-button">Cancelar</button>
-          <button type="submit" class="save-movement-button">Salvar demonstração local</button>
-        </div>
-      </form>
     </div>
-  </div>
-  <script src="../js/shared/ui.js"></script>
-  <script src="../assets/vendor/lucide.min.js"></script>
-  <script src="../js/shared/stock-model.js"></script>
-  <script src="../js/pages/estoque.js"></script>
-  <script src="../js/shared/layout.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/pages/estoque.js"></script>
+    <script src="../js/shared/layout.js"></script>
 
-  <script>
-    if (window.lucide) window.lucide.createIcons();
-  </script>
-</body>
-
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
 </html>

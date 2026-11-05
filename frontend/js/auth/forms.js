@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             email: form.email.value.trim().toLowerCase(),
             senha: form.senha.value,
             perfil_id: Number(document.getElementById('perfil_id').value),
+            telefone:
+              document.getElementById('telefone').value.trim() || undefined,
           },
         });
         form.reset();

@@ -6,7 +6,8 @@
     "build": "node scripts/build-css.cjs",
     "watch": "node scripts/build-css.cjs --watch",
     "check": "node scripts/build-css.cjs --check && node scripts/check-links.cjs",
-    "check:links": "node scripts/check-links.cjs"
+    "check:links": "node scripts/check-links.cjs",
+    "check:responsive": "node scripts/check-responsive.cjs"
   },
   "devDependencies": {
     "playwright": "1.56.1",
@@ -14,6 +15,7 @@
     "tailwindcss": "^3.4.17"
   },
   "dependencies": {
+    "@zxing/browser": "0.1.5",
     "lucide": "0.468.0"
   }
 }

@@ -69,6 +69,12 @@ export class UsersService {
       dataToUpdate.telefone = updateUserDto.telefone;
     if (updateUserDto.ativo !== undefined)
       dataToUpdate.ativo = updateUserDto.ativo;
+    if (
+      updateUserDto.ativo !== undefined ||
+      updateUserDto.perfil_id !== undefined ||
+      updateUserDto.email !== undefined
+    )
+      dataToUpdate.auth_version = { increment: 1 };
 
     if (updateUserDto.senha) {
       const saltRounds = 10;
@@ -80,20 +86,40 @@ export class UsersService {
     }
 
     try {
-      return await this.prisma.usuarios.update({
-        where: { id },
-        data: dataToUpdate,
-        select: {
-          id: true,
-          nome: true,
-          email: true,
-          perfil_id: true,
-          telefone: true,
-          ativo: true,
-          criado_em: true,
-          atualizado_em: true,
-          perfis: { select: { id: true, nome: true, permissoes: true } },
-        },
+      return await this.prisma.$transaction(async (tx) => {
+        if (
+          updateUserDto.ativo !== undefined ||
+          updateUserDto.perfil_id !== undefined
+        ) {
+          const admins = await tx.$queryRaw<{ id: number }[]>(
+            Prisma.sql`SELECT id FROM usuarios WHERE perfil_id = 1 AND ativo = true ORDER BY id FOR UPDATE`,
+          );
+          if (
+            admins.length === 1 &&
+            admins[0].id === id &&
+            (updateUserDto.ativo === false ||
+              (updateUserDto.perfil_id !== undefined &&
+                updateUserDto.perfil_id !== 1))
+          )
+            throw new BadRequestException(
+              'Mantenha pelo menos um administrador ativo.',
+            );
+        }
+        return tx.usuarios.update({
+          where: { id },
+          data: dataToUpdate,
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            perfil_id: true,
+            telefone: true,
+            ativo: true,
+            criado_em: true,
+            atualizado_em: true,
+            perfis: { select: { id: true, nome: true, permissoes: true } },
+          },
+        });
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -104,23 +130,14 @@ export class UsersService {
           throw new BadRequestException('O perfil_id informado não existe.');
         }
       }
+      if (error instanceof BadRequestException) throw error;
       throw new InternalServerErrorException('Erro ao atualizar o usuário.');
     }
   }
 
   async toggleStatus(id: number) {
     const user = await this.findById(id);
-
-    return this.prisma.usuarios.update({
-      where: { id },
-      data: { ativo: !user.ativo },
-      select: {
-        id: true,
-        nome: true,
-        email: true,
-        ativo: true,
-      },
-    });
+    return this.update(id, { ativo: !user.ativo });
   }
 
   async findByEmail(email: string) {
@@ -141,6 +158,9 @@ export class UsersService {
         token_expiracao: true,
         twoFactorSecret: true,
         isTwoFactorEnable: true,
+        two_factor_method: true,
+        ultimo_acesso: true,
+        preferencias: true,
         perfis: {
           select: {
             id: true,
@@ -204,6 +224,7 @@ export class UsersService {
         ativo: true,
         criado_em: true,
         isTwoFactorEnable: true,
+        ultimo_acesso: true,
         perfis: {
           select: { id: true, nome: true },
         },
@@ -226,6 +247,8 @@ export class UsersService {
       where: { id },
       data: {
         isTwoFactorEnable: true,
+        two_factor_method: 'TOTP',
+        auth_version: { increment: 1 },
       },
     });
   }
@@ -246,6 +269,9 @@ export class UsersService {
         auth_version: true,
         twoFactorSecret: true,
         isTwoFactorEnable: true,
+        two_factor_method: true,
+        ultimo_acesso: true,
+        preferencias: true,
         token_2fa: true,
         token_expiracao: true,
         perfis: {

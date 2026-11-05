@@ -1,641 +1,567 @@
 <!doctype html>
 <html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produtos | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/produtos.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
 
-  <title>Produtos | SINSTOCK</title>
-  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
-  <link rel="stylesheet" href="../assets/styles/produtos.css" />
-  <link rel="stylesheet" href="../assets/styles/shared.css" />
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-</head>
-
-<body>
-  <div class="dashboard">
-    <!-- =====================================
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
              MENU LATERAL
         ====================================== -->
 
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
-      </div>
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
 
-      <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item active">
-          <i data-lucide="layout-dashboard"></i>
-          Visão Geral
-        </a>
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
 
-        <a href="estoque.html" class="menu-item">
-          <i data-lucide="boxes"></i>
-          Estoque
-        </a>
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
 
-        <a href="produtos.html" class="menu-item">
-          <i data-lucide="package-search"></i>
-          Produtos
-        </a>
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
 
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
 
-        <a href="relatorios.html" class="menu-item">
-          <i data-lucide="scroll-text"></i>
-          Relatórios
-        </a>
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
-        </a>
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
 
-        <a href="configuracoes.html" class="menu-item">
-          <i data-lucide="settings"></i>
-          Configurações
-        </a>
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
 
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </nav>
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
 
-      <div class="sidebar-bottom">
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </div>
-    </aside>
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
 
-    <!-- =====================================
+      <!-- =====================================
              CONTEÚDO
         ====================================== -->
 
-    <main class="main-content">
-      <!-- =====================================
+      <main class="main-content">
+        <!-- =====================================
                  TOPO
             ====================================== -->
 
-      <header class="topbar">
-        <div class="search-box">
-          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
 
-          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
 
-          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
-        </div>
-
-        <div class="topbar-right">
-          <div class="date">
-            <i data-lucide="calendar-days"></i>
-            <span id="dataAtual"></span>
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
           </div>
 
-          <div class="notification">
-            <i data-lucide="bell"></i>
-
-            <span class="notification-number"> 1 </span>
-          </div>
-
-          <div class="user">
-            <div class="avatar">
-              <span aria-label="Usuário de demonstração">DE</span>
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
             </div>
 
-            <span> Vini </span>
+            <div class="notification">
+              <i data-lucide="bell"></i>
 
-            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- =====================================
+        <!-- =====================================
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-      <section class="content">
-        <!-- =========================================
+        <section class="content">
+          <!-- =========================================
          CABEÇALHO
     ========================================== -->
 
-        <div class="products-header">
-          <div>
-            <h1>Produtos</h1>
+          <div class="products-header">
+            <div>
+              <h1>Produtos</h1>
 
-            <p>Cadastre, consulte e gerencie os produtos do seu catálogo.</p>
+              <p>Cadastre, consulte e gerencie os produtos do seu catálogo.</p>
+            </div>
+
+            <button class="new-product-button" id="openProductModal">
+              <span
+                ><i
+                  class="converted-icon"
+                  data-lucide="plus"
+                  aria-hidden="true"
+                ></i
+              ></span>
+              Novo produto
+            </button>
           </div>
 
-          <button class="new-product-button" id="openProductModal">
-            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
-            Novo produto
-          </button>
-        </div>
-
-        <!-- =========================================
+          <!-- =========================================
          CARDS
     ========================================== -->
 
-        <div class="products-summary">
-          <article class="product-summary-card">
-            <div class="product-card-icon total">
-              <i data-lucide="clipboard-clock"></i>
-            </div>
+          <div class="products-summary">
+            <article class="product-summary-card">
+              <div class="product-card-icon total">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
-            <div>
-              <span>Total de produtos</span>
+              <div>
+                <span>Total de produtos</span>
 
-              <strong id="totalProducts"> 1.246 </strong>
+                <strong id="totalProducts">—</strong>
 
-              <small> Produtos cadastrados </small>
-            </div>
-          </article>
+                <small> Produtos cadastrados </small>
+              </div>
+            </article>
 
-          <article class="product-summary-card">
-            <div class="product-card-icon active"><i class="converted-icon" data-lucide="check" aria-hidden="true"></i></div>
+            <article class="product-summary-card">
+              <div class="product-card-icon active">
+                <i
+                  class="converted-icon"
+                  data-lucide="check"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-            <div>
-              <span>Produtos ativos</span>
+              <div>
+                <span>Produtos ativos</span>
 
-              <strong> 1.215 </strong>
+                <strong>—</strong>
 
-              <small> Disponíveis para venda </small>
-            </div>
-          </article>
+                <small> Disponíveis para venda </small>
+              </div>
+            </article>
 
-          <article class="product-summary-card">
-            <div class="product-card-icon warning">
-              <i data-lucide="clipboard-clock"></i>
-            </div>
+            <article class="product-summary-card">
+              <div class="product-card-icon warning">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
-            <div>
-              <span>Estoque baixo</span>
+              <div>
+                <span>Estoque baixo</span>
 
-              <strong> 8 </strong>
+                <strong>—</strong>
 
-              <small> Abaixo do estoque mínimo </small>
-            </div>
-          </article>
+                <small> Abaixo do estoque mínimo </small>
+              </div>
+            </article>
 
-          <article class="product-summary-card">
-            <div class="product-card-icon expiry">
-              <i data-lucide="clipboard-clock"></i>
-            </div>
+            <article class="product-summary-card">
+              <div class="product-card-icon expiry">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
-            <div>
-              <span>Próximos da validade</span>
+              <div>
+                <span>Próximos da validade</span>
 
-              <strong> 5 </strong>
+                <strong>—</strong>
 
-              <small> Vencem nos próximos 30 dias </small>
-            </div>
-          </article>
-        </div>
+                <small> Vencidos ou vencem em até 7 dias </small>
+              </div>
+            </article>
+          </div>
 
-        <!-- =========================================
+          <!-- =========================================
          TABELA
     ========================================== -->
 
-        <div class="products-card">
-          <!-- FILTROS -->
-
-          <div class="products-toolbar">
-            <div class="products-search">
-              <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
-
-              <input type="text" id="productSearch" placeholder="Buscar por produto, SKU ou código..." />
-            </div>
-
-            <div class="products-filters">
-              <select id="categoryFilter">
-                <option value="">Todas as categorias</option>
-
-                <option value="alimentos">Alimentos</option>
-
-                <option value="bebidas">Bebidas</option>
-
-                <option value="limpeza">Limpeza</option>
-              </select>
-
-              <select id="productStatusFilter">
-                <option value="">Todos os status</option>
-
-                <option value="ativo">Ativo</option>
-
-                <option value="inativo">Inativo</option>
-              </select>
-
-              <select id="stockFilter">
-                <option value="">Todo estoque</option>
-
-                <option value="normal">Normal</option>
-
-                <option value="baixo">Estoque baixo</option>
-
-                <option value="sem-estoque">Sem estoque</option>
-              </select>
-            </div>
+          <div class="catalog-tools">
+            <button type="button" data-catalog="categorias">
+              Gerenciar categorias</button
+            ><button type="button" data-catalog="filiais">
+              Gerenciar filiais</button
+            ><button type="button" data-catalog="clientes">
+              Gerenciar clientes
+            </button>
           </div>
-
-          <!-- TABELA -->
-
-          <div class="products-table-container">
-            <table class="products-table">
-              <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>SKU</th>
-                  <th>Categoria</th>
-                  <th>Fornecedor</th>
-                  <th>Estoque</th>
-                  <th>Preço</th>
-                  <th>Validade</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody id="productsTableBody">
-                <!-- PRODUTO 1 -->
-
-                <tr data-category="alimentos" data-status="ativo" data-stock="normal">
-                  <td>
-                    <div class="product-info">
-                      <div class="product-image">A</div>
-
-                      <div>
-                        <strong>Arroz Tipo 1</strong>
-                        <span>Pacote 5kg</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>#00124</td>
-
-                  <td>Alimentos</td>
-
-                  <td>Distribuidora ABC</td>
-
-                  <td>
-                    <strong>32</strong>
-                  </td>
-
-                  <td>
-                    <strong>R$ 31,90</strong>
-                  </td>
-
-                  <td>15/12/2026</td>
-
-                  <td>
-                    <span class="product-status active"> Ativo </span>
-                  </td>
-
-                  <td>
-                    <button class="product-actions" data-id="124"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                  </td>
-                </tr>
-
-                <!-- PRODUTO 2 -->
-
-                <tr data-category="alimentos" data-status="ativo" data-stock="baixo">
-                  <td>
-                    <div class="product-info">
-                      <div class="product-image">F</div>
-
-                      <div>
-                        <strong>Feijão Carioca</strong>
-                        <span>Pacote 1kg</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>#00125</td>
-
-                  <td>Alimentos</td>
-
-                  <td>Alimentos Brasil</td>
-
-                  <td>
-                    <strong class="low-stock"> 4 </strong>
-                  </td>
-
-                  <td>
-                    <strong>R$ 10,50</strong>
-                  </td>
-
-                  <td>20/11/2026</td>
-
-                  <td>
-                    <span class="product-status active"> Ativo </span>
-                  </td>
-
-                  <td>
-                    <button class="product-actions" data-id="125"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                  </td>
-                </tr>
-
-                <!-- PRODUTO 3 -->
-
-                <tr data-category="alimentos" data-status="ativo" data-stock="sem-estoque">
-                  <td>
-                    <div class="product-info">
-                      <div class="product-image">C</div>
-
-                      <div>
-                        <strong>Café Tradicional</strong>
-                        <span>Pacote 500g</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>#00126</td>
-
-                  <td>Alimentos</td>
-
-                  <td>Café Brasil</td>
-
-                  <td>
-                    <strong class="out-stock"> 0 </strong>
-                  </td>
-
-                  <td>
-                    <strong>R$ 22,90</strong>
-                  </td>
-
-                  <td>10/10/2026</td>
-
-                  <td>
-                    <span class="product-status active"> Ativo </span>
-                  </td>
-
-                  <td>
-                    <button class="product-actions" data-id="126"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                  </td>
-                </tr>
-
-                <!-- PRODUTO 4 -->
-
-                <tr data-category="bebidas" data-status="inativo" data-stock="normal">
-                  <td>
-                    <div class="product-info">
-                      <div class="product-image">R</div>
-
-                      <div>
-                        <strong>Refrigerante Cola</strong>
-                        <span>Garrafa 2L</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>#00127</td>
-
-                  <td>Bebidas</td>
-
-                  <td>Bebidas Nacional</td>
-
-                  <td>
-                    <strong>58</strong>
-                  </td>
-
-                  <td>
-                    <strong>R$ 10,90</strong>
-                  </td>
-
-                  <td>22/01/2027</td>
-
-                  <td>
-                    <span class="product-status inactive"> Inativo </span>
-                  </td>
-
-                  <td>
-                    <button class="product-actions" data-id="127"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- RODAPÉ -->
-
-          <div class="products-footer">
-            <span> Mostrando 1 a 4 de 1.246 produtos </span>
-
-            <div class="products-pagination">
-              <button aria-label="Anterior"><i class="converted-icon" data-lucide="chevron-left" aria-hidden="true"></i></button>
-
-              <button class="active">1</button>
-
-              <button>2</button>
-
-              <button>3</button>
-
-              <button>...</button>
-
-              <button>312</button>
-
-              <button aria-label="Próximo"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></button>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div class="product-modal-overlay" id="productModal">
-        <div class="product-modal">
-          <!-- CABEÇALHO -->
-
-          <div class="product-modal-header">
-            <div>
-              <h2 id="productModalTitle">Novo produto</h2>
-
-              <p>Informe os dados do produto.</p>
-            </div>
-
-            <button class="close-product-modal" id="closeProductModal" type="button" aria-label="Fechar"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
-          </div>
-
-          <!-- FORM -->
-
-          <form id="productForm">
-            <!-- ID PARA EDIÇÃO -->
-
-            <input type="hidden" id="productId" />
-
-            <!-- NOME -->
-
-            <div class="product-form-group">
-              <label for="productName"> Nome do produto * </label>
-
-              <input type="text" id="productName" placeholder="Ex: Arroz Tipo 1" required />
-            </div>
-
-            <!-- DESCRIÇÃO -->
-
-            <div class="product-form-group">
-              <label for="productDescription"> Descrição </label>
-
-              <input type="text" id="productDescription" placeholder="Ex: Pacote 5kg" />
-            </div>
-
-            <!-- SKU + CÓDIGO DE BARRAS -->
-
-            <div class="product-form-row">
-              <div class="product-form-group">
-                <label for="productSku"> SKU * </label>
-
-                <input type="text" id="productSku" placeholder="Ex: 00128" required />
+          <div class="products-card">
+            <!-- FILTROS -->
+
+            <div class="products-toolbar">
+              <div class="products-search">
+                <span
+                  ><i
+                    class="converted-icon"
+                    data-lucide="search"
+                    aria-hidden="true"
+                  ></i
+                ></span>
+
+                <input
+                  type="text"
+                  id="productSearch"
+                  placeholder="Buscar por produto, SKU ou código..."
+                />
               </div>
 
-              <div class="product-form-group">
-                <label for="productBarcode"> Código de barras </label>
-
-                <input type="text" id="productBarcode" placeholder="7891234567890" />
-              </div>
-            </div>
-
-            <!-- CATEGORIA + FORNECEDOR -->
-
-            <div class="product-form-row">
-              <div class="product-form-group">
-                <label for="productCategory"> Categoria * </label>
-
-                <select id="productCategory" required>
-                  <option value="">Selecione</option>
-
-                  <option value="alimentos">Alimentos</option>
-
-                  <option value="bebidas">Bebidas</option>
-
-                  <option value="limpeza">Limpeza</option>
+              <div class="products-filters">
+                <select id="categoryFilter">
+                  <option value="">Carregando...</option>
                 </select>
-              </div>
 
-              <div class="product-form-group">
-                <label for="productSupplier"> Fornecedor </label>
+                <select id="productStatusFilter">
+                  <option value="">Todos os status</option>
 
-                <select id="productSupplier">
-                  <option value="">Sem fornecedor</option>
+                  <option value="ativo">Ativo</option>
 
-                  <option>Distribuidora ABC</option>
+                  <option value="inativo">Inativo</option>
+                </select>
 
-                  <option>Alimentos Brasil</option>
+                <select id="stockFilter">
+                  <option value="">Todo estoque</option>
 
-                  <option>Bebidas Nacional</option>
+                  <option value="normal">Normal</option>
+
+                  <option value="baixo">Estoque baixo</option>
+
+                  <option value="sem-estoque">Sem estoque</option>
                 </select>
               </div>
             </div>
 
-            <!-- PREÇOS -->
+            <!-- TABELA -->
 
-            <div class="product-form-row">
-              <div class="product-form-group">
-                <label for="productCost"> Preço de custo * </label>
+            <div class="products-table-container">
+              <table class="products-table">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor</th>
+                    <th>Estoque</th>
+                    <th>Preço</th>
+                    <th>Validade</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
 
-                <input type="number" id="productCost" min="0" step="0.01" placeholder="0,00" required />
-              </div>
-
-              <div class="product-form-group">
-                <label for="productPrice"> Preço de venda * </label>
-
-                <input type="number" id="productPrice" min="0" step="0.01" placeholder="0,00" required />
-              </div>
+                <tbody id="productsTableBody">
+                  <tr>
+                    <td colspan="9">Carregando...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <!-- ESTOQUE -->
+            <!-- RODAPÉ -->
 
-            <div class="product-form-row">
-              <div class="product-form-group">
-                <label for="minimumStock"> Estoque mínimo </label>
+            <div class="products-footer">
+              <span>Carregando...</span>
 
-                <input type="number" id="minimumStock" min="0" value="0" />
+              <div class="products-pagination"></div>
+            </div>
+          </div>
+        </section>
+        <div class="product-modal-overlay" id="productModal">
+          <div class="product-modal">
+            <!-- CABEÇALHO -->
+
+            <div class="product-modal-header">
+              <div>
+                <h2 id="productModalTitle">Novo produto</h2>
+
+                <p>Informe os dados do produto.</p>
               </div>
 
-              <div class="product-form-group">
-                <label for="initialStock"> Estoque inicial </label>
-
-                <input type="number" id="initialStock" min="0" value="0" />
-              </div>
-            </div>
-
-            <!-- VALIDADE + UNIDADE -->
-
-            <div class="product-form-row">
-              <div class="product-form-group">
-                <label for="productExpiration"> Data de validade </label>
-
-                <input type="date" id="productExpiration" />
-              </div>
-
-              <div class="product-form-group">
-                <label for="productUnit"> Unidade </label>
-
-                <select id="productUnit">
-                  <option value="un">Unidade</option>
-
-                  <option value="kg">Quilograma</option>
-
-                  <option value="g">Grama</option>
-
-                  <option value="l">Litro</option>
-
-                  <option value="ml">Mililitro</option>
-
-                  <option value="cx">Caixa</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- STATUS -->
-
-            <div class="product-form-group">
-              <label for="productStatus"> Status </label>
-
-              <select id="productStatus">
-                <option value="ativo">Ativo</option>
-
-                <option value="inativo">Inativo</option>
-              </select>
-            </div>
-
-            <!-- OBSERVAÇÃO -->
-
-            <div class="product-form-group">
-              <label for="productObservation"> Observação </label>
-
-              <textarea id="productObservation" rows="3" placeholder="Informações adicionais..."></textarea>
-            </div>
-
-            <!-- BOTÕES -->
-
-            <div class="product-modal-footer">
-              <button type="button" class="cancel-product-button" id="cancelProduct">
-                Cancelar
-              </button>
-
-              <button type="submit" class="save-product-button">
-                Salvar produto
+              <button
+                class="close-product-modal"
+                id="closeProductModal"
+                type="button"
+                aria-label="Fechar"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="x"
+                  aria-hidden="true"
+                ></i>
               </button>
             </div>
-          </form>
+
+            <!-- FORM -->
+
+            <form id="productForm">
+              <!-- ID PARA EDIÇÃO -->
+
+              <input type="hidden" id="productId" />
+
+              <!-- NOME -->
+
+              <div class="product-form-group">
+                <label for="productName"> Nome do produto * </label>
+
+                <input
+                  type="text"
+                  id="productName"
+                  placeholder="Ex: Arroz Tipo 1"
+                  required
+                />
+              </div>
+              <div class="product-form-group">
+                <label for="productBrand">Marca</label
+                ><input type="text" id="productBrand" maxlength="100" />
+              </div>
+
+              <!-- DESCRIÇÃO -->
+
+              <div class="product-form-group">
+                <label for="productDescription"> Descrição </label>
+
+                <input
+                  type="text"
+                  id="productDescription"
+                  placeholder="Ex: Pacote 5kg"
+                />
+              </div>
+
+              <!-- SKU + CÓDIGO DE BARRAS -->
+
+              <div class="product-form-row">
+                <div class="product-form-group">
+                  <label for="productSku"> SKU </label>
+
+                  <input type="text" id="productSku" placeholder="Ex: 00128" />
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productBarcode"> Código de barras </label>
+
+                  <input
+                    type="text"
+                    id="productBarcode"
+                    placeholder="7891234567890"
+                  /><button type="button" id="scanProductBarcode">
+                    Ler pela câmera
+                  </button>
+                </div>
+              </div>
+
+              <!-- CATEGORIA + FORNECEDOR -->
+
+              <div class="product-form-row">
+                <div class="product-form-group">
+                  <label for="productCategory"> Categoria * </label>
+
+                  <select id="productCategory" required>
+                    <option value="">Carregando...</option>
+                  </select>
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productSupplier"> Fornecedor </label>
+
+                  <select id="productSupplier">
+                    <option value="">Carregando...</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- PREÇOS -->
+
+              <div class="product-form-row">
+                <div class="product-form-group">
+                  <label for="productCost">Custo médio calculado</label>
+
+                  <input
+                    type="number"
+                    id="productCost"
+                    min="0"
+                    step="0.01"
+                    placeholder="Calculado nas entradas"
+                    readonly
+                  />
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productPrice"> Preço de venda * </label>
+
+                  <input
+                    type="number"
+                    id="productPrice"
+                    min="0"
+                    step="0.01"
+                    placeholder="0,00"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- ESTOQUE -->
+
+              <div class="product-form-row">
+                <div class="product-form-group">
+                  <label for="minimumStock"> Estoque mínimo </label>
+
+                  <input
+                    type="number"
+                    id="minimumStock"
+                    step="0.001"
+                    min="0"
+                    value="0"
+                  />
+                </div>
+
+                <div class="product-form-group">
+                  <p class="catalog-note">
+                    A quantidade e a validade são registradas nos recebimentos,
+                    com fornecedor, filial e documento de origem.
+                  </p>
+                </div>
+              </div>
+
+              <!-- VALIDADE + UNIDADE -->
+
+              <div class="product-form-row">
+                <div class="product-form-group">
+                  <a href="estoque.html" class="catalog-note"
+                    >Consultar lotes e estoque</a
+                  >
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productUnit"> Unidade </label>
+
+                  <select id="productUnit">
+                    <option value="UN">Unidade</option>
+
+                    <option value="KG">Quilograma</option>
+
+                    <option value="G">Grama</option>
+
+                    <option value="L">Litro</option>
+
+                    <option value="ML">Mililitro</option>
+
+                    <option value="CX">Caixa</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- STATUS -->
+
+              <div class="product-form-group">
+                <label for="productStatus"> Status </label>
+
+                <select id="productStatus">
+                  <option value="ativo">Ativo</option>
+
+                  <option value="inativo">Inativo</option>
+                </select>
+              </div>
+
+              <!-- OBSERVAÇÃO -->
+
+              <div class="product-form-group">
+                <label for="productObservation"> Observação </label>
+
+                <textarea
+                  id="productObservation"
+                  rows="3"
+                  placeholder="Informações adicionais..."
+                ></textarea>
+              </div>
+
+              <!-- BOTÕES -->
+
+              <div class="product-modal-footer">
+                <button
+                  type="button"
+                  class="cancel-product-button"
+                  id="cancelProduct"
+                >
+                  Cancelar
+                </button>
+
+                <button type="submit" class="save-product-button">
+                  Salvar produto
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </main>
-  </div>
+      </main>
+    </div>
 
-  <script src="../js/shared/ui.js"></script>
-  <script src="../assets/vendor/lucide.min.js"></script>
-  <script src="../js/pages/produtos.js"></script>
-  <script src="../js/shared/layout.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
 
-  <script>
-    if (window.lucide) window.lucide.createIcons();
-  </script>
-</body>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/pages/produtos.js"></script>
+    <script src="../js/shared/layout.js"></script>
 
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
 </html>

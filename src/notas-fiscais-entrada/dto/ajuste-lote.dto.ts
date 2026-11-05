@@ -1,25 +1,26 @@
-import { IsDateString, IsNumber, IsOptional, IsPositive, IsString, Min } from 'class-validator';
-
+import {
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
 export class AjusteLoteDto {
-  @IsString()
+  @IsOptional() @IsString() @IsNotEmpty() @MaxLength(50) numero_lote?: string;
+  @IsOptional() @IsDateString() data_fabricacao?: string;
+  @IsOptional() @IsDateString() data_validade?: string;
+  @IsOptional() @IsInt() @Min(1) item_entrada_id?: number;
   @IsOptional()
-  numero_lote?: string;
-
-  @IsDateString()
-  @IsOptional()
-  data_fabricacao?: string;
-
-  @IsDateString()
-  @IsOptional()
-  data_validade?: string;
-
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 3 })
   @IsPositive()
-  @IsOptional()
   quantidade?: number;
-
-  @IsNumber()
-  @Min(0)
   @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
   custo_unitario?: number;
+  @IsString() @IsNotEmpty() @MaxLength(1000) motivo: string;
 }

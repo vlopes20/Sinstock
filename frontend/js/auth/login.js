@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'Não foi possível iniciar a autenticação em duas etapas.',
           );
         sessionStorage.setItem('sinstock.preAuth', result.preAuthToken);
+        sessionStorage.setItem('sinstock.mfaMethod', result.method || 'TOTP');
         location.assign(SinstockConfig.url('pages/codigo.html'));
       } else {
         SinstockSession.accept(result);

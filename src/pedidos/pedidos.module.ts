@@ -7,5 +7,6 @@ import { PedidosService } from './pedidos.service';
   imports: [PrismaModule],
   controllers: [PedidosController],
   providers: [PedidosService],
+  exports: [PedidosService],
 })
 export class PedidosModule {}

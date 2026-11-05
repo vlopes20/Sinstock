@@ -1,40 +1,37 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
-
+import { Type } from 'class-transformer';
+import {
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { CreateLoteDto } from '../../notas-fiscais-entrada/dto/create-item-entrada.dto';
 export enum TipoMovimentacao {
   ENTRADA = 'ENTRADA',
   SAIDA = 'SAIDA',
   AJUSTE = 'AJUSTE',
+  TRANSFERENCIA = 'TRANSFERENCIA',
 }
-
 export class CreateMovimentacaoDto {
-  @ApiProperty({ description: 'ID do produto' })
-  @IsInt()
-  @Min(1)
-  produto_id: number;
-
-  @ApiProperty({ description: 'ID da filial onde ocorre a movimentação' })
-  @IsInt()
-  @Min(1)
-  filial_id: number;
-
-  @ApiPropertyOptional({ description: 'ID do lote (opcional)' })
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  lote_id?: number;
-
-  @ApiProperty({ enum: TipoMovimentacao, description: 'Tipo da movimentação' })
-  @IsEnum(TipoMovimentacao)
+  @IsInt() @Min(1) produto_id: number;
+  @IsInt() @Min(1) filial_id: number;
+  @IsOptional() @IsInt() @Min(1) lote_id?: number;
+  @IsEnum({ ENTRADA: 'ENTRADA', SAIDA: 'SAIDA', AJUSTE: 'AJUSTE' })
   tipo: TipoMovimentacao;
-
-  @ApiProperty({ description: 'Quantidade movimentada' })
-  @IsInt()
-  @Min(1)
-  quantidade: number;
-
-  @ApiPropertyOptional({ description: 'Observação ou justificativa' })
+  @IsNumber({ maxDecimalPlaces: 3 }) @Min(0) quantidade: number;
+  @IsOptional() @IsString() @MaxLength(1000) observacao?: string;
+  @IsOptional() @IsString() @MaxLength(50) referencia?: string;
+  @IsOptional() @IsInt() @Min(1) fornecedor_id?: number;
   @IsOptional()
-  @IsString()
-  observacao?: string;
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  custo_unitario?: number;
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateLoteDto)
+  lote?: CreateLoteDto;
 }

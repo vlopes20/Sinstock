@@ -1051,6 +1051,9 @@ body {
 .pointer-events-none {
     pointer-events: none;
 }
+.\!visible {
+    visibility: visible !important;
+}
 .visible {
     visibility: visible;
 }
@@ -1152,9 +1155,6 @@ body {
 .flex {
     display: flex;
 }
-.\!table {
-    display: table !important;
-}
 .table {
     display: table;
 }
@@ -1182,32 +1182,11 @@ body {
 .h-\[155px\] {
     height: 155px;
 }
-.h-\[42\%\] {
-    height: 42%;
-}
-.h-\[49\%\] {
-    height: 49%;
-}
-.h-\[50\%\] {
-    height: 50%;
-}
-.h-\[60\%\] {
-    height: 60%;
-}
-.h-\[61\%\] {
-    height: 61%;
-}
 .h-\[62px\] {
     height: 62px;
 }
-.h-\[65\%\] {
-    height: 65%;
-}
 .h-\[66px\] {
     height: 66px;
-}
-.h-\[68\%\] {
-    height: 68%;
 }
 .h-\[68px\] {
     height: 68px;
@@ -1215,26 +1194,11 @@ body {
 .h-\[70px\] {
     height: 70px;
 }
-.h-\[72\%\] {
-    height: 72%;
-}
-.h-\[75\%\] {
-    height: 75%;
-}
 .h-\[800px\] {
     height: 800px;
 }
-.h-\[81\%\] {
-    height: 81%;
-}
-.h-\[82\%\] {
-    height: 82%;
-}
 .h-\[90\%\] {
     height: 90%;
-}
-.h-\[94\%\] {
-    height: 94%;
 }
 .h-\[96vh\] {
     height: 96vh;
@@ -1266,17 +1230,8 @@ body {
 .w-\[120\%\] {
     width: 120%;
 }
-.w-\[18\.7\%\] {
-    width: 18.7%;
-}
 .w-\[300px\] {
     width: 300px;
-}
-.w-\[34\.4\%\] {
-    width: 34.4%;
-}
-.w-\[46\.9\%\] {
-    width: 46.9%;
 }
 .w-\[60\%\] {
     width: 60%;

@@ -49,6 +49,8 @@ export class PreAuthStrategy extends PassportStrategy(
     return {
       userId: payload.sub,
       isPreAuth: true,
+      challengeId: payload.challengeId,
+      method: payload.method,
     };
   }
 }

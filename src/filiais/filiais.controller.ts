@@ -1,4 +1,8 @@
 import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
+import {
   Body,
   Controller,
   Delete,
@@ -11,9 +15,11 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateFilialDto } from './dto/create-filial.dto';
+import { UpdateFilialDto } from './dto/update-filial.dto';
 import { FiliaisService } from './filiais.service';
 
-@UseGuards(JwtAuthGuard)
+@PermissionResource('filiais')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('filiais')
 export class FiliaisController {
   constructor(private readonly filiaisService: FiliaisService) {}
@@ -34,10 +40,7 @@ export class FiliaisController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: Partial<CreateFilialDto>,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateFilialDto) {
     return this.filiaisService.update(id, dto);
   }
 

@@ -1,900 +1,327 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Pedidos | SINSTOCK</title>
-    <link rel="stylesheet" href="../assets/styles/dashboard.css">
-    <link rel="stylesheet" href="../assets/styles/pedidos.css">
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/pedidos.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
 
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-</head>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
 
-<body>
-
+  <body>
     <div class="dashboard">
-
-        <!-- =====================================
+      <!-- =====================================
              MENU LATERAL
         ====================================== -->
 
-        <aside class="sidebar">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreiro.png" alt="SINSTOCK" />
+        </div>
 
-            <div class="sidebar-logo">
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item">
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+          </a>
 
-                <img src="../assets/images/letreiro.png" alt="SINSTOCK">
+          <a href="pedidos.html" class="menu-item active">
+            <i data-lucide="shopping-bag"></i>
+            Pedidos
+          </a>
 
-            </div>
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
 
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
 
-            <nav class="sidebar-menu">
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
 
-                <a href="dashboard.html" class="menu-item ">
-                    <i data-lucide="layout-dashboard"></i>
-                    Dashboard
-                </a>
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
 
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
 
-                <a href="pedidos.html" class="menu-item active">
-                    <i data-lucide="shopping-bag"></i>
-                    Pedidos
-                </a>
+          <a href="#" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+        </nav>
 
+        <div class="sidebar-bottom">
+          <a href="#" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
 
-                <a href="estoque.html" class="menu-item">
-                    <i data-lucide="boxes"></i>
-                    Estoque
-                </a>
-
-
-                <a href="vendas.html" class="menu-item">
-                    <i data-lucide="badge-dollar-sign"></i>
-                    Vendas
-                </a>
-
-
-                <a href="produtos.html" class="menu-item">
-                    <i data-lucide="package-search"></i>
-                    Produtos
-                </a>
-
-
-                <a href="fornecedores.html" class="menu-item">
-                    <i data-lucide="truck"></i>
-                    Fornecedores
-                </a>
-
-
-                <a href="relatorios.html" class="menu-item">
-                    <i data-lucide="scroll-text"></i>
-                    Relatórios
-                </a>
-
-
-                <a href="#" class="menu-item">
-                    <i data-lucide="settings"></i>
-                    Configurações
-                </a>
-
-            </nav>
-
-
-            <div class="sidebar-bottom">
-
-                <a href="#" class="menu-item">
-                    <i data-lucide="circle-question-mark"></i>
-                    Ajuda e suporte
-                </a>
-
-            </div>
-
-        </aside>
-
-
-
-        <!-- =====================================
+      <!-- =====================================
              CONTEÚDO
         ====================================== -->
 
-        <main class="main-content">
-
-
-            <!-- =====================================
+      <main class="main-content">
+        <!-- =====================================
                  TOPO
             ====================================== -->
 
-            <header class="topbar">
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"> ⌕ </span>
 
-                <div class="search-box">
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
 
-                    <span class="search-icon">
-                        ⌕
-                    </span>
+            <span class="shortcut"> ⌘ K </span>
+          </div>
 
-                    <input type="text" placeholder="Buscar produtos, pedidos, clientes...">
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
 
-                    <span class="shortcut">
-                        ⌘ K
-                    </span>
+            <div class="notification">
+              <i data-lucide="bell"></i>
 
-                </div>
+              <span class="notification-number"> 1 </span>
+            </div>
 
+            <div class="user">
+              <div
+                class="avatar flex items-center justify-center bg-[#fde4d5] text-[#773513] font-bold"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
 
-                <div class="topbar-right">
-                    <div class="date">
-                        <i data-lucide="calendar-days"></i>
-                        <span id="dataAtual"></span>
-                    </div>
+              <span> Vini </span>
 
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+        </header>
 
-                    <div class="notification">
-
-                        <i data-lucide="bell"></i>
-
-                        <span class="notification-number">
-                            1
-                        </span>
-
-                    </div>
-
-
-                    <div class="user">
-
-                        <div class="avatar flex items-center justify-center bg-[#fde4d5] text-[#773513] font-bold">
-                            <span aria-label="Usuário de demonstração">DE</span>
-                        </div>
-
-                        <span>
-                            Vini
-                        </span>
-
-                        <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-
-            <!-- =====================================
+        <!-- =====================================
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-            <section class="content">
-
-                <!-- =====================================
+        <section class="content">
+          <!-- =====================================
          CABEÇALHO
     ====================================== -->
 
-                <div class="orders-header">
+          <div class="orders-header">
+            <div>
+              <h1>Pedidos</h1>
 
-                    <div>
-                        <h1>Pedidos</h1>
+              <p>Acompanhe e gerencie os pedidos cadastrados.</p>
+            </div>
 
-                        <p>
-                            Acompanhe e gerencie os pedidos cadastrados.
-                        </p>
-                    </div>
+            <button type="button" class="new-order-button" id="openOrderModal">
+              <span>+</span>
+              Novo pedido
+            </button>
+          </div>
 
-
-                    <button type="button" class="new-order-button" id="openOrderModal">
-                        <span>+</span>
-                        Novo pedido
-                    </button>
-
-                </div>
-
-
-                <!-- =====================================
+          <!-- =====================================
          CARDS
     ====================================== -->
 
-                <div class="orders-summary">
+          <div class="catalog-tools">
+            <label>Filial<select id="ordersBranch"></select></label
+            ><button type="button" data-catalog="clientes">
+              Gerenciar clientes
+            </button>
+          </div>
+          <div class="orders-summary">
+            <!-- TOTAL -->
 
+            <article class="order-summary-card">
+              <div class="summary-icon total">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
-                    <!-- TOTAL -->
+              <div class="summary-information">
+                <span> Total de pedidos </span>
 
-                    <article class="order-summary-card">
+                <strong>—</strong>
 
-                        <div class="summary-icon total">
-                            <i data-lucide="clipboard-clock"></i>
-                        </div>
+                <small class="positive"> No período selecionado </small>
+              </div>
+            </article>
 
-                        <div class="summary-information">
+            <!-- PENDENTES -->
 
-                            <span>
-                                Total de pedidos
-                            </span>
+            <article class="order-summary-card">
+              <div class="summary-icon pending">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
-                            <strong>
-                                128
-                            </strong>
+              <div class="summary-information">
+                <span>Reservas abertas</span>
 
-                            <small class="positive">
-                                +12% este mês
-                            </small>
+                <strong>—</strong>
 
-                        </div>
+                <small> Reservas abertas </small>
+              </div>
+            </article>
 
-                    </article>
+            <!-- PREPARANDO -->
 
+            <article class="order-summary-card">
+              <div class="summary-icon preparing">
+                <i data-lucide="clipboard-clock"></i>
+              </div>
 
+              <div class="summary-information">
+                <span> Em separação </span>
 
-                    <!-- PENDENTES -->
+                <strong>—</strong>
 
-                    <article class="order-summary-card">
+                <small> Sendo preparados </small>
+              </div>
+            </article>
 
-                        <div class="summary-icon pending">
-                            <i data-lucide="clipboard-clock"></i>
-                        </div>
+            <!-- CONCLUÍDOS -->
 
-                        <div class="summary-information">
+            <article class="order-summary-card">
+              <div class="summary-icon completed">✓</div>
 
-                            <span>
-                                Pendentes
-                            </span>
+              <div class="summary-information">
+                <span>Vendas confirmadas</span>
 
-                            <strong>
-                                5
-                            </strong>
+                <strong>—</strong>
 
-                            <small>
-                                Aguardando aprovação
-                            </small>
+                <small> Finalizados </small>
+              </div>
+            </article>
+          </div>
 
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- PREPARANDO -->
-
-                    <article class="order-summary-card">
-
-                        <div class="summary-icon preparing">
-                            <i data-lucide="clipboard-clock"></i>
-                        </div>
-
-                        <div class="summary-information">
-
-                            <span>
-                                Em separação
-                            </span>
-
-                            <strong>
-                                12
-                            </strong>
-
-                            <small>
-                                Sendo preparados
-                            </small>
-
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- CONCLUÍDOS -->
-
-                    <article class="order-summary-card">
-
-                        <div class="summary-icon completed">
-                            ✓
-                        </div>
-
-                        <div class="summary-information">
-
-                            <span>
-                                Concluídos
-                            </span>
-
-                            <strong>
-                                111
-                            </strong>
-
-                            <small>
-                                Finalizados
-                            </small>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-
-
-                <!-- =====================================
+          <!-- =====================================
          CARD PRINCIPAL
     ====================================== -->
 
-                <div class="orders-card">
-
-
-                    <!-- =====================================
+          <div class="orders-card">
+            <!-- =====================================
              FILTROS
         ====================================== -->
 
-                    <div class="orders-toolbar">
+            <div class="orders-toolbar">
+              <!-- BUSCA -->
 
+              <div class="order-search">
+                <span class="search-order-icon"> ⌕ </span>
 
-                        <!-- BUSCA -->
+                <input
+                  type="text"
+                  placeholder="Buscar por pedido ou cliente..."
+                />
+              </div>
 
-                        <div class="order-search">
+              <!-- FILTROS -->
 
-                            <span class="search-order-icon">
-                                ⌕
-                            </span>
+              <div class="order-filters">
+                <select id="orderStatus" aria-label="Status comercial">
+                  <option value="">Todos os status comerciais</option>
+                  <option value="ORCAMENTO">Reservado</option>
+                  <option value="CONCLUIDO">Confirmado</option>
+                  <option value="CANCELADO">Cancelado</option></select
+                ><select id="orderDelivery" aria-label="Atendimento">
+                  <option value="">Todos os atendimentos</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="EM_SEPARACAO">Em separação</option>
+                  <option value="ENVIADO">Enviado</option>
+                  <option value="ENTREGUE">Entregue</option></select
+                ><select id="orderPeriod" aria-label="Período">
+                  <option value="">Todos os períodos</option>
+                  <option value="1">Últimas 24 horas</option>
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30">Últimos 30 dias</option>
+                </select>
+              </div>
+            </div>
 
-                            <input type="text" placeholder="Buscar por pedido ou cliente...">
-
-                        </div>
-
-
-
-                        <!-- FILTROS -->
-
-                        <div class="order-filters">
-
-                            <select>
-
-                                <option value="">
-                                    Todos os status
-                                </option>
-
-                                <option>
-                                    Pendente
-                                </option>
-
-                                <option>
-                                    Em separação
-                                </option>
-
-                                <option>
-                                    Enviado
-                                </option>
-
-                                <option>
-                                    Concluído
-                                </option>
-
-                                <option>
-                                    Cancelado
-                                </option>
-
-                            </select>
-
-
-                            <select>
-
-                                <option value="">
-                                    Todos os períodos
-                                </option>
-
-                                <option>
-                                    Hoje
-                                </option>
-
-                                <option>
-                                    Últimos 7 dias
-                                </option>
-
-                                <option>
-                                    Últimos 30 dias
-                                </option>
-
-                                <option>
-                                    Este mês
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- =====================================
+            <!-- =====================================
              TABELA
         ====================================== -->
 
-                    <div class="orders-table-container">
+            <div class="orders-table-container">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>Pedido</th>
 
-                        <table class="orders-table">
+                    <th>Cliente</th>
 
-                            <thead>
+                    <th>Data</th>
 
-                                <tr>
+                    <th>Valor</th>
 
-                                    <th>Pedido</th>
+                    <th>Pagamento</th>
 
-                                    <th>Cliente</th>
+                    <th>Status</th>
 
-                                    <th>Data</th>
+                    <th></th>
+                  </tr>
+                </thead>
 
-                                    <th>Valor</th>
+                <tbody>
+                  <tr>
+                    <td colspan="7">Carregando...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-                                    <th>Pagamento</th>
-
-                                    <th>Status</th>
-
-                                    <th></th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-
-                                <!-- PEDIDO 1 -->
-
-                                <tr>
-
-                                    <td>
-
-                                        <strong class="order-number">
-                                            #1048
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="customer">
-
-                                            <div class="customer-avatar">
-                                                JL
-                                            </div>
-
-                                            <div>
-
-                                                <strong>
-                                                    João Lima
-                                                </strong>
-
-                                                <span>
-                                                    joao@email.com
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        01/09/2026
-                                    </td>
-
-
-                                    <td>
-
-                                        <strong class="order-value">
-                                            R$ 250,90
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-                                        PIX
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="order-status pending">
-                                            Pendente
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <button class="order-actions">
-                                            ⋮
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-
-
-                                <!-- PEDIDO 2 -->
-
-                                <tr>
-
-                                    <td>
-
-                                        <strong class="order-number">
-                                            #1047
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="customer">
-
-                                            <div class="customer-avatar">
-                                                MS
-                                            </div>
-
-                                            <div>
-
-                                                <strong>
-                                                    Maria Souza
-                                                </strong>
-
-                                                <span>
-                                                    maria@email.com
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        01/09/2026
-                                    </td>
-
-
-                                    <td>
-
-                                        <strong class="order-value">
-                                            R$ 180,00
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-                                        Cartão
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="order-status preparing">
-                                            Em separação
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <button class="order-actions">
-                                            ⋮
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-
-
-                                <!-- PEDIDO 3 -->
-
-                                <tr>
-
-                                    <td>
-
-                                        <strong class="order-number">
-                                            #1046
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="customer">
-
-                                            <div class="customer-avatar">
-                                                CP
-                                            </div>
-
-                                            <div>
-
-                                                <strong>
-                                                    Carlos Pereira
-                                                </strong>
-
-                                                <span>
-                                                    carlos@email.com
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        31/08/2026
-                                    </td>
-
-
-                                    <td>
-
-                                        <strong class="order-value">
-                                            R$ 490,50
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-                                        PIX
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="order-status completed">
-                                            Concluído
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <button class="order-actions">
-                                            ⋮
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-
-
-                                <!-- PEDIDO 4 -->
-
-                                <tr>
-
-                                    <td>
-
-                                        <strong class="order-number">
-                                            #1045
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="customer">
-
-                                            <div class="customer-avatar">
-                                                AS
-                                            </div>
-
-                                            <div>
-
-                                                <strong>
-                                                    Ana Santos
-                                                </strong>
-
-                                                <span>
-                                                    ana@email.com
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        31/08/2026
-                                    </td>
-
-
-                                    <td>
-
-                                        <strong class="order-value">
-                                            R$ 89,90
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-                                        Dinheiro
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="order-status sent">
-                                            Enviado
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <button class="order-actions">
-                                            ⋮
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-
-
-                                <!-- PEDIDO 5 -->
-
-                                <tr>
-
-                                    <td>
-
-                                        <strong class="order-number">
-                                            #1044
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <div class="customer">
-
-                                            <div class="customer-avatar">
-                                                RF
-                                            </div>
-
-                                            <div>
-
-                                                <strong>
-                                                    Rafael Ferreira
-                                                </strong>
-
-                                                <span>
-                                                    rafael@email.com
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <td>
-                                        30/08/2026
-                                    </td>
-
-
-                                    <td>
-
-                                        <strong class="order-value">
-                                            R$ 310,00
-                                        </strong>
-
-                                    </td>
-
-
-                                    <td>
-                                        Cartão
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="order-status cancelled">
-                                            Cancelado
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <button class="order-actions">
-                                            ⋮
-                                        </button>
-
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-
-                    <!-- =====================================
+            <!-- =====================================
              RODAPÉ DA TABELA
         ====================================== -->
 
-                    <div class="orders-footer">
+            <div class="orders-footer">
+              <span>Carregando...</span>
 
-                        <span>
-                            Mostrando 1 a 5 de 128 pedidos
-                        </span>
-
-
-                        <div class="pagination">
-
-                            <button>
-                                ‹
-                            </button>
-
-                            <button class="active">
-                                1
-                            </button>
-
-                            <button>
-                                2
-                            </button>
-
-                            <button>
-                                3
-                            </button>
-
-                            <button>
-                                ...
-                            </button>
-
-                            <button>
-                                26
-                            </button>
-
-                            <button>
-                                ›
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
+              <div class="pagination"></div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
     <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
     <script src="../js/shared/layout.js"></script>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/services/commerce.js"></script>
     <script src="../js/pages/pedidos.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
 
     <script>
-        lucide.createIcons();
+      lucide.createIcons();
     </script>
-
-</body>
-
+  </body>
 </html>

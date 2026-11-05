@@ -1,4 +1,6 @@
+import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -7,43 +9,24 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
+import { parseBoolean } from '../../common/boolean.transform';
 export class CreateProdutoDto {
-  @IsInt()
-  @IsNotEmpty()
-  categoria_id!: number;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(150)
-  nome!: string;
-
-  @IsString()
+  @IsInt() @Min(1) categoria_id: number;
+  @IsString() @IsNotEmpty() @MaxLength(150) nome: string;
+  @IsOptional() @IsString() @MaxLength(100) marca?: string;
+  @IsOptional() @IsString() @MaxLength(100) codigo_barras?: string;
   @IsOptional()
-  @MaxLength(100)
-  marca?: string;
-
-  @IsString()
-  @IsOptional()
-  @MaxLength(100)
-  codigo_barras?: string;
-
-  @IsNumber()
-  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 3 })
   @Min(0)
-  @Type(() => Number)
   estoque_minimo?: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Type(() => Number)
-  preco_venda!: number;
-
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 }) @Min(0) preco_venda: number;
+  @IsOptional() @IsString() @MaxLength(5000) descricao?: string;
+  @IsOptional() @IsString() @MaxLength(100) sku?: string;
+  @IsOptional() @IsString() @IsNotEmpty() @MaxLength(20) unidade?: string;
   @IsOptional()
-  @Min(0)
-  @Type(() => Number)
-  custo_medio?: number;
+  @Transform(({ obj, key }) => parseBoolean(obj[key]))
+  @IsBoolean()
+  ativo?: boolean;
+  @IsOptional() @IsString() @MaxLength(5000) observacao?: string;
+  @IsOptional() @IsInt() @Min(1) fornecedor_id?: number;
 }

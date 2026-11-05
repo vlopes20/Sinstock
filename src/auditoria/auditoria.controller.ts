@@ -9,6 +9,8 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Readable } from 'stream';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { AuditoriaService } from './auditoria.service';
 import { ConsultaAuditoriaDto } from './dto/consulta-auditoria.dto';
 import { ExcelService } from '../common/services/excel.service';
@@ -16,7 +18,8 @@ import { PdfService } from '../common/services/pdf.service';
 
 @ApiTags('Histórico de Auditoria')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@Roles(1)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('auditoria')
 export class AuditoriaController {
   constructor(
@@ -27,8 +30,14 @@ export class AuditoriaController {
 
   @Get('estoque/exportar-excel')
   @ApiOperation({ summary: 'Exporta logs de auditoria para Excel via Stream' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="auditoria_estoque.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="auditoria_estoque.xlsx"',
+  )
   async exportarExcelStream(
     @Query() query: ConsultaAuditoriaDto,
   ): Promise<StreamableFile> {

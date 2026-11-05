@@ -1,71 +1,66 @@
-# Backend Sinstock
+# SINSTOCK
 
-API do sistema Sinstock, desenvolvida utilizando [NestJS](https://nestjs.com/) e [Prisma ORM](https://www.prisma.io/), com banco de dados MariaDB/MySQL.
+Sistema de estoque com frontend HTML/JavaScript, NestJS, Prisma e MySQL. O frontend é servido pela API em http://localhost:3000/frontend/; a documentação HTTP fica em http://localhost:3000/api.
 
-## 📋 Pré-requisitos
+## Execução local
 
-Certifique-se de ter instalado em sua máquina:
-- [Node.js](https://nodejs.org/en/) (versão 18 ou superior)
-- Banco de dados MariaDB ou MySQL rodando localmente ou em nuvem.
+Ambiente validado: Node.js 24 e MySQL 8.4. Instale as dependências na raiz e no frontend:
 
-## 🚀 Instalação e Configuração
+    npm.cmd ci
+    npm.cmd ci --prefix frontend
 
-**1. Instale as dependências do projeto:**
-\`\`\`bash
-npm install
-\`\`\`
+Se ainda não existir .env, copie .env.example e configure DATABASE_URL, JWT_SECRET e SMTP. Preserve o .env já configurado nesta máquina.
 
-**2. Configure as variáveis de ambiente:**
-Crie o arquivo `.env` a partir do arquivo de exemplo. 
+    npm.cmd exec -- prisma generate
+    npm.cmd exec -- prisma migrate deploy
+    npm.cmd run auth:bootstrap
+    npm.cmd run build:frontend
+    npm.cmd run build
+    npm.cmd run start:prod
 
-No Windows (PowerShell/CMD):
-\`\`\`bash
-copy .env.example .env
-\`\`\`
-No Linux/Mac:
-\`\`\`bash
-cp .env.example .env
-\`\`\`
-> **Nota:** Abra o arquivo `.env` recém-criado e preencha as credenciais corretas de acesso ao seu banco de dados e a sua `JWT_SECRET`.
+O bootstrap cria somente o primeiro administrador local. Não altera usuários nem senhas existentes. As credenciais iniciais ficam no arquivo local ignorado .tmp/admin-local.json.
 
-**3. Configure o Banco de Dados (Prisma):**
-Gere os artefatos do Prisma Client, crie as tabelas no banco e popule com os dados iniciais (Seed):
-\`\`\`bash
-# Gera o Client do Prisma
-npx prisma generate
+Durante o desenvolvimento:
 
-# Sincroniza o banco de dados com o schema
-npx prisma db push
+    npm.cmd run start:dev
+    npm.cmd run watch:frontend
 
-# Popula o banco com os usuários e perfis iniciais
-npx prisma db seed
-\`\`\`
+As migrações incluem constraints de saldo e triggers de histórico imutável; utilize migrate deploy para instalar a estrutura completa.
 
-## 💻 Executando a Aplicação
+## Funcionalidades conectadas
 
-\`\`\`bash
-# Modo de desenvolvimento (recomendado)
-npm run start:dev
+- Login, recuperação de senha, encerramento de sessões, segundo fator por e-mail ou aplicativo autenticador.
+- Cadastro administrativo de usuários, perfis e permissões; empresa e preferências pessoais.
+- Produtos, categorias, fornecedores, filiais e clientes.
+- Entradas com documento e fornecedor, lotes, custo médio, ajustes, transferências, reservas e histórico.
+- Checkout, confirmação/cancelamento de pedidos e acompanhamento de atendimento.
+- Dashboard, alertas, busca global e notificações com leitura individual.
+- Relatórios de vendas, ranking, estoque, validade e movimentações; exportação PDF, XLSX e CSV.
+- Leitura de códigos pela câmera; fornecedores por GPS, cidade ou CEP.
+- Chamados com mensagens, anexos protegidos e FAQ administrável.
 
-# Modo de produção
-npm run start:prod
-\`\`\`
-A aplicação estará disponível em `http://localhost:3000`.
+O sistema exige comunicação com o servidor para gravar operações. O cadastro de usuários permanece restrito a administradores.
 
-## 🧪 Testes
+## Verificação
 
-\`\`\`bash
-# Testes unitários
-npm run test
+    npm.cmd run build
+    npm.cmd test -- --runInBand
+    npm.cmd run test:auth
+    npm.cmd run test:stock
+    npm.cmd run check:frontend
+    npm.cmd --prefix frontend run check:responsive
 
-# Cobertura de testes
-npm run test:cov
-\`\`\`
+test:stock usa um banco temporário sinstock_test_* com MySQL real, migrações e navegador. O banco é removido ao terminar. SMTP é substituído nos testes, sem envio real de mensagens. O usuário do banco precisa poder criar/remover esse banco temporário.
 
-## 🛠️ Tecnologias Utilizadas
+## Documentação
 
-- **NestJS:** Framework Node.js para construção de APIs eficientes e escaláveis.
-- **Prisma:** ORM moderno para Node.js e TypeScript.
-- **JWT & Passport:** Autenticação e segurança de rotas.
-- **Bcrypt:** Criptografia de senhas.
-- **MariaDB / MySQL:** Banco de dados relacional.
+- [Requisitos do PDF e decisões confirmadas](docs/requisitos-documentacao.md)
+- [Estado da implementação](docs/implementacao-status.md)
+- [Contratos e regras implementadas](docs/contratos-integracao.md)
+- [Matriz atual de telas e APIs](docs/matriz-integracao-atual.md)
+- [Validação e limites da homologação](docs/homologacao-integracao.md)
+- [SMTP com Gmail](docs/smtp.md)
+- [MySQL local no Windows](docs/mysql-local.md)
+- [Frontend e compilação de estilos](frontend/README.md)
+
+Os inventários e a análise de 04/11/2026 documentam o diagnóstico anterior à integração. A documentação atual acima identifica as entregas posteriores.

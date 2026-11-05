@@ -34,11 +34,15 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(1)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(1)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }

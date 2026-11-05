@@ -7,41 +7,20 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
-
 export class CreateLoteDto {
-  @IsString()
-  @IsNotEmpty()
-  numero_lote!: string;
-
-  @IsDateString()
-  @IsOptional()
-  data_fabricacao?: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  data_validade!: string;
+  @IsString() @IsNotEmpty() @MaxLength(50) numero_lote: string;
+  @IsOptional() @IsDateString() data_fabricacao?: string;
+  @IsDateString() data_validade: string;
 }
-
 export class CreateItemEntradaDto {
-  @IsInt()
-  @IsNotEmpty()
-  produto_id!: number;
-
-  @IsNumber()
-  @IsPositive()
-  quantidade!: number;
-
-  @IsNumber()
-  @Min(0)
-  custo_unitario!: number;
-
-  @IsInt()
-  @IsOptional()
-  lote_id?: number;
-
+  @IsInt() @Min(1) produto_id: number;
+  @IsNumber({ maxDecimalPlaces: 3 }) @IsPositive() quantidade: number;
+  @IsNumber({ maxDecimalPlaces: 2 }) @Min(0) custo_unitario: number;
+  @IsOptional() @IsInt() @Min(1) lote_id?: number;
   @IsOptional()
   @ValidateNested()
   @Type(() => CreateLoteDto)

@@ -1,62 +1,132 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { Prisma } from '@prisma/client';
 import { AlertasService } from '../alertas/alertas.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { FiltroNotificacoesDto } from './dto/filtro-notificacoes.dto';
 
 @Injectable()
 export class NotificacoesService {
-  private readonly logger = new Logger(NotificacoesService.name);
-
   constructor(
     private readonly prisma: PrismaService,
-    private readonly alertasService: AlertasService,
+    private readonly alerts: AlertasService,
   ) {}
-
-  // Executa automaticamente todo dia às 08:00 AM
-  @Cron(CronExpression.EVERY_DAY_AT_8AM)
+  @Cron(CronExpression.EVERY_DAY_AT_8AM, { timeZone: 'America/Sao_Paulo' })
   async dispararNotificacoesDiarias() {
-    this.logger.log('Iniciando varredura de alertas para disparo de notificações...');
-
-    const estoqueBaixo = await this.alertasService.verificarEstoqueMinimo();
-    const lotesVencendo = await this.alertasService.verificarLotesVencimento(30);
-
-    // Grava as notificações pendentes na tabela de notificações
-    for (const item of estoqueBaixo) {
-      await this.prisma.notificacoes.create({
-        data: {
-          titulo: 'Alerta de Estoque Baixo',
-          mensagem: `O produto ${item.produto_nome} está com apenas ${item.quantidade_atual} unidades no estoque da filial ${item.filial_id}.`,
-          tipo: 'ESTOQUE_BAIXO',
-          lida: false,
-        } as any,
-      });
-    }
-
-    for (const lote of lotesVencendo) {
-      await this.prisma.notificacoes.create({
-        data: {
-          titulo: 'Alerta de Validade de Lote',
-          mensagem: `O lote ${lote.numero_lote} do produto ${lote.produto_nome} vence em ${lote.dias_para_vencer} dias.`,
-          tipo: 'VENCIMENTO',
-          lida: false,
-        } as any,
-      });
-    }
-
-    this.logger.log(`Notificações geradas com sucesso: ${estoqueBaixo.length + lotesVencendo.length} novos avisos.`);
-  }
-
-  async listarNotificacoes(lida?: boolean) {
-    return this.prisma.notificacoes.findMany({
-      where: lida !== undefined ? { lida } : {},
-      orderBy: { id: 'desc' },
+    const [low, lots] = await Promise.all([
+      this.alerts.verificarEstoqueMinimo(),
+      this.alerts.verificarLotesVencimento(),
+    ]);
+    const day = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'America/Sao_Paulo',
     });
+    const entries = [
+      ...low.map((item) => ({
+        chave: 'ESTOQUE:' + item.produto_id + ':' + item.filial_id + ':' + day,
+        titulo: 'Estoque baixo',
+        tipo: 'ESTOQUE_BAIXO',
+        mensagem:
+          item.produto_nome +
+          ': ' +
+          item.quantidade_atual +
+          ' disponíveis na filial ' +
+          item.filial_nome +
+          '.',
+      })),
+      ...lots.map((lot) => ({
+        chave: 'VALIDADE:' + lot.lote_id + ':' + day,
+        titulo: lot.dias_para_vencer < 0 ? 'Lote vencido' : 'Validade próxima',
+        tipo: 'VENCIMENTO',
+        mensagem:
+          lot.produto_nome +
+          ' · lote ' +
+          lot.numero_lote +
+          ': ' +
+          (lot.dias_para_vencer < 0
+            ? 'vencido'
+            : 'vence em ' + lot.dias_para_vencer + ' dias') +
+          '.',
+      })),
+    ];
+    // Unique keys make repeat and concurrent scans idempotent for the same day.
+    for (const data of entries) {
+      try {
+        await this.prisma.notificacoes.upsert({
+          where: { chave: data.chave },
+          create: data,
+          update: {},
+        });
+      } catch (error) {
+        if (error?.code !== 'P2002') throw error;
+      }
+    }
+    return { alertas_encontrados: entries.length };
   }
-
-  async marcarComoLida(id: number) {
-    return this.prisma.notificacoes.update({
-      where: { id },
-      data: { lida: true },
+  async listarNotificacoes(dto: FiltroNotificacoesDto, usuarioId: number) {
+    const user = await this.prisma.usuarios.findUniqueOrThrow({
+      where: { id: usuarioId },
+      select: { preferencias: true },
     });
+    const preferences = user.preferencias as Record<string, unknown> | null;
+    const disabled: string[] = [];
+    if (preferences?.notificar_estoque === false)
+      disabled.push('ESTOQUE_BAIXO');
+    if (preferences?.notificar_validade === false) disabled.push('VENCIMENTO');
+    const pagina = dto.pagina ?? 1,
+      limite = dto.limite ?? 10;
+    const where: Prisma.notificacoesWhereInput = {
+      tipo: { notIn: disabled },
+      ...(dto.lida !== undefined
+        ? {
+            leituras: dto.lida
+              ? { some: { usuario_id: usuarioId } }
+              : { none: { usuario_id: usuarioId } },
+          }
+        : {}),
+    };
+    const [total, unread, rows] = await Promise.all([
+      this.prisma.notificacoes.count({ where }),
+      this.prisma.notificacoes.count({
+        where: {
+          tipo: { notIn: disabled },
+          leituras: { none: { usuario_id: usuarioId } },
+        },
+      }),
+      this.prisma.notificacoes.findMany({
+        where,
+        take: limite,
+        skip: (pagina - 1) * limite,
+        orderBy: { id: 'desc' },
+        include: {
+          leituras: {
+            where: { usuario_id: usuarioId },
+            select: { usuario_id: true },
+          },
+        },
+      }),
+    ]);
+    return {
+      dados: rows.map(({ leituras, ...row }) => ({
+        ...row,
+        lida: leituras.length > 0,
+      })),
+      nao_lidas: unread,
+      meta: { total, pagina, limite, totalPages: Math.ceil(total / limite) },
+    };
+  }
+  async marcarComoLida(id: number, usuarioId: number) {
+    if (!(await this.prisma.notificacoes.findUnique({ where: { id } })))
+      throw new NotFoundException('Notificação não encontrada.');
+    await this.prisma.leituraNotificacao.upsert({
+      where: {
+        notificacao_id_usuario_id: {
+          notificacao_id: id,
+          usuario_id: usuarioId,
+        },
+      },
+      create: { notificacao_id: id, usuario_id: usuarioId },
+      update: {},
+    });
+    return { id, lida: true };
   }
 }

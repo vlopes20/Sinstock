@@ -1,4 +1,8 @@
 import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
+import {
   Body,
   Controller,
   Delete,
@@ -20,7 +24,8 @@ import { BuscaCodigoBarrasDto } from './dto/busca-codigo-barras.dto';
 
 @ApiTags('Produtos')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@PermissionResource('produtos')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('produtos')
 export class ProdutosController {
   constructor(private readonly produtosService: ProdutosService) {}
@@ -32,7 +37,9 @@ export class ProdutosController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listagem de produtos com filtros dinâmicos e paginação' })
+  @ApiOperation({
+    summary: 'Listagem de produtos com filtros dinâmicos e paginação',
+  })
   listar(@Query() query: FiltroProdutosDto) {
     return this.produtosService.listar(query);
   }
@@ -43,10 +50,12 @@ export class ProdutosController {
     @Param('codigo') codigo: string,
     @Query() query: BuscaCodigoBarrasDto,
   ) {
-    return this.produtosService.buscarPorCodigoBarras(
-      codigo,
-      query.filial_id,
-    );
+    return this.produtosService.buscarPorCodigoBarras(codigo, query.filial_id);
+  }
+
+  @Get('resumo')
+  resumo() {
+    return this.produtosService.resumo();
   }
 
   @Get(':id')

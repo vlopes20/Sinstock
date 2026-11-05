@@ -8,12 +8,23 @@
   }
   async function request(
     endpoint,
-    { method = 'GET', body, auth = true, token, signal } = {},
+    {
+      method = 'GET',
+      body,
+      auth = true,
+      token,
+      signal,
+      responseType = 'json',
+    } = {},
   ) {
     const credential =
       token ?? (auth ? sessionStorage.getItem('sinstock.access') : null);
-    const headers = { Accept: 'application/json' };
-    if (body !== undefined) headers['Content-Type'] = 'application/json';
+    const multipart = body instanceof FormData;
+    const headers = {
+      Accept: responseType === 'blob' ? '*/*' : 'application/json',
+    };
+    if (body !== undefined && !multipart)
+      headers['Content-Type'] = 'application/json';
     if (credential) headers.Authorization = `Bearer ${credential}`;
     const controller = new AbortController();
     const cancel = () => controller.abort();
@@ -24,11 +35,21 @@
       const response = await fetch(SinstockConfig.apiBaseUrl + endpoint, {
         method,
         headers,
-        body: body === undefined ? undefined : JSON.stringify(body),
+        body:
+          body === undefined
+            ? undefined
+            : multipart
+              ? body
+              : JSON.stringify(body),
         signal: controller.signal,
         cache: 'no-store',
         credentials: 'omit',
       });
+      if (response.ok && responseType === 'blob')
+        return {
+          blob: await response.blob(),
+          contentDisposition: response.headers.get('Content-Disposition'),
+        };
       const text = await response.text();
       let data = null;
       try {
@@ -65,5 +86,76 @@
       signal?.removeEventListener('abort', cancel);
     }
   }
-  window.SinstockAPI = { request, ApiError };
+  async function subscribe(
+    endpoint,
+    receive,
+    { signal, onState = () => {} } = {},
+  ) {
+    while (!signal?.aborted) {
+      try {
+        const response = await fetch(SinstockConfig.apiBaseUrl + endpoint, {
+          headers: {
+            Accept: 'text/event-stream',
+            Authorization:
+              'Bearer ' + sessionStorage.getItem('sinstock.access'),
+          },
+          signal,
+          cache: 'no-store',
+          credentials: 'omit',
+        });
+        if (response.status === 401) {
+          window.dispatchEvent(new Event('sinstock:unauthorized'));
+          return;
+        }
+        if (response.status === 403) {
+          onState('Acesso às atualizações não autorizado.');
+          return;
+        }
+        if (!response.ok || !response.body) throw new Error('Disconnected');
+        onState('Conectado: atualizações automáticas.');
+        const reader = response.body.getReader(),
+          decoder = new TextDecoder();
+        let buffer = '';
+        try {
+          while (!signal?.aborted) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder
+              .decode(value, { stream: true })
+              .replace(/\r\n/g, '\n');
+            let boundary;
+            while ((boundary = buffer.indexOf('\n\n')) >= 0) {
+              const frame = buffer.slice(0, boundary);
+              buffer = buffer.slice(boundary + 2);
+              const data = frame
+                .split('\n')
+                .filter((line) => line.startsWith('data:'))
+                .map((line) => line.slice(5).trim())
+                .join('\n');
+              if (data) receive(JSON.parse(data));
+            }
+          }
+        } finally {
+          await reader.cancel().catch(() => {});
+          reader.releaseLock();
+        }
+      } catch {
+        if (signal?.aborted) return;
+      }
+      if (signal?.aborted) return;
+      onState('Reconectando atualizações...');
+      await new Promise((resolve) => {
+        const timer = setTimeout(() => {
+          signal?.removeEventListener('abort', stop);
+          resolve();
+        }, 3000);
+        function stop() {
+          clearTimeout(timer);
+          resolve();
+        }
+        signal?.addEventListener('abort', stop, { once: true });
+      });
+    }
+  }
+  window.SinstockAPI = { request, subscribe, ApiError };
 })();

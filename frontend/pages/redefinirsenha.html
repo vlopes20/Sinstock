@@ -1,75 +1,155 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redefinir Senha | SINSTOCK</title>
-  <link rel="stylesheet" href="../assets/styles/autenticacao.css">
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-  <script src="../js/auth/forms.js" defer></script>
-</head>
-<body class="bg-white text-gray-900 font-sans antialiased min-h-screen">
-  <main class="relative grid grid-cols-1 lg:grid-cols-[42%_58%] w-full min-h-screen overflow-hidden">
-    
-    <section class="relative w-full min-h-screen flex items-center justify-center px-8 lg:px-[70px] bg-white z-20">
-      <div class="w-full max-w-[445px] my-auto">
-        <div class="mb-8">
-          <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Nova Senha</h1>
-          <p class="mt-2 text-gray-500 text-base">Digite a sua nova senha nos campos abaixo.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redefinir Senha | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/autenticacao.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/auth/session.js"></script>
+    <script src="../js/auth/forms.js" defer></script>
+  </head>
+  <body class="bg-white text-gray-900 font-sans antialiased min-h-screen">
+    <main
+      class="auth-page relative grid grid-cols-1 lg:grid-cols-[42%_58%] w-full min-h-screen overflow-hidden"
+    >
+      <section
+        class="auth-panel relative w-full min-h-screen flex items-center justify-center px-8 lg:px-[70px] bg-white z-20"
+      >
+        <div class="auth-content w-full max-w-[445px] my-auto">
+          <div class="mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">
+              Nova Senha
+            </h1>
+            <p class="mt-2 text-gray-500 text-base">
+              Digite a sua nova senha nos campos abaixo.
+            </p>
+          </div>
+
+          <form id="resetPasswordForm" class="space-y-6">
+            <!-- NOVA SENHA -->
+            <div>
+              <label
+                for="novaSenha"
+                class="block mb-2.5 text-lg font-normal text-gray-700"
+                >Nova Senha</label
+              >
+              <div
+                class="relative flex items-center w-full h-[68px] border border-gray-300 rounded-lg bg-white focus-within:border-[#ff6200] focus-within:ring-4 focus-within:ring-[#ff6200]/10 transition-all"
+              >
+                <svg
+                  class="w-6 h-6 ml-5 text-gray-500 flex-shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect width="18" height="11" x="3" y="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  type="password"
+                  minlength="8"
+                  maxlength="72"
+                  autocomplete="new-password"
+                  id="novaSenha"
+                  name="novaSenha"
+                  placeholder="Digite a nova senha"
+                  required
+                  class="w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400"
+                />
+              </div>
+            </div>
+
+            <!-- CONFIRMAR NOVA SENHA -->
+            <div>
+              <label
+                for="confirmarSenha"
+                class="block mb-2.5 text-lg font-normal text-gray-700"
+                >Confirmar Nova Senha</label
+              >
+              <div
+                id="confirmarContainer"
+                class="relative flex items-center w-full h-[68px] border border-gray-300 rounded-lg bg-white focus-within:border-[#ff6200] focus-within:ring-4 focus-within:ring-[#ff6200]/10 transition-all"
+              >
+                <svg
+                  class="w-6 h-6 ml-5 text-gray-500 flex-shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect width="18" height="11" x="3" y="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  type="password"
+                  minlength="8"
+                  maxlength="72"
+                  autocomplete="new-password"
+                  id="confirmarSenha"
+                  name="confirmarSenha"
+                  placeholder="Repita a nova senha"
+                  required
+                  class="w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400"
+                />
+              </div>
+              <!-- MENSAGEM DE ERRO (Oculta por padrão) -->
+              <span
+                id="erroSenha"
+                class="hidden mt-2 text-sm text-red-600 font-medium"
+                >As senhas não coincidem. Verifique e tente novamente.</span
+              >
+            </div>
+
+            <button
+              type="submit"
+              class="w-full h-[66px] rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25"
+            >
+              Alterar Senha
+            </button>
+            <a
+              href="esquecisenha.html"
+              class="block mt-4 text-orange-600 underline"
+              >Solicitar outro link</a
+            >
+          </form>
         </div>
+      </section>
 
-        <form id="resetPasswordForm" class="space-y-6">
-          <!-- NOVA SENHA -->
-          <div>
-            <label for="novaSenha" class="block mb-2.5 text-lg font-normal text-gray-700">Nova Senha</label>
-            <div class="relative flex items-center w-full h-[68px] border border-gray-300 rounded-lg bg-white focus-within:border-[#ff6200] focus-within:ring-4 focus-within:ring-[#ff6200]/10 transition-all">
-              <svg class="w-6 h-6 ml-5 text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              <input type="password" minlength="8" maxlength="72" autocomplete="new-password" id="novaSenha" name="novaSenha" placeholder="Digite a nova senha" required class="w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400">
-            </div>
-          </div>
+      <!-- LADO DIREITO (ILUSTRAÇÃO E DECORAÇÕES) -->
+      <section
+        class="auth-artwork hidden lg:block absolute top-0 right-0 w-[60%] h-screen bg-gradient-to-br from-[#ff842c] via-[#e05c0f] to-[#b83d00] [clip-path:polygon(0_0,100%_0,100%_100%,46%_100%)] overflow-hidden z-20"
+      >
+        <!-- Círculos decorativos do fundo -->
+        <div
+          class="absolute w-[800px] h-[800px] rounded-full border border-white/15 right-10 top-[80px]"
+        ></div>
+        <div
+          class="absolute w-[1050px] h-[1050px] rounded-full border border-white/15 -right-[100px] top-[30px]"
+        ></div>
 
-          <!-- CONFIRMAR NOVA SENHA -->
-          <div>
-            <label for="confirmarSenha" class="block mb-2.5 text-lg font-normal text-gray-700">Confirmar Nova Senha</label>
-            <div id="confirmarContainer" class="relative flex items-center w-full h-[68px] border border-gray-300 rounded-lg bg-white focus-within:border-[#ff6200] focus-within:ring-4 focus-within:ring-[#ff6200]/10 transition-all">
-              <svg class="w-6 h-6 ml-5 text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              <input type="password" minlength="8" maxlength="72" autocomplete="new-password" id="confirmarSenha" name="confirmarSenha" placeholder="Repita a nova senha" required class="w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400">
-            </div>
-            <!-- MENSAGEM DE ERRO (Oculta por padrão) -->
-            <span id="erroSenha" class="hidden mt-2 text-sm text-red-600 font-medium">As senhas não coincidem. Verifique e tente novamente.</span>
-          </div>
+        <!-- Logo -->
+        <div class="absolute right-[16px] -top-[10px] z-30">
+          <img
+            src="../assets/images/logocinza.png"
+            alt="Logo SINSTOCK"
+            class="w-[300px] h-[155px]"
+          />
+        </div>
+      </section>
 
-          <button type="submit" class="w-full h-[66px] rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25">
-            Alterar Senha
-          </button>
-        <a href="esquecisenha.html" class="block mt-4 text-orange-600 underline">Solicitar outro link</a></form>
+      <!-- ILUSTRAÇÃO PRINCIPAL -->
+      <div
+        class="auth-illustration hidden lg:block absolute top-[130px] right-[-140px] w-[81%] h-[96vh] z-30 pointer-events-none"
+      >
+        <img
+          src="../assets/images/login.png"
+          alt="Sistema SINSTOCK"
+          class="w-[120%] h-[90%] object-contain"
+        />
       </div>
-    </section>
-
-    <!-- LADO DIREITO (ILUSTRAÇÃO E DECORAÇÕES) -->
-    <section class="hidden lg:block absolute top-0 right-0 w-[60%] h-screen bg-gradient-to-br from-[#ff842c] via-[#e05c0f] to-[#b83d00] [clip-path:polygon(0_0,100%_0,100%_100%,46%_100%)] overflow-hidden z-20">
-      <!-- Círculos decorativos do fundo -->
-      <div class="absolute w-[800px] h-[800px] rounded-full border border-white/15 right-10 top-[80px]"></div>
-      <div class="absolute w-[1050px] h-[1050px] rounded-full border border-white/15 -right-[100px] top-[30px]"></div>
-      
-      <!-- Logo -->
-      <div class="absolute right-[16px] -top-[10px] z-30">
-        <img src="../assets/images/logocinza.png" alt="Logo SINSTOCK" class="w-[300px] h-[155px]">
-      </div>
-    </section>
-
-    <!-- ILUSTRAÇÃO PRINCIPAL -->
-    <div class="hidden lg:block absolute top-[130px] right-[-140px] w-[81%] h-[96vh] z-30 pointer-events-none">
-      <img src="../assets/images/login.png" alt="Sistema SINSTOCK" class="w-[120%] h-[90%] object-contain">
-    </div>
-
-  </main>
-  
-</body>
+    </main>
+  </body>
 </html>

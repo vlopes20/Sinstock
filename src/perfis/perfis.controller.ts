@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -31,7 +32,16 @@ export class PerfisController {
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(1)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.perfisService.findOne(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(RolesGuard)
+  @Roles(1)
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: CreatePerfilDto) {
+    return this.perfisService.update(id, dto);
   }
 }

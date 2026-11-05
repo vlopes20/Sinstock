@@ -1,5 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class CreateTransferenciaDto {
   @ApiProperty({ description: 'ID do produto' })
@@ -24,12 +32,13 @@ export class CreateTransferenciaDto {
   lote_id?: number;
 
   @ApiProperty({ description: 'Quantidade transferida' })
-  @IsInt()
-  @Min(1)
+  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsPositive()
   quantidade: number;
 
   @ApiPropertyOptional({ description: 'Observação ou justificativa' })
   @IsOptional()
   @IsString()
+  @MaxLength(1000)
   observacao?: string;
 }

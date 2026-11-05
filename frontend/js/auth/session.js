@@ -4,8 +4,8 @@
     document.documentElement.hasAttribute('data-auth-required');
   let profile = null;
   const clear = () => {
-    ['sinstock.access', 'sinstock.preAuth'].forEach((key) =>
-      sessionStorage.removeItem(key),
+    ['sinstock.access', 'sinstock.preAuth', 'sinstock.mfaMethod'].forEach(
+      (key) => sessionStorage.removeItem(key),
     );
     ['access_token', 'token', 'usuario'].forEach((key) =>
       localStorage.removeItem(key),
@@ -111,6 +111,25 @@
       { once: true },
     ),
   );
+  let lastActivity = Date.now();
+  ['pointerdown', 'keydown', 'scroll'].forEach((event) =>
+    document.addEventListener(
+      event,
+      () => {
+        lastActivity = Date.now();
+      },
+      { passive: true },
+    ),
+  );
+  if (protectedPage)
+    setInterval(() => {
+      if (
+        profile &&
+        profile.preferencias?.logout_inativo !== false &&
+        Date.now() - lastActivity >= 15 * 60000
+      )
+        window.SinstockSession.logout();
+    }, 30000);
   if (protectedPage && !sessionStorage.getItem('sinstock.access')) login();
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && protectedPage) {

@@ -921,9 +921,122 @@ body {
     }
 
 }
+/* Keep the form readable on tablets and on short, landscape viewports. */
+.login-page {
+
+    position: relative;
+
+    min-height: 100svh;
+
+}
+.login-left {
+
+    min-height: 100svh;
+
+    align-items: center;
+
+    padding: 96px clamp(24px, 4vw, 70px) 48px;
+
+}
+.login-container {
+
+    margin-top: 0px;
+
+    min-width: 0px;
+
+}
+.input-box input {
+
+    min-width: 0px;
+
+}
+.login-message {
+
+    overflow-wrap: anywhere;
+
+}
+.illustration-container {
+
+    right: 0px;
+
+    height: calc(100svh - 130px);
+
+    width: 58%;
+
+}
+.illustration-container img {
+
+    height: 100%;
+
+    width: 100%;
+
+}
+@media (max-width: 1279px) {
+    .login-page {
+
+        display: block;
+
+    }
+    .login-right, .illustration-container, .dots {
+
+        display: none;
+
+    }
+    .login-left {
+
+        width: 100%;
+
+    }
+    .login-container {
+
+        max-width: 445px;
+
+    }
+}
+@media (max-width: 600px) {
+    .language {
+
+        top: 1.5rem;
+
+        left: 1.5rem;
+
+    }
+    .login-header {
+
+        margin-bottom: 1.75rem;
+
+    }
+    .login-header h1 {
+
+        font-size: clamp(28px, 8vw, 34px);
+
+    }
+    .input-box input {
+
+        font-size: 1rem;
+
+        line-height: 1.5rem;
+
+    }
+    .forgot-password {
+
+        margin-bottom: 1.75rem;
+
+    }
+    .login-button, .input-box {
+
+        height: 3.5rem;
+
+    }
+}
 .pointer-events-none {
 
     pointer-events: none;
+
+}
+.\!visible {
+
+    visibility: visible !important;
 
 }
 .visible {
@@ -1095,11 +1208,6 @@ body {
     display: flex;
 
 }
-.\!table {
-
-    display: table !important;
-
-}
 .table {
 
     display: table;
@@ -1145,49 +1253,14 @@ body {
     height: 155px;
 
 }
-.h-\[42\%\] {
-
-    height: 42%;
-
-}
-.h-\[49\%\] {
-
-    height: 49%;
-
-}
-.h-\[50\%\] {
-
-    height: 50%;
-
-}
-.h-\[60\%\] {
-
-    height: 60%;
-
-}
-.h-\[61\%\] {
-
-    height: 61%;
-
-}
 .h-\[62px\] {
 
     height: 62px;
 
 }
-.h-\[65\%\] {
-
-    height: 65%;
-
-}
 .h-\[66px\] {
 
     height: 66px;
-
-}
-.h-\[68\%\] {
-
-    height: 68%;
 
 }
 .h-\[68px\] {
@@ -1200,39 +1273,14 @@ body {
     height: 70px;
 
 }
-.h-\[72\%\] {
-
-    height: 72%;
-
-}
-.h-\[75\%\] {
-
-    height: 75%;
-
-}
 .h-\[800px\] {
 
     height: 800px;
 
 }
-.h-\[81\%\] {
-
-    height: 81%;
-
-}
-.h-\[82\%\] {
-
-    height: 82%;
-
-}
 .h-\[90\%\] {
 
     height: 90%;
-
-}
-.h-\[94\%\] {
-
-    height: 94%;
 
 }
 .h-\[96vh\] {
@@ -1285,24 +1333,9 @@ body {
     width: 120%;
 
 }
-.w-\[18\.7\%\] {
-
-    width: 18.7%;
-
-}
 .w-\[300px\] {
 
     width: 300px;
-
-}
-.w-\[34\.4\%\] {
-
-    width: 34.4%;
-
-}
-.w-\[46\.9\%\] {
-
-    width: 46.9%;
 
 }
 .w-\[60\%\] {

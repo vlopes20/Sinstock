@@ -1,5 +1,6 @@
 import {
   Injectable,
+  BadRequestException,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -34,12 +35,12 @@ export class FiliaisService {
   async findOne(id: number) {
     const filial = await this.prisma.filiais.findUnique({
       where: { id },
-      include: { 
+      include: {
         saldos_estoque: {
           include: {
-            produtos: { select: { nome: true } }
-          }
-        } 
+            produtos: { select: { nome: true } },
+          },
+        },
       },
     });
 
@@ -57,7 +58,10 @@ export class FiliaisService {
         data: dto,
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException(`Filial com ID ${id} não encontrada.`);
       }
       throw new InternalServerErrorException('Erro ao atualizar filial.');
@@ -68,10 +72,23 @@ export class FiliaisService {
     try {
       return await this.prisma.filiais.delete({ where: { id } });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2003'
+      ) {
+        throw new BadRequestException(
+          'Não é possível excluir a filial: existem registros vinculados.',
+        );
+      }
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException(`Filial com ID ${id} não encontrada.`);
       }
-      throw new InternalServerErrorException('Erro ao excluir filial. Verifique se não há estoques vinculados a ela.');
+      throw new InternalServerErrorException(
+        'Erro ao excluir filial. Verifique se não há estoques vinculados a ela.',
+      );
     }
   }
 }

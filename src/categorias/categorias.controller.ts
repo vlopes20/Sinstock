@@ -1,4 +1,8 @@
 import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
+import {
   Body,
   Controller,
   Delete,
@@ -17,7 +21,8 @@ import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @ApiTags('Categorias')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@PermissionResource('categorias')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('categorias')
 export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}

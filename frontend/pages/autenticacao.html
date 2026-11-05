@@ -1,63 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verifique seu E-mail | SINSTOCK</title>
-  <link rel="stylesheet" href="../assets/styles/autenticacao.css">
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-</head>
-<body class="bg-white text-gray-900 font-sans antialiased min-h-screen">
-  <main class="relative grid grid-cols-1 lg:grid-cols-[42%_58%] w-full min-h-screen overflow-hidden">
-    
-    <section class="relative w-full min-h-screen flex items-center justify-center px-8 lg:px-[70px] bg-white z-20">
-      <div class="absolute top-7 left-[35px] flex items-center gap-2.5 text-base font-medium cursor-pointer text-gray-900">
-        <span>Português (BR)</span>
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="m6 9 6 6 6-6"/>
-        </svg>
-      </div>
-
-      <div class="w-full max-w-[445px] my-auto">
-        <div class="w-[70px] h-[70px] rounded-full bg-[#ff6200]/10 flex items-center justify-center mb-6">
-          <svg class="w-9 h-9 text-[#ff6200]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verifique seu E-mail | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/autenticacao.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+  <body class="bg-white text-gray-900 font-sans antialiased min-h-screen">
+    <main
+      class="auth-page relative grid grid-cols-1 lg:grid-cols-[42%_58%] w-full min-h-screen overflow-hidden"
+    >
+      <section
+        class="auth-panel relative w-full min-h-screen flex items-center justify-center px-8 lg:px-[70px] bg-white z-20"
+      >
+        <div
+          class="auth-language absolute top-7 left-[35px] flex items-center gap-2.5 text-base font-medium cursor-pointer text-gray-900"
+        >
+          <span>Português (BR)</span>
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="m6 9 6 6 6-6" />
           </svg>
         </div>
 
-        <div class="mb-8">
-          <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Verifique seu E-mail</h1>
-          <p class="mt-3 text-gray-600 text-base leading-relaxed">
-            Se houver uma conta ativa com o e-mail informado, você receberá um link para redefinir sua senha. Confira também a pasta de spam.
-          </p>
+        <div class="auth-content w-full max-w-[445px] my-auto">
+          <div
+            class="w-[70px] h-[70px] rounded-full bg-[#ff6200]/10 flex items-center justify-center mb-6"
+          >
+            <svg
+              class="w-9 h-9 text-[#ff6200]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+          </div>
+
+          <div class="mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">
+              Verifique seu E-mail
+            </h1>
+            <p class="mt-3 text-gray-600 text-base leading-relaxed">
+              Se houver uma conta ativa com o e-mail informado, você receberá um
+              link para redefinir sua senha. Confira também a pasta de spam.
+            </p>
+          </div>
+
+          <a
+            href="esquecisenha.html"
+            class="block text-center rounded-full bg-orange-600 py-4 text-white font-bold"
+            >Solicitar outro link</a
+          >
+
+          <div class="mt-6 text-center">
+            <a
+              href="../index.html"
+              class="text-[#ff5a00] text-base font-medium hover:text-[#df4e00] hover:underline"
+              >Ir para a página de Login</a
+            >
+          </div>
         </div>
+      </section>
 
-        <a href="esquecisenha.html" class="block text-center rounded-full bg-orange-600 py-4 text-white font-bold">Solicitar outro link</a>
+      <!-- LADO DIREITO (ILUSTRAÇÃO E DECORAÇÕES) -->
+      <section
+        class="auth-artwork hidden lg:block absolute top-0 right-0 w-[60%] h-screen bg-gradient-to-br from-[#ff842c] via-[#e05c0f] to-[#b83d00] [clip-path:polygon(0_0,100%_0,100%_100%,46%_100%)] overflow-hidden z-20"
+      >
+        <!-- Círculos decorativos do fundo -->
+        <div
+          class="absolute w-[800px] h-[800px] rounded-full border border-white/15 right-10 top-[80px]"
+        ></div>
+        <div
+          class="absolute w-[1050px] h-[1050px] rounded-full border border-white/15 -right-[100px] top-[30px]"
+        ></div>
 
-        <div class="mt-6 text-center">
-          <a href="../index.html" class="text-[#ff5a00] text-base font-medium hover:text-[#df4e00] hover:underline">Ir para a página de Login</a>
+        <!-- Logo -->
+        <div class="absolute right-[16px] -top-[10px] z-30">
+          <img
+            src="../assets/images/logocinza.png"
+            alt="Logo SINSTOCK"
+            class="w-[300px] h-[155px]"
+          />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- LADO DIREITO (ILUSTRAÇÃO E DECORAÇÕES) -->
-    <section class="hidden lg:block absolute top-0 right-0 w-[60%] h-screen bg-gradient-to-br from-[#ff842c] via-[#e05c0f] to-[#b83d00] [clip-path:polygon(0_0,100%_0,100%_100%,46%_100%)] overflow-hidden z-20">
-      <!-- Círculos decorativos do fundo -->
-      <div class="absolute w-[800px] h-[800px] rounded-full border border-white/15 right-10 top-[80px]"></div>
-      <div class="absolute w-[1050px] h-[1050px] rounded-full border border-white/15 -right-[100px] top-[30px]"></div>
-      
-      <!-- Logo -->
-      <div class="absolute right-[16px] -top-[10px] z-30">
-        <img src="../assets/images/logocinza.png" alt="Logo SINSTOCK" class="w-[300px] h-[155px]">
+      <!-- ILUSTRAÇÃO PRINCIPAL -->
+      <div
+        class="auth-illustration hidden lg:block absolute top-[130px] right-[-140px] w-[81%] h-[96vh] z-30 pointer-events-none"
+      >
+        <img
+          src="../assets/images/login.png"
+          alt="Sistema SINSTOCK"
+          class="w-[120%] h-[90%] object-contain"
+        />
       </div>
-    </section>
-
-    <!-- ILUSTRAÇÃO PRINCIPAL -->
-    <div class="hidden lg:block absolute top-[130px] right-[-140px] w-[81%] h-[96vh] z-30 pointer-events-none">
-      <img src="../assets/images/login.png" alt="Sistema SINSTOCK" class="w-[120%] h-[90%] object-contain">
-    </div>
-  </main>
-</body>
+    </main>
+  </body>
 </html>

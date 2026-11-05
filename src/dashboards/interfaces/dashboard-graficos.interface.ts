@@ -16,11 +16,17 @@ export interface GraficoBarraAlertaStock {
   stockMinimo: number;
 }
 
-export interface EventoRealTimeStock {
-  tipo: 'ENTRADA' | 'SAIDA' | 'ALERTA_STOCK';
-  produtoId: string;
-  nomeProduto: string;
-  quantidade: number;
-  stockAtual: number;
-  timestamp: string;
-}
+export type EventoRealTimeStock =
+  | {
+      tipo: 'ESTOQUE_ATUALIZADO';
+      produtoIds: number[];
+      timestamp: string;
+    }
+  | {
+      tipo: 'ENTRADA' | 'SAIDA' | 'ALERTA_STOCK';
+      produtoId: string;
+      nomeProduto: string;
+      quantidade: number;
+      stockAtual: number;
+      timestamp: string;
+    };

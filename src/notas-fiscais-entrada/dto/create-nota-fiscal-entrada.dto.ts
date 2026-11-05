@@ -1,86 +1,35 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayMinSize,
   IsArray,
   IsDateString,
+  IsIn,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
+  Min,
   ValidateNested,
 } from 'class-validator';
-
-export class CreateLoteDto {
-  @IsString()
-  @IsNotEmpty()
-  numero_lote!: string;
-
-  @IsDateString()
-  @IsOptional()
-  data_fabricacao?: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  data_validade!: string;
-}
-
-export class CreateItemEntradaDto {
-  @IsNumber()
-  @IsNotEmpty()
-  produto_id!: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  quantidade!: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  custo_unitario!: number;
-
-  @IsNumber()
-  @IsOptional()
-  lote_id?: number;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateLoteDto)
-  lote?: CreateLoteDto;
-}
+import { CreateItemEntradaDto } from './create-item-entrada.dto';
+export { CreateItemEntradaDto, CreateLoteDto } from './create-item-entrada.dto';
 
 export class CreateNotaFiscalEntradaDto {
-  @IsNumber()
-  @IsNotEmpty()
-  fornecedor_id!: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  usuario_id!: number;
-
-  @IsNumber()
-  @IsOptional()
-  filial_id?: number;
-
-  @IsString()
-  @IsNotEmpty()
-  numero_nf!: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  data_emissao!: string;
-
-  @IsDateString()
-  @IsOptional()
-  data_recebimento?: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  total!: number;
-
-  @IsString()
-  @IsOptional()
-  status?: string;
-
+  @IsInt() @Min(1) fornecedor_id: number;
+  @IsInt() @Min(1) filial_id: number;
+  @IsString() @IsNotEmpty() @MaxLength(50) numero_nf: string;
+  @IsOptional() @IsString() @MaxLength(1000) observacao?: string;
+  @IsDateString() data_emissao: string;
+  @IsOptional() @IsDateString() data_recebimento?: string;
+  // Kept for older clients; the server always computes the total.
+  @IsOptional() @IsNumber({ maxDecimalPlaces: 2 }) @Min(0) total?: number;
+  @IsOptional() @IsIn(['PENDENTE', 'RECEBIDA']) status?:
+    'PENDENTE' | 'RECEBIDA';
   @IsArray()
+  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => CreateItemEntradaDto)
-  itens!: CreateItemEntradaDto[];
+  itens: CreateItemEntradaDto[];
 }

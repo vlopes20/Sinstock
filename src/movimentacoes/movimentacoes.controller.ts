@@ -1,4 +1,8 @@
 import {
+  PermissionResource,
+  PermissionsGuard,
+} from '../auth/guards/permissions.guard';
+import {
   Body,
   Controller,
   Get,
@@ -18,6 +22,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Ajuste o caminh
 import { CreateMovimentacaoDto } from './dto/create-movimentacao.dto';
 import { CreateTransferenciaDto } from './dto/create-transferencia.dto';
 import { MovimentacoesService } from './movimentacoes.service';
+import { HistoricoMovimentacoesDto } from './dto/historico-movimentacoes.dto';
 
 interface RequestWithUser extends ExpressRequest {
   user: {
@@ -28,7 +33,8 @@ interface RequestWithUser extends ExpressRequest {
 
 @ApiTags('Movimentações de Estoque')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@PermissionResource('movimentacoes')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('movimentacoes')
 export class MovimentacoesController {
   constructor(private readonly movimentacoesService: MovimentacoesService) {}
@@ -64,15 +70,7 @@ export class MovimentacoesController {
   @ApiQuery({ name: 'filial_id', required: false, type: Number })
   @ApiQuery({ name: 'produto_id', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  listarHistorico(
-    @Query('filial_id') filialId?: number,
-    @Query('produto_id') produtoId?: number,
-    @Query('limit') limit?: number,
-  ) {
-    return this.movimentacoesService.listarHistorico(
-      filialId ? Number(filialId) : undefined,
-      produtoId ? Number(produtoId) : undefined,
-      limit ? Number(limit) : 50,
-    );
+  listarHistorico(@Query() dto: HistoricoMovimentacoesDto) {
+    return this.movimentacoesService.listarHistorico(dto);
   }
 }

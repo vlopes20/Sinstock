@@ -1,1141 +1,405 @@
 <!doctype html>
 <html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendas | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/vendas.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
 
-  <title>Vendas | SINSTOCK</title>
-  <link rel="stylesheet" href="../assets/styles/dashboard.css" />
-  <link rel="stylesheet" href="../assets/styles/vendas.css" />
-  <link rel="stylesheet" href="../assets/styles/shared.css" />
-  <script src="../js/core/config.js"></script>
-  <script src="../js/core/api.js"></script>
-  <script src="../js/auth/session.js"></script>
-</head>
-
-<body>
-  <div class="dashboard">
-    <!-- =====================================
+  <body>
+    <div class="dashboard">
+      <!-- =====================================
              MENU LATERAL 
              
         ====================================== -->
 
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
-      </div>
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+        </div>
 
-      <nav class="sidebar-menu">
-        <a href="dashboard.html" class="menu-item active">
-          <i data-lucide="layout-dashboard"></i>
-          Visão Geral
-        </a>
+        <nav class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
 
-        <a href="estoque.html" class="menu-item">
-          <i data-lucide="boxes"></i>
-          Estoque
-        </a>
+          <a href="estoque.html" class="menu-item">
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
 
-        <a href="produtos.html" class="menu-item">
-          <i data-lucide="package-search"></i>
-          Produtos
-        </a>
+          <a href="produtos.html" class="menu-item">
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
 
-        <a href="vendas.html" class="menu-item">
-          <i data-lucide="badge-dollar-sign"></i>
-          Vendas
-        </a>
+          <a href="vendas.html" class="menu-item">
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
 
-        <a href="relatorios.html" class="menu-item">
-          <i data-lucide="scroll-text"></i>
-          Relatórios
-        </a>
+          <a href="relatorios.html" class="menu-item">
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
 
-        <a href="fornecedores.html" class="menu-item">
-          <i data-lucide="truck"></i>
-          Fornecedores
-        </a>
+          <a href="fornecedores.html" class="menu-item">
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
 
-        <a href="configuracoes.html" class="menu-item">
-          <i data-lucide="settings"></i>
-          Configurações
-        </a>
+          <a href="configuracoes.html" class="menu-item">
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
 
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </nav>
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
 
-      <div class="sidebar-bottom">
-        <a href="ajuda.html" class="menu-item">
-          <i data-lucide="circle-question-mark"></i>
-          Ajuda e suporte
-        </a>
-      </div>
-    </aside>
+        <div class="sidebar-bottom">
+          <a href="ajuda.html" class="menu-item">
+            <i data-lucide="circle-question-mark"></i>
+            Ajuda e suporte
+          </a>
+        </div>
+      </aside>
 
-    <!-- =====================================
+      <!-- =====================================
              CONTEÚDO
         ====================================== -->
 
-    <main class="main-content">
-      <!-- =====================================
+      <main class="main-content">
+        <!-- =====================================
                  TOPO
             ====================================== -->
 
-      <header class="topbar">
-        <div class="search-box">
-          <span class="search-icon"><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
 
-          <input type="text" placeholder="Buscar produtos, pedidos, clientes..." />
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+            />
 
-          <span class="shortcut"><i class="converted-icon" data-lucide="command" aria-hidden="true"></i> K</span>
-        </div>
-
-        <div class="topbar-right">
-          <div class="date">
-            <i data-lucide="calendar-days"></i>
-            <span id="dataAtual"></span>
+            <span class="shortcut"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
           </div>
 
-          <div class="notification">
-            <i data-lucide="bell"></i>
-
-            <span class="notification-number"> 1 </span>
-          </div>
-
-          <div class="user">
-            <div class="avatar">
-              <span aria-label="Usuário de demonstração">DE</span>
+          <div class="topbar-right">
+            <div class="date">
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
             </div>
 
-            <span> Vini </span>
+            <div class="notification">
+              <i data-lucide="bell"></i>
 
-            <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+              <span class="notification-number"> 1 </span>
+            </div>
+
+            <div class="user">
+              <div class="avatar">
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- =====================================
+        <!-- =====================================
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-      <section class="content">
-
-        <!-- =========================================
+        <section class="content">
+          <!-- =========================================
          CABEÇALHO
     ========================================== -->
 
-        <div class="sales-header">
+          <div class="sales-header">
+            <div>
+              <h1>Vendas</h1>
 
-          <div>
-            <h1>Vendas</h1>
+              <p>Acompanhe suas vendas e o faturamento da empresa.</p>
+            </div>
 
-            <p>
-              Acompanhe suas vendas e o faturamento da empresa.
-            </p>
+            <button class="new-sale-button" id="openSaleModal">
+              <span
+                ><i
+                  class="converted-icon"
+                  data-lucide="plus"
+                  aria-hidden="true"
+                ></i
+              ></span>
+              Nova venda
+            </button>
           </div>
 
-
-          <button class="new-sale-button" id="openSaleModal">
-            <span><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i></span>
-            Nova venda
-          </button>
-
-        </div>
-
-
-        <!-- =========================================
+          <!-- =========================================
          CARDS
     ========================================== -->
 
-        <div class="sales-summary">
+          <div class="catalog-tools">
+            <label>Filial<select id="salesBranch"></select></label
+            ><label>De<input id="salesFrom" type="date" /></label
+            ><label>Até<input id="salesTo" type="date" /></label>
+          </div>
+          <div class="sales-summary">
+            <!-- FATURAMENTO -->
 
+            <article class="sales-summary-card">
+              <div class="sales-card-icon revenue">
+                <i
+                  class="converted-icon"
+                  data-lucide="dollar-sign"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-          <!-- FATURAMENTO -->
+              <div class="sales-card-info">
+                <span> Faturamento no período </span>
 
-          <article class="sales-summary-card">
+                <strong>—</strong>
 
-            <div class="sales-card-icon revenue"><i class="converted-icon" data-lucide="dollar-sign" aria-hidden="true"></i></div>
+                <small class="positive"> Vendas confirmadas </small>
+              </div>
+            </article>
 
-            <div class="sales-card-info">
+            <!-- VENDAS -->
 
-              <span>
-                Faturamento hoje
-              </span>
+            <article class="sales-summary-card">
+              <div class="sales-card-icon sales">
+                <i
+                  class="converted-icon"
+                  data-lucide="trending-up"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-              <strong>
-                R$ 18.450,90
-              </strong>
+              <div class="sales-card-info">
+                <span> Vendas no período </span>
 
-              <small class="positive">
-                +8,7% em relação a ontem
-              </small>
+                <strong>—</strong>
 
-            </div>
+                <small class="positive"> Vendas confirmadas </small>
+              </div>
+            </article>
 
-          </article>
+            <!-- TICKET MÉDIO -->
 
+            <article class="sales-summary-card">
+              <div class="sales-card-icon average">
+                <i
+                  class="converted-icon"
+                  data-lucide="receipt"
+                  aria-hidden="true"
+                ></i>
+              </div>
 
-          <!-- VENDAS -->
+              <div class="sales-card-info">
+                <span> Ticket médio </span>
 
-          <article class="sales-summary-card">
+                <strong>—</strong>
 
-            <div class="sales-card-icon sales"><i class="converted-icon" data-lucide="trending-up" aria-hidden="true"></i></div>
+                <small> Média por venda </small>
+              </div>
+            </article>
 
-            <div class="sales-card-info">
+            <!-- CANCELADAS -->
 
-              <span>
-                Vendas hoje
-              </span>
+            <article class="sales-summary-card">
+              <div class="sales-card-icon cancelled">
+                <i data-lucide="credit-card-x"></i>
+              </div>
 
-              <strong>
-                32
-              </strong>
+              <div class="sales-card-info">
+                <span> Vendas canceladas </span>
 
-              <small class="positive">
-                +12% em relação a ontem
-              </small>
+                <strong>—</strong>
 
-            </div>
+                <small> No período </small>
+              </div>
+            </article>
+          </div>
 
-          </article>
-
-
-          <!-- TICKET MÉDIO -->
-
-          <article class="sales-summary-card">
-
-            <div class="sales-card-icon average"><i class="converted-icon" data-lucide="receipt" aria-hidden="true"></i></div>
-
-            <div class="sales-card-info">
-
-              <span>
-                Ticket médio
-              </span>
-
-              <strong>
-                R$ 576,59
-              </strong>
-
-              <small>
-                Média por venda
-              </small>
-
-            </div>
-
-          </article>
-
-
-          <!-- CANCELADAS -->
-
-          <article class="sales-summary-card">
-
-            <div class="sales-card-icon cancelled">
-              <i data-lucide="credit-card-x"></i>
-            </div>
-
-            <div class="sales-card-info">
-
-              <span>
-                Vendas canceladas
-              </span>
-
-              <strong>
-                2
-              </strong>
-
-              <small>
-                Hoje
-              </small>
-
-            </div>
-
-          </article>
-
-        </div>
-
-
-        <!-- =========================================
+          <!-- =========================================
          ABAS
     ========================================== -->
 
-        <div class="sales-tabs">
+          <div class="sales-tabs">
+            <button class="sales-tab active" data-tab="salesOverview">
+              Visão geral
+            </button>
 
-          <button class="sales-tab active" data-tab="salesOverview">
-            Visão geral
-          </button>
+            <button class="sales-tab" data-tab="salesHistory">
+              Histórico de vendas
+            </button>
+          </div>
 
-          <button class="sales-tab" data-tab="salesHistory">
-            Histórico de vendas
-          </button>
-
-        </div>
-
-
-        <!-- =========================================
+          <!-- =========================================
          VISÃO GERAL
     ========================================== -->
 
-        <div id="salesOverview" class="sales-tab-content active">
+          <div id="salesOverview" class="sales-tab-content active">
+            <div class="sales-grid">
+              <!-- FATURAMENTO -->
 
-          <div class="sales-grid">
+              <article class="sales-chart-card">
+                <div class="sales-section-header">
+                  <div>
+                    <h2>Faturamento</h2>
 
-
-            <!-- FATURAMENTO -->
-
-            <article class="sales-chart-card">
-
-              <div class="sales-section-header">
-
-                <div>
-                  <h2>Faturamento</h2>
-
-                  <p>
-                    Desempenho das vendas nos últimos dias.
-                  </p>
+                    <p>Desempenho das vendas nos últimos dias.</p>
+                  </div>
                 </div>
 
-
-                <select>
-
-                  <option>
-                    Últimos 7 dias
-                  </option>
-
-                  <option>
-                    Últimos 30 dias
-                  </option>
-
-                  <option>
-                    Este mês
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div class="sales-chart">
-
-                <div class="chart-bars">
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[42%]"></div>
-
-                    <span>27 Ago</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[60%]"></div>
-
-                    <span>28 Ago</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[49%]"></div>
-
-                    <span>29 Ago</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[72%]"></div>
-
-                    <span>30 Ago</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[65%]"></div>
-
-                    <span>31 Ago</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar h-[81%]"></div>
-
-                    <span>01 Set</span>
-
-                  </div>
-
-
-                  <div class="sales-bar-group">
-
-                    <div class="sales-bar active h-[94%]"></div>
-
-                    <span>02 Set</span>
-
-                  </div>
-
+                <div class="sales-chart">
+                  <div class="chart-bars"><p>Carregando...</p></div>
                 </div>
 
-              </div>
+                <div class="sales-chart-footer">
+                  <span> Total no período </span>
 
-
-              <div class="sales-chart-footer">
-
-                <span>
-                  Total no período
-                </span>
-
-                <strong>
-                  R$ 84.620,30
-                </strong>
-
-              </div>
-
-            </article>
-
-
-            <!-- FORMAS DE PAGAMENTO -->
-
-            <article class="payment-card">
-
-              <div class="sales-section-header">
-
-                <div>
-                  <h2>Formas de pagamento</h2>
-
-                  <p>
-                    Distribuição das vendas de hoje.
-                  </p>
+                  <strong>—</strong>
                 </div>
+              </article>
 
-              </div>
+              <!-- FORMAS DE PAGAMENTO -->
 
+              <article class="payment-card">
+                <div class="sales-section-header">
+                  <div>
+                    <h2>Formas de pagamento</h2>
 
-              <div class="payment-list">
-
-
-                <div class="payment-item">
-
-                  <div class="payment-name">
-
-                    <div class="payment-icon pix"><i class="converted-icon" data-lucide="qr-code" aria-hidden="true"></i></div>
-
-                    <div>
-                      <strong>PIX</strong>
-                      <span>15 vendas</span>
-                    </div>
-
+                    <p>Distribuição das vendas no período.</p>
                   </div>
-
-
-                  <strong>
-                    46,9%
-                  </strong>
-
                 </div>
 
-
-                <div class="payment-progress">
-
-                  <div class="w-[46.9%]"></div>
-
-                </div>
-
-
-
-                <div class="payment-item">
-
-                  <div class="payment-name">
-
-                    <div class="payment-icon card"><i class="converted-icon" data-lucide="credit-card" aria-hidden="true"></i></div>
-
-                    <div>
-                      <strong>Cartão</strong>
-                      <span>11 vendas</span>
-                    </div>
-
-                  </div>
-
-                  <strong>
-                    34,4%
-                  </strong>
-
-                </div>
-
-
-                <div class="payment-progress">
-
-                  <div class="w-[34.4%]"></div>
-
-                </div>
-
-
-
-                <div class="payment-item">
-
-                  <div class="payment-name">
-
-                    <div class="payment-icon cash"><i class="converted-icon" data-lucide="banknote" aria-hidden="true"></i></div>
-
-                    <div>
-                      <strong>Dinheiro</strong>
-                      <span>6 vendas</span>
-                    </div>
-
-                  </div>
-
-                  <strong>
-                    18,7%
-                  </strong>
-
-                </div>
-
-
-                <div class="payment-progress">
-
-                  <div class="w-[18.7%]"></div>
-
-                </div>
-
-              </div>
-
-            </article>
-
+                <div class="payment-list"><p>Carregando...</p></div>
+              </article>
+            </div>
           </div>
 
-        </div>
-
-
-
-        <!-- =========================================
+          <!-- =========================================
          HISTÓRICO
     ========================================== -->
 
-        <div id="salesHistory" class="sales-tab-content">
-
-          <div class="sales-table-card">
-
-
-            <!-- FILTROS -->
-
-            <div class="sales-toolbar">
-
-
-              <div class="sales-search">
-
-                <span><i class="converted-icon" data-lucide="search" aria-hidden="true"></i></span>
-
-                <input type="text" id="salesSearch" placeholder="Buscar venda, cliente ou código...">
-
-              </div>
-
-
-              <div class="sales-filters">
-
-
-                <select id="paymentFilter">
-
-                  <option value="">
-                    Todas as formas
-                  </option>
-
-                  <option value="pix">
-                    PIX
-                  </option>
-
-                  <option value="cartao">
-                    Cartão
-                  </option>
-
-                  <option value="dinheiro">
-                    Dinheiro
-                  </option>
-
-                </select>
-
-
-                <select id="salesStatusFilter">
-
-                  <option value="">
-                    Todos os status
-                  </option>
-
-                  <option value="pago">
-                    Pago
-                  </option>
-
-                  <option value="pendente">
-                    Pendente
-                  </option>
-
-                  <option value="cancelado">
-                    Cancelado
-                  </option>
-
-                </select>
-
-              </div>
-
-            </div>
-
-
-            <!-- TABELA -->
-
-            <div class="sales-table-container">
-
-              <table class="sales-table">
-
-                <thead>
-
-                  <tr>
-                    <th>Venda</th>
-                    <th>Cliente</th>
-                    <th>Data</th>
-                    <th>Itens</th>
-                    <th>Pagamento</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th></th>
-                  </tr>
-
-                </thead>
-
-
-                <tbody id="salesTableBody">
-
-
-                  <tr data-payment="pix" data-status="pago">
-
-                    <td>
-                      <strong class="sale-code">
-                        #2048
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <div class="sale-customer">
-
-                        <div class="sale-avatar">
-                          JL
-                        </div>
-
-                        <div>
-                          <strong>João Lima</strong>
-                          <span>joao@email.com</span>
-                        </div>
-
-                      </div>
-
-                    </td>
-
-                    <td>
-                      02/09/2026 14:18
-                    </td>
-
-                    <td>
-                      4
-                    </td>
-
-                    <td>
-                      PIX
-                    </td>
-
-                    <td>
-                      <strong>
-                        R$ 250,90
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <span class="sale-status paid">
-                        Pago
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-
-                    </td>
-
-                  </tr>
-
-
-
-                  <tr data-payment="cartao" data-status="pago">
-
-                    <td>
-                      <strong class="sale-code">
-                        #2047
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <div class="sale-customer">
-
-                        <div class="sale-avatar">
-                          MS
-                        </div>
-
-                        <div>
-                          <strong>Maria Souza</strong>
-                          <span>maria@email.com</span>
-                        </div>
-
-                      </div>
-
-                    </td>
-
-                    <td>
-                      02/09/2026 13:42
-                    </td>
-
-                    <td>2</td>
-
-                    <td>
-                      Cartão
-                    </td>
-
-                    <td>
-                      <strong>
-                        R$ 180,00
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <span class="sale-status paid">
-                        Pago
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-
-                    </td>
-
-                  </tr>
-
-
-
-                  <tr data-payment="dinheiro" data-status="pago">
-
-                    <td>
-                      <strong class="sale-code">
-                        #2046
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <div class="sale-customer">
-
-                        <div class="sale-avatar">
-                          CP
-                        </div>
-
-                        <div>
-                          <strong>Carlos Pereira</strong>
-                          <span>carlos@email.com</span>
-                        </div>
-
-                      </div>
-
-                    </td>
-
-                    <td>
-                      01/09/2026 17:21
-                    </td>
-
-                    <td>5</td>
-
-                    <td>
-                      Dinheiro
-                    </td>
-
-                    <td>
-                      <strong>
-                        R$ 490,50
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <span class="sale-status paid">
-                        Pago
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-
-                    </td>
-
-                  </tr>
-
-
-
-                  <tr data-payment="pix" data-status="cancelado">
-
-                    <td>
-                      <strong class="sale-code">
-                        #2045
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <div class="sale-customer">
-
-                        <div class="sale-avatar">
-                          AS
-                        </div>
-
-                        <div>
-                          <strong>Ana Santos</strong>
-                          <span>ana@email.com</span>
-                        </div>
-
-                      </div>
-
-                    </td>
-
-                    <td>
-                      01/09/2026 15:05
-                    </td>
-
-                    <td>1</td>
-
-                    <td>
-                      PIX
-                    </td>
-
-                    <td>
-                      <strong>
-                        R$ 79,90
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <span class="sale-status cancelled">
-                        Cancelado
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <button class="sale-actions"><i class="converted-icon" data-lucide="ellipsis-vertical" aria-hidden="true"></i></button>
-
-                    </td>
-
-                  </tr>
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-
-            <!-- PAGINAÇÃO -->
-
-            <div class="sales-table-footer">
-
-              <span>
-                Mostrando 1 a 4 de 328 vendas
-              </span>
-
-
-              <div class="sales-pagination">
-
-                <button aria-label="Anterior"><i class="converted-icon" data-lucide="chevron-left" aria-hidden="true"></i></button>
-
-                <button class="active">
-                  1
-                </button>
-
-                <button>2</button>
-
-                <button>3</button>
-
-                <button>...</button>
-
-                <button>82</button>
-
-                <button aria-label="Próximo"><i class="converted-icon" data-lucide="chevron-right" aria-hidden="true"></i></button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-      <div class="sale-modal-overlay" id="saleModal">
-
-        <div class="sale-modal">
-
-
-          <div class="sale-modal-header">
-
-            <div>
-
-              <h2>
-                Nova venda
-              </h2>
-
-              <p>
-                Adicione os produtos e finalize a venda.
-              </p>
-
-            </div>
-
-
-            <button class="close-sale-modal" id="closeSaleModal" aria-label="Fechar"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
-
-          </div>
-
-
-
-          <form id="newSaleForm">
-
-
-            <!-- CLIENTE -->
-
-            <div class="sale-form-group">
-
-              <label>
-                Cliente
-              </label>
-
-              <select id="saleCustomer">
-
-                <option value="">
-                  Consumidor final
-                </option>
-
-                <option>
-                  João Lima
-                </option>
-
-                <option>
-                  Maria Souza
-                </option>
-
-                <option>
-                  Carlos Pereira
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <!-- PRODUTOS -->
-
-            <div class="sale-products-header">
-
-              <strong>
-                Produtos
-              </strong>
-
-              <button type="button" id="addSaleProduct"><i class="converted-icon" data-lucide="plus" aria-hidden="true"></i> Adicionar produto</button>
-
-            </div>
-
-
-            <div id="saleProducts">
-
-              <div class="sale-product-row">
-
-                <select class="sale-product-select">
-
-                  <option value="" data-price="0">
-                    Selecione o produto
-                  </option>
-
-                  <option value="Arroz Tipo 1" data-price="25.90">
-                    Arroz Tipo 1
-                  </option>
-
-                  <option value="Feijão Carioca" data-price="8.50">
-                    Feijão Carioca
-                  </option>
-
-                  <option value="Refrigerante Cola" data-price="10.90">
-                    Refrigerante Cola
-                  </option>
-
-                </select>
-
-
-                <input class="sale-product-quantity" type="number" min="1" value="1">
-
-
-                <div class="sale-product-price">
-                  R$ 0,00
+          <div id="salesHistory" class="sales-tab-content">
+            <div class="sales-table-card">
+              <!-- FILTROS -->
+
+              <div class="sales-toolbar">
+                <div class="sales-search">
+                  <span
+                    ><i
+                      class="converted-icon"
+                      data-lucide="search"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
+
+                  <input
+                    type="text"
+                    id="salesSearch"
+                    placeholder="Buscar venda, cliente ou código..."
+                  />
                 </div>
 
+                <div class="sales-filters">
+                  <select id="paymentFilter">
+                    <option value="">Todas as formas</option>
+                    <option value="PIX">PIX</option>
+                    <option value="CARTAO">Cartão</option>
+                    <option value="DINHEIRO">Dinheiro</option>
+                    <option value="BOLETO">Boleto</option>
+                    <option value="OUTRO">Outro</option>
+                  </select>
 
-                <button type="button" class="remove-sale-product" aria-label="Remover produto"><i class="converted-icon" data-lucide="x" aria-hidden="true"></i></button>
-
+                  <select id="salesStatusFilter">
+                    <option value="">Todos os status</option>
+                    <option value="CONCLUIDO">Confirmado</option>
+                    <option value="ORCAMENTO">Reservado</option>
+                    <option value="CANCELADO">Cancelado</option>
+                  </select>
+                </div>
               </div>
 
+              <!-- TABELA -->
+
+              <div class="sales-table-container">
+                <table class="sales-table">
+                  <thead>
+                    <tr>
+                      <th>Venda</th>
+                      <th>Cliente</th>
+                      <th>Data</th>
+                      <th>Itens</th>
+                      <th>Pagamento</th>
+                      <th>Valor</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="salesTableBody">
+                    <tr>
+                      <td colspan="8">Carregando...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- PAGINAÇÃO -->
+
+              <div class="sales-table-footer">
+                <span>Carregando...</span>
+
+                <div class="sales-pagination"></div>
+              </div>
             </div>
-
-
-            <!-- DESCONTO -->
-
-            <div class="sale-form-row">
-
-              <div class="sale-form-group">
-
-                <label>
-                  Desconto (R$)
-                </label>
-
-                <input type="number" id="saleDiscount" value="0" min="0" step="0.01">
-
-              </div>
-
-
-              <div class="sale-form-group">
-
-                <label>
-                  Pagamento
-                </label>
-
-                <select id="salePayment" required>
-
-                  <option value="">
-                    Selecione
-                  </option>
-
-                  <option>
-                    PIX
-                  </option>
-
-                  <option>
-                    Cartão de crédito
-                  </option>
-
-                  <option>
-                    Cartão de débito
-                  </option>
-
-                  <option>
-                    Dinheiro
-                  </option>
-
-                </select>
-
-              </div>
-
-            </div>
-
-
-            <!-- RESUMO -->
-
-            <div class="sale-summary-box">
-
-              <div>
-
-                <span>
-                  Subtotal
-                </span>
-
-                <strong id="saleSubtotal">
-                  R$ 0,00
-                </strong>
-
-              </div>
-
-
-              <div>
-
-                <span>
-                  Desconto
-                </span>
-
-                <strong id="saleDiscountValue">
-                  R$ 0,00
-                </strong>
-
-              </div>
-
-
-              <div class="sale-total">
-
-                <span>
-                  Total
-                </span>
-
-                <strong id="saleTotal">
-                  R$ 0,00
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div class="sale-modal-footer">
-
-              <button type="button" class="cancel-sale-button" id="cancelSale">
-                Cancelar
-              </button>
-
-
-              <button type="submit" class="finish-sale-button">
-                Finalizar venda
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-      </div>
-
-
-
-
-
-
-    </main>
-
-
+          </div>
+        </section>
+      </main>
+    </div>
 
     <script src="../js/shared/ui.js"></script>
-  <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
     <script src="../js/shared/layout.js"></script>
     <script>
       if (window.lucide) window.lucide.createIcons();
     </script>
+    <script src="../js/services/commerce.js"></script>
     <script src="../js/pages/vendas.js"></script>
-</body>
-
+  </body>
 </html>

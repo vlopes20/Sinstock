@@ -526,4 +526,26 @@ body {
     }
 
 }
+/* Keep the form readable on tablets and on short, landscape viewports. */
+.login-page { @apply relative min-h-svh; }
+.login-left { @apply min-h-svh items-center [padding:96px_clamp(24px,_4vw,_70px)_48px]; }
+.login-container { @apply min-w-0 mt-0; }
+.input-box input { @apply min-w-0; }
+.login-message { @apply [overflow-wrap:anywhere]; }
+.illustration-container { @apply right-0 w-[58%] h-[calc(100svh_-_130px)]; }
+.illustration-container img { @apply w-full h-full; }
+@media (max-width: 1279px) {
+    .login-page { @apply block; }
+    .login-right, .illustration-container, .dots { @apply hidden; }
+    .login-left { @apply w-full; }
+    .login-container { @apply max-w-[445px]; }
+}
+@media (max-width: 600px) {
+    .language { @apply top-6 left-6; }
+    .login-header { @apply mb-7; }
+    .login-header h1 { @apply text-[length:clamp(28px,_8vw,_34px)]; }
+    .input-box input { @apply text-base; }
+    .forgot-password { @apply mb-7; }
+    .login-button, .input-box { @apply h-14; }
+}
 @tailwind utilities;
