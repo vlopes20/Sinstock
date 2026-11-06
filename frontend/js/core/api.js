@@ -50,6 +50,8 @@
           blob: await response.blob(),
           contentDisposition: response.headers.get('Content-Disposition'),
         };
+      if (response.status === 401 && auth && !token)
+        window.dispatchEvent(new Event('sinstock:unauthorized'));
       const text = await response.text();
       let data = null;
       try {
@@ -61,8 +63,6 @@
         );
       }
       if (!response.ok) {
-        if (response.status === 401 && auth && !token)
-          window.dispatchEvent(new Event('sinstock:unauthorized'));
         const message = Array.isArray(data?.message)
           ? data.message.join(' ')
           : data?.message;

@@ -1,3 +1,5 @@
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { PermissionUser } from '../auth/permission-policy';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -20,7 +22,7 @@ export class BuscaGlobalController {
   @ApiOperation({
     summary: 'Realiza pesquisa multi-critério centralizada no sistema',
   })
-  buscar(@Query() query: BuscaGlobalDto) {
-    return this.buscaGlobalService.buscar(query);
+  buscar(@Query() query: BuscaGlobalDto, @CurrentUser() user: PermissionUser) {
+    return this.buscaGlobalService.buscar(query, user);
   }
 }

@@ -1,3 +1,4 @@
+import { canAccess } from '../auth/permission-policy';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -34,13 +35,26 @@ export class DashboardService {
       concatMap(async (event) => {
         const user = await this.prisma.usuarios.findUnique({
           where: { id: userId },
-          select: { ativo: true, auth_version: true },
+          select: {
+            ativo: true,
+            auth_version: true,
+            perfil_id: true,
+            perfis: { select: { permissoes: true } },
+          },
         });
         return {
           event,
           allowed:
             !!user?.ativo &&
             user.auth_version === version &&
+            canAccess(
+              {
+                perfil_id: user.perfil_id,
+                permissoes: user.perfis?.permissoes,
+              },
+              'dashboard',
+              'ler',
+            ) &&
             Date.now() < expiresAt * 1000,
         };
       }),

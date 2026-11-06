@@ -55,8 +55,9 @@ export class StockService {
     )
       throw new BadRequestException('Informe produtos válidos.');
     for (let attempt = 0; ; attempt++) {
+      let result: T;
       try {
-        const result = await this.prisma.$transaction(
+        result = await this.prisma.$transaction(
           async (tx) => {
             const rows = await tx.$queryRaw<{ id: number }[]>(
               Prisma.sql`SELECT id FROM produtos WHERE id IN (${Prisma.join(products)}) ORDER BY id FOR UPDATE`,
@@ -71,15 +72,22 @@ export class StockService {
             timeout: 20000,
           },
         );
-        this.events.emit({
-          tipo: 'ESTOQUE_ATUALIZADO',
-          produtoIds: products,
-          timestamp: new Date().toISOString(),
-        });
-        return result;
-      } catch (error) {
-        if (error?.code !== 'P2034' || attempt >= 2) throw error;
+      } catch (error: unknown) {
+        const conflict =
+          error !== null &&
+          typeof error === 'object' &&
+          'code' in error &&
+          error.code === 'P2034';
+        if (!conflict || attempt >= 2) throw error;
+        continue;
       }
+      // Publication occurs after commit and must never trigger transaction retry.
+      this.events.emit({
+        tipo: 'ESTOQUE_ATUALIZADO',
+        produtoIds: products,
+        timestamp: new Date().toISOString(),
+      });
+      return result;
     }
   }
 
@@ -89,9 +97,15 @@ export class StockService {
       if (!lote || lote.produto_id !== key.produto_id)
         throw new BadRequestException('O lote não pertence ao produto.');
     }
-    return tx.saldos_estoque.findFirst({
+    const rows = await tx.saldos_estoque.findMany({
       where: { ...key, lote_id: key.lote_id ?? null },
+      take: 2,
     });
+    if (rows.length > 1)
+      throw new BadRequestException(
+        'Saldos duplicados para produto, filial e lote. Solicite uma revisao de integridade.',
+      );
+    return rows[0] ?? null;
   }
 
   async change(
@@ -100,14 +114,26 @@ export class StockService {
     delta: Prisma.Decimal.Value,
     reservedDelta: Prisma.Decimal.Value = 0,
   ) {
+    const quantityDelta = new Prisma.Decimal(delta);
+    const reservationDelta = new Prisma.Decimal(reservedDelta);
+    if (!quantityDelta.isFinite() || !reservationDelta.isFinite())
+      throw new BadRequestException(
+        'Quantidade e reserva devem ser valores finitos.',
+      );
     const current = await this.balance(tx, key);
     const before = new Prisma.Decimal(current?.quantidade ?? 0);
     const reservedBefore = new Prisma.Decimal(
       current?.quantidade_reservada ?? 0,
     );
-    const after = before.plus(delta).toDecimalPlaces(3);
-    const reserved = reservedBefore.plus(reservedDelta).toDecimalPlaces(3);
-    if (after.isNegative() || reserved.isNegative() || after.lessThan(reserved))
+    const after = before.plus(quantityDelta).toDecimalPlaces(3);
+    const reserved = reservedBefore.plus(reservationDelta).toDecimalPlaces(3);
+    if (
+      !after.isFinite() ||
+      !reserved.isFinite() ||
+      after.isNegative() ||
+      reserved.isNegative() ||
+      after.lessThan(reserved)
+    )
       throw new BadRequestException(
         `Saldo disponível insuficiente para o produto ${key.produto_id}. Disponível: ${before.minus(reservedBefore).toString()}.`,
       );
