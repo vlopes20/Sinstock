@@ -6,6 +6,11 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import {
+  canAccess,
+  isAdministrator,
+  PermissionUser,
+} from '../permission-policy';
 
 export const PermissionResource = (resource: string) =>
   SetMetadata('permission-resource', resource);
@@ -18,22 +23,11 @@ export class PermissionsGuard implements CanActivate {
       'permission-resource',
       [context.getHandler(), context.getClass()],
     );
-    const request = context.switchToHttp().getRequest();
+    const request = context
+      .switchToHttp()
+      .getRequest<{ method: string; user?: PermissionUser }>();
     const user = request.user;
     if (!user) throw new ForbiddenException('Usuário não identificado.');
-    let permissions = user.permissoes;
-    if (typeof permissions === 'string') {
-      try {
-        permissions = JSON.parse(permissions);
-      } catch {
-        permissions = {};
-      }
-    }
-    const admin =
-      user.perfil_id === 1 ||
-      permissions?.admin === true ||
-      permissions?.todas === true;
-    if (admin) return true;
     const action = ['GET', 'HEAD'].includes(request.method)
       ? 'ler'
       : request.method === 'POST'
@@ -42,17 +36,11 @@ export class PermissionsGuard implements CanActivate {
           ? 'excluir'
           : 'editar';
     // Branch administration is restricted, while operators may consult branches.
-    if (resource === 'filiais' && action !== 'ler')
+    if (!isAdministrator(user) && resource === 'filiais' && action !== 'ler')
       throw new ForbiddenException(
         'Somente administradores podem gerenciar filiais.',
       );
-    const configured = permissions?.[resource ?? ''];
-    if (
-      configured === true ||
-      configured?.[action] === true ||
-      (configured === undefined && permissions?.operacoes === true)
-    )
-      return true;
+    if (canAccess(user, resource ?? '', action)) return true;
     throw new ForbiddenException('Seu perfil não permite esta operação.');
   }
 }
