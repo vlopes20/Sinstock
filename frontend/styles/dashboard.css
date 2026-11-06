@@ -192,7 +192,7 @@ body {
     @apply w-full;
     @apply h-[110px];
 
-    @apply [background:#ffffff];
+    @apply [background:#fFffff];
 
     @apply [border-bottom:1px_solid_#e5e7eb];
 
