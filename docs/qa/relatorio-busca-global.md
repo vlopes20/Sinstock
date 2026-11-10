@@ -87,3 +87,48 @@ Corrigida revalidacao de dashboard.ler em SSE aberto. Confirmada reutilizacao TO
 Estado final repetido: 92 testes aprovados em 11 suites (9,243 s), TypeScript, diff --check e sintaxe JS aprovados. Lint dos 15 arquivos TypeScript: tres erros preexistentes, nenhum novo/aviso. Nenhum teste enfraquecido/ignorado; dois testes TOTP caracterizam defeito persistente e nao representam correcao.
 
 Leia README.md para o estado atual, matriz-rastreabilidade.md para cobertura e pull-request.md para o texto proposto. arquivos-commit.md lista todos os arquivos locais, inclusive nao rastreados. Nenhum codigo de producao foi alterado nesta rodada; somente documentacao. Nenhum commit ou staging executado.
+
+## Execução de testes unitários na nuvem — 10/11/2026
+
+Esta execução reproduziu a suíte histórica após a integração do PR #5 à `develop`. Os registros anteriores deste relatório foram preservados; os tempos e resultados de outras verificações pertencem às respectivas rodadas.
+
+### Versão e isolamento
+
+- Repositório confirmado: `vlopes20/Sinstock`.
+- A branch remota `develop` foi buscada explicitamente, com o checkout inicialmente sem alterações locais.
+- Base utilizada: `41066823366b44b4e988480a20e1584910c4a03d`.
+- Merge do PR #5 confirmado como ancestral da base: `9a144f517d860b86876ba9b887043f34dc958f7c` (`Merge pull request #5 from vlopes20/qa/testes-busca-global`).
+- Branch isolada criada a partir dessa base: `qa/cloud-validation-20261110`. A `develop` compartilhada não foi modificada.
+
+### Comandos e resultados confirmados
+
+| Etapa | Comando | Resultado |
+|---|---|---|
+| Dependências | `npm ci --cache /workspace/.npm` | Aprovado, respeitando o lockfile |
+| Prisma Client | `DATABASE_URL='mysql://qa_ficticio:qa_ficticio@database.invalid:3306/sinstock_qa' npm run db:generate` | Prisma Client 7.9.1 gerado em `node_modules/@prisma/client`, sem conexão com MySQL |
+| TypeScript | `npm run typecheck` | Aprovado; código de saída 0 |
+| Testes unitários | `npm test -- --runInBand --no-cache` | Aprovado; código de saída 0 |
+
+Na execução, TypeScript e Jest também receberam a `DATABASE_URL` fictícia acima. Para Jest, as variáveis de banco apontaram para `database.invalid`, com usuário/senha fictícios, e `SMTP_ENABLED=false`; nenhuma credencial real foi utilizada.
+
+Resultado do Jest:
+
+- Suítes: **11 aprovadas de 11**, 0 reprovadas.
+- Testes: **92 aprovados de 92**, 0 reprovados.
+- Snapshots: 0.
+- Tempo informado pelo Jest: **10,969 segundos**.
+- Os **92 testes históricos foram reproduzidos com sucesso**.
+
+### Limites da evidência e restrições respeitadas
+
+Os testes usam mocks para banco e serviços externos, além de simulações locais. Não validam integração real com MySQL, conectividade da aplicação com banco, migrations, constraints, concorrência, atomicidade ou rollback reais. Gerar o Prisma Client comprova a geração do cliente a partir do schema, não o funcionamento de um banco.
+
+Não houve acesso a bancos de dados, execução de migrations ou seed, nem alterações em bancos de dados. Backend e frontend não foram iniciados. Não houve uso de credenciais reais, alteração de código de produção, schema Prisma ou lockfile, nem execução de `npm audit fix`. TLS e verificações de segurança foram mantidos. Nenhum commit, push ou merge foi realizado nesta execução.
+
+Ao final da execução dos testes, o checkout permaneceu sem alterações locais. Esta atualização posterior modifica apenas a documentação de QA.
+
+### Problemas e próximos passos
+
+A instalação apresentou avisos de dependências obsoletas, sem impedir os comandos. Não houve falha na geração do cliente, no TypeScript ou no Jest. Lint, auditoria de dependências e integração não foram executados nesta rodada; os resultados históricos dessas verificações não constituem nova validação.
+
+Os testes de caracterização TOTP continuam documentando um defeito conhecido; o total aprovado não comprova proteção contra replay nem encerra as pendências anteriores. Próximo passo: revisar este registro como evidência de QA do TCC. Qualquer validação de integração com MySQL exige uma etapa separada, autorizada e com banco isolado.
