@@ -1,60 +1,5 @@
-/* =========================================
-   CABEÇALHO
-========================================= */
-
-.help-header {
-    @apply w-full;
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply gap-[20px];
-
-    @apply mb-[25px];
-}
-
-.help-header h1 {
-    @apply text-[length:clamp(28px,_2.5vw,_36px)];
-
-    @apply mb-[7px];
-
-    @apply text-[#111827];
-}
-
-.help-header p {
-    @apply text-[#7c8493];
-
-    @apply text-[length:16px];
-}
-
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 /* BOTÃO */
-
-.new-ticket-button {
-    @apply h-[50px];
-
-    @apply [padding:0_22px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[8px];
-
-    @apply [border:none];
-
-    @apply rounded-[12px];
-
-    @apply [background:#fd7941];
-
-    @apply text-[white];
-
-    @apply text-[length:15px];
-    @apply font-semibold;
-
-    @apply cursor-pointer;
-
-    @apply [transition:0.2s];
-}
 
 .new-ticket-button:hover {
     @apply [background:#f2672f];
@@ -270,43 +215,10 @@
    ABAS
 ========================================= */
 
-.help-tabs {
-    @apply flex;
-
-    @apply gap-[8px];
-
-    @apply mb-[18px];
-
-    @apply overflow-x-auto;
-}
-
-.help-tab {
-    @apply [padding:11px_17px];
-
-    @apply [border:none];
-
-    @apply rounded-[10px];
-
-    @apply [background:transparent];
-
-    @apply text-[#64748b];
-
-    @apply text-[length:14px];
-    @apply font-semibold;
-
-    @apply whitespace-nowrap;
-
-    @apply cursor-pointer;
-}
-
 .help-tab.active {
     @apply [background:#fff0e9];
 
     @apply text-[#fd7941];
-}
-
-.help-tab-content {
-    @apply hidden;
 }
 
 .help-tab-content.active {
@@ -592,24 +504,6 @@
     @apply font-semibold;
 
     @apply cursor-pointer;
-}
-
-.tickets-table-container {
-    @apply w-full;
-
-    @apply overflow-x-auto;
-}
-
-.tickets-table {
-    @apply w-full;
-
-    @apply min-w-[850px];
-
-    @apply border-collapse;
-}
-
-.tickets-table thead {
-    @apply [background:#fafafa];
 }
 
 .tickets-table th {

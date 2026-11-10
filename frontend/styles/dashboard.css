@@ -1,3 +1,4 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 @tailwind base;
 
 :root {
@@ -34,93 +35,7 @@ body {
     @apply text-[#111827];
 }
 
-/* =========================================
-   DASHBOARD
-========================================= */
-
-.dashboard {
-    @apply flex;
-
-    @apply w-full;
-    @apply min-h-screen;
-}
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
-.sidebar {
-    @apply fixed;
-
-    @apply top-0;
-    @apply left-0;
-
-    @apply w-[var(--sidebar-width)];
-    @apply h-screen;
-
-    @apply [background:#383636];
-
-    @apply [border-right:1px_solid_#5a5a5a];
-    @apply [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)];
-
-    @apply flex;
-    @apply flex-col;
-
-    @apply z-[10];
-}
-
-/* LOGO */
-
-.sidebar-logo {
-    @apply h-[115px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply [padding:0_30px];
-}
-
-.sidebar-logo img {
-    @apply w-[240px];
-    @apply h-auto;
-
-    @apply object-contain;
-}
-
 /* MENU */
-
-.sidebar-menu {
-    @apply flex;
-    @apply flex-col;
-    @apply items-center;
-    @apply gap-[10px];
-
-    @apply pt-0;
-}
-
-.menu-item {
-    @apply relative;
-
-    @apply h-[58px];
-    @apply w-[85%];
-
-    @apply flex;
-    @apply items-center;
-    
-    @apply gap-[12px];
-
-    @apply p-[34px];
-
-    @apply text-[#ffffff];
-
-    @apply no-underline;
-
-    @apply text-[length:18px];
-
-    @apply [transition:0.2s];
- 
-    @apply rounded-[6px];
-}
 
 .menu-item:hover {
    
@@ -146,17 +61,6 @@ body {
 
 /* PARTE INFERIOR */
 
-.sidebar-bottom {
-    @apply mt-auto;
-    @apply items-center;
-    @apply justify-center;
-    @apply flex;
-
-    @apply [border-top:1px_solid_#7d7f85];
-
-    @apply [padding:20px_0];
-}
-
 .help-icon {
     @apply w-[28px];
     @apply h-[28px];
@@ -172,73 +76,13 @@ body {
     @apply rounded-[50%];
 }
 
-/* =========================================
-   CONTEÚDO PRINCIPAL
-========================================= */
-
-.main-content {
-    @apply w-[calc(100%_-_var(--sidebar-width))];
-
-    @apply ml-[var(--sidebar-width)];
-
-    @apply min-w-[0];
-}
-
-/* =========================================
-   TOPBAR
-========================================= */
-
-.topbar {
-    @apply w-full;
-    @apply h-[110px];
-
-    @apply [background:#fFffff];
-
-    @apply [border-bottom:1px_solid_#e5e7eb];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply [padding:0_50px];
-}
-
 /* BUSCA */
-
-.search-box {
-    @apply w-[55%];
-    @apply max-w-[680px];
-    @apply h-[64px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply rounded-[6px];
-
-    @apply [padding:0_20px];
-
-    @apply [background:white];
-}
-
-.search-icon {
-    @apply text-[length:31px];
-
-    @apply text-[#64748b];
-
-    @apply mr-[14px];
-}
 
 .search-icon,
 .shortcut,
 .arrow {
     @apply inline-flex;
     @apply items-center;
-}
-
-.shortcut {
-    @apply gap-[4px];
 }
 
 .search-icon svg,
@@ -250,186 +94,17 @@ body {
     @apply shrink-0;
 }
 
-.search-box input {
-    @apply [flex:1];
-
-    @apply h-full;
-
-    @apply [border:none];
-    @apply [outline:none];
-
-    @apply text-[length:17px];
-
-    @apply text-[#334155];
-}
-
 .search-box input::placeholder {
     @apply text-[#94a3b8];
 }
 
-.shortcut {
-    @apply [padding:7px_10px];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[6px];
-
-    @apply text-[#64748b];
-}
-
-/* DIREITA */
-
-.topbar-right {
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[38px];
-}
-
-.date {
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[10px];
-
-    @apply text-[#475569];
-
-    @apply text-[length:16px];
-}
-
-/* NOTIFICAÇÃO */
-
-.notification {
-    @apply relative;
-
-    @apply text-[length:24px];
-
-    @apply cursor-pointer;
-}
-
-.notification-number {
-    @apply absolute;
-
-    @apply top-[-10px];
-    @apply right-[-12px];
-
-    @apply w-[22px];
-    @apply h-[22px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-center;
-
-    @apply rounded-[50%];
-
-    @apply [background:#ff5b16];
-
-    @apply text-[white];
-
-    @apply text-[length:12px];
-
-    @apply [border:2px_solid_white];
-}
-
 /* USUÁRIO */
-
-.user {
-    @apply flex;
-    @apply items-center;
-   
-    @apply gap-[12px];
-
-    @apply font-semibold;
-    @apply cursor-pointer;
-}
-
-.avatar {
-    @apply w-[50px];
-    @apply h-[50px];
-
-    @apply rounded-[50%];
-
-    @apply overflow-hidden;
-
-    @apply [background:#f1f5f9];
-}
 
 .avatar img {
     @apply w-full;
     @apply h-full;
 
     @apply object-cover;
-}
-
-.user-arrow {
-    @apply text-[#64748b];
-    @apply relative;
-    @apply top-[4px];
-}
-
-/* =========================================
-   CONTEÚDO
-========================================= */
-
-.content {
-    @apply [padding:clamp(20px,_3vw,_45px)];
-
-    @apply [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)];
-}
-
-/* =========================================
-   BOAS-VINDAS
-========================================= */
-
-.welcome {
-    @apply mb-[28px];
-}
-
-.welcome h1 {
-    @apply text-[length:39px];
-
-    @apply mb-[8px];
-
-    @apply tracking-[-1px];
-}
-
-.welcome p {
-    @apply text-[length:18px];
-
-    @apply text-[#7c8493];
-}
-
-/* =========================================
-   CARDS DE RESUMO
-========================================= */
-
-.summary-cards {
-    @apply grid;
-
-    @apply grid-cols-[repeat(_auto-fit,_minmax(260px,_1fr)_)];
-
-    @apply gap-[clamp(16px,_2vw,_28px)];
-
-    @apply mb-[30px];
-}
-
-.summary-card {
-    @apply min-h-[158px];
-
-    @apply [background:#ffffff];
-
-    @apply [border:1px_solid_#dfdfdf];
-
-    @apply rounded-[6px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply [padding:28px_24px];
-
-    @apply relative;
-
-    @apply [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)];
 }
 
 /* ÍCONE */
@@ -463,39 +138,8 @@ body {
 }
 /* INFORMAÇÃO */
 
-.card-information {
-    @apply flex;
-    @apply flex-col;
-}
-
-.card-title {
-    @apply text-[length:17px];
-
-    @apply text-[#4b5563];
-
-    @apply mb-[6px];
-}
-
-.card-information strong {
-    @apply text-[length:32px];
-
-    @apply mb-[12px];
-}
-
 .card-information strong.money {
     @apply text-[length:25px];
-}
-
-.card-information p {
-    @apply text-[#7c8493];
-
-    @apply text-[length:15px];
-}
-
-.positive {
-    @apply text-[#13a53c];
-
-    @apply mr-[4px];
 }
 
 /* TENDÊNCIA */
@@ -523,47 +167,8 @@ body {
 }
 
 /* =========================================
-   GRID INFERIOR
-========================================= */
-
-.dashboard-grid {
-    @apply grid;
-
-    @apply grid-cols-[minmax(0,_1.6fr)_minmax(320px,_1fr)];
-
-    @apply gap-[24px];
-}
-
-/* =========================================
    GRÁFICO
 ========================================= */
-
-.chart-card,
-.alerts-card {
-    @apply [background:#ffffff];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[22px];
-
-    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)];
-}
-
-.chart-card {
-    @apply p-[24px];
-}
-
-.card-header {
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply mb-[20px];
-}
-
-.card-header h2 {
-    @apply text-[length:18px];
-}
 
 .card-header select {
     @apply [padding:10px_18px];
@@ -583,14 +188,6 @@ body {
 
 /* GRÁFICO */
 
-.chart {
-    @apply h-[290px];
-
-    @apply flex;
-
-    @apply relative;
-}
-
 .chart-y {
     @apply w-[45px];
 
@@ -603,14 +200,6 @@ body {
     @apply text-[#64748b];
 
     @apply text-[length:13px];
-}
-
-.chart-area {
-    @apply relative;
-
-    @apply [flex:1];
-
-    @apply h-full;
 }
 
 .grid-line {
@@ -702,24 +291,6 @@ body {
 
 /* TOTAL */
 
-.chart-total {
-    @apply h-[58px];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[12px];
-
-    @apply mt-[14px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply [padding:0_14px];
-
-    @apply text-[#64748b];
-}
-
 .orange-dot {
     @apply inline-block;
 
@@ -733,19 +304,6 @@ body {
     @apply mr-[10px];
 }
 
-.total-value {
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[25px];
-}
-
-.total-value strong {
-    @apply text-[#111827];
-
-    @apply text-[length:25px];
-}
-
 .total-value span {
     @apply text-[#13a53c];
 }
@@ -753,22 +311,6 @@ body {
 /* =========================================
    ALERTAS
 ========================================= */
-
-.alerts-card {
-    @apply overflow-hidden;
-}
-
-.alerts-header {
-    @apply h-[84px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply [padding:0_28px];
-
-    @apply [border-bottom:1px_solid_#e5e7eb];
-}
 
 .alerts-header > div {
     @apply flex;
@@ -870,10 +412,6 @@ body {
 
     @apply text-[#64748b];
 }
-
-/* =========================================
-   RESPONSIVO
-========================================= */
 
 /* =============================
    NOTEBOOK
@@ -1101,4 +639,3 @@ body {
     }
 
 }
-@tailwind utilities;

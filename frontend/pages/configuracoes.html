@@ -7,6 +7,7 @@
 
     <title>Configurações | SINSTOCK</title>
 
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
     <link rel="stylesheet" href="../assets/styles/dashboard.css" />
     <link rel="stylesheet" href="../assets/styles/configuracoes.css" />
 
@@ -18,63 +19,99 @@
   </head>
 
   <body>
-    <div class="dashboard">
+    <div class="dashboard flex w-full min-h-screen">
       <!-- =====================================
              MENU LATERAL
         ====================================== -->
 
-      <aside class="sidebar">
-        <div class="sidebar-logo">
-          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
         </div>
 
-        <nav class="sidebar-menu">
-          <a href="dashboard.html" class="menu-item active">
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="layout-dashboard"></i>
             Visão Geral
           </a>
 
-          <a href="estoque.html" class="menu-item">
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="boxes"></i>
             Estoque
           </a>
 
-          <a href="produtos.html" class="menu-item">
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="package-search"></i>
             Produtos
           </a>
 
-          <a href="vendas.html" class="menu-item">
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="badge-dollar-sign"></i>
             Vendas
           </a>
 
-          <a href="relatorios.html" class="menu-item">
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="scroll-text"></i>
             Relatórios
           </a>
 
-          <a href="fornecedores.html" class="menu-item">
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="truck"></i>
             Fornecedores
           </a>
 
-          <a href="configuracoes.html" class="menu-item">
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="settings"></i>
             Configurações
           </a>
 
-          <a href="ajuda.html" class="menu-item">
-            <i data-lucide="circle-question-mark"></i>
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
             Ajuda e suporte
           </a>
         </nav>
 
-        <div class="sidebar-bottom">
-          <a href="ajuda.html" class="menu-item">
-            <i data-lucide="circle-question-mark"></i>
-            Ajuda e suporte
-          </a>
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
         </div>
       </aside>
 
@@ -82,14 +119,21 @@
              CONTEÚDO
         ====================================== -->
 
-      <main class="main-content">
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
         <!-- =====================================
                  TOPO
             ====================================== -->
 
-        <header class="topbar">
-          <div class="search-box">
-            <span class="search-icon"
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
               ><i
                 class="converted-icon"
                 data-lucide="search"
@@ -100,9 +144,11 @@
             <input
               type="text"
               placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
             />
 
-            <span class="shortcut"
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
               ><i
                 class="converted-icon"
                 data-lucide="command"
@@ -112,26 +158,40 @@
             >
           </div>
 
-          <div class="topbar-right">
-            <div class="date">
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
               <i data-lucide="calendar-days"></i>
               <span id="dataAtual"></span>
             </div>
 
-            <div class="notification">
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
               <i data-lucide="bell"></i>
 
-              <span class="notification-number"> 1 </span>
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
             </div>
 
-            <div class="user">
-              <div class="avatar">
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
                 <span aria-label="Usuário">DE</span>
               </div>
 
               <span> Vini </span>
 
-              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
             </div>
           </div>
         </header>
@@ -140,72 +200,174 @@
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-        <section class="content">
-          <div class="settings-header">
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <div class="settings-header mb-[25px]">
             <div>
-              <h1>Configurações</h1>
-              <p>Empresa, usuários, estoque e segurança da sua conta.</p>
+              <h1
+                class="text-[length:clamp(28px,_2.5vw,_36px)] mb-[7px] text-[#111827]"
+              >
+                Configurações
+              </h1>
+              <p class="text-[#7c8493] text-[length:16px]">
+                Empresa, usuários, estoque e segurança da sua conta.
+              </p>
             </div>
             <a href="cadastro.html" data-admin-only>Cadastrar usuário</a>
           </div>
-          <div class="settings-tabs">
-            <button class="settings-tab active" data-tab="generalSettings">
+          <div
+            class="settings-tabs flex gap-[8px] mb-[20px] pb-[2px] overflow-x-auto"
+          >
+            <button
+              class="settings-tab active [padding:11px_17px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold whitespace-nowrap cursor-pointer"
+              data-tab="generalSettings"
+            >
               Empresa</button
             ><button
-              class="settings-tab"
+              class="settings-tab [padding:11px_17px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold whitespace-nowrap cursor-pointer"
               data-tab="usersSettings"
               data-admin-only
             >
               Usuários e permissões</button
-            ><button class="settings-tab" data-tab="stockSettings">
+            ><button
+              class="settings-tab [padding:11px_17px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold whitespace-nowrap cursor-pointer"
+              data-tab="stockSettings"
+            >
               Estoque e alertas</button
-            ><button class="settings-tab" data-tab="securitySettings">
+            ><button
+              class="settings-tab [padding:11px_17px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold whitespace-nowrap cursor-pointer"
+              data-tab="securitySettings"
+            >
               Segurança</button
-            ><button class="settings-tab" data-tab="systemSettings">
+            ><button
+              class="settings-tab [padding:11px_17px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold whitespace-nowrap cursor-pointer"
+              data-tab="systemSettings"
+            >
               Preferências
             </button>
           </div>
           <p id="settingsError" role="alert"></p>
-          <div class="settings-content active" id="generalSettings">
-            <form class="settings-card" id="companyForm">
-              <div class="settings-card-header"><h2>Dados da empresa</h2></div>
-              <div class="settings-card-body">
-                <div class="settings-form-row">
-                  <div class="settings-form-group">
-                    <label for="companyName">Nome da empresa</label
-                    ><input id="companyName" type="text" maxlength="150" />
+          <div class="settings-content active hidden" id="generalSettings">
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="companyForm"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Dados da empresa
+                </h2>
+              </div>
+              <div class="settings-card-body p-[24px]">
+                <div
+                  class="settings-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[18px]"
+                >
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyName"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >Nome da empresa</label
+                    ><input
+                      id="companyName"
+                      type="text"
+                      maxlength="150"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                    />
                   </div>
-                  <div class="settings-form-group">
-                    <label for="companyCnpj">CNPJ</label
-                    ><input id="companyCnpj" type="text" maxlength="20" />
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyCnpj"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >CNPJ</label
+                    ><input
+                      id="companyCnpj"
+                      type="text"
+                      maxlength="20"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                    />
                   </div>
                 </div>
-                <div class="settings-form-row">
-                  <div class="settings-form-group">
-                    <label for="companyEmail">E-mail</label
-                    ><input id="companyEmail" type="email" />
+                <div
+                  class="settings-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[18px]"
+                >
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyEmail"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >E-mail</label
+                    ><input
+                      id="companyEmail"
+                      type="email"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                    />
                   </div>
-                  <div class="settings-form-group">
-                    <label for="companyPhone">Telefone</label
-                    ><input id="companyPhone" type="tel" maxlength="20" />
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyPhone"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >Telefone</label
+                    ><input
+                      id="companyPhone"
+                      type="tel"
+                      maxlength="20"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                    />
                   </div>
                 </div>
-                <div class="settings-form-group">
-                  <label for="companyAddress">Endereço</label
-                  ><input id="companyAddress" type="text" maxlength="255" />
+                <div
+                  class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                >
+                  <label
+                    for="companyAddress"
+                    class="text-[#374151] text-[length:14px] font-semibold"
+                    >Endereço</label
+                  ><input
+                    id="companyAddress"
+                    type="text"
+                    maxlength="255"
+                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                  />
                 </div>
-                <div class="settings-form-row">
-                  <div class="settings-form-group">
-                    <label for="companyCity">Cidade</label
-                    ><input id="companyCity" type="text" maxlength="100" />
+                <div
+                  class="settings-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[18px]"
+                >
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyCity"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >Cidade</label
+                    ><input
+                      id="companyCity"
+                      type="text"
+                      maxlength="100"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                    />
                   </div>
-                  <div class="settings-form-group">
-                    <label for="companyState">UF</label
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="companyState"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >UF</label
                     ><input
                       id="companyState"
                       type="text"
                       maxlength="2"
                       pattern="[A-Z]{2}"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                     />
                   </div>
                 </div>
@@ -213,21 +375,33 @@
                   Somente administradores podem alterar os dados da empresa.
                 </p>
               </div>
-              <div class="settings-card-footer" data-admin-only>
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+                data-admin-only
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Salvar
                 </button>
               </div>
             </form>
           </div>
-          <div class="settings-content" id="usersSettings">
-            <div class="settings-card">
-              <div class="settings-card-header">
-                <h2>Usuários</h2>
+          <div class="settings-content hidden" id="usersSettings">
+            <div
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Usuários
+                </h2>
                 <button
                   type="button"
                   id="openUserModal"
-                  class="add-user-button"
+                  class="add-user-button h-[44px] [padding:0_16px] [border:none] rounded-[10px] [background:#fd7941] text-[white] font-semibold cursor-pointer"
                 >
                   Novo usuário
                 </button>
@@ -248,11 +422,18 @@
                 </table>
               </div>
             </div>
-            <form class="settings-card" id="permissionsForm">
-              <div class="settings-card-header">
-                <h2>Permissões por perfil</h2>
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="permissionsForm"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Permissões por perfil
+                </h2>
               </div>
-              <div class="settings-card-body">
+              <div class="settings-card-body p-[24px]">
                 <label>Perfil<select id="permissionProfile"></select></label>
                 <div class="settings-table-container">
                   <table class="settings-table">
@@ -269,26 +450,45 @@
                   </table>
                 </div>
               </div>
-              <div class="settings-card-footer">
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Salvar
                 </button>
               </div>
             </form>
           </div>
-          <div class="settings-content" id="stockSettings">
-            <form class="settings-card" id="stockSettingsForm" data-admin-only>
-              <div class="settings-card-header">
-                <h2>Padrões de estoque</h2>
+          <div class="settings-content hidden" id="stockSettings">
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="stockSettingsForm"
+              data-admin-only
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Padrões de estoque
+                </h2>
               </div>
-              <div class="settings-card-body">
+              <div class="settings-card-body p-[24px]">
                 <p>
                   O sistema sempre bloqueia estoque negativo e protege
                   quantidades reservadas.
                 </p>
-                <div class="settings-form-row">
-                  <div class="settings-form-group">
-                    <label for="expirationDays"
+                <div
+                  class="settings-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[18px]"
+                >
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="expirationDays"
+                      class="text-[#374151] text-[length:14px] font-semibold"
                       >Aviso de validade (até sete dias)</label
                     ><input
                       id="expirationDays"
@@ -296,10 +496,15 @@
                       min="1"
                       max="7"
                       required
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                     />
                   </div>
-                  <div class="settings-form-group">
-                    <label for="defaultMinimumStock"
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="defaultMinimumStock"
+                      class="text-[#374151] text-[length:14px] font-semibold"
                       >Mínimo padrão para novos produtos</label
                     ><input
                       id="defaultMinimumStock"
@@ -308,6 +513,7 @@
                       max="9999999.999"
                       step="0.001"
                       required
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                     />
                   </div>
                 </div>
@@ -315,17 +521,29 @@
                   Produtos já cadastrados mantêm seus mínimos individuais.
                 </p>
               </div>
-              <div class="settings-card-footer">
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Salvar
                 </button>
               </div>
             </form>
-            <form class="settings-card" id="notificationPreferences">
-              <div class="settings-card-header">
-                <h2>Minhas notificações</h2>
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="notificationPreferences"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Minhas notificações
+                </h2>
               </div>
-              <div class="settings-card-body">
+              <div class="settings-card-body p-[24px]">
                 <label
                   ><input type="checkbox" id="lowStockAlert" /> Receber
                   notificações de estoque baixo</label
@@ -337,32 +555,57 @@
                   Os alertas operacionais continuam disponíveis no dashboard.
                 </p>
               </div>
-              <div class="settings-card-footer">
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Salvar
                 </button>
               </div>
             </form>
           </div>
-          <div class="settings-content" id="securitySettings">
-            <form class="settings-card" id="passwordForm">
-              <div class="settings-card-header">
-                <h2>Alterar minha senha</h2>
+          <div class="settings-content hidden" id="securitySettings">
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="passwordForm"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Alterar minha senha
+                </h2>
               </div>
-              <div class="settings-card-body">
-                <div class="settings-form-group">
-                  <label for="currentPassword">Senha atual</label
+              <div class="settings-card-body p-[24px]">
+                <div
+                  class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                >
+                  <label
+                    for="currentPassword"
+                    class="text-[#374151] text-[length:14px] font-semibold"
+                    >Senha atual</label
                   ><input
                     id="currentPassword"
                     type="password"
                     required
                     autocomplete="current-password"
                     maxlength="72"
+                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                   />
                 </div>
-                <div class="settings-form-row">
-                  <div class="settings-form-group">
-                    <label for="newPassword">Nova senha</label
+                <div
+                  class="settings-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[18px]"
+                >
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="newPassword"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >Nova senha</label
                     ><input
                       id="newPassword"
                       type="password"
@@ -370,10 +613,16 @@
                       minlength="8"
                       maxlength="72"
                       autocomplete="new-password"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                     />
                   </div>
-                  <div class="settings-form-group">
-                    <label for="confirmPassword">Confirme a nova senha</label
+                  <div
+                    class="settings-form-group flex flex-col gap-[8px] mb-[18px]"
+                  >
+                    <label
+                      for="confirmPassword"
+                      class="text-[#374151] text-[length:14px] font-semibold"
+                      >Confirme a nova senha</label
                     ><input
                       id="confirmPassword"
                       type="password"
@@ -381,21 +630,33 @@
                       minlength="8"
                       maxlength="72"
                       autocomplete="new-password"
+                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:0_14px] [background:white] text-[#334155] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
                     />
                   </div>
                 </div>
               </div>
-              <div class="settings-card-footer">
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Alterar senha
                 </button>
               </div>
             </form>
-            <div class="settings-card">
-              <div class="settings-card-header">
-                <h2>Verificação em duas etapas</h2>
+            <div
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Verificação em duas etapas
+                </h2>
               </div>
-              <div class="settings-card-body">
+              <div class="settings-card-body p-[24px]">
                 <p id="twoFactorStatus"></p>
                 <div class="catalog-tools">
                   <button id="enableEmail2fa" type="button">
@@ -409,12 +670,19 @@
               </div>
             </div>
           </div>
-          <div class="settings-content" id="systemSettings">
-            <form class="settings-card" id="systemForm">
-              <div class="settings-card-header">
-                <h2>Minhas preferências</h2>
+          <div class="settings-content hidden" id="systemSettings">
+            <form
+              class="settings-card w-full mb-[22px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+              id="systemForm"
+            >
+              <div
+                class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  Minhas preferências
+                </h2>
               </div>
-              <div class="settings-card-body">
+              <div class="settings-card-body p-[24px]">
                 <p>
                   Idioma: Português (Brasil) · Moeda: Real (BRL) · Datas:
                   DD/MM/AAAA.
@@ -431,8 +699,13 @@
                   sessão após 15 minutos sem atividade</label
                 >
               </div>
-              <div class="settings-card-footer">
-                <button type="submit" class="save-settings-button">
+              <div
+                class="settings-card-footer [padding:18px_24px] flex justify-end [border-top:1px_solid_#e5e7eb] [background:#fafafa]"
+              >
+                <button
+                  type="submit"
+                  class="save-settings-button min-h-[46px] [padding:0_20px] [border:none] rounded-[10px] [background:#fd7941] text-[white] text-[length:14px] font-semibold cursor-pointer [transition:0.2s]"
+                >
                   Salvar
                 </button>
               </div>

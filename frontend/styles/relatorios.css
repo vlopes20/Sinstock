@@ -1,70 +1,5 @@
-/* =========================================
-   CABEÇALHO
-========================================= */
-
-.reports-header {
-    @apply w-full;
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply gap-[20px];
-
-    @apply mb-[25px];
-}
-
-.reports-header h1 {
-    @apply text-[length:clamp(28px,_2.5vw,_36px)];
-
-    @apply mb-[7px];
-
-    @apply text-[#111827];
-}
-
-.reports-header p {
-    @apply text-[#7c8493];
-
-    @apply text-[length:16px];
-}
-
-.reports-header-actions {
-    @apply flex;
-
-    @apply gap-[10px];
-}
-
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 /* BOTÕES */
-
-.export-report-button,
-.generate-report-button {
-    @apply h-[48px];
-
-    @apply [padding:0_18px];
-
-    @apply rounded-[11px];
-
-    @apply text-[length:14px];
-    @apply font-semibold;
-
-    @apply cursor-pointer;
-}
-
-.export-report-button {
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply [background:white];
-
-    @apply text-[#475569];
-}
-
-.generate-report-button {
-    @apply [border:none];
-
-    @apply [background:#fd6423];
-
-    @apply text-[white];
-}
 
 .generate-report-button:hover {
     @apply [background:#f2672f];
@@ -98,62 +33,9 @@
     @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.03)];
 }
 
-.report-filter-group {
-    @apply flex;
-
-    @apply flex-col;
-
-    @apply gap-[7px];
-}
-
-.report-filter-group label {
-    @apply text-[#475569];
-
-    @apply text-[length:13px];
-
-    @apply font-semibold;
-}
-
-.report-filter-group select,
-.report-filter-group input {
-    @apply w-full;
-
-    @apply h-[46px];
-
-    @apply [padding:0_12px];
-
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply rounded-[10px];
-
-    @apply [background:white];
-
-    @apply text-[#475569];
-
-    @apply [outline:none];
-}
-
 .report-filter-group select:focus,
 .report-filter-group input:focus {
     @apply border-[#fd7941];
-}
-
-.filter-buttons {
-    @apply flex;
-
-    @apply gap-[8px];
-}
-
-.filter-buttons button {
-    @apply h-[46px];
-
-    @apply [padding:0_16px];
-
-    @apply rounded-[10px];
-
-    @apply font-semibold;
-
-    @apply cursor-pointer;
 }
 
 .clear-filter-button {
@@ -162,14 +44,6 @@
     @apply [background:white];
 
     @apply text-[#64748b];
-}
-
-.apply-filter-button {
-    @apply [border:none];
-
-    @apply [background:#fd6423];
-
-    @apply text-[white];
 }
 
 /* =========================================
@@ -515,12 +389,6 @@
    TABELAS
 ========================================= */
 
-.report-table-card {
-    @apply w-full;
-
-    @apply overflow-hidden;
-}
-
 .report-table-header {
     @apply min-h-[80px];
 
@@ -530,24 +398,6 @@
     @apply items-center;
 
     @apply [border-bottom:1px_solid_#e5e7eb];
-}
-
-.report-table-container {
-    @apply w-full;
-
-    @apply overflow-x-auto;
-}
-
-.report-table {
-    @apply w-full;
-
-    @apply min-w-[750px];
-
-    @apply border-collapse;
-}
-
-.report-table thead {
-    @apply [background:#fafafa];
 }
 
 .report-table th {

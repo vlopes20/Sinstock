@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Vendas | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
     <link rel="stylesheet" href="../assets/styles/dashboard.css" />
     <link rel="stylesheet" href="../assets/styles/vendas.css" />
     <link rel="stylesheet" href="../assets/styles/shared.css" />
@@ -16,64 +17,100 @@
   </head>
 
   <body>
-    <div class="dashboard">
+    <div class="dashboard flex w-full min-h-screen">
       <!-- =====================================
              MENU LATERAL 
              
         ====================================== -->
 
-      <aside class="sidebar">
-        <div class="sidebar-logo">
-          <img src="../assets/images/letreirobranco.png" alt="SINSTOCK" />
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
         </div>
 
-        <nav class="sidebar-menu">
-          <a href="dashboard.html" class="menu-item active">
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="layout-dashboard"></i>
             Visão Geral
           </a>
 
-          <a href="estoque.html" class="menu-item">
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="boxes"></i>
             Estoque
           </a>
 
-          <a href="produtos.html" class="menu-item">
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="package-search"></i>
             Produtos
           </a>
 
-          <a href="vendas.html" class="menu-item">
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="badge-dollar-sign"></i>
             Vendas
           </a>
 
-          <a href="relatorios.html" class="menu-item">
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="scroll-text"></i>
             Relatórios
           </a>
 
-          <a href="fornecedores.html" class="menu-item">
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="truck"></i>
             Fornecedores
           </a>
 
-          <a href="configuracoes.html" class="menu-item">
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
             <i data-lucide="settings"></i>
             Configurações
           </a>
 
-          <a href="ajuda.html" class="menu-item">
-            <i data-lucide="circle-question-mark"></i>
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
             Ajuda e suporte
           </a>
         </nav>
 
-        <div class="sidebar-bottom">
-          <a href="ajuda.html" class="menu-item">
-            <i data-lucide="circle-question-mark"></i>
-            Ajuda e suporte
-          </a>
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
         </div>
       </aside>
 
@@ -81,14 +118,21 @@
              CONTEÚDO
         ====================================== -->
 
-      <main class="main-content">
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
         <!-- =====================================
                  TOPO
             ====================================== -->
 
-        <header class="topbar">
-          <div class="search-box">
-            <span class="search-icon"
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
               ><i
                 class="converted-icon"
                 data-lucide="search"
@@ -99,9 +143,11 @@
             <input
               type="text"
               placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
             />
 
-            <span class="shortcut"
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
               ><i
                 class="converted-icon"
                 data-lucide="command"
@@ -111,26 +157,40 @@
             >
           </div>
 
-          <div class="topbar-right">
-            <div class="date">
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
               <i data-lucide="calendar-days"></i>
               <span id="dataAtual"></span>
             </div>
 
-            <div class="notification">
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
               <i data-lucide="bell"></i>
 
-              <span class="notification-number"> 1 </span>
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
             </div>
 
-            <div class="user">
-              <div class="avatar">
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
                 <span aria-label="Usuário">DE</span>
               </div>
 
               <span> Vini </span>
 
-              <span class="user-arrow"><i data-lucide="chevron-down"></i></span>
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
             </div>
           </div>
         </header>
@@ -139,20 +199,33 @@
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-        <section class="content">
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
           <!-- =========================================
          CABEÇALHO
     ========================================== -->
 
-          <div class="sales-header">
+          <div
+            class="sales-header w-full flex items-center justify-between gap-[20px] mb-[28px]"
+          >
             <div>
-              <h1>Vendas</h1>
+              <h1
+                class="text-[length:clamp(28px,_2.5vw,_36px)] mb-[7px] text-[#111827]"
+              >
+                Vendas
+              </h1>
 
-              <p>Acompanhe suas vendas e o faturamento da empresa.</p>
+              <p class="text-[#7c8493] text-[length:16px]">
+                Acompanhe suas vendas e o faturamento da empresa.
+              </p>
             </div>
 
-            <button class="new-sale-button" id="openSaleModal">
-              <span
+            <button
+              class="new-sale-button h-[50px] [padding:0_22px] flex items-center gap-[9px] [border:none] rounded-[12px] [background:#fd6423] text-[white] text-[length:15px] font-semibold cursor-pointer [transition:0.2s]"
+              id="openSaleModal"
+            >
+              <span class="text-[length:23px]"
                 ><i
                   class="converted-icon"
                   data-lucide="plus"
@@ -172,11 +245,17 @@
             ><label>De<input id="salesFrom" type="date" /></label
             ><label>Até<input id="salesTo" type="date" /></label>
           </div>
-          <div class="sales-summary">
+          <div
+            class="sales-summary grid grid-cols-[repeat(_4,_minmax(0,_1fr)_)] gap-[20px] mb-[28px]"
+          >
             <!-- FATURAMENTO -->
 
-            <article class="sales-summary-card">
-              <div class="sales-card-icon revenue">
+            <article
+              class="sales-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="sales-card-icon revenue w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:27px] text-[#ffffff] [background:#499261]"
+              >
                 <i
                   class="converted-icon"
                   data-lucide="dollar-sign"
@@ -184,19 +263,29 @@
                 ></i>
               </div>
 
-              <div class="sales-card-info">
-                <span> Faturamento no período </span>
+              <div class="sales-card-info min-w-[0] flex flex-col gap-[5px]">
+                <span class="text-[#64748b] text-[length:14px]">
+                  Faturamento no período
+                </span>
 
-                <strong>—</strong>
+                <strong class="text-[#111827] text-[length:24px]">—</strong>
 
-                <small class="positive"> Vendas confirmadas </small>
+                <small
+                  class="positive mr-[4px] text-[length:12px] text-[#16a34a]"
+                >
+                  Vendas confirmadas
+                </small>
               </div>
             </article>
 
             <!-- VENDAS -->
 
-            <article class="sales-summary-card">
-              <div class="sales-card-icon sales">
+            <article
+              class="sales-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="sales-card-icon sales w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:27px] text-[#fff5df] [background:#dd951a]"
+              >
                 <i
                   class="converted-icon"
                   data-lucide="trending-up"
@@ -204,19 +293,29 @@
                 ></i>
               </div>
 
-              <div class="sales-card-info">
-                <span> Vendas no período </span>
+              <div class="sales-card-info min-w-[0] flex flex-col gap-[5px]">
+                <span class="text-[#64748b] text-[length:14px]">
+                  Vendas no período
+                </span>
 
-                <strong>—</strong>
+                <strong class="text-[#111827] text-[length:24px]">—</strong>
 
-                <small class="positive"> Vendas confirmadas </small>
+                <small
+                  class="positive mr-[4px] text-[length:12px] text-[#16a34a]"
+                >
+                  Vendas confirmadas
+                </small>
               </div>
             </article>
 
             <!-- TICKET MÉDIO -->
 
-            <article class="sales-summary-card">
-              <div class="sales-card-icon average">
+            <article
+              class="sales-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="sales-card-icon average w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:27px] text-[#eaf2ff] [background:#415683]"
+              >
                 <i
                   class="converted-icon"
                   data-lucide="receipt"
@@ -224,28 +323,40 @@
                 ></i>
               </div>
 
-              <div class="sales-card-info">
-                <span> Ticket médio </span>
+              <div class="sales-card-info min-w-[0] flex flex-col gap-[5px]">
+                <span class="text-[#64748b] text-[length:14px]">
+                  Ticket médio
+                </span>
 
-                <strong>—</strong>
+                <strong class="text-[#111827] text-[length:24px]">—</strong>
 
-                <small> Média por venda </small>
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Média por venda
+                </small>
               </div>
             </article>
 
             <!-- CANCELADAS -->
 
-            <article class="sales-summary-card">
-              <div class="sales-card-icon cancelled">
+            <article
+              class="sales-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="sales-card-icon cancelled w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:27px] text-[#fff0e9] [background:#b64e2e]"
+              >
                 <i data-lucide="credit-card-x"></i>
               </div>
 
-              <div class="sales-card-info">
-                <span> Vendas canceladas </span>
+              <div class="sales-card-info min-w-[0] flex flex-col gap-[5px]">
+                <span class="text-[#64748b] text-[length:14px]">
+                  Vendas canceladas
+                </span>
 
-                <strong>—</strong>
+                <strong class="text-[#111827] text-[length:24px]">—</strong>
 
-                <small> No período </small>
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  No período
+                </small>
               </div>
             </article>
           </div>
@@ -254,12 +365,18 @@
          ABAS
     ========================================== -->
 
-          <div class="sales-tabs">
-            <button class="sales-tab active" data-tab="salesOverview">
+          <div class="sales-tabs flex gap-[10px] mb-[18px]">
+            <button
+              class="sales-tab active [padding:11px_18px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] font-semibold cursor-pointer"
+              data-tab="salesOverview"
+            >
               Visão geral
             </button>
 
-            <button class="sales-tab" data-tab="salesHistory">
+            <button
+              class="sales-tab [padding:11px_18px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] font-semibold cursor-pointer"
+              data-tab="salesHistory"
+            >
               Histórico de vendas
             </button>
           </div>
@@ -268,42 +385,66 @@
          VISÃO GERAL
     ========================================== -->
 
-          <div id="salesOverview" class="sales-tab-content active">
-            <div class="sales-grid">
+          <div id="salesOverview" class="sales-tab-content active hidden">
+            <div
+              class="sales-grid grid grid-cols-[minmax(0,_1.6fr)_minmax(300px,_0.8fr)] gap-[22px]"
+            >
               <!-- FATURAMENTO -->
 
-              <article class="sales-chart-card">
-                <div class="sales-section-header">
+              <article
+                class="sales-chart-card [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)] p-[24px]"
+              >
+                <div
+                  class="sales-section-header flex items-center justify-between gap-[15px] mb-[25px]"
+                >
                   <div>
-                    <h2>Faturamento</h2>
+                    <h2 class="text-[length:18px] mb-[5px]">Faturamento</h2>
 
-                    <p>Desempenho das vendas nos últimos dias.</p>
+                    <p class="text-[#94a3b8] text-[length:13px]">
+                      Desempenho das vendas nos últimos dias.
+                    </p>
                   </div>
                 </div>
 
-                <div class="sales-chart">
-                  <div class="chart-bars"><p>Carregando...</p></div>
+                <div class="sales-chart h-[300px] flex items-end">
+                  <div
+                    class="chart-bars w-full h-full flex items-end justify-between gap-[16px] [border-bottom:1px_solid_#e5e7eb]"
+                  >
+                    <p>Carregando...</p>
+                  </div>
                 </div>
 
-                <div class="sales-chart-footer">
+                <div
+                  class="sales-chart-footer mt-[20px] pt-[18px] [border-top:1px_solid_#edf0f2] flex items-center justify-between text-[#64748b]"
+                >
                   <span> Total no período </span>
 
-                  <strong>—</strong>
+                  <strong class="text-[#111827] text-[length:23px]">—</strong>
                 </div>
               </article>
 
               <!-- FORMAS DE PAGAMENTO -->
 
-              <article class="payment-card">
-                <div class="sales-section-header">
+              <article
+                class="payment-card [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)] p-[24px]"
+              >
+                <div
+                  class="sales-section-header flex items-center justify-between gap-[15px] mb-[25px]"
+                >
                   <div>
-                    <h2>Formas de pagamento</h2>
+                    <h2 class="text-[length:18px] mb-[5px]">
+                      Formas de pagamento
+                    </h2>
 
-                    <p>Distribuição das vendas no período.</p>
+                    <p class="text-[#94a3b8] text-[length:13px]">
+                      Distribuição das vendas no período.
+                    </p>
                   </div>
                 </div>
 
-                <div class="payment-list"><p>Carregando...</p></div>
+                <div class="payment-list flex flex-col">
+                  <p>Carregando...</p>
+                </div>
               </article>
             </div>
           </div>
@@ -312,13 +453,19 @@
          HISTÓRICO
     ========================================== -->
 
-          <div id="salesHistory" class="sales-tab-content">
-            <div class="sales-table-card">
+          <div id="salesHistory" class="sales-tab-content hidden">
+            <div
+              class="sales-table-card [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)] overflow-hidden"
+            >
               <!-- FILTROS -->
 
-              <div class="sales-toolbar">
-                <div class="sales-search">
-                  <span
+              <div
+                class="sales-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <div
+                  class="sales-search w-[min(390px,_100%)] h-[50px] flex items-center [padding:0_16px] [border:1px_solid_#dfe3e8] rounded-[11px]"
+                >
+                  <span class="mr-[10px] text-[#64748b] text-[length:25px]"
                     ><i
                       class="converted-icon"
                       data-lucide="search"
@@ -330,11 +477,15 @@
                     type="text"
                     id="salesSearch"
                     placeholder="Buscar venda, cliente ou código..."
+                    class="[flex:1] min-w-[0] h-full [border:none] [outline:none] [background:transparent]"
                   />
                 </div>
 
-                <div class="sales-filters">
-                  <select id="paymentFilter">
+                <div class="sales-filters flex gap-[12px]">
+                  <select
+                    id="paymentFilter"
+                    class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569]"
+                  >
                     <option value="">Todas as formas</option>
                     <option value="PIX">PIX</option>
                     <option value="CARTAO">Cartão</option>
@@ -343,7 +494,10 @@
                     <option value="OUTRO">Outro</option>
                   </select>
 
-                  <select id="salesStatusFilter">
+                  <select
+                    id="salesStatusFilter"
+                    class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569]"
+                  >
                     <option value="">Todos os status</option>
                     <option value="CONCLUIDO">Confirmado</option>
                     <option value="ORCAMENTO">Reservado</option>
@@ -354,9 +508,9 @@
 
               <!-- TABELA -->
 
-              <div class="sales-table-container">
-                <table class="sales-table">
-                  <thead>
+              <div class="sales-table-container w-full overflow-x-auto">
+                <table class="sales-table w-full min-w-[950px] border-collapse">
+                  <thead class="[background:#fafafa]">
                     <tr>
                       <th>Venda</th>
                       <th>Cliente</th>
@@ -379,10 +533,12 @@
 
               <!-- PAGINAÇÃO -->
 
-              <div class="sales-table-footer">
+              <div
+                class="sales-table-footer min-h-[70px] [padding:0_22px] flex items-center justify-between text-[#7c8493] text-[length:13px]"
+              >
                 <span>Carregando...</span>
 
-                <div class="sales-pagination"></div>
+                <div class="sales-pagination flex gap-[7px]"></div>
               </div>
             </div>
           </div>

@@ -1,77 +1,8 @@
 /* Gerado por npm run build. Edite styles/configuracoes.css. */
-/* =========================================
-   CABEÇALHO
-========================================= */
-
-.settings-header {
-
-    margin-bottom: 25px;
-
-}
-
-.settings-header h1 {
-
-    font-size: clamp(28px, 2.5vw, 36px);
-
-    margin-bottom: 7px;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(17 24 39 / var(--tw-text-opacity, 1));
-
-}
-
-.settings-header p {
-
-    --tw-text-opacity: 1;
-
-    color: rgb(124 132 147 / var(--tw-text-opacity, 1));
-
-    font-size: 16px;
-
-}
-
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 /* =========================================
    ABAS
 ========================================= */
-
-.settings-tabs {
-
-    display: flex;
-
-    gap: 8px;
-
-    margin-bottom: 20px;
-
-    padding-bottom: 2px;
-
-    overflow-x: auto;
-
-}
-
-.settings-tab {
-
-    padding: 11px 17px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: transparent;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    white-space: nowrap;
-
-    cursor: pointer;
-
-}
 
 .settings-tab:hover {
 
@@ -89,12 +20,6 @@
 
 }
 
-.settings-content {
-
-    display: none;
-
-}
-
 .settings-content.active {
 
     display: block;
@@ -104,54 +29,6 @@
 /* =========================================
    CARDS
 ========================================= */
-
-.settings-card {
-
-    width: 100%;
-
-    margin-bottom: 22px;
-
-    background: #ffffff;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
-
-}
-
-.settings-card-header {
-
-    min-height: 85px;
-
-    padding: 20px 24px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    border-bottom: 1px solid #e5e7eb;
-
-}
-
-.settings-card-header h2 {
-
-    margin-bottom: 5px;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(17 24 39 / var(--tw-text-opacity, 1));
-
-    font-size: 18px;
-
-}
 
 .settings-card-header p {
 
@@ -163,96 +40,9 @@
 
 }
 
-.settings-card-body {
-
-    padding: 24px;
-
-}
-
-.settings-card-footer {
-
-    padding: 18px 24px;
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    border-top: 1px solid #e5e7eb;
-
-    background: #fafafa;
-
-}
-
 /* =========================================
    FORM
 ========================================= */
-
-.settings-form-row {
-
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 18px;
-
-}
-
-.settings-form-group {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    margin-bottom: 18px;
-
-}
-
-.settings-form-group label {
-
-    --tw-text-opacity: 1;
-
-    color: rgb(55 65 81 / var(--tw-text-opacity, 1));
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-}
-
-.settings-form-group input,
-.settings-form-group select,
-.settings-form-group textarea {
-
-    width: 100%;
-
-    border: 1px solid #dfe3e8;
-
-    border-radius: 10px;
-
-    padding: 0 14px;
-
-    background: white;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(51 65 85 / var(--tw-text-opacity, 1));
-
-    font-family: inherit;
-
-    font-size: 14px;
-
-    outline: none;
-
-}
-
-.settings-form-group input,
-.settings-form-group select {
-
-    height: 48px;
-
-}
 
 .settings-form-group textarea {
 
@@ -278,57 +68,9 @@
    BOTÕES
 ========================================= */
 
-.save-settings-button {
-
-    min-height: 46px;
-
-    padding: 0 20px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #fd7941;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-
-}
-
 .save-settings-button:hover {
 
     background: #f2672f;
-
-}
-
-.add-user-button {
-
-    height: 44px;
-
-    padding: 0 16px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #fd7941;
-
-    --tw-text-opacity: 1;
-
-    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-
-    font-weight: 600;
-
-    cursor: pointer;
 
 }
 

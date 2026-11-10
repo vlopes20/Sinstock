@@ -1,59 +1,7 @@
-/* =========================================
-   CABEÇALHO
-========================================= */
-
-.settings-header {
-    @apply mb-[25px];
-}
-
-.settings-header h1 {
-    @apply text-[length:clamp(28px,_2.5vw,_36px)];
-
-    @apply mb-[7px];
-
-    @apply text-[#111827];
-}
-
-.settings-header p {
-    @apply text-[#7c8493];
-
-    @apply text-[length:16px];
-}
-
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 /* =========================================
    ABAS
 ========================================= */
-
-.settings-tabs {
-    @apply flex;
-
-    @apply gap-[8px];
-
-    @apply mb-[20px];
-
-    @apply pb-[2px];
-
-    @apply overflow-x-auto;
-}
-
-.settings-tab {
-    @apply [padding:11px_17px];
-
-    @apply [border:none];
-
-    @apply rounded-[10px];
-
-    @apply [background:transparent];
-
-    @apply text-[#64748b];
-
-    @apply text-[length:14px];
-    @apply font-semibold;
-
-    @apply whitespace-nowrap;
-
-    @apply cursor-pointer;
-}
 
 .settings-tab:hover {
     @apply [background:#f8fafc];
@@ -65,10 +13,6 @@
     @apply text-[#fd7941];
 }
 
-.settings-content {
-    @apply hidden;
-}
-
 .settings-content.active {
     @apply block;
 }
@@ -77,121 +21,15 @@
    CARDS
 ========================================= */
 
-.settings-card {
-    @apply w-full;
-
-    @apply mb-[22px];
-
-    @apply [background:#ffffff];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[18px];
-
-    @apply overflow-hidden;
-
-    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
-}
-
-.settings-card-header {
-    @apply min-h-[85px];
-
-    @apply [padding:20px_24px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply gap-[20px];
-
-    @apply [border-bottom:1px_solid_#e5e7eb];
-}
-
-.settings-card-header h2 {
-    @apply mb-[5px];
-
-    @apply text-[#111827];
-
-    @apply text-[length:18px];
-}
-
 .settings-card-header p {
     @apply text-[#94a3b8];
 
     @apply text-[length:13px];
 }
 
-.settings-card-body {
-    @apply p-[24px];
-}
-
-.settings-card-footer {
-    @apply [padding:18px_24px];
-
-    @apply flex;
-    @apply justify-end;
-
-    @apply [border-top:1px_solid_#e5e7eb];
-
-    @apply [background:#fafafa];
-}
-
 /* =========================================
    FORM
 ========================================= */
-
-.settings-form-row {
-    @apply grid;
-
-    @apply grid-cols-[repeat(2,_minmax(0,_1fr))];
-
-    @apply gap-[18px];
-}
-
-.settings-form-group {
-    @apply flex;
-
-    @apply flex-col;
-
-    @apply gap-[8px];
-
-    @apply mb-[18px];
-}
-
-.settings-form-group label {
-    @apply text-[#374151];
-
-    @apply text-[length:14px];
-
-    @apply font-semibold;
-}
-
-.settings-form-group input,
-.settings-form-group select,
-.settings-form-group textarea {
-    @apply w-full;
-
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply rounded-[10px];
-
-    @apply [padding:0_14px];
-
-    @apply [background:white];
-
-    @apply text-[#334155];
-
-    @apply [font-family:inherit];
-
-    @apply text-[length:14px];
-
-    @apply [outline:none];
-}
-
-.settings-form-group input,
-.settings-form-group select {
-    @apply h-[48px];
-}
 
 .settings-form-group textarea {
     @apply min-h-[100px];
@@ -211,47 +49,8 @@
    BOTÕES
 ========================================= */
 
-.save-settings-button {
-    @apply min-h-[46px];
-
-    @apply [padding:0_20px];
-
-    @apply [border:none];
-
-    @apply rounded-[10px];
-
-    @apply [background:#fd7941];
-
-    @apply text-[white];
-
-    @apply text-[length:14px];
-    @apply font-semibold;
-
-    @apply cursor-pointer;
-
-    @apply [transition:0.2s];
-}
-
 .save-settings-button:hover {
     @apply [background:#f2672f];
-}
-
-.add-user-button {
-    @apply h-[44px];
-
-    @apply [padding:0_16px];
-
-    @apply [border:none];
-
-    @apply rounded-[10px];
-
-    @apply [background:#fd7941];
-
-    @apply text-[white];
-
-    @apply font-semibold;
-
-    @apply cursor-pointer;
 }
 
 .secondary-settings-button {

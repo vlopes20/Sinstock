@@ -87,29 +87,34 @@ frontend/
   scripts/            Compilacao e verificacao de caminhos
 ```
 
-- `styles/*.css`: fontes Tailwind; os componentes existentes usam `@apply`.
+- `index.html` e `pages/*.html`: edite cores, tamanhos e espacamentos nas classes
+  Tailwind dos elementos, como nas paginas de cadastro e recuperacao de senha.
+- `styles/*.css`: complementos de responsividade, estados interativos, tema e
+  componentes criados pelo JavaScript. Esses complementos ainda usam `@apply`.
 - `assets/styles/*.css`: arquivos gerados e versionados, utilizados pelas paginas.
   Nao edite esses arquivos manualmente: execute o build antes de publicar.
 - `tailwind.config.cjs`: configuracao dos utilitarios e das fontes HTML/JS.
-- `pages/*.html` e `js/*.js`: tambem podem usar classes utilitarias diretamente.
+- `pages/*.html` e `js/*.js`: usam classes utilitarias diretamente.
   Use nomes completos nas strings para que o compilador detecte as classes.
 
 Exemplo de componente:
 
-```css
-.example-card {
-    @apply flex items-center gap-[12px] rounded-[18px];
-}
+```html
+<div class="flex items-center gap-3 rounded-[18px] bg-white p-6">
+  <h2 class="text-xl font-semibold text-gray-900">Resumo</h2>
+</div>
 ```
 
-As classes de componentes, seletores de estado e media queries foram mantidos
-para preservar a cascata e os seletores usados por menus, filtros e modais no
-JavaScript. Valores especificos do desenho usam valores/propriedades arbitrarios
-do Tailwind. As variaveis CSS de tema continuam declaradas em `:root`.
+Nomes como `sidebar`, `menu-item` e `help-tab` permanecem no HTML como referencias
+para os scripts e os ajustes compartilhados. Nao remova esses nomes ao editar
+as classes visuais. Valores especificos do desenho usam valores/propriedades
+arbitrarios do Tailwind. As variaveis CSS de tema continuam em `:root`.
 
-`dashboard.css` fornece a base compartilhada das telas administrativas; cada
-tela continua carregando seu complemento depois dessa base. `login.css` atende
-ao `index.html`. Ambos preservam o reset original, sem o Preflight do Tailwind.
+`utilities.css` compila as classes usadas no HTML das telas operacionais e do
+login. Carregue-o antes dos complementos, para que os estados e ajustes
+responsivos preservem sua prioridade. `dashboard.css` fornece o tema e o reset
+compartilhados; cada tela carrega seu complemento depois dessa base.
+`login.css` atende ao `index.html`. Ambos preservam o reset original, sem o Preflight do Tailwind.
 `autenticacao.css` inclui o Preflight para as seis paginas que ja usavam Tailwind.
 Isso evita alterar os estilos padrao de elementos nas telas migradas.
 

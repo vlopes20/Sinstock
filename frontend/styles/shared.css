@@ -8,6 +8,20 @@
 .mobile-menu-toggle, .mobile-menu-close { @apply hidden; }
 .sidebar { @apply overflow-y-auto; }
 .sidebar-menu { @apply shrink-0; }
+.sidebar .menu-item svg { @apply w-6 h-6 shrink-0; }
+.sidebar .sidebar-logout {
+    @apply border border-solid border-[#fca5a54d] bg-[#ef444414] text-[#00ff15] font-semibold text-left cursor-pointer rounded-xl;
+    font-family: inherit;
+    transition: background-color .2s, border-color .2s, color .2s;
+}
+.sidebar .sidebar-logout:hover {
+    @apply bg-[#b91c1c] border-[#ef4444] text-white;
+}
+.sidebar .sidebar-logout:focus-visible {
+    outline: 3px solid #fca5a5;
+    outline-offset: 3px;
+}
+.sidebar .sidebar-logout:disabled { @apply cursor-wait opacity-60; }
 .menu-backdrop { @apply hidden; }
 .shared-toast { @apply fixed; @apply bottom-[20px]; @apply left-[50%]; @apply [transform:translateX(-50%)]; @apply w-[max-content]; @apply max-w-[calc(100vw_-_32px)]; @apply [padding:14px_20px]; @apply [background:#29313d]; @apply text-[white]; @apply rounded-[10px]; @apply z-[2000]; @apply [font:15px/1.5_Arial,_sans-serif]; @apply [box-shadow:0_5px_24px_#0003]; }
 .shared-toast:empty { @apply hidden; }
@@ -65,9 +79,9 @@ svg.converted-icon {
 .main-content .content,
 .content > *,
 .content article,
-[class$="-form-row"] > *,
-[class$="-form-group"],
-[class$="-card-info"],
+[class*="-form-row"] > *,
+[class*="-form-group"],
+[class*="-card-info"],
 .stock-summary-card > div:last-child,
 .summary-information,
 .card-information {
@@ -158,7 +172,7 @@ svg.converted-icon {
     .report-chart-bars { @apply gap-2; }
     .content :is(.stock-filters, .product-filters, .supplier-filters, .sales-filters, .order-filters) { @apply min-w-0 flex-wrap; }
     .content :is(.stock-filters, .product-filters, .supplier-filters, .sales-filters, .order-filters) select { @apply min-w-0; }
-    .content [class$="-form-row"] { @apply grid-cols-[minmax(0,_1fr)]; }
+    .content [class*="-form-row"] { @apply grid-cols-[minmax(0,_1fr)]; }
     :is(.stock-modal, .product-modal, .supplier-modal, .sale-modal, .order-modal, .user-modal, .ticket-modal) { @apply p-[18px]; }
     [class*="-modal-footer"] > button { @apply flex-1 min-h-[44px]; }
     .settings-header > a { @apply w-full; }

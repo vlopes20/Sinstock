@@ -1,66 +1,7 @@
-/* =========================================
-   CABEÇALHO
-========================================= */
-
-.products-header {
-    @apply w-full;
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply gap-[20px];
-
-    @apply mb-[28px];
-}
-
-.products-header h1 {
-    @apply text-[length:clamp(28px,_2.5vw,_36px)];
-
-    @apply mb-[7px];
-
-    @apply text-[#111827];
-}
-
-.products-header p {
-    @apply text-[#7c8493];
-
-    @apply text-[length:16px];
-}
-
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
 /* =========================================
    BOTÃO NOVO PRODUTO
 ========================================= */
-
-.new-product-button {
-    @apply h-[50px];
-
-    @apply [padding:0_22px];
-
-    @apply [border:none];
-
-    @apply rounded-[12px];
-
-    @apply [background:#fd6423];
-
-    @apply text-[#ffffff];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[9px];
-
-    @apply text-[length:15px];
-    @apply font-semibold;
-
-    @apply cursor-pointer;
-
-    @apply [transition:0.2s];
-}
-
-.new-product-button span {
-    @apply text-[length:23px];
-}
 
 .new-product-button:hover {
     @apply [background:#f2672f];
@@ -72,35 +13,6 @@
    CARDS
 ========================================= */
 
-.products-summary {
-    @apply grid;
-
-    @apply grid-cols-[repeat(4,_minmax(0,_1fr))];
-
-    @apply gap-[20px];
-
-    @apply mb-[28px];
-}
-
-.product-summary-card {
-    @apply min-h-[125px];
-
-    @apply p-[22px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply gap-[18px];
-
-    @apply [background:#ffffff];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[18px];
-
-    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
-}
-
 .product-summary-card > div:last-child {
     @apply min-w-[0];
 
@@ -110,46 +22,7 @@
     @apply gap-[5px];
 }
 
-.product-summary-card span {
-    @apply text-[#64748b];
-
-    @apply text-[length:14px];
-}
-
-.product-summary-card strong {
-    @apply text-[#111827];
-
-    @apply text-[length:25px];
-}
-
-.product-summary-card small {
-    @apply text-[#94a3b8];
-
-    @apply text-[length:12px];
-}
-
 /* ÍCONES */
-
-.product-card-icon {
-    @apply w-[60px];
-    @apply h-[60px];
-
-    @apply shrink-0;
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-center;
-
-    @apply rounded-[16px];
-
-    @apply text-[length:26px];
-}
-
-.product-card-icon.total {
-    @apply text-[#fff0e9];
-
-    @apply [background:#b64e2e];
-}
 
 .product-card-icon.active {
     @apply text-[#ffffff];
@@ -157,68 +30,9 @@
     @apply [background:#499261];
 }
 
-.product-card-icon.warning {
-    @apply text-[#fff5df];
-
-    @apply [background:#dd951a];
-}
-
-.product-card-icon.expiry {
-    @apply text-[#eaf2ff];
-
-    @apply [background:#415683];
-}
-
-/* =========================================
-   CARD PRINCIPAL
-========================================= */
-
-.products-card {
-    @apply w-full;
-
-    @apply [background:#ffffff];
-
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply rounded-[18px];
-
-    @apply overflow-hidden;
-
-    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
-}
-
 /* =========================================
    FILTROS
 ========================================= */
-
-.products-toolbar {
-    @apply min-h-[88px];
-
-    @apply [padding:18px_22px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply gap-[20px];
-
-    @apply [border-bottom:1px_solid_#e5e7eb];
-}
-
-.products-search {
-    @apply w-[min(390px,_100%)];
-
-    @apply h-[50px];
-
-    @apply flex;
-    @apply items-center;
-
-    @apply [padding:0_16px];
-
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply rounded-[11px];
-}
 
 .products-search:focus-within {
     @apply border-[#fd7941];
@@ -226,74 +40,9 @@
     @apply [box-shadow:0_0_0_3px_rgba(253,_121,_65,_0.08)];
 }
 
-.products-search span {
-    @apply mr-[10px];
-
-    @apply text-[#64748b];
-
-    @apply text-[length:25px];
-}
-
-.products-search input {
-    @apply [flex:1];
-
-    @apply min-w-[0];
-
-    @apply h-full;
-
-    @apply [border:none];
-    @apply [outline:none];
-
-    @apply [background:transparent];
-
-    @apply text-[length:14px];
-}
-
-.products-filters {
-    @apply flex;
-
-    @apply gap-[12px];
-}
-
-.products-filters select {
-    @apply min-w-[160px];
-
-    @apply h-[50px];
-
-    @apply [padding:0_14px];
-
-    @apply [border:1px_solid_#dfe3e8];
-
-    @apply rounded-[11px];
-
-    @apply [background:white];
-
-    @apply text-[#475569];
-
-    @apply [outline:none];
-}
-
 /* =========================================
    TABELA
 ========================================= */
-
-.products-table-container {
-    @apply w-full;
-
-    @apply overflow-x-auto;
-}
-
-.products-table {
-    @apply w-full;
-
-    @apply min-w-[1100px];
-
-    @apply border-collapse;
-}
-
-.products-table thead {
-    @apply [background:#fafafa];
-}
 
 .products-table th {
     @apply h-[52px];
@@ -446,26 +195,6 @@
    RODAPÉ
 ========================================= */
 
-.products-footer {
-    @apply min-h-[70px];
-
-    @apply [padding:0_22px];
-
-    @apply flex;
-    @apply items-center;
-    @apply justify-between;
-
-    @apply text-[#7c8493];
-
-    @apply text-[length:13px];
-}
-
-.products-pagination {
-    @apply flex;
-
-    @apply gap-[7px];
-}
-
 .products-pagination button {
     @apply min-w-[36px];
     @apply h-[36px];
@@ -555,23 +284,6 @@
     @apply text-[length:14px];
 }
 
-.close-product-modal {
-    @apply w-[38px];
-    @apply h-[38px];
-
-    @apply shrink-0;
-
-    @apply [border:none];
-
-    @apply rounded-[9px];
-
-    @apply [background:#f3f4f6];
-
-    @apply text-[length:23px];
-
-    @apply cursor-pointer;
-}
-
 /* =========================================
    FORM
 ========================================= */
@@ -621,27 +333,9 @@
     @apply border-[#fd7941];
 }
 
-.product-form-row {
-    @apply grid;
-
-    @apply grid-cols-[repeat(2,_minmax(0,_1fr))];
-
-    @apply gap-[15px];
-}
-
 /* =========================================
    BOTÕES MODAL
 ========================================= */
-
-.product-modal-footer {
-    @apply flex;
-
-    @apply justify-end;
-
-    @apply gap-[12px];
-
-    @apply mt-[25px];
-}
 
 .cancel-product-button,
 .save-product-button {
@@ -654,14 +348,6 @@
     @apply font-semibold;
 
     @apply cursor-pointer;
-}
-
-.cancel-product-button {
-    @apply [border:1px_solid_#e5e7eb];
-
-    @apply [background:white];
-
-    @apply text-[#475569];
 }
 
 .save-product-button {

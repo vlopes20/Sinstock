@@ -50,18 +50,22 @@
       node.classList.add('flex', 'items-center', 'justify-center');
     });
     const userMenu = document.querySelector('.user');
-    if (userMenu) {
-      let logout = document.getElementById('sessionLogout');
-      if (!logout) {
-        logout = document.createElement('button');
-        logout.id = 'sessionLogout';
-        logout.type = 'button';
-        logout.textContent = 'Sair';
-        logout.className =
-          'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700';
-        logout.addEventListener('click', () => SinstockSession.logout());
-        userMenu.after(logout);
-      }
+    let logout = document.getElementById('sessionLogout');
+    if (!logout && userMenu) {
+      logout = document.createElement('button');
+      logout.id = 'sessionLogout';
+      logout.type = 'button';
+      logout.textContent = 'Sair';
+      logout.className =
+        'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700';
+      userMenu.after(logout);
+    }
+    if (logout) {
+      logout.onclick = () => {
+        logout.disabled = true;
+        logout.setAttribute('aria-busy', 'true');
+        SinstockSession.logout();
+      };
     }
   }
   async function verify() {
