@@ -1,5 +1,17 @@
 # Pacote de QA para revisao - SINSTOCK
 
+## Execução na nuvem — 10/11/2026
+
+Repositório `vlopes20/Sinstock`, branch `qa/cloud-validation-20261110`, commit `41066823366b44b4e988480a20e1584910c4a03d`, baseado na `develop` remota com o PR #5 integrado.
+
+`npm ci`, geração do Prisma Client 7.9.1 com `DATABASE_URL` fictícia e `npm run typecheck` aprovados. `npm test -- --runInBand --no-cache`: **11 suítes aprovadas; 92 testes aprovados, 0 falhas; tempo Jest de 10,969 segundos**. Os 92 testes históricos foram reproduzidos.
+
+Os testes usam mocks e não validam integração real com MySQL, concorrência ou rollback no banco. Não houve acesso a bancos de dados, migrations, seed ou alterações em bancos. Backend e frontend não foram iniciados. Código de produção, schema Prisma e lockfile permaneceram inalterados; nenhum commit, push ou merge foi realizado nesta execução.
+
+Detalhes e limites: [relatório da execução de 10/11/2026](relatorio-busca-global.md#execução-de-testes-unitários-na-nuvem--10112026). Os registros abaixo são históricos e preservam os resultados e pendências das rodadas anteriores; verificações de lint, auditoria e sintaxe JavaScript não foram repetidas nesta execução.
+
+## Registro histórico das rodadas anteriores
+
 Base auditada: develop, commit 4c3eddc. Branch local: qa/testes-busca-global. Sem commit/push/merge. Este resumo representa o estado final; contagens 49/67 nos relatorios detalhados sao historicas.
 
 ## Validacao final repetida nesta rodada
