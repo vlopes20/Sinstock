@@ -1,0 +1,417 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* =========================================
+   BOTÃO NOVO PRODUTO
+========================================= */
+
+.new-product-button:hover {
+    @apply [background:#f2672f];
+
+    @apply [transform:translateY(-1px)];
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.product-summary-card > div:last-child {
+    @apply min-w-[0];
+
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[5px];
+}
+
+/* ÍCONES */
+
+.product-card-icon.active {
+    @apply text-[#ffffff];
+
+    @apply [background:#499261];
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.products-search:focus-within {
+    @apply border-[#fd7941];
+
+    @apply [box-shadow:0_0_0_3px_rgba(253,_121,_65,_0.08)];
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.products-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_20px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.products-table td {
+    @apply h-[80px];
+
+    @apply [padding:0_20px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:14px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.products-table tbody tr {
+    @apply [transition:0.2s];
+}
+
+.products-table tbody tr:hover {
+    @apply [background:#fffaf7];
+}
+
+/* =========================================
+   PRODUTO
+========================================= */
+
+.product-info {
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[13px];
+}
+
+.product-image {
+    @apply w-[44px];
+    @apply h-[44px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[10px];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply font-bold;
+}
+
+.product-info > div:last-child {
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[4px];
+}
+
+.product-info strong {
+    @apply text-[#111827];
+}
+
+.product-info span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   ESTOQUE
+========================================= */
+
+.low-stock {
+    @apply text-[#e58a00];
+}
+
+.out-stock {
+    @apply text-[#ef4444];
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.product-status {
+    @apply inline-flex;
+    @apply items-center;
+
+    @apply [padding:7px_12px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+}
+
+.product-status.active {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.product-status.inactive {
+    @apply text-[#64748b];
+
+    @apply [background:#f1f5f9];
+}
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.product-actions {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:22px];
+
+    @apply cursor-pointer;
+}
+
+.product-actions:hover {
+    @apply [background:#f3f4f6];
+}
+
+/* =========================================
+   RODAPÉ
+========================================= */
+
+.products-pagination button {
+    @apply min-w-[36px];
+    @apply h-[36px];
+
+    @apply [padding:0_8px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[8px];
+
+    @apply [background:#ffffff];
+
+    @apply text-[#475569];
+
+    @apply cursor-pointer;
+}
+
+.products-pagination button.active {
+    @apply border-[#fd7941];
+
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.product-modal-overlay {
+    @apply fixed;
+
+    @apply [inset:0];
+
+    @apply z-[1000];
+
+    @apply hidden;
+
+    @apply items-center;
+    @apply justify-center;
+
+    @apply p-[20px];
+
+    @apply [background:rgba(15,_23,_42,_0.55)];
+}
+
+.product-modal-overlay.active {
+    @apply flex;
+}
+
+.product-modal {
+    @apply w-[min(700px,_100%)];
+
+    @apply max-h-[92vh];
+
+    @apply overflow-y-auto;
+
+    @apply p-[26px];
+
+    @apply [background:#ffffff];
+
+    @apply rounded-[20px];
+
+    @apply [box-shadow:0_25px_70px_rgba(0,_0,_0,_0.2)];
+}
+
+.product-modal-header {
+    @apply flex;
+
+    @apply items-start;
+    @apply justify-between;
+
+    @apply gap-[20px];
+
+    @apply mb-[25px];
+}
+
+.product-modal-header h2 {
+    @apply mb-[5px];
+
+    @apply text-[length:23px];
+}
+
+.product-modal-header p {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:14px];
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.product-form-group {
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[8px];
+
+    @apply mb-[18px];
+}
+
+.product-form-group label {
+    @apply text-[#374151];
+
+    @apply text-[length:14px];
+    @apply font-semibold;
+}
+
+.product-form-group input,
+.product-form-group select,
+.product-form-group textarea {
+    @apply w-full;
+
+    @apply [border:1px_solid_#dfe3e8];
+
+    @apply rounded-[10px];
+
+    @apply [padding:12px_14px];
+
+    @apply [outline:none];
+
+    @apply [font-family:inherit];
+
+    @apply text-[length:14px];
+}
+
+.product-form-group input,
+.product-form-group select {
+    @apply h-[48px];
+}
+
+.product-form-group input:focus,
+.product-form-group select:focus,
+.product-form-group textarea:focus {
+    @apply border-[#fd7941];
+}
+
+/* =========================================
+   BOTÕES MODAL
+========================================= */
+
+.cancel-product-button,
+.save-product-button {
+    @apply h-[48px];
+
+    @apply [padding:0_20px];
+
+    @apply rounded-[10px];
+
+    @apply font-semibold;
+
+    @apply cursor-pointer;
+}
+
+.save-product-button {
+    @apply [border:none];
+
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .products-summary {
+        @apply grid-cols-[repeat(2,_1fr)];
+    }
+
+    .products-toolbar {
+        @apply flex-col;
+
+        @apply items-stretch;
+    }
+
+    .products-search {
+        @apply w-full;
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .products-header {
+        @apply flex-col;
+
+        @apply items-start;
+    }
+
+    .products-summary {
+        @apply grid-cols-[1fr];
+    }
+
+    .products-filters {
+        @apply flex-col;
+    }
+
+    .products-filters select {
+        @apply w-full;
+    }
+
+    .products-footer {
+        @apply flex-col;
+
+        @apply items-start;
+
+        @apply gap-[15px];
+
+        @apply p-[18px];
+    }
+
+    .product-form-row {
+        @apply grid-cols-[1fr];
+    }
+
+}

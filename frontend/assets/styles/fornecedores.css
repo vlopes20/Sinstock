@@ -1,0 +1,392 @@
+/* Gerado por npm run build. Edite styles/fornecedores.css. */
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* =========================================
+   BOTÃO
+========================================= */
+
+.new-supplier-button:hover {
+
+    background: #f2672f;
+
+    transform: translateY(-1px);
+
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.supplier-summary-card > div:last-child {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+/* ÍCONES */
+
+.supplier-card-icon.active {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+
+    background: #499261;
+
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.supplier-search:focus-within {
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+    box-shadow: 0 0 0 3px rgba(253, 121, 65, 0.08);
+
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.suppliers-table th {
+
+    height: 52px;
+
+    padding: 0 18px;
+
+    text-align: left;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(104 115 134 / var(--tw-text-opacity, 1));
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+.suppliers-table td {
+
+    height: 80px;
+
+    padding: 0 18px;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+
+    font-size: 13px;
+
+    border-bottom: 1px solid #edf0f2;
+
+}
+
+.suppliers-table tbody tr {
+
+    transition: 0.2s;
+
+}
+
+.suppliers-table tbody tr:hover {
+
+    background: #fffaf7;
+
+}
+
+/* =========================================
+   FORNECEDOR
+========================================= */
+
+.supplier-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+.supplier-avatar {
+
+    width: 44px;
+
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #fff0e9;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(253 121 65 / var(--tw-text-opacity, 1));
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.supplier-info > div:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+.supplier-info strong {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+
+    white-space: nowrap;
+
+}
+
+.supplier-info span {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+
+    font-size: 12px;
+
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.supplier-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+.supplier-status.active {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(22 156 70 / var(--tw-text-opacity, 1));
+
+    background: #eaf9ef;
+
+}
+
+.supplier-status.inactive {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+
+    background: #f1f5f9;
+
+}
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.supplier-actions {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+.supplier-actions:hover {
+
+    background: #f3f4f6;
+
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.suppliers-pagination button {
+
+    min-width: 36px;
+
+    height: 36px;
+
+    padding: 0 8px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    background: white;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+
+    cursor: pointer;
+
+}
+
+.suppliers-pagination button.active {
+
+    background: #fd7941;
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+    --tw-text-opacity: 1;
+
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.supplier-modal-overlay.active {
+
+    display: flex;
+
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.supplier-form-group input:focus,
+.supplier-form-group select:focus,
+.supplier-form-group textarea:focus {
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .suppliers-summary {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    .suppliers-toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .supplier-search {
+
+        width: 100%;
+
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .suppliers-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .suppliers-summary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .supplier-filters {
+
+        flex-direction: column;
+
+    }
+
+    .supplier-filters select {
+
+        width: 100%;
+
+    }
+
+    .suppliers-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+        padding: 18px;
+
+    }
+
+    .supplier-form-row,
+    .supplier-address-row {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

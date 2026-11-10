@@ -1,0 +1,557 @@
+/* Gerado por npm run build. Edite styles/estoque.css. */
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* =========================================
+   BOTÃO NOVA MOVIMENTAÇÃO
+========================================= */
+
+.new-movement-button:hover {
+
+    background: #f2662d;
+
+    transform: translateY(-1px);
+
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.stock-summary-card > div:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+/* =========================================
+   ABAS
+========================================= */
+
+.stock-tab.active {
+
+    background: #fff0e9;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(253 121 65 / var(--tw-text-opacity, 1));
+
+}
+
+.stock-tab-content.active {
+
+    display: block;
+
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.stock-search:focus-within {
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+    box-shadow: 0 0 0 3px rgba(253, 121, 65, 0.08);
+
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.stock-table th {
+
+    height: 52px;
+
+    padding: 0 20px;
+
+    text-align: left;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(104 115 134 / var(--tw-text-opacity, 1));
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+.stock-table td {
+
+    height: 80px;
+
+    padding: 0 20px;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #edf0f2;
+
+}
+
+.stock-table tbody tr:hover {
+
+    background: #fffaf7;
+
+}
+
+/* =========================================
+   PRODUTO
+========================================= */
+
+.stock-product {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+.stock-product-image {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 10px;
+
+    background: #fff0e9;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(253 121 65 / var(--tw-text-opacity, 1));
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: 700;
+
+}
+
+.stock-product > div:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+.stock-product strong {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+
+}
+
+.stock-product span {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+
+    font-size: 12px;
+
+}
+
+/* =========================================
+   QUANTIDADE
+========================================= */
+
+.stock-quantity {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+
+    font-size: 16px;
+
+}
+
+.stock-quantity.low {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(229 138 0 / var(--tw-text-opacity, 1));
+
+}
+
+.stock-quantity.out {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(228 63 76 / var(--tw-text-opacity, 1));
+
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.stock-status {
+
+    display: inline-flex;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+.stock-status.normal {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(22 156 70 / var(--tw-text-opacity, 1));
+
+    background: #eaf9ef;
+
+}
+
+.stock-status.low {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(229 138 0 / var(--tw-text-opacity, 1));
+
+    background: #fff5df;
+
+}
+
+.stock-status.out {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(228 63 76 / var(--tw-text-opacity, 1));
+
+    background: #ffebed;
+
+}
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.stock-actions-button {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+.stock-actions-button:hover {
+
+    background: #f3f4f6;
+
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.pagination {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+.pagination button {
+
+    min-width: 36px;
+
+    height: 36px;
+
+    padding: 0 8px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    background: white;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+
+    cursor: pointer;
+
+}
+
+.pagination button.active {
+
+    background: #fd7941;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+}
+
+/* =========================================
+   MOVIMENTAÇÕES
+========================================= */
+
+.movement-type {
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+.movement-type.entry {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(22 156 70 / var(--tw-text-opacity, 1));
+
+    background: #eaf9ef;
+
+}
+
+.movement-type.exit {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(228 63 76 / var(--tw-text-opacity, 1));
+
+    background: #ffebed;
+
+}
+
+.movement-type.adjustment {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+
+    background: #eaf2ff;
+
+}
+
+.movement-positive {
+
+    --tw-text-opacity: 1 !important;
+
+    color: rgb(22 163 74 / var(--tw-text-opacity, 1)) !important;
+
+    font-weight: 700;
+
+}
+
+.movement-negative {
+
+    --tw-text-opacity: 1 !important;
+
+    color: rgb(239 68 68 / var(--tw-text-opacity, 1)) !important;
+
+    font-weight: 700;
+
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.stock-modal-overlay.active {
+
+    display: flex;
+
+}
+
+/* TIPOS */
+
+.movement-type-selector {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+}
+
+.movement-option {
+
+    height: 65px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    background: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    --tw-text-opacity: 1;
+
+    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+
+    cursor: pointer;
+
+}
+
+.movement-option.active {
+
+    --tw-text-opacity: 1;
+
+    color: rgb(253 121 65 / var(--tw-text-opacity, 1));
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+    background: #fff7f3;
+
+}
+
+/* FORM */
+
+.stock-form-group input:focus,
+.stock-form-group select:focus,
+.stock-form-group textarea:focus {
+
+    --tw-border-opacity: 1;
+
+    border-color: rgb(253 121 65 / var(--tw-border-opacity, 1));
+
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 900px) {
+
+    .stock-toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .stock-search {
+
+        width: 100%;
+
+    }
+
+    .stock-filters select {
+
+        flex: 1;
+
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .stock-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .stock-summary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .stock-filters {
+
+        flex-direction: column;
+
+    }
+
+    .stock-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+        padding: 18px;
+
+    }
+
+    .movement-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .stock-form-row {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .stock-modal {
+
+        padding: 20px;
+
+    }
+
+}

@@ -1,0 +1,639 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* BOTÕES */
+
+.generate-report-button:hover {
+    @apply [background:#f2672f];
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.reports-filters-card {
+    @apply w-full;
+
+    @apply p-[20px];
+
+    @apply mb-[25px];
+
+    @apply grid;
+
+    @apply grid-cols-[repeat(4,_minmax(150px,_1fr))_auto];
+
+    @apply [align-items:end];
+
+    @apply gap-[15px];
+
+    @apply [background:white];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[16px];
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.03)];
+}
+
+.report-filter-group select:focus,
+.report-filter-group input:focus {
+    @apply border-[#fd7941];
+}
+
+.clear-filter-button {
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply [background:white];
+
+    @apply text-[#64748b];
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.reports-summary {
+    @apply grid;
+
+    @apply grid-cols-[repeat(4,_minmax(0,_1fr))];
+
+    @apply gap-[20px];
+
+    @apply mb-[25px];
+}
+
+.report-summary-card {
+    @apply min-h-[125px];
+
+    @apply p-[22px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[17px];
+
+    @apply [background:white];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[18px];
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
+}
+
+.report-summary-card > div:last-child {
+    @apply min-w-[0];
+
+    @apply flex;
+
+    @apply flex-col;
+
+    @apply gap-[5px];
+}
+
+.report-summary-card span {
+    @apply text-[#64748b];
+
+    @apply text-[length:14px];
+}
+
+.report-summary-card strong {
+    @apply text-[#111827];
+
+    @apply text-[length:24px];
+}
+
+.report-summary-card small {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+.report-positive {
+    @apply text-[#16a34a] !important;
+}
+
+/* ÍCONES */
+
+.report-card-icon {
+    @apply w-[60px];
+    @apply h-[60px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[16px];
+
+    @apply text-[length:26px];
+}
+
+.report-card-icon.revenue {
+    @apply text-[#ffffff];
+
+    @apply [background:#499261];
+}
+
+.report-card-icon.sales {
+    @apply text-[#fff0e9];
+
+    @apply [background:#b64e2e];
+}
+
+.report-card-icon.entry {
+    @apply text-[#eaf2ff];
+
+    @apply [background:#415683];
+}
+
+.report-card-icon.exit {
+    @apply text-[#fff5df];
+
+    @apply [background:#dd951a];
+
+}
+/* =========================================
+   ABAS
+========================================= */
+
+.reports-tabs {
+    @apply flex;
+
+    @apply gap-[8px];
+
+    @apply mb-[18px];
+
+    @apply overflow-x-auto;
+}
+
+.report-tab {
+    @apply [padding:11px_17px];
+
+    @apply [border:none];
+
+    @apply rounded-[10px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:14px];
+    @apply font-semibold;
+
+    @apply whitespace-nowrap;
+
+    @apply cursor-pointer;
+}
+
+.report-tab.active {
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+}
+
+.report-tab-content {
+    @apply hidden;
+}
+
+.report-tab-content.active {
+    @apply block;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.reports-grid {
+    @apply grid;
+
+    @apply grid-cols-[minmax(0,_1.6fr)_minmax(300px,_0.8fr)];
+
+    @apply gap-[22px];
+
+    @apply mb-[22px];
+}
+
+.report-chart-card,
+.ranking-card,
+.report-table-card {
+    @apply [background:white];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[18px];
+
+    @apply [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)];
+}
+
+.report-chart-card,
+.ranking-card {
+    @apply p-[24px];
+}
+
+/* =========================================
+   CABEÇALHO DAS SEÇÕES
+========================================= */
+
+.report-section-header {
+    @apply flex;
+
+    @apply items-center;
+    @apply justify-between;
+
+    @apply gap-[15px];
+
+    @apply mb-[25px];
+}
+
+.report-section-header h2,
+.report-table-header h2 {
+    @apply text-[length:18px];
+
+    @apply text-[#111827];
+
+    @apply mb-[5px];
+}
+
+.report-section-header p,
+.report-table-header p {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:13px];
+}
+
+.report-section-header > strong {
+    @apply text-[#fd7941];
+
+    @apply text-[length:21px];
+}
+
+/* =========================================
+   GRÁFICO
+========================================= */
+
+.report-chart {
+    @apply h-[300px];
+}
+
+.report-chart-bars {
+    @apply w-full;
+    @apply h-full;
+
+    @apply flex;
+    @apply items-end;
+
+    @apply justify-between;
+
+    @apply gap-[15px];
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.report-bar-group {
+    @apply [flex:1];
+
+    @apply h-full;
+
+    @apply flex;
+    @apply flex-col;
+
+    @apply items-center;
+    @apply justify-end;
+
+    @apply gap-[10px];
+}
+
+.report-bar {
+    @apply w-[min(50px,_75%)];
+
+    @apply min-h-[10px];
+
+    @apply [background:#ffc6ae];
+
+    @apply rounded-[10px_10px_4px_4px];
+
+    @apply [transition:0.2s];
+}
+
+.report-bar:hover,
+.report-bar.active {
+    @apply [background:#fd7941];
+}
+
+.report-bar-group span {
+    @apply text-[#64748b];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   RANKING
+========================================= */
+
+.product-ranking {
+    @apply flex;
+
+    @apply flex-col;
+}
+
+.ranking-item {
+    @apply min-h-[72px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[14px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.ranking-item:last-child {
+    @apply [border-bottom:none];
+}
+
+.ranking-position {
+    @apply w-[36px];
+    @apply h-[36px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[10px];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply font-bold;
+}
+
+.ranking-info {
+    @apply [flex:1];
+
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[4px];
+}
+
+.ranking-info span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   TABELAS
+========================================= */
+
+.report-table-header {
+    @apply min-h-[80px];
+
+    @apply [padding:20px_22px];
+
+    @apply flex;
+    @apply items-center;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.report-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_20px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.report-table td {
+    @apply h-[70px];
+
+    @apply [padding:0_20px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:13px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.report-table tbody tr:hover {
+    @apply [background:#fffaf7];
+}
+
+/* =========================================
+   BADGES
+========================================= */
+
+.percentage-badge {
+    @apply inline-flex;
+
+    @apply [padding:6px_10px];
+
+    @apply rounded-[20px];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+.report-status {
+    @apply inline-flex;
+
+    @apply [padding:7px_11px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+.report-status.success {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.report-status.warning {
+    @apply text-[#e58a00];
+
+    @apply [background:#fff5df];
+}
+
+.report-status.cancelled {
+    @apply text-[#e43f4c];
+
+    @apply [background:#ffebed];
+}
+
+/* MOVIMENTAÇÕES */
+
+.movement-report {
+    @apply inline-flex;
+
+    @apply [padding:7px_11px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+.movement-report.entry {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.movement-report.exit {
+    @apply text-[#e43f4c];
+
+    @apply [background:#ffebed];
+}
+
+.movement-report.adjustment {
+    @apply text-[#2563eb];
+
+    @apply [background:#eaf2ff];
+}
+
+.positive-number {
+    @apply text-[#16a34a] !important;
+
+    @apply font-bold;
+}
+
+.negative-number {
+    @apply text-[#ef4444] !important;
+
+    @apply font-bold;
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .reports-summary {
+        @apply grid-cols-[repeat(2,_1fr)];
+    }
+
+    .reports-filters-card {
+        @apply grid-cols-[repeat(2,_1fr)];
+    }
+
+    .filter-buttons {
+        @apply [grid-column:1_/_-1];
+
+        @apply justify-end;
+    }
+
+}
+
+@media (max-width: 1000px) {
+
+    .reports-grid {
+        @apply grid-cols-[1fr];
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .reports-header {
+        @apply flex-col;
+
+        @apply items-start;
+    }
+
+    .reports-header-actions {
+        @apply w-full;
+    }
+
+    .reports-header-actions button {
+        @apply [flex:1];
+    }
+
+    .reports-summary {
+        @apply grid-cols-[1fr];
+    }
+
+    .reports-filters-card {
+        @apply grid-cols-[1fr];
+    }
+
+    .filter-buttons {
+        @apply [grid-column:auto];
+    }
+
+    .filter-buttons button {
+        @apply [flex:1];
+    }
+
+    .report-chart {
+        @apply min-w-[520px];
+    }
+
+    .report-chart-card {
+        @apply overflow-x-auto;
+    }
+
+}
+
+@media print {
+
+    .sidebar,
+    .topbar,
+    .reports-header-actions,
+    .reports-filters-card,
+    .reports-tabs {
+        @apply hidden !important;
+    }
+
+    .main-content {
+        @apply w-full !important;
+
+        @apply ml-0 !important;
+    }
+
+    .content {
+        @apply p-[20px] !important;
+
+        @apply [background:white] !important;
+    }
+
+    .report-tab-content {
+        @apply hidden !important;
+    }
+
+    .report-tab-content.active {
+        @apply block !important;
+    }
+
+    .report-table-card,
+    .report-chart-card,
+    .ranking-card,
+    .report-summary-card {
+        @apply [box-shadow:none];
+
+        @apply [break-inside:avoid];
+    }
+
+}

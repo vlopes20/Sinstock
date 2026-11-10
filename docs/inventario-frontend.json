@@ -1,0 +1,2919 @@
+{
+  "pages": [
+    {
+      "file": "frontend/index.html",
+      "title": "Login | SINSTOCK",
+      "auth": "public",
+      "scripts": [
+        "./js/core/config.js",
+        "./js/core/api.js",
+        "./js/auth/session.js",
+        "./js/auth/login.js",
+        "./assets/vendor/lucide.min.js"
+      ],
+      "controls": [
+        {
+          "tag": "form",
+          "id": "loginForm"
+        },
+        {
+          "tag": "input",
+          "id": "usuario",
+          "name": "usuario",
+          "type": "email"
+        },
+        {
+          "tag": "input",
+          "id": "senha",
+          "name": "senha",
+          "type": "password"
+        },
+        {
+          "tag": "button",
+          "id": "togglePassword",
+          "type": "button",
+          "class": "password-toggle"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "login-button"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/ajuda.html",
+      "title": "Ajuda e Suporte | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/pages/ajuda.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openTicketModal",
+          "class": "new-ticket-button"
+        },
+        {
+          "tag": "input",
+          "id": "helpSearch",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "class": "help-tab active"
+        },
+        {
+          "tag": "button",
+          "class": "help-tab"
+        },
+        {
+          "tag": "button",
+          "class": "help-tab"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "class": "faq-question"
+        },
+        {
+          "tag": "button",
+          "id": "openTicketFromHelp",
+          "class": "contact-support-button"
+        },
+        {
+          "tag": "button",
+          "id": "openTicketFromTickets",
+          "class": "new-ticket-secondary"
+        },
+        {
+          "tag": "button",
+          "class": "ticket-actions"
+        },
+        {
+          "tag": "button",
+          "class": "ticket-actions"
+        },
+        {
+          "tag": "button",
+          "class": "ticket-actions"
+        },
+        {
+          "tag": "button",
+          "id": "closeTicketModal",
+          "type": "button",
+          "class": "close-ticket-modal"
+        },
+        {
+          "tag": "form",
+          "id": "ticketForm"
+        },
+        {
+          "tag": "input",
+          "id": "ticketSubject",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "ticketCategory"
+        },
+        {
+          "tag": "select",
+          "id": "ticketPriority"
+        },
+        {
+          "tag": "textarea",
+          "id": "ticketDescription"
+        },
+        {
+          "tag": "select",
+          "id": "ticketPage"
+        },
+        {
+          "tag": "input",
+          "id": "ticketAttachment",
+          "type": "file"
+        },
+        {
+          "tag": "button",
+          "id": "cancelTicket",
+          "type": "button",
+          "class": "cancel-ticket-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "send-ticket-button"
+        }
+      ],
+      "tabs": [
+        "helpCenter",
+        "tickets",
+        "contact"
+      ]
+    },
+    {
+      "file": "frontend/pages/autenticacao.html",
+      "title": "Verifique seu E-mail | SINSTOCK",
+      "auth": "public",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js"
+      ],
+      "controls": [],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/cadastro.html",
+      "title": "Cadastro | SINSTOCK",
+      "auth": "admin",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/auth/forms.js"
+      ],
+      "controls": [
+        {
+          "tag": "form",
+          "id": "cadastroForm",
+          "class": "space-y-4"
+        },
+        {
+          "tag": "input",
+          "id": "nome",
+          "name": "nome",
+          "type": "text",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-base text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "input",
+          "id": "email",
+          "name": "email",
+          "type": "email",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-base text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "select",
+          "id": "perfil_id",
+          "name": "perfil_id",
+          "class": "w-full h-[62px] border border-gray-300 rounded-lg bg-white px-4"
+        },
+        {
+          "tag": "input",
+          "id": "senha",
+          "name": "senha",
+          "type": "password",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-base text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "w-full h-[62px] mt-2 rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/codigo.html",
+      "title": "Código de Verificação | SINSTOCK",
+      "auth": "public",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/auth/mfa.js"
+      ],
+      "controls": [
+        {
+          "tag": "form",
+          "id": "codeForm",
+          "class": "space-y-6"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "class": "otp-input w-full h-14 sm:h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg bg-white text-gray-900 outline-none focus:border-[#ff6200] focus:ring-4 focus:ring-[#ff6200]/10 transition-all"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "w-full h-[66px] rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25 active:translate-y-0"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/configuracoes.html",
+      "title": "Configurações | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/pages/configuracoes.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "class": "settings-tab active"
+        },
+        {
+          "tag": "button",
+          "class": "settings-tab"
+        },
+        {
+          "tag": "button",
+          "class": "settings-tab"
+        },
+        {
+          "tag": "button",
+          "class": "settings-tab"
+        },
+        {
+          "tag": "button",
+          "class": "settings-tab"
+        },
+        {
+          "tag": "form",
+          "id": "companyForm",
+          "class": "settings-card"
+        },
+        {
+          "tag": "input",
+          "id": "companyName",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "companyCnpj",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "companyEmail",
+          "type": "email"
+        },
+        {
+          "tag": "input",
+          "id": "companyPhone",
+          "type": "tel"
+        },
+        {
+          "tag": "input",
+          "id": "companyAddress",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "companyCity",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "companyState"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-settings-button"
+        },
+        {
+          "tag": "button",
+          "id": "openUserModal",
+          "class": "add-user-button"
+        },
+        {
+          "tag": "button",
+          "class": "user-action-button"
+        },
+        {
+          "tag": "button",
+          "class": "user-action-button"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "button",
+          "id": "savePermissions",
+          "type": "button",
+          "class": "save-settings-button"
+        },
+        {
+          "tag": "form",
+          "id": "stockSettingsForm",
+          "class": "settings-card"
+        },
+        {
+          "tag": "input",
+          "id": "lowStockAlert",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "id": "negativeStockBlock",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "id": "expirationAlert",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "id": "expirationDays",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "defaultMinimumStock",
+          "type": "number"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-settings-button"
+        },
+        {
+          "tag": "form",
+          "id": "passwordForm",
+          "class": "settings-card"
+        },
+        {
+          "tag": "input",
+          "id": "currentPassword",
+          "type": "password"
+        },
+        {
+          "tag": "input",
+          "id": "newPassword",
+          "type": "password"
+        },
+        {
+          "tag": "input",
+          "id": "confirmPassword",
+          "type": "password"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-settings-button"
+        },
+        {
+          "tag": "input",
+          "id": "automaticLogout",
+          "type": "checkbox"
+        },
+        {
+          "tag": "input",
+          "type": "checkbox"
+        },
+        {
+          "tag": "form",
+          "id": "systemForm",
+          "class": "settings-card"
+        },
+        {
+          "tag": "select",
+          "id": "systemLanguage"
+        },
+        {
+          "tag": "select",
+          "id": "systemCurrency"
+        },
+        {
+          "tag": "select",
+          "id": "dateFormat"
+        },
+        {
+          "tag": "select",
+          "id": "itemsPerPage"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-settings-button"
+        },
+        {
+          "tag": "button",
+          "id": "exportSystemData",
+          "type": "button",
+          "class": "secondary-settings-button"
+        },
+        {
+          "tag": "button",
+          "id": "closeUserModal",
+          "type": "button",
+          "class": "close-user-modal"
+        },
+        {
+          "tag": "form",
+          "id": "userForm"
+        },
+        {
+          "tag": "input",
+          "id": "newUserName",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "newUserEmail",
+          "type": "email"
+        },
+        {
+          "tag": "select",
+          "id": "newUserRole"
+        },
+        {
+          "tag": "select",
+          "id": "newUserStatus"
+        },
+        {
+          "tag": "input",
+          "id": "newUserPassword",
+          "type": "password"
+        },
+        {
+          "tag": "button",
+          "id": "cancelUser",
+          "type": "button",
+          "class": "cancel-settings-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-settings-button"
+        }
+      ],
+      "tabs": [
+        "generalSettings",
+        "usersSettings",
+        "stockSettings",
+        "securitySettings",
+        "systemSettings"
+      ]
+    },
+    {
+      "file": "frontend/pages/dashboard.html",
+      "title": "Dashboard | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/shared/layout.js",
+        "../js/pages/dashboard.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "select"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/esquecisenha.html",
+      "title": "Esqueci Minha Senha | SINSTOCK",
+      "auth": "public",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/auth/forms.js"
+      ],
+      "controls": [
+        {
+          "tag": "form",
+          "id": "forgotForm",
+          "class": "space-y-6"
+        },
+        {
+          "tag": "input",
+          "id": "email",
+          "name": "email",
+          "type": "email",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "w-full h-[66px] rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/estoque.html",
+      "title": "Estoque | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/shared/stock-model.js",
+        "../js/pages/estoque.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openMovementModal",
+          "class": "new-movement-button"
+        },
+        {
+          "tag": "button",
+          "class": "stock-tab active"
+        },
+        {
+          "tag": "button",
+          "class": "stock-tab"
+        },
+        {
+          "tag": "input",
+          "id": "stockSearch",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "categoryFilter"
+        },
+        {
+          "tag": "select",
+          "id": "stockStatusFilter"
+        },
+        {
+          "tag": "button",
+          "class": "stock-actions-button"
+        },
+        {
+          "tag": "button",
+          "class": "stock-actions-button"
+        },
+        {
+          "tag": "button",
+          "class": "stock-actions-button"
+        },
+        {
+          "tag": "button",
+          "class": "stock-actions-button"
+        },
+        {
+          "tag": "select",
+          "id": "movementFilter"
+        },
+        {
+          "tag": "button",
+          "id": "closeMovementModal",
+          "type": "button",
+          "class": "close-modal"
+        },
+        {
+          "tag": "form",
+          "id": "movementForm"
+        },
+        {
+          "tag": "select",
+          "id": "movementType"
+        },
+        {
+          "tag": "select",
+          "id": "movementProduct"
+        },
+        {
+          "tag": "input",
+          "id": "movementQuantity",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "movementDate",
+          "type": "date"
+        },
+        {
+          "tag": "input",
+          "id": "movementReason"
+        },
+        {
+          "tag": "input",
+          "id": "movementSupplier"
+        },
+        {
+          "tag": "input",
+          "id": "movementReference"
+        },
+        {
+          "tag": "button",
+          "id": "cancelMovement",
+          "type": "button",
+          "class": "cancel-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-movement-button"
+        }
+      ],
+      "tabs": [
+        "inventory",
+        "movements"
+      ]
+    },
+    {
+      "file": "frontend/pages/fornecedores.html",
+      "title": "Fornecedores | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/pages/fornecedores.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openSupplierModal",
+          "class": "new-supplier-button"
+        },
+        {
+          "tag": "input",
+          "id": "supplierSearch",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "supplierCategoryFilter"
+        },
+        {
+          "tag": "select",
+          "id": "supplierStatusFilter"
+        },
+        {
+          "tag": "button",
+          "class": "supplier-actions"
+        },
+        {
+          "tag": "button",
+          "class": "supplier-actions"
+        },
+        {
+          "tag": "button",
+          "class": "supplier-actions"
+        },
+        {
+          "tag": "button",
+          "class": "supplier-actions"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "class": "active"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "id": "closeSupplierModal",
+          "type": "button",
+          "class": "close-supplier-modal"
+        },
+        {
+          "tag": "form",
+          "id": "supplierForm"
+        },
+        {
+          "tag": "input",
+          "id": "supplierId",
+          "type": "hidden"
+        },
+        {
+          "tag": "input",
+          "id": "companyName",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "tradeName",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "supplierCnpj",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "stateRegistration",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "contactPerson",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "supplierEmail",
+          "type": "email"
+        },
+        {
+          "tag": "input",
+          "id": "supplierPhone",
+          "type": "tel"
+        },
+        {
+          "tag": "select",
+          "id": "supplierCategory"
+        },
+        {
+          "tag": "input",
+          "id": "deliveryTime",
+          "type": "number"
+        },
+        {
+          "tag": "select",
+          "id": "paymentTerms"
+        },
+        {
+          "tag": "input",
+          "id": "supplierAddress",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "supplierCity",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "supplierState"
+        },
+        {
+          "tag": "input",
+          "id": "supplierZip",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "supplierStatus"
+        },
+        {
+          "tag": "textarea",
+          "id": "supplierNotes"
+        },
+        {
+          "tag": "button",
+          "id": "cancelSupplier",
+          "type": "button",
+          "class": "cancel-supplier-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-supplier-button"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/login.html",
+      "title": "Login | SINSTOCK",
+      "auth": "public",
+      "scripts": [],
+      "controls": [],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/pedidos.html",
+      "title": "Pedidos | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/shared/layout.js",
+        "../js/pages/pedidos.js",
+        "../js/shared/ui.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openOrderModal",
+          "type": "button",
+          "class": "new-order-button"
+        },
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "select"
+        },
+        {
+          "tag": "select"
+        },
+        {
+          "tag": "button",
+          "class": "order-actions"
+        },
+        {
+          "tag": "button",
+          "class": "order-actions"
+        },
+        {
+          "tag": "button",
+          "class": "order-actions"
+        },
+        {
+          "tag": "button",
+          "class": "order-actions"
+        },
+        {
+          "tag": "button",
+          "class": "order-actions"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "class": "active"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/produtos.html",
+      "title": "Produtos | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/pages/produtos.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openProductModal",
+          "class": "new-product-button"
+        },
+        {
+          "tag": "input",
+          "id": "productSearch",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "categoryFilter"
+        },
+        {
+          "tag": "select",
+          "id": "productStatusFilter"
+        },
+        {
+          "tag": "select",
+          "id": "stockFilter"
+        },
+        {
+          "tag": "button",
+          "class": "product-actions"
+        },
+        {
+          "tag": "button",
+          "class": "product-actions"
+        },
+        {
+          "tag": "button",
+          "class": "product-actions"
+        },
+        {
+          "tag": "button",
+          "class": "product-actions"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "class": "active"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "id": "closeProductModal",
+          "type": "button",
+          "class": "close-product-modal"
+        },
+        {
+          "tag": "form",
+          "id": "productForm"
+        },
+        {
+          "tag": "input",
+          "id": "productId",
+          "type": "hidden"
+        },
+        {
+          "tag": "input",
+          "id": "productName",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "productDescription",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "productSku",
+          "type": "text"
+        },
+        {
+          "tag": "input",
+          "id": "productBarcode",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "productCategory"
+        },
+        {
+          "tag": "select",
+          "id": "productSupplier"
+        },
+        {
+          "tag": "input",
+          "id": "productCost",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "productPrice",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "minimumStock",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "initialStock",
+          "type": "number"
+        },
+        {
+          "tag": "input",
+          "id": "productExpiration",
+          "type": "date"
+        },
+        {
+          "tag": "select",
+          "id": "productUnit"
+        },
+        {
+          "tag": "select",
+          "id": "productStatus"
+        },
+        {
+          "tag": "textarea",
+          "id": "productObservation"
+        },
+        {
+          "tag": "button",
+          "id": "cancelProduct",
+          "type": "button",
+          "class": "cancel-product-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "save-product-button"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/redefinirsenha.html",
+      "title": "Redefinir Senha | SINSTOCK",
+      "auth": "public",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/auth/forms.js"
+      ],
+      "controls": [
+        {
+          "tag": "form",
+          "id": "resetPasswordForm",
+          "class": "space-y-6"
+        },
+        {
+          "tag": "input",
+          "id": "novaSenha",
+          "name": "novaSenha",
+          "type": "password",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "input",
+          "id": "confirmarSenha",
+          "name": "confirmarSenha",
+          "type": "password",
+          "class": "w-full h-full border-0 outline-none bg-transparent pl-4 pr-4 text-lg text-gray-900 placeholder-gray-400"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "w-full h-[66px] rounded-full bg-gradient-to-r from-[#ff5800] to-[#ff6800] text-white text-xl font-bold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff5e00]/25"
+        }
+      ],
+      "tabs": []
+    },
+    {
+      "file": "frontend/pages/relatorios.html",
+      "title": "Relatórios | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/pages/relatorios.js",
+        "../js/shared/layout.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "exportReport",
+          "class": "export-report-button"
+        },
+        {
+          "tag": "button",
+          "id": "printReport",
+          "class": "generate-report-button"
+        },
+        {
+          "tag": "select",
+          "id": "periodFilter"
+        },
+        {
+          "tag": "input",
+          "id": "startDate",
+          "type": "date"
+        },
+        {
+          "tag": "input",
+          "id": "endDate",
+          "type": "date"
+        },
+        {
+          "tag": "select",
+          "id": "reportCategory"
+        },
+        {
+          "tag": "button",
+          "id": "clearReportFilters",
+          "class": "clear-filter-button"
+        },
+        {
+          "tag": "button",
+          "id": "applyReportFilters",
+          "class": "apply-filter-button"
+        },
+        {
+          "tag": "button",
+          "class": "report-tab active"
+        },
+        {
+          "tag": "button",
+          "class": "report-tab"
+        },
+        {
+          "tag": "button",
+          "class": "report-tab"
+        },
+        {
+          "tag": "button",
+          "class": "report-tab"
+        }
+      ],
+      "tabs": [
+        "generalReport",
+        "salesReport",
+        "stockReport",
+        "movementsReport"
+      ]
+    },
+    {
+      "file": "frontend/pages/vendas.html",
+      "title": "Vendas | SINSTOCK",
+      "auth": "user",
+      "scripts": [
+        "../js/core/config.js",
+        "../js/core/api.js",
+        "../js/auth/session.js",
+        "../js/shared/ui.js",
+        "../assets/vendor/lucide.min.js",
+        "../js/shared/layout.js",
+        "../js/pages/vendas.js"
+      ],
+      "controls": [
+        {
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "tag": "button",
+          "id": "openSaleModal",
+          "class": "new-sale-button"
+        },
+        {
+          "tag": "button",
+          "class": "sales-tab active"
+        },
+        {
+          "tag": "button",
+          "class": "sales-tab"
+        },
+        {
+          "tag": "select"
+        },
+        {
+          "tag": "input",
+          "id": "salesSearch",
+          "type": "text"
+        },
+        {
+          "tag": "select",
+          "id": "paymentFilter"
+        },
+        {
+          "tag": "select",
+          "id": "salesStatusFilter"
+        },
+        {
+          "tag": "button",
+          "class": "sale-actions"
+        },
+        {
+          "tag": "button",
+          "class": "sale-actions"
+        },
+        {
+          "tag": "button",
+          "class": "sale-actions"
+        },
+        {
+          "tag": "button",
+          "class": "sale-actions"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "class": "active"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button"
+        },
+        {
+          "tag": "button",
+          "id": "closeSaleModal",
+          "class": "close-sale-modal"
+        },
+        {
+          "tag": "form",
+          "id": "newSaleForm"
+        },
+        {
+          "tag": "select",
+          "id": "saleCustomer"
+        },
+        {
+          "tag": "button",
+          "id": "addSaleProduct",
+          "type": "button"
+        },
+        {
+          "tag": "select",
+          "class": "sale-product-select"
+        },
+        {
+          "tag": "input",
+          "type": "number",
+          "class": "sale-product-quantity"
+        },
+        {
+          "tag": "button",
+          "type": "button",
+          "class": "remove-sale-product"
+        },
+        {
+          "tag": "input",
+          "id": "saleDiscount",
+          "type": "number"
+        },
+        {
+          "tag": "select",
+          "id": "salePayment"
+        },
+        {
+          "tag": "button",
+          "id": "cancelSale",
+          "type": "button",
+          "class": "cancel-sale-button"
+        },
+        {
+          "tag": "button",
+          "type": "submit",
+          "class": "finish-sale-button"
+        }
+      ],
+      "tabs": [
+        "salesOverview",
+        "salesHistory"
+      ]
+    }
+  ],
+  "scripts": [
+    {
+      "file": "frontend/js/auth/forms.js",
+      "lines": 95,
+      "functions": [],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "'DOMContentLoaded'",
+          "handler": "async () => {\r\n  const form = document.querySelector('form');\r\n  if (!form) return;\r\n  const message = document.createElement('p');\r\n  message.id = 'formMessage",
+          "line": 1
+        },
+        {
+          "target": "form",
+          "event": "'submit'",
+          "handler": "async (event) => {\r\n    event.preventDefault();\r\n    if (pending || submit.disabled || !form.reportValidity()) return;\r\n    pending = true;\r\n    submit.disabled",
+          "line": 39
+        }
+      ],
+      "calls": [
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/perfis'"
+          ],
+          "line": 26
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/forgot-password'",
+            "{\r\n          method: 'POST',\r\n          auth: false,\r\n          body: { email: form.email.value.trim().toLowerCase() },\r\n        }"
+          ],
+          "line": 48
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/reset-password'",
+            "{\r\n          method: 'POST',\r\n          auth: false,\r\n          body: { token: resetToken, senha },\r\n        }"
+          ],
+          "line": 58
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/users'",
+            "{\r\n          method: 'POST',\r\n          body: {\r\n            nome: form.nome.value.trim(),\r\n            email: form.email.value.trim().toLowerCase(),\r\n            senha: form.senha.value,\r\n            perfil_id: Number(document.getElementById('perfil_id').value),\r\n          },\r\n        }"
+          ],
+          "line": 73
+        }
+      ],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/auth/login.js",
+      "lines": 58,
+      "functions": [],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "'DOMContentLoaded'",
+          "handler": "() => {\r\n  const form = document.getElementById('loginForm');\r\n  const message = document.getElementById('loginMessage');\r\n  const button = form.querySelector('",
+          "line": 1
+        },
+        {
+          "target": "document\r\n    .getElementById('togglePassword')",
+          "event": "'click'",
+          "handler": "(event) => {\r\n      password.type = password.type === 'password' ? 'text' : 'password';\r\n      event.currentTarget.setAttribute(\r\n        'aria-label',\r\n       ",
+          "line": 7
+        },
+        {
+          "target": "form",
+          "event": "'submit'",
+          "handler": "async (event) => {\r\n    event.preventDefault();\r\n    if (pending || !form.reportValidity()) return;\r\n    pending = true;\r\n    button.disabled = true;\r\n    butto",
+          "line": 19
+        }
+      ],
+      "calls": [
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/login'",
+            "{\r\n        method: 'POST',\r\n        auth: false,\r\n        body: {\r\n          email: email.value.trim().toLowerCase(),\r\n          senha: password.value,\r\n        },\r\n      }"
+          ],
+          "line": 29
+        },
+        {
+          "callee": "sessionStorage.setItem",
+          "args": [
+            "'sinstock.preAuth'",
+            "result.preAuthToken"
+          ],
+          "line": 42
+        }
+      ],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/auth/mfa.js",
+      "lines": 59,
+      "functions": [],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "'DOMContentLoaded'",
+          "handler": "() => {\r\n  const token = sessionStorage.getItem('sinstock.preAuth');\r\n  if (!token) {\r\n    location.replace(SinstockConfig.url('index.html'));\r\n    return;\r\n  }",
+          "line": 1
+        },
+        {
+          "target": "input",
+          "event": "'input'",
+          "handler": "() => {\r\n      input.value = input.value.replace(/\\D/g, '').slice(-1);\r\n      if (input.value && index < 5) inputs[index + 1].focus();\r\n    }",
+          "line": 13
+        },
+        {
+          "target": "input",
+          "event": "'keydown'",
+          "handler": "(event) => {\r\n      if (event.key === 'Backspace' && !input.value && index)\r\n        inputs[index - 1].focus();\r\n    }",
+          "line": 17
+        },
+        {
+          "target": "input",
+          "event": "'paste'",
+          "handler": "(event) => {\r\n      const code = event.clipboardData.getData('text').trim();\r\n      if (!/^\\d{6}$/.test(code)) return;\r\n      event.preventDefault();\r\n      inp",
+          "line": 21
+        },
+        {
+          "target": "form",
+          "event": "'submit'",
+          "handler": "async (event) => {\r\n    event.preventDefault();\r\n    if (pending) return;\r\n    const codigo = inputs.map((input) => input.value).join('');\r\n    if (!/^\\d{6}$/.t",
+          "line": 31
+        }
+      ],
+      "calls": [
+        {
+          "callee": "sessionStorage.getItem",
+          "args": [
+            "'sinstock.preAuth'"
+          ],
+          "line": 2
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/2fa/authenticate'",
+            "{\r\n        method: 'POST',\r\n        auth: false,\r\n        token,\r\n        body: { codigo },\r\n      }"
+          ],
+          "line": 43
+        }
+      ],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/auth/session.js",
+      "lines": 139,
+      "functions": [
+        {
+          "name": "clear",
+          "line": 6
+        },
+        {
+          "name": "login",
+          "line": 15
+        },
+        {
+          "name": "accept",
+          "line": 22
+        },
+        {
+          "name": "renderUser",
+          "line": 29
+        },
+        {
+          "name": "verify",
+          "line": 67
+        },
+        {
+          "name": "logout",
+          "line": 128
+        }
+      ],
+      "listeners": [
+        {
+          "target": "logout",
+          "event": "'click'",
+          "handler": "() => SinstockSession.logout()",
+          "line": 62
+        },
+        {
+          "target": "retry",
+          "event": "'click'",
+          "handler": "() => location.reload()",
+          "line": 96
+        },
+        {
+          "target": "window",
+          "event": "'sinstock:unauthorized'",
+          "handler": "() => login('expired')",
+          "line": 106
+        },
+        {
+          "target": "document",
+          "event": "'DOMContentLoaded'",
+          "handler": "async () => resolve(protectedPage ? await verify() : null)",
+          "line": 108
+        },
+        {
+          "target": "window",
+          "event": "'pageshow'",
+          "handler": "(event) => {\r\n    if (event.persisted && protectedPage) {\r\n      document.documentElement.classList.add('invisible');\r\n      verify();\r\n    }\r\n  }",
+          "line": 115
+        }
+      ],
+      "calls": [
+        {
+          "callee": "(() => {\r\n  'use strict';\r\n  const protectedPage =\r\n    document.documentElement.hasAttribute('data-auth-required');\r\n  let profile = null;\r\n  const clear = () => {\r\n    ['sinstock.access', 'sinstock.preAuth'].forEach((key) =>\r\n      sessionStorage.removeItem(key),\r\n    );\r\n    ['access_token', 'token', 'usuario'].forEach((key) =>\r\n      localStorage.removeItem(key),\r\n    );\r\n    profile = null;\r\n  };\r\n  function login(reason = '') {\r\n    clear();\r\n    location.replace(\r\n      SinstockConfig.url('index.html') +\r\n        (reason ? `?reason=${encodeURIComponent(reason)}` : ''),\r\n    );\r\n  }\r\n  function accept(data) {\r\n    if (typeof data?.access_token !== 'string' || !data.access_token)\r\n      throw new Error('Resposta de autenticação inválida.');\r\n    clear();\r\n    sessionStorage.setItem('sinstock.access', data.access_token);\r\n    profile = data.usuario || null;\r\n  }\r\n  function renderUser(user) {\r\n    document\r\n      .querySelectorAll('[data-admin-only]')\r\n      .forEach((node) => node.classList.toggle('hidden', user.perfil_id !== 1));\r\n    document\r\n      .querySelectorAll('.user > span:not(.user-arrow)')\r\n      .forEach((node) => {\r\n        node.textContent = user.nome;\r\n      });\r\n    document.querySelectorAll('.avatar').forEach((node) => {\r\n      const initials = user.nome\r\n        .trim()\r\n        .split(/\\s+/)\r\n        .slice(0, 2)\r\n        .map((name) => name[0])\r\n        .join('')\r\n        .toUpperCase();\r\n      const span = document.createElement('span');\r\n      span.textContent = initials;\r\n      span.setAttribute('aria-label', user.nome);\r\n      node.replaceChildren(span);\r\n      node.classList.add('flex', 'items-center', 'justify-center');\r\n    });\r\n    const userMenu = document.querySelector('.user');\r\n    if (userMenu) {\r\n      let logout = document.getElementById('sessionLogout');\r\n      if (!logout) {\r\n        logout = document.createElement('button');\r\n        logout.id = 'sessionLogout';\r\n        logout.type = 'button';\r\n        logout.textContent = 'Sair';\r\n        logout.className =\r\n          'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700';\r\n        logout.addEventListener('click', () => SinstockSession.logout());\r\n        userMenu.after(logout);\r\n      }\r\n    }\r\n  }\r\n  async function verify() {\r\n    if (!sessionStorage.getItem('sinstock.access')) {\r\n      login();\r\n      return null;\r\n    }\r\n    try {\r\n      profile = await SinstockAPI.request('/auth/me');\r\n      if (!profile?.ativo) {\r\n        login('expired');\r\n        return null;\r\n      }\r\n      if (\r\n        document.documentElement.dataset.authRequired === 'admin' &&\r\n        profile.perfil_id !== 1\r\n      ) {\r\n        throw new Error('Apenas administradores podem cadastrar usuários.');\r\n      }\r\n      renderUser(profile);\r\n      document.documentElement.classList.remove('invisible');\r\n      return profile;\r\n    } catch (error) {\r\n      if (error.status === 401) return null;\r\n      const panel = document.createElement('main');\r\n      panel.className = 'mx-auto max-w-lg p-8 text-center';\r\n      const message = document.createElement('p');\r\n      message.textContent = error.message;\r\n      const retry = document.createElement('button');\r\n      retry.textContent = 'Tentar novamente';\r\n      retry.className = 'm-4 rounded-lg bg-orange-600 px-4 py-2 text-white';\r\n      retry.addEventListener('click', () => location.reload());\r\n      const back = document.createElement('a');\r\n      back.href = SinstockConfig.url('index.html');\r\n      back.textContent = 'Voltar ao login';\r\n      panel.append(message, retry, back);\r\n      document.body.replaceChildren(panel);\r\n      document.documentElement.classList.remove('invisible');\r\n      return null;\r\n    }\r\n  }\r\n  window.addEventListener('sinstock:unauthorized', () => login('expired'));\r\n  const ready = new Promise((resolve) =>\r\n    document.addEventListener(\r\n      'DOMContentLoaded',\r\n      async () => resolve(protectedPage ? await verify() : null),\r\n      { once: true },\r\n    ),\r\n  );\r\n  if (protectedPage && !sessionStorage.getItem('sinstock.access')) login();\r\n  window.addEventListener('pageshow', (event) => {\r\n    if (event.persisted && protectedPage) {\r\n      document.documentElement.classList.add('invisible');\r\n      verify();\r\n    }\r\n  });\r\n  window.SinstockSession = {\r\n    ready,\r\n    accept,\r\n    clear,\r\n    get user() {\r\n      return profile;\r\n    },\r\n    async logout() {\r\n      try {\r\n        await SinstockAPI.request('/auth/logout', { method: 'POST' });\r\n      } catch {\r\n        /* Always remove the local session, even while offline. */\r\n      } finally {\r\n        login();\r\n      }\r\n    },\r\n  };\r\n})",
+          "args": [],
+          "line": 1
+        },
+        {
+          "callee": "sessionStorage.removeItem",
+          "args": [
+            "key"
+          ],
+          "line": 8
+        },
+        {
+          "callee": "localStorage.removeItem",
+          "args": [
+            "key"
+          ],
+          "line": 11
+        },
+        {
+          "callee": "sessionStorage.setItem",
+          "args": [
+            "'sinstock.access'",
+            "data.access_token"
+          ],
+          "line": 26
+        },
+        {
+          "callee": "sessionStorage.getItem",
+          "args": [
+            "'sinstock.access'"
+          ],
+          "line": 68
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/me'"
+          ],
+          "line": 73
+        },
+        {
+          "callee": "sessionStorage.getItem",
+          "args": [
+            "'sinstock.access'"
+          ],
+          "line": 114
+        },
+        {
+          "callee": "SinstockAPI.request",
+          "args": [
+            "'/auth/logout'",
+            "{ method: 'POST' }"
+          ],
+          "line": 130
+        }
+      ],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/core/api.js",
+      "lines": 70,
+      "functions": [
+        {
+          "name": "request",
+          "line": 9
+        },
+        {
+          "name": "cancel",
+          "line": 19
+        }
+      ],
+      "listeners": [
+        {
+          "target": "signal",
+          "event": "'abort'",
+          "handler": "cancel",
+          "line": 20
+        }
+      ],
+      "calls": [
+        {
+          "callee": "(() => {\r\n  'use strict';\r\n  class ApiError extends Error {\r\n    constructor(message, status = 0) {\r\n      super(message);\r\n      this.status = status;\r\n    }\r\n  }\r\n  async function request(\r\n    endpoint,\r\n    { method = 'GET', body, auth = true, token, signal } = {},\r\n  ) {\r\n    const credential =\r\n      token ?? (auth ? sessionStorage.getItem('sinstock.access') : null);\r\n    const headers = { Accept: 'application/json' };\r\n    if (body !== undefined) headers['Content-Type'] = 'application/json';\r\n    if (credential) headers.Authorization = `Bearer ${credential}`;\r\n    const controller = new AbortController();\r\n    const cancel = () => controller.abort();\r\n    signal?.addEventListener('abort', cancel, { once: true });\r\n    if (signal?.aborted) controller.abort();\r\n    const timer = setTimeout(cancel, 15000);\r\n    try {\r\n      const response = await fetch(SinstockConfig.apiBaseUrl + endpoint, {\r\n        method,\r\n        headers,\r\n        body: body === undefined ? undefined : JSON.stringify(body),\r\n        signal: controller.signal,\r\n        cache: 'no-store',\r\n        credentials: 'omit',\r\n      });\r\n      const text = await response.text();\r\n      let data = null;\r\n      try {\r\n        data = text ? JSON.parse(text) : null;\r\n      } catch {\r\n        throw new ApiError(\r\n          'O servidor retornou uma resposta inesperada.',\r\n          response.status,\r\n        );\r\n      }\r\n      if (!response.ok) {\r\n        if (response.status === 401 && auth && !token)\r\n          window.dispatchEvent(new Event('sinstock:unauthorized'));\r\n        const message = Array.isArray(data?.message)\r\n          ? data.message.join(' ')\r\n          : data?.message;\r\n        throw new ApiError(\r\n          response.status === 429\r\n            ? 'Muitas tentativas. Aguarde um minuto e tente novamente.'\r\n            : message || 'Não foi possível concluir a solicitação.',\r\n          response.status,\r\n        );\r\n      }\r\n      return data;\r\n    } catch (error) {\r\n      if (error instanceof ApiError) throw error;\r\n      throw new ApiError(\r\n        error.name === 'AbortError'\r\n          ? 'A solicitação demorou demais. Tente novamente.'\r\n          : 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.',\r\n      );\r\n    } finally {\r\n      clearTimeout(timer);\r\n      signal?.removeEventListener('abort', cancel);\r\n    }\r\n  }\r\n  window.SinstockAPI = { request, ApiError };\r\n})",
+          "args": [],
+          "line": 1
+        },
+        {
+          "callee": "sessionStorage.getItem",
+          "args": [
+            "'sinstock.access'"
+          ],
+          "line": 14
+        },
+        {
+          "callee": "fetch",
+          "args": [
+            "SinstockConfig.apiBaseUrl + endpoint",
+            "{\r\n        method,\r\n        headers,\r\n        body: body === undefined ? undefined : JSON.stringify(body),\r\n        signal: controller.signal,\r\n        cache: 'no-store',\r\n        credentials: 'omit',\r\n      }"
+          ],
+          "line": 24
+        }
+      ],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/core/config.js",
+      "lines": 17,
+      "functions": [],
+      "listeners": [],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/ajuda.js",
+      "lines": 567,
+      "functions": [
+        {
+          "name": "filterFAQ",
+          "line": 110
+        },
+        {
+          "name": "openTicketModal",
+          "line": 276
+        },
+        {
+          "name": "closeTicketModal",
+          "line": 285
+        }
+      ],
+      "listeners": [
+        {
+          "target": "tab",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            helpTabs.forEach(\r\n                function (item) {\r\n\r\n                    item.classList.remove(\r\n                        \"active",
+          "line": 18
+        },
+        {
+          "target": "question",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            item.classList.toggle(\r\n                \"active\"\r\n            );\r\n\r\n        }",
+          "line": 81
+        },
+        {
+          "target": "helpSearch",
+          "event": "\"input\"",
+          "handler": "function () {\r\n\r\n        filterFAQ(\r\n            this.value\r\n        );\r\n\r\n    }",
+          "line": 155
+        },
+        {
+          "target": "card",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                const category =\r\n                    this.dataset.category;\r\n\r\n\r\n                /* abre aba central */\r\n\r\n                hel",
+          "line": 180
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"openTicketModal\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "openTicketModal",
+          "line": 294
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"openTicketFromHelp\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "openTicketModal",
+          "line": 304
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"openTicketFromTickets\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "openTicketModal",
+          "line": 314
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"closeTicketModal\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "closeTicketModal",
+          "line": 324
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"cancelTicket\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "closeTicketModal",
+          "line": 334
+        },
+        {
+          "target": "ticketModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (\r\n            event.target ===\r\n            ticketModal\r\n        ) {\r\n\r\n            closeTicketModal();\r\n\r\n        }\r\n\r\n    }",
+          "line": 344
+        },
+        {
+          "target": "ticketForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const subject =\r\n            document.getElementById(\r\n                \"ticketSubject\"\r\n     ",
+          "line": 371
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/configuracoes.js",
+      "lines": 562,
+      "functions": [
+        {
+          "name": "openUserModal",
+          "line": 144
+        },
+        {
+          "name": "closeUserModal",
+          "line": 153
+        }
+      ],
+      "listeners": [
+        {
+          "target": "tab",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            settingsTabs.forEach(\r\n                function (item) {\r\n\r\n                    item.classList.remove(\r\n                        \"ac",
+          "line": 18
+        },
+        {
+          "target": "companyForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const company = {\r\n\r\n            nome:\r\n                document.getElementById(\r\n           ",
+          "line": 73
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"openUserModal\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "openUserModal",
+          "line": 162
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"closeUserModal\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "closeUserModal",
+          "line": 172
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"cancelUser\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "closeUserModal",
+          "line": 182
+        },
+        {
+          "target": "userModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (\r\n            event.target ===\r\n            userModal\r\n        ) {\r\n\r\n            closeUserModal();\r\n\r\n        }\r\n\r\n    }",
+          "line": 192
+        },
+        {
+          "target": "userForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const name =\r\n            document.getElementById(\r\n                \"newUserName\"\r\n          ",
+          "line": 219
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"savePermissions\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            alert(\r\n                \"Permissões atualizadas!\"\r\n            );\r\n\r\n        }",
+          "line": 355
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"stockSettingsForm\"\r\n    )",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n            event.preventDefault();\r\n\r\n\r\n            const settings = {\r\n\r\n                alertaEstoqueBaixo:\r\n                    docume",
+          "line": 375
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"passwordForm\"\r\n    )",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n            event.preventDefault();\r\n\r\n\r\n            const newPassword =\r\n                document.getElementById(\r\n                    \"n",
+          "line": 433
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"systemForm\"\r\n    )",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n            event.preventDefault();\r\n\r\n\r\n            const preferences = {\r\n\r\n                idioma:\r\n                    document.getEle",
+          "line": 496
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"exportSystemData\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            alert(\r\n                \"A exportação será integrada ao backend.\"\r\n            );\r\n\r\n        }",
+          "line": 549
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/dashboard.js",
+      "lines": 1107,
+      "functions": [
+        {
+          "name": "updateCurrentDate",
+          "line": 49
+        },
+        {
+          "name": "setActiveSidebarItem",
+          "line": 84
+        },
+        {
+          "name": "createNotificationMenu",
+          "line": 237
+        },
+        {
+          "name": "positionDropdown",
+          "line": 355
+        },
+        {
+          "name": "closeNotificationMenu",
+          "line": 410
+        },
+        {
+          "name": "createUserMenu",
+          "line": 430
+        },
+        {
+          "name": "closeUserMenu",
+          "line": 528
+        },
+        {
+          "name": "logout",
+          "line": 573
+        },
+        {
+          "name": "updateChart",
+          "line": 681
+        },
+        {
+          "name": "showToast",
+          "line": 1035
+        }
+      ],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "\"DOMContentLoaded\"",
+          "handler": "function () {\r\n\r\n    /* =====================================================\r\n       ELEMENTOS\r\n    ====================================================== */\r\n",
+          "line": 5
+        },
+        {
+          "target": "document",
+          "event": "\"keydown\"",
+          "handler": "function (event) {\r\n\r\n            const controlPressed =\r\n                event.ctrlKey ||\r\n                event.metaKey;\r\n\r\n\r\n            if (\r\n              ",
+          "line": 132
+        },
+        {
+          "target": "searchInput",
+          "event": "\"keydown\"",
+          "handler": "function (event) {\r\n\r\n                if (\r\n                    event.key !== \"Enter\"\r\n                ) {\r\n                    return;\r\n                }\r\n\r\n\r\n",
+          "line": 169
+        },
+        {
+          "target": "notification",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n                event.stopPropagation();\r\n\r\n\r\n                closeUserMenu();\r\n\r\n\r\n                if (!notificationMenu) {\r\n\r\n          ",
+          "line": 376
+        },
+        {
+          "target": "logoutButton",
+          "event": "\"click\"",
+          "handler": "logout",
+          "line": 481
+        },
+        {
+          "target": "user",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n                event.stopPropagation();\r\n\r\n\r\n                closeNotificationMenu();\r\n\r\n\r\n                if (!userMenu) {\r\n\r\n          ",
+          "line": 494
+        },
+        {
+          "target": "document",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            closeNotificationMenu();\r\n\r\n            closeUserMenu();\r\n\r\n        }",
+          "line": 545
+        },
+        {
+          "target": "window",
+          "event": "\"resize\"",
+          "handler": "function () {\r\n\r\n            closeNotificationMenu();\r\n\r\n            closeUserMenu();\r\n\r\n        }",
+          "line": 557
+        },
+        {
+          "target": "periodSelect",
+          "event": "\"change\"",
+          "handler": "function () {\r\n\r\n                updateChart(\r\n                    this.value\r\n                );\r\n\r\n            }",
+          "line": 967
+        },
+        {
+          "target": "item",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                    if (index === 0) {\r\n\r\n                        window.location.href =\r\n                            \"estoque.html\";\r\n\r\n      ",
+          "line": 997
+        }
+      ],
+      "calls": [],
+      "dynamicControls": [
+        {
+          "tag": "button",
+          "id": "dashboardLogout"
+        }
+      ]
+    },
+    {
+      "file": "frontend/js/pages/estoque.js",
+      "lines": 369,
+      "functions": [
+        {
+          "name": "filterStock",
+          "line": 78
+        },
+        {
+          "name": "openModal",
+          "line": 185
+        },
+        {
+          "name": "closeModal",
+          "line": 192
+        }
+      ],
+      "listeners": [
+        {
+          "target": "tab",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            tabs.forEach(function (item) {\r\n                item.classList.remove(\"active\");\r\n            });\r\n\r\n\r\n            tabContents.forE",
+          "line": 16
+        },
+        {
+          "target": "searchInput",
+          "event": "\"input\"",
+          "handler": "filterStock",
+          "line": 142
+        },
+        {
+          "target": "categoryFilter",
+          "event": "\"change\"",
+          "handler": "filterStock",
+          "line": 148
+        },
+        {
+          "target": "statusFilter",
+          "event": "\"change\"",
+          "handler": "filterStock",
+          "line": 154
+        },
+        {
+          "target": "openModalButton",
+          "event": "\"click\"",
+          "handler": "openModal",
+          "line": 199
+        },
+        {
+          "target": "closeModalButton",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 205
+        },
+        {
+          "target": "cancelMovement",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 211
+        },
+        {
+          "target": "modal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (event.target === modal) {\r\n            closeModal();\r\n        }\r\n\r\n    }",
+          "line": 217
+        },
+        {
+          "target": "option",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                movementOptions.forEach(\r\n                    function (item) {\r\n\r\n                        item.classList.remove(\r\n            ",
+          "line": 247
+        },
+        {
+          "target": "movementForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const movement = {\r\n\r\n            tipo:\r\n                movementType.value,\r\n\r\n            p",
+          "line": 303
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/fornecedores.js",
+      "lines": 381,
+      "functions": [
+        {
+          "name": "openModal",
+          "line": 35
+        },
+        {
+          "name": "closeModal",
+          "line": 70
+        },
+        {
+          "name": "filterSuppliers",
+          "line": 128
+        }
+      ],
+      "listeners": [
+        {
+          "target": "openSupplierModal",
+          "event": "\"click\"",
+          "handler": "openModal",
+          "line": 60
+        },
+        {
+          "target": "closeSupplierModal",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 79
+        },
+        {
+          "target": "cancelSupplier",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 85
+        },
+        {
+          "target": "supplierModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (\r\n            event.target ===\r\n            supplierModal\r\n        ) {\r\n\r\n            closeModal();\r\n\r\n        }\r\n\r\n    }",
+          "line": 91
+        },
+        {
+          "target": "supplierSearch",
+          "event": "\"input\"",
+          "handler": "filterSuppliers",
+          "line": 191
+        },
+        {
+          "target": "supplierCategoryFilter",
+          "event": "\"change\"",
+          "handler": "filterSuppliers",
+          "line": 197
+        },
+        {
+          "target": "supplierStatusFilter",
+          "event": "\"change\"",
+          "handler": "filterSuppliers",
+          "line": 203
+        },
+        {
+          "target": "supplierCnpj",
+          "event": "\"input\"",
+          "handler": "function () {\r\n\r\n        let value =\r\n            this.value.replace(\r\n                /\\D/g,\r\n                \"\"\r\n            );\r\n\r\n\r\n        value =\r\n        ",
+          "line": 219
+        },
+        {
+          "target": "supplierForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const supplier = {\r\n\r\n            razaoSocial:\r\n                document.getElementById(\r\n   ",
+          "line": 272
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/pedidos.js",
+      "lines": 2557,
+      "functions": [
+        {
+          "name": "updateCurrentDate",
+          "line": 60
+        },
+        {
+          "name": "setActiveSidebarItem",
+          "line": 94
+        },
+        {
+          "name": "normalizeText",
+          "line": 177
+        },
+        {
+          "name": "parseDateBR",
+          "line": 191
+        },
+        {
+          "name": "getRowStatus",
+          "line": 236
+        },
+        {
+          "name": "matchesPeriod",
+          "line": 316
+        },
+        {
+          "name": "getFilteredRows",
+          "line": 454
+        },
+        {
+          "name": "updateTable",
+          "line": 556
+        },
+        {
+          "name": "updateFooter",
+          "line": 652
+        },
+        {
+          "name": "createPagination",
+          "line": 686
+        },
+        {
+          "name": "createOrderModal",
+          "line": 918
+        },
+        {
+          "name": "createProductRow",
+          "line": 1224
+        },
+        {
+          "name": "formatCurrency",
+          "line": 1315
+        },
+        {
+          "name": "calculateOrderTotal",
+          "line": 1337
+        },
+        {
+          "name": "openOrderModal",
+          "line": 1556
+        },
+        {
+          "name": "closeOrderModal",
+          "line": 1565
+        },
+        {
+          "name": "getNextOrderNumber",
+          "line": 1625
+        },
+        {
+          "name": "getInitials",
+          "line": 1665
+        },
+        {
+          "name": "changeSummaryCard",
+          "line": 1689
+        },
+        {
+          "name": "createActionMenu",
+          "line": 1979
+        },
+        {
+          "name": "closeActionMenu",
+          "line": 2046
+        },
+        {
+          "name": "updateOrderStatus",
+          "line": 2119
+        },
+        {
+          "name": "showToast",
+          "line": 2478
+        }
+      ],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "\"DOMContentLoaded\"",
+          "handler": "function () {\r\n\r\n    /* =====================================================\r\n       ELEMENTOS PRINCIPAIS\r\n    ================================================",
+          "line": 5
+        },
+        {
+          "target": "document",
+          "event": "\"keydown\"",
+          "handler": "function (event) {\r\n\r\n            const controlPressed =\r\n                event.ctrlKey ||\r\n                event.metaKey;\r\n\r\n\r\n            if (\r\n              ",
+          "line": 142
+        },
+        {
+          "target": "previous",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                if (\r\n                    currentPage > 1\r\n                ) {\r\n\r\n                    currentPage--;\r\n\r\n                    upd",
+          "line": 710
+        },
+        {
+          "target": "button",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                    currentPage =\r\n                        page;\r\n\r\n\r\n                    updateTable();\r\n\r\n                }",
+          "line": 800
+        },
+        {
+          "target": "next",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n                if (\r\n                    currentPage <\r\n                    totalPages\r\n                ) {\r\n\r\n                    currentPage",
+          "line": 836
+        },
+        {
+          "target": "orderSearch",
+          "event": "\"input\"",
+          "handler": "function () {\r\n\r\n                currentPage = 1;\r\n\r\n                updateTable();\r\n\r\n            }",
+          "line": 868
+        },
+        {
+          "target": "statusFilter",
+          "event": "\"change\"",
+          "handler": "function () {\r\n\r\n                currentPage = 1;\r\n\r\n                updateTable();\r\n\r\n            }",
+          "line": 884
+        },
+        {
+          "target": "periodFilter",
+          "event": "\"change\"",
+          "handler": "function () {\r\n\r\n                currentPage = 1;\r\n\r\n                updateTable();\r\n\r\n            }",
+          "line": 900
+        },
+        {
+          "target": "orderModal\r\n        .querySelector(\r\n            \"#addOrderProduct\"\r\n        )",
+          "event": "\"click\"",
+          "handler": "createProductRow",
+          "line": 1461
+        },
+        {
+          "target": "productsContainer",
+          "event": "\"change\"",
+          "handler": "calculateOrderTotal",
+          "line": 1475
+        },
+        {
+          "target": "productsContainer",
+          "event": "\"input\"",
+          "handler": "calculateOrderTotal",
+          "line": 1481
+        },
+        {
+          "target": "orderModal\r\n        .querySelector(\r\n            \"#newOrderDiscount\"\r\n        )",
+          "event": "\"input\"",
+          "handler": "calculateOrderTotal",
+          "line": 1487
+        },
+        {
+          "target": "productsContainer",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n            if (\r\n                !event.target\r\n                    .classList\r\n                    .contains(\r\n                        \"",
+          "line": 1501
+        },
+        {
+          "target": "newOrderButton",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            orderModal.classList.add(\"active\");\r\n\r\n        }",
+          "line": 1574
+        },
+        {
+          "target": "orderModal\r\n        .querySelector(\r\n            \".close-order-modal\"\r\n        )",
+          "event": "\"click\"",
+          "handler": "closeOrderModal",
+          "line": 1584
+        },
+        {
+          "target": "orderModal\r\n        .querySelector(\r\n            \".cancel-order-button\"\r\n        )",
+          "event": "\"click\"",
+          "handler": "closeOrderModal",
+          "line": 1594
+        },
+        {
+          "target": "orderModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n            if (\r\n                event.target ===\r\n                orderModal\r\n            ) {\r\n\r\n                closeOrderModal();\r\n\r\n ",
+          "line": 1604
+        },
+        {
+          "target": "orderModal\r\n        .querySelector(\r\n            \"#newOrderForm\"\r\n        )",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n                event.preventDefault();\r\n\r\n\r\n                const customer =\r\n                    orderModal\r\n                        .qu",
+          "line": 1729
+        },
+        {
+          "target": "tableBody",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n            const button =\r\n                event.target.closest(\r\n                    \".order-actions\"\r\n                );\r\n\r\n\r\n         ",
+          "line": 2063
+        },
+        {
+          "target": "document",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n            if (\r\n                actionMenu &&\r\n                actionMenu.contains(\r\n                    event.target\r\n                )",
+          "line": 2300
+        }
+      ],
+      "calls": [],
+      "dynamicControls": [
+        {
+          "tag": "form",
+          "id": "newOrderForm"
+        },
+        {
+          "tag": "select",
+          "id": "newOrderCustomer"
+        },
+        {
+          "tag": "button",
+          "id": "addOrderProduct"
+        },
+        {
+          "tag": "select",
+          "id": "newOrderPayment"
+        },
+        {
+          "tag": "input",
+          "id": "newOrderDiscount"
+        },
+        {
+          "tag": "textarea",
+          "id": "newOrderObservation"
+        }
+      ]
+    },
+    {
+      "file": "frontend/js/pages/produtos.js",
+      "lines": 372,
+      "functions": [
+        {
+          "name": "openModal",
+          "line": 35
+        },
+        {
+          "name": "closeModal",
+          "line": 71
+        },
+        {
+          "name": "filterProducts",
+          "line": 133
+        }
+      ],
+      "listeners": [
+        {
+          "target": "openProductModal",
+          "event": "\"click\"",
+          "handler": "openModal",
+          "line": 61
+        },
+        {
+          "target": "closeProductModal",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 80
+        },
+        {
+          "target": "cancelProduct",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 86
+        },
+        {
+          "target": "productModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (\r\n            event.target === productModal\r\n        ) {\r\n\r\n            closeModal();\r\n\r\n        }\r\n\r\n    }",
+          "line": 92
+        },
+        {
+          "target": "productSearch",
+          "event": "\"input\"",
+          "handler": "filterProducts",
+          "line": 217
+        },
+        {
+          "target": "categoryFilter",
+          "event": "\"change\"",
+          "handler": "filterProducts",
+          "line": 223
+        },
+        {
+          "target": "statusFilter",
+          "event": "\"change\"",
+          "handler": "filterProducts",
+          "line": 229
+        },
+        {
+          "target": "stockFilter",
+          "event": "\"change\"",
+          "handler": "filterProducts",
+          "line": 235
+        },
+        {
+          "target": "productForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const product = {\r\n\r\n            nome:\r\n                document.getElementById(\r\n           ",
+          "line": 245
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/relatorios.js",
+      "lines": 312,
+      "functions": [
+        {
+          "name": "getActiveReportTable",
+          "line": 164
+        }
+      ],
+      "listeners": [
+        {
+          "target": "tab",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            reportTabs.forEach(\r\n                function (item) {\r\n\r\n                    item.classList.remove(\r\n                        \"acti",
+          "line": 18
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"applyReportFilters\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            if (\r\n                startDate.value &&\r\n                endDate.value &&\r\n                startDate.value >\r\n                    ",
+          "line": 88
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"clearReportFilters\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            periodFilter.value = \"30\";\r\n\r\n            startDate.value = \"\";\r\n\r\n            endDate.value = \"\";\r\n\r\n            reportCategory.va",
+          "line": 140
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"exportReport\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            const table =\r\n                getActiveReportTable();\r\n\r\n\r\n            if (!table) {\r\n\r\n                alert(\r\n                  ",
+          "line": 183
+        },
+        {
+          "target": "document\r\n    .getElementById(\r\n        \"printReport\"\r\n    )",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            window.print();\r\n\r\n        }",
+          "line": 301
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/pages/vendas.js",
+      "lines": 584,
+      "functions": [
+        {
+          "name": "filterSales",
+          "line": 76
+        },
+        {
+          "name": "openModal",
+          "line": 176
+        },
+        {
+          "name": "closeModal",
+          "line": 183
+        },
+        {
+          "name": "createProductRow",
+          "line": 235
+        },
+        {
+          "name": "formatCurrency",
+          "line": 363
+        },
+        {
+          "name": "updateSaleTotal",
+          "line": 376
+        }
+      ],
+      "listeners": [
+        {
+          "target": "tab",
+          "event": "\"click\"",
+          "handler": "function () {\r\n\r\n            salesTabs.forEach(function (item) {\r\n\r\n                item.classList.remove(\"active\");\r\n\r\n            });\r\n\r\n\r\n            salesCo",
+          "line": 16
+        },
+        {
+          "target": "salesSearch",
+          "event": "\"input\"",
+          "handler": "filterSales",
+          "line": 133
+        },
+        {
+          "target": "paymentFilter",
+          "event": "\"change\"",
+          "handler": "filterSales",
+          "line": 139
+        },
+        {
+          "target": "salesStatusFilter",
+          "event": "\"change\"",
+          "handler": "filterSales",
+          "line": 145
+        },
+        {
+          "target": "openSaleModal",
+          "event": "\"click\"",
+          "handler": "openModal",
+          "line": 190
+        },
+        {
+          "target": "closeSaleModal",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 196
+        },
+        {
+          "target": "cancelSale",
+          "event": "\"click\"",
+          "handler": "closeModal",
+          "line": 202
+        },
+        {
+          "target": "saleModal",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (event.target === saleModal) {\r\n            closeModal();\r\n        }\r\n\r\n    }",
+          "line": 208
+        },
+        {
+          "target": "addSaleProduct",
+          "event": "\"click\"",
+          "handler": "createProductRow",
+          "line": 310
+        },
+        {
+          "target": "saleProducts",
+          "event": "\"click\"",
+          "handler": "function (event) {\r\n\r\n        if (\r\n            event.target.classList.contains(\r\n                \"remove-sale-product\"\r\n            )\r\n        ) {\r\n\r\n         ",
+          "line": 320
+        },
+        {
+          "target": "saleProducts",
+          "event": "\"change\"",
+          "handler": "updateSaleTotal",
+          "line": 467
+        },
+        {
+          "target": "saleProducts",
+          "event": "\"input\"",
+          "handler": "updateSaleTotal",
+          "line": 473
+        },
+        {
+          "target": "saleDiscount",
+          "event": "\"input\"",
+          "handler": "updateSaleTotal",
+          "line": 479
+        },
+        {
+          "target": "newSaleForm",
+          "event": "\"submit\"",
+          "handler": "function (event) {\r\n\r\n        event.preventDefault();\r\n\r\n\r\n        const items = [];\r\n\r\n\r\n        document\r\n            .querySelectorAll(\r\n                \".sa",
+          "line": 495
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/shared/layout.js",
+      "lines": 33,
+      "functions": [
+        {
+          "name": "atualizarData",
+          "line": 1
+        }
+      ],
+      "listeners": [],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/shared/stock-model.js",
+      "lines": 103,
+      "functions": [
+        {
+          "name": "seed",
+          "line": 5
+        },
+        {
+          "name": "validate",
+          "line": 16
+        },
+        {
+          "name": "load",
+          "line": 41
+        },
+        {
+          "name": "apply",
+          "line": 51
+        },
+        {
+          "name": "saveMovement",
+          "line": 89
+        },
+        {
+          "name": "status",
+          "line": 96
+        }
+      ],
+      "listeners": [],
+      "calls": [],
+      "dynamicControls": []
+    },
+    {
+      "file": "frontend/js/shared/ui.js",
+      "lines": 220,
+      "functions": [
+        {
+          "name": "notify",
+          "line": 9
+        },
+        {
+          "name": "escape",
+          "line": 15
+        },
+        {
+          "name": "closeMenu",
+          "line": 65
+        },
+        {
+          "name": "addMenu",
+          "line": 103
+        },
+        {
+          "name": "refreshModals",
+          "line": 159
+        },
+        {
+          "name": "focusable",
+          "line": 182
+        },
+        {
+          "name": "trapFocus",
+          "line": 186
+        }
+      ],
+      "listeners": [
+        {
+          "target": "document",
+          "event": "\"DOMContentLoaded\"",
+          "handler": "() => {\r\n        const sidebar = document.querySelector(\".sidebar\");\r\n        const main = document.querySelector(\"main\");\r\n        const topbar = document.quer",
+          "line": 21
+        },
+        {
+          "target": "toggle",
+          "event": "\"click\"",
+          "handler": "() => {\r\n            previousOverflow = document.body.style.overflow;\r\n            sidebar.classList.add(\"mobile-open\");\r\n            backdrop.classList.add(\"is",
+          "line": 74
+        },
+        {
+          "target": "close",
+          "event": "\"click\"",
+          "handler": "() => closeMenu()",
+          "line": 83
+        },
+        {
+          "target": "backdrop",
+          "event": "\"click\"",
+          "handler": "() => closeMenu()",
+          "line": 84
+        },
+        {
+          "target": "window",
+          "event": "\"resize\"",
+          "handler": "() => { if (window.innerWidth > 850) closeMenu(false); }",
+          "line": 85
+        },
+        {
+          "target": "trigger",
+          "event": "\"click\"",
+          "handler": "() => {\r\n                const open = panel.hidden;\r\n                panels.forEach(item => { item.panel.hidden = true; item.trigger.setAttribute(\"aria-expanded",
+          "line": 122
+        },
+        {
+          "target": "document",
+          "event": "\"click\"",
+          "handler": "event => panels.forEach(item => {\r\n            if (!item.panel.contains(event.target) && !item.trigger.contains(event.target)) {\r\n                item.panel.hid",
+          "line": 134
+        },
+        {
+          "target": "element",
+          "event": "\"keydown\"",
+          "handler": "event => {\r\n                if (event.key === \"Enter\" || event.key === \" \") { event.preventDefault(); element.click(); }\r\n            }",
+          "line": 144
+        },
+        {
+          "target": "search",
+          "event": "\"keydown\"",
+          "handler": "event => {\r\n                if (event.key === \"Enter\") window.SinstockUI.notify(\"A busca global ainda não está integrada. Use os filtros da página.\");\r\n        ",
+          "line": 151
+        },
+        {
+          "target": "document",
+          "event": "\"keydown\"",
+          "handler": "event => {\r\n            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === \"k\" && search && !activeModal) {\r\n                event.preventDefau",
+          "line": 196
+        },
+        {
+          "target": "document",
+          "event": "\"keydown\"",
+          "handler": "event => {\r\n            if (activeModal && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === \"k\") {\r\n                event.preventDefault();\r\n    ",
+          "line": 212
+        }
+      ],
+      "calls": [],
+      "dynamicControls": []
+    }
+  ]
+}

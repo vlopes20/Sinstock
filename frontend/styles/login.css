@@ -1,0 +1,166 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+@tailwind base;
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    @apply m-0;
+    @apply p-0;
+    @apply box-border;
+}
+
+html,
+body {
+    @apply w-full;
+    @apply min-h-full;
+}
+
+body {
+    @apply [font-family:Inter,_Arial,_Helvetica,_sans-serif];
+
+    @apply [background:#ffffff];
+    @apply text-[#111827];
+}
+
+/* INPUT */
+
+.input-box:focus-within {
+    @apply border-[#ff6200];
+
+    @apply [box-shadow:0_0_0_3px_rgba(255,_98,_0,_0.1)];
+}
+
+/* INPUT REAL */
+
+.input-box input::placeholder {
+    @apply text-[#9ca3af];
+}
+
+/* BOTÃO OLHO */
+
+.password-toggle svg {
+    @apply w-[25px];
+    @apply h-[25px];
+
+    @apply text-[#6b7280];
+}
+
+.password-toggle:hover svg {
+    @apply text-[#ff6200];
+}
+
+/* =========================
+   ESQUECI SENHA
+========================= */
+
+.forgot-password a:hover {
+    @apply text-[#df4e00];
+
+    @apply underline;
+}
+
+/* =========================
+   BOTÃO LOGIN
+========================= */
+
+.login-button:hover {
+    @apply [transform:translateY(-2px)];
+
+    @apply [box-shadow:0_12px_25px_rgba(255,_94,_0,_0.25)];
+}
+
+.login-button:active {
+    @apply [transform:translateY(0)];
+}
+
+/* =========================
+   ERROS
+========================= */
+
+.input-box.error {
+    @apply border-[#e11d48];
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .login-page {
+        @apply grid-cols-[50%_50%];
+    }
+
+    .login-right::before {
+        @apply hidden;
+    }
+
+    .logo img {
+        @apply w-[190px];
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .login-page {
+        @apply block;
+    }
+
+    .login-right {
+        @apply hidden;
+    }
+
+    .login-left {
+        @apply w-full;
+    }
+
+    .language {
+        @apply top-[30px];
+        @apply left-[30px];
+    }
+
+    .login-container {
+        @apply max-w-[450px];
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .login-header h1 {
+        @apply text-[length:34px];
+    }
+
+    .input-box {
+        @apply h-[62px];
+    }
+
+    .login-button {
+        @apply h-[62px];
+
+        @apply text-[length:19px];
+    }
+
+    .forgot-password {
+        @apply mb-[50px];
+    }
+
+}
+/* Keep the form readable on tablets and on short, landscape viewports. */
+@media (max-width: 1279px) {
+    .login-page { @apply block; }
+    .login-right, .illustration-container, .dots { @apply hidden; }
+    .login-left { @apply w-full; }
+    .login-container { @apply max-w-[445px]; }
+}
+@media (max-width: 600px) {
+    .language { @apply top-6 left-6; }
+    .login-header { @apply mb-7; }
+    .login-header h1 { @apply text-[length:clamp(28px,_8vw,_34px)]; }
+    .input-box input { @apply text-base; }
+    .forgot-password { @apply mb-7; }
+    .login-button, .input-box { @apply h-14; }
+}

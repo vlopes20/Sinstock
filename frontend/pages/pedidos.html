@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pedidos | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/pedidos.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard flex w-full min-h-screen">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreiro.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
+        </div>
+
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+          </a>
+
+          <a
+            href="pedidos.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="shopping-bag"></i>
+            Pedidos
+          </a>
+
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a
+            href="#"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help" aria-hidden="true"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
+            >
+              ⌕
+            </span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
+            />
+
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
+            >
+              ⌘ K
+            </span>
+          </div>
+
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
+              <i data-lucide="bell"></i>
+
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
+            </div>
+
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar flex items-center justify-center bg-[#fde4d5] text-[#773513] font-bold w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
+          <div
+            class="orders-header flex items-center justify-between mb-[28px]"
+          >
+            <div>
+              <h1 class="text-[length:36px] text-[#111827] mb-[7px]">
+                Pedidos
+              </h1>
+
+              <p class="text-[length:16px] text-[#7c8493]">
+                Acompanhe e gerencie os pedidos cadastrados.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="new-order-button h-[50px] [padding:0_22px] [border:none] rounded-[12px] [background:#fd6423] text-[#ffffff] flex items-center gap-[9px] text-[length:15px] font-semibold cursor-pointer [transition:0.2s]"
+              id="openOrderModal"
+            >
+              <span class="text-[length:23px] [font-weight:300]">+</span>
+              Novo pedido
+            </button>
+          </div>
+
+          <!-- =====================================
+         CARDS
+    ====================================== -->
+
+          <div class="catalog-tools">
+            <label>Filial<select id="ordersBranch"></select></label
+            ><button type="button" data-catalog="clientes">
+              Gerenciar clientes
+            </button>
+          </div>
+          <div
+            class="orders-summary grid grid-cols-[repeat(4,_1fr)] gap-[20px] mb-[26px]"
+          >
+            <!-- TOTAL -->
+
+            <article
+              class="order-summary-card min-h-[120px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] flex items-center p-[20px] gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="summary-icon total w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:25px] text-[#fff0e9] [background:#b64e2e]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information flex flex-col gap-[5px]">
+                <span class="text-[length:14px] text-[#64748b]">
+                  Total de pedidos
+                </span>
+
+                <strong class="text-[length:27px] text-[#111827]">—</strong>
+
+                <small
+                  class="positive mr-[4px] text-[length:12px] text-[#16a34a]"
+                >
+                  No período selecionado
+                </small>
+              </div>
+            </article>
+
+            <!-- PENDENTES -->
+
+            <article
+              class="order-summary-card min-h-[120px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] flex items-center p-[20px] gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="summary-icon pending w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:25px] text-[#fff5df] [background:#dd951a]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information flex flex-col gap-[5px]">
+                <span class="text-[length:14px] text-[#64748b]"
+                  >Reservas abertas</span
+                >
+
+                <strong class="text-[length:27px] text-[#111827]">—</strong>
+
+                <small class="text-[length:12px] text-[#94a3b8]">
+                  Reservas abertas
+                </small>
+              </div>
+            </article>
+
+            <!-- PREPARANDO -->
+
+            <article
+              class="order-summary-card min-h-[120px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] flex items-center p-[20px] gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="summary-icon preparing w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:25px] text-[#eaf2ff] [background:#415683]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div class="summary-information flex flex-col gap-[5px]">
+                <span class="text-[length:14px] text-[#64748b]">
+                  Em separação
+                </span>
+
+                <strong class="text-[length:27px] text-[#111827]">—</strong>
+
+                <small class="text-[length:12px] text-[#94a3b8]">
+                  Sendo preparados
+                </small>
+              </div>
+            </article>
+
+            <!-- CONCLUÍDOS -->
+
+            <article
+              class="order-summary-card min-h-[120px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] flex items-center p-[20px] gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="summary-icon completed w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:25px] text-[#ffffff] [background:#499261]"
+              >
+                ✓
+              </div>
+
+              <div class="summary-information flex flex-col gap-[5px]">
+                <span class="text-[length:14px] text-[#64748b]"
+                  >Vendas confirmadas</span
+                >
+
+                <strong class="text-[length:27px] text-[#111827]">—</strong>
+
+                <small class="text-[length:12px] text-[#94a3b8]">
+                  Finalizados
+                </small>
+              </div>
+            </article>
+          </div>
+
+          <!-- =====================================
+         CARD PRINCIPAL
+    ====================================== -->
+
+          <div
+            class="orders-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+          >
+            <!-- =====================================
+             FILTROS
+        ====================================== -->
+
+            <div
+              class="orders-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+            >
+              <!-- BUSCA -->
+
+              <div
+                class="order-search w-[390px] h-[50px] flex items-center [padding:0_16px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:#ffffff] [transition:0.2s]"
+              >
+                <span
+                  class="search-order-icon mr-[11px] text-[length:25px] text-[#64748b]"
+                >
+                  ⌕
+                </span>
+
+                <input
+                  type="text"
+                  placeholder="Buscar por pedido ou cliente..."
+                  class="[flex:1] h-full [border:none] [outline:none] [background:transparent] text-[#334155] text-[length:14px]"
+                />
+              </div>
+
+              <!-- FILTROS -->
+
+              <div class="order-filters flex gap-[12px]">
+                <select
+                  id="orderStatus"
+                  aria-label="Status comercial"
+                  class="min-w-[170px] h-[50px] [border:1px_solid_#dfe3e8] rounded-[11px] [padding:0_14px] [background:#ffffff] text-[#475569] cursor-pointer [outline:none]"
+                >
+                  <option value="">Todos os status comerciais</option>
+                  <option value="ORCAMENTO">Reservado</option>
+                  <option value="CONCLUIDO">Confirmado</option>
+                  <option value="CANCELADO">Cancelado</option></select
+                ><select
+                  id="orderDelivery"
+                  aria-label="Atendimento"
+                  class="min-w-[170px] h-[50px] [border:1px_solid_#dfe3e8] rounded-[11px] [padding:0_14px] [background:#ffffff] text-[#475569] cursor-pointer [outline:none]"
+                >
+                  <option value="">Todos os atendimentos</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="EM_SEPARACAO">Em separação</option>
+                  <option value="ENVIADO">Enviado</option>
+                  <option value="ENTREGUE">Entregue</option></select
+                ><select
+                  id="orderPeriod"
+                  aria-label="Período"
+                  class="min-w-[170px] h-[50px] [border:1px_solid_#dfe3e8] rounded-[11px] [padding:0_14px] [background:#ffffff] text-[#475569] cursor-pointer [outline:none]"
+                >
+                  <option value="">Todos os períodos</option>
+                  <option value="1">Últimas 24 horas</option>
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30">Últimos 30 dias</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- =====================================
+             TABELA
+        ====================================== -->
+
+            <div class="orders-table-container w-full overflow-x-auto">
+              <table class="orders-table w-full min-w-[850px] border-collapse">
+                <thead class="[background:#fafafa]">
+                  <tr>
+                    <th>Pedido</th>
+
+                    <th>Cliente</th>
+
+                    <th>Data</th>
+
+                    <th>Valor</th>
+
+                    <th>Pagamento</th>
+
+                    <th>Status</th>
+
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td colspan="7">Carregando...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- =====================================
+             RODAPÉ DA TABELA
+        ====================================== -->
+
+            <div
+              class="orders-footer min-h-[70px] [padding:0_22px] flex items-center justify-between text-[#7c8493] text-[length:13px]"
+            >
+              <span>Carregando...</span>
+
+              <div class="pagination flex gap-[7px]"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
+    <script src="../js/shared/layout.js"></script>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/services/commerce.js"></script>
+    <script src="../js/pages/pedidos.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

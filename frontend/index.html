@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Login | SINSTOCK</title>
+
+    <link rel="stylesheet" href="./assets/styles/utilities.css" />
+    <link rel="stylesheet" href="./assets/styles/login.css" />
+    <link rel="stylesheet" href="./assets/styles/shared.css" />
+    <script src="./js/core/config.js"></script>
+    <script src="./js/core/api.js"></script>
+    <script src="./js/auth/session.js"></script>
+    <script src="./js/auth/login.js" defer></script>
+  </head>
+
+  <body>
+    <main
+      class="login-page grid grid-cols-[42%_58%] w-full overflow-hidden [background:#ffffff] relative min-h-svh"
+    >
+      <!-- =========================
+             LADO ESQUERDO
+        ========================== -->
+      <section
+        class="login-left relative w-full flex justify-center [background:#ffffff] z-[2] min-h-svh items-center [padding:96px_clamp(24px,_4vw,_70px)_48px]"
+      >
+        <div
+          class="language absolute top-[28px] left-[35px] flex items-center gap-[10px] text-[length:16px] font-medium cursor-pointer text-[#111827]"
+        >
+          <span>Português (BR)</span>
+
+          <i
+            data-lucide="chevron-down"
+            width="18"
+            height="18"
+            aria-hidden="true"
+          ></i>
+        </div>
+
+        <div class="login-container w-full max-w-[445px] min-w-0 mt-0">
+          <div class="login-header mb-[45px]">
+            <h1
+              class="text-[length:40px] font-extrabold tracking-[-1px] text-[#111827]"
+            >
+              Autenticação
+            </h1>
+            <p class="text-[#6b7280] text-[length:15px] hidden">
+              Entre com seus dados para acessar o sistema.
+            </p>
+          </div>
+
+          <form id="loginForm">
+            <!-- USUÁRIO -->
+            <div class="form-group mb-[28px]">
+              <label
+                for="usuario"
+                class="block mb-[10px] text-[length:17px] font-normal text-[#374151]"
+              >
+                E-mail
+              </label>
+
+              <div
+                class="input-box w-full h-[68px] flex items-center relative [border:1px_solid_#d1d5db] rounded-[8px] [background:#ffffff] [transition:0.2s]"
+              >
+                <i
+                  class="input-icon w-[26px] h-[26px] ml-[20px] text-[#6b7280] shrink-0"
+                  data-lucide="user"
+                  aria-hidden="true"
+                ></i>
+
+                <input
+                  type="email"
+                  id="usuario"
+                  name="usuario"
+                  placeholder="seu-email@dominio.com"
+                  autocomplete="username"
+                  required
+                  class="w-full h-full [border:none] [outline:none] [background:transparent] [padding:0_55px_0_18px] text-[length:17px] text-[#111827] min-w-0"
+                />
+              </div>
+
+              <span
+                class="error-message block mt-[6px] min-h-[15px] text-[length:13px] text-[#e11d48]"
+                id="usuarioError"
+              ></span>
+            </div>
+
+            <!-- SENHA -->
+            <div class="form-group mb-[28px]">
+              <label
+                for="senha"
+                class="block mb-[10px] text-[length:17px] font-normal text-[#374151]"
+              >
+                Senha
+              </label>
+
+              <div
+                class="input-box w-full h-[68px] flex items-center relative [border:1px_solid_#d1d5db] rounded-[8px] [background:#ffffff] [transition:0.2s]"
+              >
+                <i
+                  class="input-icon w-[26px] h-[26px] ml-[20px] text-[#6b7280] shrink-0"
+                  data-lucide="lock"
+                  aria-hidden="true"
+                ></i>
+
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  placeholder="Informe sua senha"
+                  autocomplete="current-password"
+                  required
+                  class="w-full h-full [border:none] [outline:none] [background:transparent] [padding:0_55px_0_18px] text-[length:17px] text-[#111827] min-w-0"
+                />
+
+                <button
+                  type="button"
+                  class="password-toggle absolute right-[18px] top-[50%] [transform:translateY(-50%)] [border:none] [background:transparent] cursor-pointer flex items-center justify-center p-[5px]"
+                  id="togglePassword"
+                  aria-label="Mostrar senha"
+                >
+                  <i id="eyeIcon" data-lucide="eye" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <span
+                class="error-message block mt-[6px] min-h-[15px] text-[length:13px] text-[#e11d48]"
+                id="senhaError"
+              ></span>
+            </div>
+
+            <!-- ESQUECI SENHA -->
+            <div class="forgot-password flex justify-end mt-[-12px] mb-[70px]">
+              <a
+                href="./pages/esquecisenha.html"
+                id="forgotPassword"
+                class="text-[#ff5a00] text-[length:16px] no-underline"
+              >
+                Esqueci minha senha
+              </a>
+            </div>
+
+            <!-- MENSAGEM -->
+            <div
+              id="loginMessage"
+              role="status"
+              aria-live="polite"
+              class="login-message text-center mb-[15px] min-h-[18px] text-[length:14px] [overflow-wrap:anywhere]"
+            ></div>
+
+            <!-- BOTÃO -->
+            <button
+              type="submit"
+              class="login-button w-full h-[66px] [border:none] rounded-[40px] [background:linear-gradient(_90deg,_#ff5800,_#ff6800_)] text-[#ffffff] text-[length:21px] font-bold cursor-pointer [transition:0.2s]"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- =========================
+             LADO DIREITO
+        ========================== -->
+      <section
+        class="login-right absolute top-0 right-0 w-[60%] h-screen [background:linear-gradient(_135deg,_#ff842c_0%,_#e05c0f_50%,_#b83d00_100%_)] [clip-path:polygon(_0_0,_100%_0,_100%_100%,_46%_100%_)] overflow-hidden z-[2]"
+      >
+        <div
+          class="background-circle circle-one absolute rounded-[50%] [border:1px_solid_rgba(255,_255,_255,_0.13)] w-[800px] h-[800px] right-[40px] top-[80px]"
+        ></div>
+        <div
+          class="background-circle circle-two absolute rounded-[50%] [border:1px_solid_rgba(255,_255,_255,_0.13)] w-[1050px] h-[1050px] right-[-100px] top-[30px]"
+        ></div>
+
+        <div class="logo absolute right-[16px] top-[-10px] z-[5]">
+          <img
+            src="assets/images/logocinza.png"
+            alt="Logo SINSTOCK"
+            class="w-[300px] h-[155px]"
+          />
+        </div>
+      </section>
+
+      <div
+        class="illustration-container absolute top-[130px] z-[2] pointer-events-none right-0 w-[58%] h-[calc(100svh_-_130px)]"
+      >
+        <img
+          src="assets/images/login.png"
+          alt="Sistema de gerenciamento de estoque SINSTOCK"
+          class="object-contain [object-position:center] w-full h-full"
+        />
+      </div>
+
+      <div
+        class="dots absolute top-[180px] right-[35px] w-[50px] grid grid-cols-[repeat(3,_4px)] gap-[13px]"
+      >
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+        <span
+          class="w-[4px] h-[4px] rounded-[50%] [background:rgba(255,_255,_255,_0.5)]"
+        ></span>
+      </div>
+    </main>
+
+    <script src="./assets/vendor/lucide.min.js"></script>
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

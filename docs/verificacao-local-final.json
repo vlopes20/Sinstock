@@ -1,0 +1,98 @@
+{
+  "consultas": [
+    {
+      "endpoint": "/auth/me",
+      "status": 200
+    },
+    {
+      "endpoint": "/produtos",
+      "status": 200
+    },
+    {
+      "endpoint": "/produtos/resumo",
+      "status": 200
+    },
+    {
+      "endpoint": "/fornecedores",
+      "status": 200
+    },
+    {
+      "endpoint": "/fornecedores/resumo",
+      "status": 200
+    },
+    {
+      "endpoint": "/categorias",
+      "status": 200
+    },
+    {
+      "endpoint": "/filiais",
+      "status": 200
+    },
+    {
+      "endpoint": "/clientes",
+      "status": 200
+    },
+    {
+      "endpoint": "/movimentacoes/historico",
+      "status": 200
+    },
+    {
+      "endpoint": "/notas-fiscais-entrada",
+      "status": 200
+    },
+    {
+      "endpoint": "/pedidos",
+      "status": 200
+    },
+    {
+      "endpoint": "/pedidos/resumo/periodo",
+      "status": 200
+    },
+    {
+      "endpoint": "/saldos-estoque/resumo/atual",
+      "status": 200
+    },
+    {
+      "endpoint": "/dashboard/resumo",
+      "status": 200
+    },
+    {
+      "endpoint": "/relatorios?tipo=estoque",
+      "status": 200
+    },
+    {
+      "endpoint": "/relatorios?tipo=vendas",
+      "status": 200
+    },
+    {
+      "endpoint": "/notificacoes",
+      "status": 200
+    },
+    {
+      "endpoint": "/configuracoes/publicas",
+      "status": 200
+    },
+    {
+      "endpoint": "/configuracoes/preferencias",
+      "status": 200
+    },
+    {
+      "endpoint": "/chamados",
+      "status": 200
+    },
+    {
+      "endpoint": "/chamados/faq",
+      "status": 200
+    },
+    {
+      "endpoint": "/users",
+      "status": 200
+    },
+    {
+      "endpoint": "/perfis",
+      "status": 200
+    }
+  ],
+  "alteracoes_estoque": 0,
+  "emails_enviados": 0
+}

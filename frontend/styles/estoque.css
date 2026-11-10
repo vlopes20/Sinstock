@@ -1,0 +1,400 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* =========================================
+   BOTÃO NOVA MOVIMENTAÇÃO
+========================================= */
+
+.new-movement-button:hover {
+    @apply [background:#f2662d];
+
+    @apply [transform:translateY(-1px)];
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.stock-summary-card > div:last-child {
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[5px];
+}
+
+/* =========================================
+   ABAS
+========================================= */
+
+.stock-tab.active {
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+}
+
+.stock-tab-content.active {
+    @apply block;
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.stock-search:focus-within {
+    @apply border-[#fd7941];
+
+    @apply [box-shadow:0_0_0_3px_rgba(253,_121,_65,_0.08)];
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.stock-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_20px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.stock-table td {
+    @apply h-[80px];
+
+    @apply [padding:0_20px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:14px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.stock-table tbody tr:hover {
+    @apply [background:#fffaf7];
+}
+
+/* =========================================
+   PRODUTO
+========================================= */
+
+.stock-product {
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[13px];
+}
+
+.stock-product-image {
+    @apply w-[44px];
+    @apply h-[44px];
+
+    @apply rounded-[10px];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply font-bold;
+}
+
+.stock-product > div:last-child {
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[4px];
+}
+
+.stock-product strong {
+    @apply text-[#111827];
+}
+
+.stock-product span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   QUANTIDADE
+========================================= */
+
+.stock-quantity {
+    @apply text-[#111827];
+
+    @apply text-[length:16px];
+}
+
+.stock-quantity.low {
+    @apply text-[#e58a00];
+}
+
+.stock-quantity.out {
+    @apply text-[#e43f4c];
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.stock-status {
+    @apply inline-flex;
+
+    @apply [padding:7px_12px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+}
+
+.stock-status.normal {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.stock-status.low {
+    @apply text-[#e58a00];
+
+    @apply [background:#fff5df];
+}
+
+.stock-status.out {
+    @apply text-[#e43f4c];
+
+    @apply [background:#ffebed];
+}
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.stock-actions-button {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:22px];
+
+    @apply cursor-pointer;
+}
+
+.stock-actions-button:hover {
+    @apply [background:#f3f4f6];
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.pagination {
+    @apply flex;
+
+    @apply gap-[7px];
+}
+
+.pagination button {
+    @apply min-w-[36px];
+    @apply h-[36px];
+
+    @apply [padding:0_8px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[8px];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+
+    @apply cursor-pointer;
+}
+
+.pagination button.active {
+    @apply [background:#fd7941];
+
+    @apply text-[white];
+
+    @apply border-[#fd7941];
+}
+
+/* =========================================
+   MOVIMENTAÇÕES
+========================================= */
+
+.movement-type {
+    @apply [padding:7px_11px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+
+    @apply font-semibold;
+}
+
+.movement-type.entry {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.movement-type.exit {
+    @apply text-[#e43f4c];
+
+    @apply [background:#ffebed];
+}
+
+.movement-type.adjustment {
+    @apply text-[#2563eb];
+
+    @apply [background:#eaf2ff];
+}
+
+.movement-positive {
+    @apply text-[#16a34a] !important;
+
+    @apply font-bold;
+}
+
+.movement-negative {
+    @apply text-[#ef4444] !important;
+
+    @apply font-bold;
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.stock-modal-overlay.active {
+    @apply flex;
+}
+
+/* TIPOS */
+
+.movement-type-selector {
+    @apply grid;
+
+    @apply grid-cols-[repeat(3,_1fr)];
+
+    @apply gap-[10px];
+
+    @apply mb-[22px];
+}
+
+.movement-option {
+    @apply h-[65px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[12px];
+
+    @apply [background:white];
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply gap-[8px];
+
+    @apply text-[#64748b];
+
+    @apply cursor-pointer;
+}
+
+.movement-option.active {
+    @apply text-[#fd7941];
+
+    @apply border-[#fd7941];
+
+    @apply [background:#fff7f3];
+}
+
+/* FORM */
+
+.stock-form-group input:focus,
+.stock-form-group select:focus,
+.stock-form-group textarea:focus {
+    @apply border-[#fd7941];
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 900px) {
+
+    .stock-toolbar {
+        @apply flex-col;
+
+        @apply items-stretch;
+    }
+
+    .stock-search {
+        @apply w-full;
+    }
+
+    .stock-filters select {
+        @apply [flex:1];
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .stock-header {
+        @apply flex-col;
+
+        @apply items-start;
+    }
+
+    .stock-summary {
+        @apply grid-cols-[1fr];
+    }
+
+    .stock-filters {
+        @apply flex-col;
+    }
+
+    .stock-footer {
+        @apply flex-col;
+
+        @apply items-start;
+
+        @apply gap-[15px];
+
+        @apply p-[18px];
+    }
+
+    .movement-header {
+        @apply flex-col;
+
+        @apply items-start;
+    }
+
+    .stock-form-row {
+        @apply grid-cols-[1fr];
+    }
+
+    .stock-modal {
+        @apply p-[20px];
+    }
+
+}

@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard flex w-full min-h-screen">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
+        </div>
+
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
+            />
+
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
+              <i data-lucide="bell"></i>
+
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
+            </div>
+
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <div class="welcome mb-[28px]">
+            <h1
+              id="dashboardWelcome"
+              class="text-[length:39px] mb-[8px] tracking-[-1px]"
+            >
+              Resumo do sistema
+            </h1>
+            <p class="text-[length:18px] text-[#7c8493]">
+              Estoque atual e desempenho no período selecionado.
+            </p>
+          </div>
+          <div class="catalog-tools">
+            <label>Filial<select id="dashboardBranch"></select></label
+            ><label
+              >Período<select id="dashboardPeriod">
+                <option value="7">Últimos 7 dias</option>
+                <option value="30">Últimos 30 dias</option>
+                <option value="90">Últimos 90 dias</option>
+              </select></label
+            ><button type="button" id="refreshDashboard">Atualizar</button>
+          </div>
+          <p id="dashboardError" role="alert"></p>
+          <div
+            class="summary-cards grid grid-cols-[repeat(_auto-fit,_minmax(260px,_1fr)_)] gap-[clamp(16px,_2vw,_28px)] mb-[30px]"
+          >
+            <article
+              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
+            >
+              <div class="card-information flex flex-col">
+                <span
+                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
+                  >Pedidos no período</span
+                ><strong
+                  id="dashboardOrders"
+                  class="text-[length:32px] mb-[12px]"
+                  >—</strong
+                >
+                <p class="text-[#7c8493] text-[length:15px]">
+                  Inclui reservas e cancelamentos
+                </p>
+              </div>
+            </article>
+            <article
+              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
+            >
+              <div class="card-information flex flex-col">
+                <span
+                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
+                  >Estoque disponível</span
+                ><strong
+                  id="dashboardStock"
+                  class="text-[length:32px] mb-[12px]"
+                  >—</strong
+                >
+                <p class="text-[#7c8493] text-[length:15px]">
+                  Quantidade física menos reservas
+                </p>
+              </div>
+            </article>
+            <article
+              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
+            >
+              <div class="card-information flex flex-col">
+                <span
+                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
+                  >Vendas confirmadas</span
+                ><strong
+                  id="dashboardRevenue"
+                  class="text-[length:32px] mb-[12px]"
+                  >—</strong
+                >
+                <p class="text-[#7c8493] text-[length:15px]">
+                  Faturamento no período
+                </p>
+              </div>
+            </article>
+          </div>
+          <div
+            class="dashboard-grid grid grid-cols-[minmax(0,_1.6fr)_minmax(320px,_1fr)] gap-[24px]"
+          >
+            <article
+              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
+            >
+              <div
+                class="card-header flex items-center justify-between mb-[20px]"
+              >
+                <h2 class="text-[length:18px]">Vendas por dia</h2>
+                <button type="button" id="showSalesData">Ver dados</button>
+              </div>
+              <div class="chart h-[290px] flex relative">
+                <div
+                  class="chart-area relative [flex:1] h-full"
+                  id="dashboardChart"
+                >
+                  <p>Carregando...</p>
+                </div>
+              </div>
+              <div
+                class="chart-total h-[58px] [border:1px_solid_#e5e7eb] rounded-[12px] mt-[14px] flex items-center justify-between [padding:0_14px] text-[#64748b]"
+              >
+                <span>Total do período</span>
+                <div class="total-value flex items-center gap-[25px]">
+                  <strong
+                    id="dashboardTotal"
+                    class="text-[#111827] text-[length:25px]"
+                    >—</strong
+                  >
+                </div>
+              </div>
+            </article>
+            <article
+              class="alerts-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] overflow-hidden"
+            >
+              <div
+                class="alerts-header h-[84px] flex items-center justify-between [padding:0_28px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <strong>Alertas atuais</strong>
+              </div>
+              <div id="dashboardAlerts"></div>
+            </article>
+          </div>
+          <div
+            class="dashboard-grid grid grid-cols-[minmax(0,_1.6fr)_minmax(320px,_1fr)] gap-[24px]"
+          >
+            <article
+              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
+            >
+              <div
+                class="card-header flex items-center justify-between mb-[20px]"
+              >
+                <h2 class="text-[length:18px]">Estoque por categoria</h2>
+              </div>
+              <div class="catalog-table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Categoria</th>
+                      <th>Disponível</th>
+                      <th>Valor físico</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardCategories"></tbody>
+                </table>
+              </div>
+            </article>
+            <article
+              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
+            >
+              <div
+                class="card-header flex items-center justify-between mb-[20px]"
+              >
+                <h2 class="text-[length:18px]">Movimentações recentes</h2>
+              </div>
+              <div class="catalog-table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Operação</th>
+                      <th>Quantidade</th>
+                      <th>Responsável</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardRecent"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/shared/layout.js"></script>
+    <script src="../js/pages/dashboard.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,289 @@
+/* Estilos principais nos atributos class do HTML. Complementos de estados e responsividade abaixo. */
+/* =========================================
+   BOTÃO
+========================================= */
+
+.new-supplier-button:hover {
+    @apply [background:#f2672f];
+
+    @apply [transform:translateY(-1px)];
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.supplier-summary-card > div:last-child {
+    @apply min-w-[0];
+
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[5px];
+}
+
+/* ÍCONES */
+
+.supplier-card-icon.active {
+    @apply text-[#ffffff];
+
+    @apply [background:#499261];
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.supplier-search:focus-within {
+    @apply border-[#fd7941];
+
+    @apply [box-shadow:0_0_0_3px_rgba(253,_121,_65,_0.08)];
+}
+
+/* =========================================
+   TABELA
+========================================= */
+
+.suppliers-table th {
+    @apply h-[52px];
+
+    @apply [padding:0_18px];
+
+    @apply text-left;
+
+    @apply text-[#687386];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+
+    @apply [border-bottom:1px_solid_#e5e7eb];
+}
+
+.suppliers-table td {
+    @apply h-[80px];
+
+    @apply [padding:0_18px];
+
+    @apply text-[#475569];
+
+    @apply text-[length:13px];
+
+    @apply [border-bottom:1px_solid_#edf0f2];
+}
+
+.suppliers-table tbody tr {
+    @apply [transition:0.2s];
+}
+
+.suppliers-table tbody tr:hover {
+    @apply [background:#fffaf7];
+}
+
+/* =========================================
+   FORNECEDOR
+========================================= */
+
+.supplier-info {
+    @apply flex;
+    @apply items-center;
+
+    @apply gap-[13px];
+}
+
+.supplier-avatar {
+    @apply w-[44px];
+    @apply h-[44px];
+
+    @apply shrink-0;
+
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+
+    @apply rounded-[12px];
+
+    @apply [background:#fff0e9];
+
+    @apply text-[#fd7941];
+
+    @apply text-[length:13px];
+    @apply font-bold;
+}
+
+.supplier-info > div:last-child {
+    @apply flex;
+    @apply flex-col;
+
+    @apply gap-[4px];
+}
+
+.supplier-info strong {
+    @apply text-[#111827];
+
+    @apply whitespace-nowrap;
+}
+
+.supplier-info span {
+    @apply text-[#94a3b8];
+
+    @apply text-[length:12px];
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.supplier-status {
+    @apply inline-flex;
+    @apply items-center;
+
+    @apply [padding:7px_12px];
+
+    @apply rounded-[20px];
+
+    @apply text-[length:12px];
+    @apply font-semibold;
+}
+
+.supplier-status.active {
+    @apply text-[#169c46];
+
+    @apply [background:#eaf9ef];
+}
+
+.supplier-status.inactive {
+    @apply text-[#64748b];
+
+    @apply [background:#f1f5f9];
+}
+
+/* =========================================
+   AÇÕES
+========================================= */
+
+.supplier-actions {
+    @apply w-[38px];
+    @apply h-[38px];
+
+    @apply [border:none];
+
+    @apply rounded-[8px];
+
+    @apply [background:transparent];
+
+    @apply text-[#64748b];
+
+    @apply text-[length:22px];
+
+    @apply cursor-pointer;
+}
+
+.supplier-actions:hover {
+    @apply [background:#f3f4f6];
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.suppliers-pagination button {
+    @apply min-w-[36px];
+    @apply h-[36px];
+
+    @apply [padding:0_8px];
+
+    @apply [border:1px_solid_#e5e7eb];
+
+    @apply rounded-[8px];
+
+    @apply [background:white];
+
+    @apply text-[#475569];
+
+    @apply cursor-pointer;
+}
+
+.suppliers-pagination button.active {
+    @apply [background:#fd7941];
+
+    @apply border-[#fd7941];
+
+    @apply text-[white];
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.supplier-modal-overlay.active {
+    @apply flex;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.supplier-form-group input:focus,
+.supplier-form-group select:focus,
+.supplier-form-group textarea:focus {
+    @apply border-[#fd7941];
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 1250px) {
+
+    .suppliers-summary {
+        @apply grid-cols-[repeat(2,_1fr)];
+    }
+
+    .suppliers-toolbar {
+        @apply flex-col;
+
+        @apply items-stretch;
+    }
+
+    .supplier-search {
+        @apply w-full;
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .suppliers-header {
+        @apply flex-col;
+
+        @apply items-start;
+    }
+
+    .suppliers-summary {
+        @apply grid-cols-[1fr];
+    }
+
+    .supplier-filters {
+        @apply flex-col;
+    }
+
+    .supplier-filters select {
+        @apply w-full;
+    }
+
+    .suppliers-footer {
+        @apply flex-col;
+
+        @apply items-start;
+
+        @apply gap-[15px];
+
+        @apply p-[18px];
+    }
+
+    .supplier-form-row,
+    .supplier-address-row {
+        @apply grid-cols-[1fr];
+    }
+
+}

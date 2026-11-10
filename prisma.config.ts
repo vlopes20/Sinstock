@@ -1,11 +1,15 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
+import { resolve } from 'node:path';
 import { defineConfig, env } from 'prisma/config';
 
+config({ path: resolve(__dirname, '.env'), quiet: true });
+
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: 'backend/prisma/schema.prisma',
 
   migrations: {
-    path: 'prisma/migrations',
+    path: 'backend/prisma/migrations',
+    seed: 'node backend/scripts/bootstrap-admin.cjs',
   },
 
   datasource: {

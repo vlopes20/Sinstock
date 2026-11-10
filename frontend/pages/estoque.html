@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Estoque | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/estoque.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard flex w-full min-h-screen">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
+        </div>
+
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
+            />
+
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
+              <i data-lucide="bell"></i>
+
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
+            </div>
+
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <!-- ==============================
+         CABEÇALHO
+    =============================== -->
+
+          <div
+            class="stock-header flex justify-between items-center gap-[20px] mb-[28px]"
+          >
+            <div>
+              <h1
+                class="text-[length:clamp(28px,_2.5vw,_36px)] text-[#111827] mb-[7px]"
+              >
+                Estoque
+              </h1>
+
+              <p class="text-[#7c8493] text-[length:16px]">
+                Acompanhe saldos, entradas e saídas dos seus produtos.
+              </p>
+            </div>
+
+            <button
+              class="new-movement-button h-[50px] [padding:0_22px] [border:none] rounded-[12px] [background:#fd6423] text-[white] flex items-center gap-[9px] text-[length:15px] font-semibold cursor-pointer [transition:0.2s]"
+              id="openMovementModal"
+            >
+              <span class="text-[length:23px]"
+                ><i
+                  class="converted-icon"
+                  data-lucide="plus"
+                  aria-hidden="true"
+                ></i
+              ></span>
+              Nova movimentação
+            </button>
+          </div>
+
+          <!-- ==============================
+         CARDS
+    =============================== -->
+
+          <p id="stockError" class="demo-error" role="alert"></p>
+          <div class="catalog-tools">
+            <label for="stockBranch">Filial</label
+            ><select id="stockBranch" required></select
+            ><button type="button" data-catalog="filiais">
+              Gerenciar filiais</button
+            ><button type="button" id="refreshStock">Atualizar</button>
+          </div>
+          <div
+            class="stock-summary w-full grid grid-cols-[repeat(4,_minmax(0,_1fr))] gap-[20px] mb-[28px]"
+          >
+            <article
+              class="stock-summary-card min-h-[125px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] p-[22px] flex items-center gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="stock-card-icon primary w-[60px] h-[60px] shrink-0 rounded-[16px] flex items-center justify-center text-[length:25px] text-[#eaf2ff] [background:#415683]"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="package"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Itens em estoque</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Unidades disponíveis
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="stock-summary-card min-h-[125px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] p-[22px] flex items-center gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="stock-card-icon warning w-[60px] h-[60px] shrink-0 rounded-[16px] flex items-center justify-center text-[length:25px] text-[#fff5df] [background:#dd951a]"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="triangle-alert"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Estoque baixo</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Produtos abaixo do mínimo
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="stock-summary-card min-h-[125px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] p-[22px] flex items-center gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="stock-card-icon danger w-[60px] h-[60px] shrink-0 rounded-[16px] flex items-center justify-center text-[length:25px] text-[#fff0e9] [background:#b64e2e]"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="circle-alert"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Sem estoque</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Produtos indisponíveis
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="stock-summary-card min-h-[125px] [background:white] [border:1px_solid_#e5e7eb] rounded-[18px] p-[22px] flex items-center gap-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="stock-card-icon success w-[60px] h-[60px] shrink-0 rounded-[16px] flex items-center justify-center text-[length:25px] text-[#ffffff] [background:#499261]"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="dollar-sign"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Valor em estoque</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Valor pelo custo dos produtos
+                </small>
+              </div>
+            </article>
+          </div>
+
+          <!-- ==============================
+         ABAS
+    =============================== -->
+
+          <div class="stock-tabs flex gap-[10px] mb-[18px]">
+            <button
+              class="stock-tab active [padding:11px_18px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold cursor-pointer"
+              data-tab="inventory"
+            >
+              Visão geral
+            </button>
+
+            <button
+              class="stock-tab [padding:11px_18px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold cursor-pointer"
+              data-tab="movements"
+            >
+              Movimentações
+            </button>
+            <button
+              class="stock-tab [padding:11px_18px] [border:none] rounded-[10px] [background:transparent] text-[#64748b] text-[length:14px] font-semibold cursor-pointer"
+              data-tab="receipts"
+            >
+              Recebimentos
+            </button>
+          </div>
+
+          <!-- ==================================================
+         VISÃO GERAL DO ESTOQUE
+    =================================================== -->
+
+          <div class="stock-tab-content active hidden" id="inventory">
+            <div
+              class="stock-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden"
+            >
+              <!-- ==============================
+                 FILTROS
+            =============================== -->
+
+              <div
+                class="stock-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <div
+                  class="stock-search w-[min(390px,_100%)] h-[50px] flex items-center [border:1px_solid_#dfe3e8] rounded-[11px] [padding:0_16px]"
+                >
+                  <span class="text-[#64748b] text-[length:25px] mr-[10px]"
+                    ><i
+                      class="converted-icon"
+                      data-lucide="search"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
+
+                  <input
+                    type="text"
+                    id="stockSearch"
+                    aria-label="Buscar produto ou código"
+                    placeholder="Buscar produto ou código..."
+                    class="[flex:1] h-full min-w-[0] [border:none] [outline:none] [background:transparent] text-[length:14px]"
+                  />
+                </div>
+
+                <div class="stock-filters flex gap-[12px]">
+                  <select
+                    id="categoryFilter"
+                    aria-label="Filtrar categoria"
+                    class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
+                  >
+                    <option value="">Todas as categorias</option>
+                  </select>
+
+                  <select
+                    id="stockStatusFilter"
+                    aria-label="Filtrar situação do estoque"
+                    class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
+                  >
+                    <option value="">Todos os status</option>
+                    <option value="sem-movimento">
+                      Sem movimento há 30 dias
+                    </option>
+
+                    <option value="normal">Normal</option>
+
+                    <option value="baixo">Estoque baixo</option>
+
+                    <option value="sem-estoque">Sem estoque</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- ==============================
+                 TABELA
+            =============================== -->
+
+              <div class="stock-table-container w-full overflow-x-auto">
+                <table
+                  class="stock-table w-full min-w-[1000px] border-collapse"
+                >
+                  <thead class="[background:#fafafa]">
+                    <tr>
+                      <th>Produto</th>
+                      <th>SKU</th>
+                      <th>Categoria</th>
+                      <th>Estoque atual</th>
+                      <th>Estoque mínimo</th>
+                      <th>Custo unitário</th>
+                      <th>Valor estoque</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="stockTableBody">
+                    <tr>
+                      <td colspan="9">Carregando...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- ==============================
+                 RODAPÉ
+            =============================== -->
+
+              <div
+                class="stock-footer min-h-[70px] [padding:0_22px] flex items-center justify-between text-[#7c8493] text-[length:13px]"
+              >
+                <span>Carregando...</span>
+                <div class="catalog-pagination" id="stockPagination"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================================================
+         MOVIMENTAÇÕES
+    =================================================== -->
+
+          <div class="stock-tab-content hidden" id="movements">
+            <div
+              class="stock-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden"
+            >
+              <div
+                class="movement-header min-h-[90px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <div>
+                  <h2 class="text-[#111827] text-[length:18px] mb-[5px]">
+                    Histórico de movimentações
+                  </h2>
+
+                  <p class="text-[#94a3b8] text-[length:13px]">
+                    Entradas, saídas e ajustes realizados no estoque.
+                  </p>
+                </div>
+
+                <select
+                  id="movementFilter"
+                  aria-label="Filtrar movimentações"
+                  class="h-[45px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white]"
+                >
+                  <option value="">Todas as movimentações</option>
+
+                  <option value="entrada">Entradas</option>
+
+                  <option value="saida">Saídas</option>
+
+                  <option value="ajuste">Ajustes</option>
+                  <option value="transferencia">Transferências</option>
+                </select>
+              </div>
+
+              <div class="stock-table-container w-full overflow-x-auto">
+                <table
+                  class="stock-table movement-table w-full min-w-[1000px] border-collapse"
+                >
+                  <thead class="[background:#fafafa]">
+                    <tr>
+                      <th>Data</th>
+                      <th>Produto</th>
+                      <th>Tipo</th>
+                      <th>Quantidade</th>
+                      <th>Motivo</th>
+                      <th>Responsável</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="movementTableBody"></tbody>
+                </table>
+              </div>
+              <div class="catalog-pagination" id="historyPagination"></div>
+            </div>
+          </div>
+          <div class="stock-tab-content hidden" id="receipts">
+            <div
+              class="stock-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden"
+            >
+              <div
+                class="stock-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+              >
+                <input
+                  id="receiptSearch"
+                  aria-label="Buscar nota fiscal"
+                  placeholder="Buscar nota ou fornecedor"
+                /><select id="receiptStatus" aria-label="Status do recebimento">
+                  <option value="">Todos os status</option>
+                  <option value="PENDENTE">Pendente</option>
+                  <option value="RECEBIDA">Recebida</option>
+                  <option value="CANCELADA">Cancelada</option>
+                </select>
+              </div>
+              <div class="stock-table-container w-full overflow-x-auto">
+                <table
+                  class="stock-table w-full min-w-[1000px] border-collapse"
+                >
+                  <thead class="[background:#fafafa]">
+                    <tr>
+                      <th>Documento</th>
+                      <th>Fornecedor</th>
+                      <th>Filial</th>
+                      <th>Emissão</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="receiptsBody"></tbody>
+                </table>
+              </div>
+              <div class="catalog-pagination" id="receiptPagination"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div
+      class="stock-modal-overlay fixed [inset:0] z-[1000] [background:rgba(15,_23,_42,_0.55)] hidden items-center justify-center p-[20px]"
+      id="movementModal"
+    >
+      <div
+        class="stock-modal w-[min(600px,_100%)] max-h-[90vh] overflow-y-auto [background:white] rounded-[20px] p-[26px] [box-shadow:0_25px_70px_rgba(0,_0,_0,_0.2)]"
+      >
+        <div
+          class="stock-modal-header flex justify-between gap-[20px] mb-[25px]"
+        >
+          <div>
+            <h2 class="text-[length:23px] mb-[5px]">Nova movimentação</h2>
+            <p class="text-[#94a3b8] text-[length:14px]">
+              Operações registradas no servidor com identificação do
+              responsável.
+            </p>
+          </div>
+          <button
+            type="button"
+            id="closeMovementModal"
+            class="close-modal w-[38px] h-[38px] [border:none] rounded-[9px] [background:#f3f4f6] text-[length:23px] cursor-pointer"
+            aria-label="Fechar movimentação"
+          >
+            <i class="converted-icon" data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form id="movementForm">
+          <p
+            id="movementError"
+            class="demo-error"
+            role="alert"
+            tabindex="-1"
+          ></p>
+          <div
+            class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+          >
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementType"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Tipo *</label
+              >
+              <select
+                id="movementType"
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              >
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+                <option value="ajuste">Ajuste de contagem</option>
+                <option value="transferencia">Transferência</option>
+              </select>
+            </div>
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementProduct"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Produto *</label
+              >
+              <select
+                id="movementProduct"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              >
+                <option value="">Selecione</option></select
+              ><button type="button" id="scanMovementProduct">
+                Ler pela câmera
+              </button>
+            </div>
+          </div>
+          <div
+            class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+          >
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementBranch"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Filial de origem *</label
+              ><select
+                id="movementBranch"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              ></select>
+            </div>
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementLot"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Lote</label
+              ><select
+                id="movementLot"
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              >
+                <option value="">Sem lote</option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="stock-form-group flex flex-col gap-[8px] mb-[18px]"
+            data-transfer-only
+          >
+            <label
+              for="movementDestination"
+              class="text-[#374151] text-[length:14px] font-semibold"
+              >Filial de destino *</label
+            ><select
+              id="movementDestination"
+              class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+            ></select>
+          </div>
+          <p id="movementBalance" aria-live="polite"></p>
+          <div
+            class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+          >
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementQuantity"
+                id="movementQuantityLabel"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Quantidade de unidades *</label
+              ><input
+                id="movementQuantity"
+                type="number"
+                min="0.001"
+                step="0.001"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              />
+            </div>
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementDate"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Data *</label
+              ><input
+                id="movementDate"
+                type="date"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              />
+            </div>
+          </div>
+          <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+            <label
+              for="movementReason"
+              class="text-[#374151] text-[length:14px] font-semibold"
+              >Motivo *</label
+            ><input
+              id="movementReason"
+              maxlength="200"
+              required
+              placeholder="Ex.: recebimento de mercadoria"
+              class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+            />
+          </div>
+          <div
+            class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+          >
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementSupplier"
+                id="movementSupplierLabel"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Fornecedor *</label
+              ><select
+                id="movementSupplier"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              ></select>
+            </div>
+            <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+              <label
+                for="movementReference"
+                id="movementReferenceLabel"
+                class="text-[#374151] text-[length:14px] font-semibold"
+                >Nota fiscal ou pedido *</label
+              ><input
+                id="movementReference"
+                maxlength="50"
+                required
+                class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+              />
+            </div>
+          </div>
+          <div data-entry-only>
+            <div
+              class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+            >
+              <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+                <label
+                  for="movementCost"
+                  class="text-[#374151] text-[length:14px] font-semibold"
+                  >Custo unitário *</label
+                ><input
+                  id="movementCost"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                />
+              </div>
+              <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+                <label
+                  for="movementReceiptStatus"
+                  class="text-[#374151] text-[length:14px] font-semibold"
+                  >Recebimento</label
+                ><select
+                  id="movementReceiptStatus"
+                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                >
+                  <option value="RECEBIDA">Receber agora</option>
+                  <option value="PENDENTE">Registrar como pendente</option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="stock-form-row grid grid-cols-[repeat(2,_1fr)] gap-[15px]"
+            >
+              <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+                <label
+                  for="movementNewLot"
+                  class="text-[#374151] text-[length:14px] font-semibold"
+                  >Novo lote (opcional)</label
+                ><input
+                  id="movementNewLot"
+                  maxlength="50"
+                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                />
+              </div>
+              <div class="stock-form-group flex flex-col gap-[8px] mb-[18px]">
+                <label
+                  for="movementExpiry"
+                  class="text-[#374151] text-[length:14px] font-semibold"
+                  >Validade do novo lote</label
+                ><input
+                  id="movementExpiry"
+                  type="date"
+                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [font-family:inherit] text-[length:14px] [outline:none] h-[48px]"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="stock-modal-footer flex justify-end gap-[12px] mt-[25px]">
+            <button
+              type="button"
+              id="cancelMovement"
+              class="cancel-button h-[48px] [padding:0_20px] rounded-[10px] font-semibold cursor-pointer [border:1px_solid_#e5e7eb] [background:white] text-[#475569]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="save-movement-button h-[48px] [padding:0_20px] rounded-[10px] font-semibold cursor-pointer [border:none] [background:#fd7941] text-[white]"
+            >
+              Salvar movimentação
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/pages/estoque.js"></script>
+    <script src="../js/shared/layout.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

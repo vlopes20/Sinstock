@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Relatórios | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/relatorios.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard flex w-full min-h-screen">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
+        </div>
+
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
+            />
+
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
+              <i data-lucide="bell"></i>
+
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
+            </div>
+
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <div
+            class="reports-header w-full flex items-center justify-between gap-[20px] mb-[25px]"
+          >
+            <div>
+              <h1
+                class="text-[length:clamp(28px,_2.5vw,_36px)] mb-[7px] text-[#111827]"
+              >
+                Relatórios
+              </h1>
+              <p class="text-[#7c8493] text-[length:16px]">
+                Dados reais de vendas, estoque, validade e movimentações.
+              </p>
+            </div>
+            <div class="reports-header-actions flex gap-[10px]">
+              <select id="reportFormat" aria-label="Formato de exportação">
+                <option value="csv">CSV</option>
+                <option value="xlsx">XLSX</option>
+                <option value="pdf">PDF</option></select
+              ><button
+                id="exportReport"
+                class="export-report-button h-[48px] [padding:0_18px] rounded-[11px] text-[length:14px] font-semibold cursor-pointer [border:1px_solid_#dfe3e8] [background:white] text-[#475569]"
+                type="button"
+              >
+                Exportar</button
+              ><button
+                id="printReport"
+                class="generate-report-button h-[48px] [padding:0_18px] rounded-[11px] text-[length:14px] font-semibold cursor-pointer [border:none] [background:#fd6423] text-[white]"
+                type="button"
+              >
+                Imprimir
+              </button>
+            </div>
+          </div>
+          <div class="reports-filters">
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="reportType"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Relatório</label
+              ><select
+                id="reportType"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              >
+                <option value="categorias">Vendas por categoria</option>
+                <option value="vendas">Vendas confirmadas</option>
+                <option value="estoque">Estoque atual</option>
+                <option value="movimentacoes">Movimentações</option>
+                <option value="mais-vendidos">Mais vendidos</option>
+                <option value="menos-vendidos">Menos vendidos</option>
+                <option value="vencidos">Vencidos com saldo</option>
+                <option value="vencimento">Validade em até sete dias</option>
+                <option value="sem-movimento">Sem movimento recente</option>
+              </select>
+            </div>
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="reportBranch"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Filial</label
+              ><select
+                id="reportBranch"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              ></select>
+            </div>
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="reportCategory"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Categoria</label
+              ><select
+                id="reportCategory"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              ></select>
+            </div>
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="startDate"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Data inicial</label
+              ><input
+                id="startDate"
+                type="date"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              />
+            </div>
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="endDate"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Data final</label
+              ><input
+                id="endDate"
+                type="date"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              />
+            </div>
+            <div class="report-filter-group flex flex-col gap-[7px]">
+              <label
+                for="reportIdleDays"
+                class="text-[#475569] text-[length:13px] font-semibold"
+                >Dias sem movimento</label
+              ><input
+                id="reportIdleDays"
+                type="number"
+                min="1"
+                max="3650"
+                value="30"
+                class="w-full h-[46px] [padding:0_12px] [border:1px_solid_#dfe3e8] rounded-[10px] [background:white] text-[#475569] [outline:none]"
+              />
+            </div>
+            <div class="filter-buttons flex gap-[8px]">
+              <button
+                id="clearReportFilters"
+                type="button"
+                class="h-[46px] [padding:0_16px] rounded-[10px] font-semibold cursor-pointer"
+              >
+                Limpar</button
+              ><button
+                id="applyReportFilters"
+                class="apply-filter-button [border:none] [background:#fd6423] text-[white] h-[46px] [padding:0_16px] rounded-[10px] font-semibold cursor-pointer"
+                type="button"
+              >
+                Aplicar
+              </button>
+            </div>
+          </div>
+          <p id="reportError" role="alert"></p>
+          <article class="report-table-card w-full overflow-hidden">
+            <h2 id="reportTitle">Carregando relatório...</h2>
+            <p id="reportContext" class="catalog-note"></p>
+            <div class="report-table-container w-full overflow-x-auto">
+              <table
+                class="report-table w-full min-w-[750px] border-collapse"
+                id="liveReportTable"
+              >
+                <thead class="[background:#fafafa]"></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="reports-footer">
+              <span id="reportCount"></span>
+              <div id="reportPagination" class="catalog-pagination"></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../js/pages/relatorios.js"></script>
+    <script src="../js/shared/layout.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>

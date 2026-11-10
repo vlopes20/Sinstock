@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="pt-BR" class="invisible" data-auth-required="user">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Produtos | SINSTOCK</title>
+    <link rel="stylesheet" href="../assets/styles/utilities.css" />
+    <link rel="stylesheet" href="../assets/styles/dashboard.css" />
+    <link rel="stylesheet" href="../assets/styles/produtos.css" />
+    <link rel="stylesheet" href="../assets/styles/shared.css" />
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/services/data.js"></script>
+    <script src="../js/auth/session.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard flex w-full min-h-screen">
+      <!-- =====================================
+             MENU LATERAL
+        ====================================== -->
+
+      <aside
+        class="sidebar fixed top-0 left-0 w-[var(--sidebar-width)] h-screen [background:#383636] [border-right:1px_solid_#5a5a5a] [box-shadow:4px_0_10px_rgba(0,_0,_0,_0.15)] flex flex-col z-[10]"
+      >
+        <div class="sidebar-logo h-[115px] flex items-center [padding:0_30px]">
+          <img
+            src="../assets/images/letreirobranco.png"
+            alt="SINSTOCK"
+            class="w-[240px] h-auto object-contain"
+          />
+        </div>
+
+        <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
+          <a
+            href="dashboard.html"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="layout-dashboard"></i>
+            Visão Geral
+          </a>
+
+          <a
+            href="estoque.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="boxes"></i>
+            Estoque
+          </a>
+
+          <a
+            href="produtos.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="package-search"></i>
+            Produtos
+          </a>
+
+          <a
+            href="vendas.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="badge-dollar-sign"></i>
+            Vendas
+          </a>
+
+          <a
+            href="relatorios.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="scroll-text"></i>
+            Relatórios
+          </a>
+
+          <a
+            href="fornecedores.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="truck"></i>
+            Fornecedores
+          </a>
+
+          <a
+            href="configuracoes.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="settings"></i>
+            Configurações
+          </a>
+
+          <a
+            href="ajuda.html"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="circle-help"></i>
+            Ajuda e suporte
+          </a>
+        </nav>
+
+        <div
+          class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
+        >
+          <button
+            type="button"
+            id="sessionLogout"
+            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+          >
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>Sair do sistema</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- =====================================
+             CONTEÚDO
+        ====================================== -->
+
+      <main
+        class="main-content w-[calc(100%_-_var(--sidebar-width))] ml-[var(--sidebar-width)] min-w-[0]"
+      >
+        <!-- =====================================
+                 TOPO
+            ====================================== -->
+
+        <header
+          class="topbar w-full h-[110px] [background:#fFffff] [border-bottom:1px_solid_#e5e7eb] flex items-center justify-between [padding:0_50px]"
+        >
+          <div
+            class="search-box w-[55%] max-w-[680px] h-[64px] flex items-center [border:1px_solid_#dfe3e8] rounded-[6px] [padding:0_20px] [background:white]"
+          >
+            <span
+              class="search-icon text-[length:31px] text-[#64748b] mr-[14px]"
+              ><i
+                class="converted-icon"
+                data-lucide="search"
+                aria-hidden="true"
+              ></i
+            ></span>
+
+            <input
+              type="text"
+              placeholder="Buscar produtos, pedidos, clientes..."
+              class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
+            />
+
+            <span
+              class="shortcut gap-[4px] [padding:7px_10px] [border:1px_solid_#e5e7eb] rounded-[6px] text-[#64748b]"
+              ><i
+                class="converted-icon"
+                data-lucide="command"
+                aria-hidden="true"
+              ></i>
+              K</span
+            >
+          </div>
+
+          <div class="topbar-right flex items-center gap-[38px]">
+            <div
+              class="date flex items-center gap-[10px] text-[#475569] text-[length:16px]"
+            >
+              <i data-lucide="calendar-days"></i>
+              <span id="dataAtual"></span>
+            </div>
+
+            <div
+              class="notification relative text-[length:24px] cursor-pointer"
+            >
+              <i data-lucide="bell"></i>
+
+              <span
+                class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
+              >
+                1
+              </span>
+            </div>
+
+            <div
+              class="user flex items-center gap-[12px] font-semibold cursor-pointer"
+            >
+              <div
+                class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
+              >
+                <span aria-label="Usuário">DE</span>
+              </div>
+
+              <span> Vini </span>
+
+              <span class="user-arrow text-[#64748b] relative top-[4px]"
+                ><i data-lucide="chevron-down"></i
+              ></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================
+                 CONTEÚDO DA DASHBOARD
+            ====================================== -->
+
+        <section
+          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+        >
+          <!-- =========================================
+         CABEÇALHO
+    ========================================== -->
+
+          <div
+            class="products-header w-full flex items-center justify-between gap-[20px] mb-[28px]"
+          >
+            <div>
+              <h1
+                class="text-[length:clamp(28px,_2.5vw,_36px)] mb-[7px] text-[#111827]"
+              >
+                Produtos
+              </h1>
+
+              <p class="text-[#7c8493] text-[length:16px]">
+                Cadastre, consulte e gerencie os produtos do seu catálogo.
+              </p>
+            </div>
+
+            <button
+              class="new-product-button h-[50px] [padding:0_22px] [border:none] rounded-[12px] [background:#fd6423] text-[#ffffff] flex items-center gap-[9px] text-[length:15px] font-semibold cursor-pointer [transition:0.2s]"
+              id="openProductModal"
+            >
+              <span class="text-[length:23px]"
+                ><i
+                  class="converted-icon"
+                  data-lucide="plus"
+                  aria-hidden="true"
+                ></i
+              ></span>
+              Novo produto
+            </button>
+          </div>
+
+          <!-- =========================================
+         CARDS
+    ========================================== -->
+
+          <div
+            class="products-summary grid grid-cols-[repeat(4,_minmax(0,_1fr))] gap-[20px] mb-[28px]"
+          >
+            <article
+              class="product-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="product-card-icon total w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#fff0e9] [background:#b64e2e]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Total de produtos</span
+                >
+
+                <strong
+                  id="totalProducts"
+                  class="text-[#111827] text-[length:25px]"
+                  >—</strong
+                >
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Produtos cadastrados
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="product-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="product-card-icon active w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px]"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="check"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Produtos ativos</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Disponíveis para venda
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="product-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="product-card-icon warning w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#fff5df] [background:#dd951a]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Estoque baixo</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Abaixo do estoque mínimo
+                </small>
+              </div>
+            </article>
+
+            <article
+              class="product-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+            >
+              <div
+                class="product-card-icon expiry w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#eaf2ff] [background:#415683]"
+              >
+                <i data-lucide="clipboard-clock"></i>
+              </div>
+
+              <div>
+                <span class="text-[#64748b] text-[length:14px]"
+                  >Próximos da validade</span
+                >
+
+                <strong class="text-[#111827] text-[length:25px]">—</strong>
+
+                <small class="text-[#94a3b8] text-[length:12px]">
+                  Vencidos ou vencem em até 7 dias
+                </small>
+              </div>
+            </article>
+          </div>
+
+          <!-- =========================================
+         TABELA
+    ========================================== -->
+
+          <div class="catalog-tools">
+            <button type="button" data-catalog="categorias">
+              Gerenciar categorias</button
+            ><button type="button" data-catalog="filiais">
+              Gerenciar filiais</button
+            ><button type="button" data-catalog="clientes">
+              Gerenciar clientes
+            </button>
+          </div>
+          <div
+            class="products-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
+          >
+            <!-- FILTROS -->
+
+            <div
+              class="products-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
+            >
+              <div
+                class="products-search w-[min(390px,_100%)] h-[50px] flex items-center [padding:0_16px] [border:1px_solid_#dfe3e8] rounded-[11px]"
+              >
+                <span class="mr-[10px] text-[#64748b] text-[length:25px]"
+                  ><i
+                    class="converted-icon"
+                    data-lucide="search"
+                    aria-hidden="true"
+                  ></i
+                ></span>
+
+                <input
+                  type="text"
+                  id="productSearch"
+                  placeholder="Buscar por produto, SKU ou código..."
+                  class="[flex:1] min-w-[0] h-full [border:none] [outline:none] [background:transparent] text-[length:14px]"
+                />
+              </div>
+
+              <div class="products-filters flex gap-[12px]">
+                <select
+                  id="categoryFilter"
+                  class="min-w-[160px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
+                >
+                  <option value="">Carregando...</option>
+                </select>
+
+                <select
+                  id="productStatusFilter"
+                  class="min-w-[160px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
+                >
+                  <option value="">Todos os status</option>
+
+                  <option value="ativo">Ativo</option>
+
+                  <option value="inativo">Inativo</option>
+                </select>
+
+                <select
+                  id="stockFilter"
+                  class="min-w-[160px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
+                >
+                  <option value="">Todo estoque</option>
+
+                  <option value="normal">Normal</option>
+
+                  <option value="baixo">Estoque baixo</option>
+
+                  <option value="sem-estoque">Sem estoque</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- TABELA -->
+
+            <div class="products-table-container w-full overflow-x-auto">
+              <table
+                class="products-table w-full min-w-[1100px] border-collapse"
+              >
+                <thead class="[background:#fafafa]">
+                  <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor</th>
+                    <th>Estoque</th>
+                    <th>Preço</th>
+                    <th>Validade</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody id="productsTableBody">
+                  <tr>
+                    <td colspan="9">Carregando...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- RODAPÉ -->
+
+            <div
+              class="products-footer min-h-[70px] [padding:0_22px] flex items-center justify-between text-[#7c8493] text-[length:13px]"
+            >
+              <span>Carregando...</span>
+
+              <div class="products-pagination flex gap-[7px]"></div>
+            </div>
+          </div>
+        </section>
+        <div class="product-modal-overlay" id="productModal">
+          <div class="product-modal">
+            <!-- CABEÇALHO -->
+
+            <div class="product-modal-header">
+              <div>
+                <h2 id="productModalTitle">Novo produto</h2>
+
+                <p>Informe os dados do produto.</p>
+              </div>
+
+              <button
+                class="close-product-modal w-[38px] h-[38px] shrink-0 [border:none] rounded-[9px] [background:#f3f4f6] text-[length:23px] cursor-pointer"
+                id="closeProductModal"
+                type="button"
+                aria-label="Fechar"
+              >
+                <i
+                  class="converted-icon"
+                  data-lucide="x"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
+
+            <!-- FORM -->
+
+            <form id="productForm">
+              <!-- ID PARA EDIÇÃO -->
+
+              <input type="hidden" id="productId" />
+
+              <!-- NOME -->
+
+              <div class="product-form-group">
+                <label for="productName"> Nome do produto * </label>
+
+                <input
+                  type="text"
+                  id="productName"
+                  placeholder="Ex: Arroz Tipo 1"
+                  required
+                />
+              </div>
+              <div class="product-form-group">
+                <label for="productBrand">Marca</label
+                ><input type="text" id="productBrand" maxlength="100" />
+              </div>
+
+              <!-- DESCRIÇÃO -->
+
+              <div class="product-form-group">
+                <label for="productDescription"> Descrição </label>
+
+                <input
+                  type="text"
+                  id="productDescription"
+                  placeholder="Ex: Pacote 5kg"
+                />
+              </div>
+
+              <!-- SKU + CÓDIGO DE BARRAS -->
+
+              <div
+                class="product-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
+              >
+                <div class="product-form-group">
+                  <label for="productSku"> SKU </label>
+
+                  <input type="text" id="productSku" placeholder="Ex: 00128" />
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productBarcode"> Código de barras </label>
+
+                  <input
+                    type="text"
+                    id="productBarcode"
+                    placeholder="7891234567890"
+                  /><button type="button" id="scanProductBarcode">
+                    Ler pela câmera
+                  </button>
+                </div>
+              </div>
+
+              <!-- CATEGORIA + FORNECEDOR -->
+
+              <div
+                class="product-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
+              >
+                <div class="product-form-group">
+                  <label for="productCategory"> Categoria * </label>
+
+                  <select id="productCategory" required>
+                    <option value="">Carregando...</option>
+                  </select>
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productSupplier"> Fornecedor </label>
+
+                  <select id="productSupplier">
+                    <option value="">Carregando...</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- PREÇOS -->
+
+              <div
+                class="product-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
+              >
+                <div class="product-form-group">
+                  <label for="productCost">Custo médio calculado</label>
+
+                  <input
+                    type="number"
+                    id="productCost"
+                    min="0"
+                    step="0.01"
+                    placeholder="Calculado nas entradas"
+                    readonly
+                  />
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productPrice"> Preço de venda * </label>
+
+                  <input
+                    type="number"
+                    id="productPrice"
+                    min="0"
+                    step="0.01"
+                    placeholder="0,00"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- ESTOQUE -->
+
+              <div
+                class="product-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
+              >
+                <div class="product-form-group">
+                  <label for="minimumStock"> Estoque mínimo </label>
+
+                  <input
+                    type="number"
+                    id="minimumStock"
+                    step="0.001"
+                    min="0"
+                    value="0"
+                  />
+                </div>
+
+                <div class="product-form-group">
+                  <p class="catalog-note">
+                    A quantidade e a validade são registradas nos recebimentos,
+                    com fornecedor, filial e documento de origem.
+                  </p>
+                </div>
+              </div>
+
+              <!-- VALIDADE + UNIDADE -->
+
+              <div
+                class="product-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
+              >
+                <div class="product-form-group">
+                  <a href="estoque.html" class="catalog-note"
+                    >Consultar lotes e estoque</a
+                  >
+                </div>
+
+                <div class="product-form-group">
+                  <label for="productUnit"> Unidade </label>
+
+                  <select id="productUnit">
+                    <option value="UN">Unidade</option>
+
+                    <option value="KG">Quilograma</option>
+
+                    <option value="G">Grama</option>
+
+                    <option value="L">Litro</option>
+
+                    <option value="ML">Mililitro</option>
+
+                    <option value="CX">Caixa</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- STATUS -->
+
+              <div class="product-form-group">
+                <label for="productStatus"> Status </label>
+
+                <select id="productStatus">
+                  <option value="ativo">Ativo</option>
+
+                  <option value="inativo">Inativo</option>
+                </select>
+              </div>
+
+              <!-- OBSERVAÇÃO -->
+
+              <div class="product-form-group">
+                <label for="productObservation"> Observação </label>
+
+                <textarea
+                  id="productObservation"
+                  rows="3"
+                  placeholder="Informações adicionais..."
+                ></textarea>
+              </div>
+
+              <!-- BOTÕES -->
+
+              <div
+                class="product-modal-footer flex justify-end gap-[12px] mt-[25px]"
+              >
+                <button
+                  type="button"
+                  class="cancel-product-button [border:1px_solid_#e5e7eb] [background:white] text-[#475569]"
+                  id="cancelProduct"
+                >
+                  Cancelar
+                </button>
+
+                <button type="submit" class="save-product-button">
+                  Salvar produto
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/shared/connected.js"></script>
+    <script src="../assets/vendor/lucide.min.js"></script>
+    <script src="../assets/vendor/zxing-browser.min.js"></script>
+    <script src="../js/shared/scanner.js"></script>
+
+    <script src="../js/shared/catalogs.js"></script>
+    <script src="../js/pages/produtos.js"></script>
+    <script src="../js/shared/layout.js"></script>
+
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+    </script>
+  </body>
+</html>
