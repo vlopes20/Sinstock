@@ -10,12 +10,12 @@
 .sidebar-menu { @apply shrink-0; }
 .sidebar .menu-item svg { @apply w-6 h-6 shrink-0; }
 .sidebar .sidebar-logout {
-    @apply border border-solid border-[#fca5a54d] bg-[#ef444414] text-[#00ff15] font-semibold text-left cursor-pointer rounded-xl;
+    @apply border border-solid border-[#fca5a54d] bg-[#ef444414] text-[#ffff] font-semibold text-left cursor-pointer rounded-xl;
     font-family: inherit;
     transition: background-color .2s, border-color .2s, color .2s;
 }
 .sidebar .sidebar-logout:hover {
-    @apply bg-[#b91c1c] border-[#ef4444] text-white;
+    @apply bg-[#fdfdfd] border-[#ef4444] text-white;
 }
 .sidebar .sidebar-logout:focus-visible {
     outline: 3px solid #fca5a5;

@@ -58,11 +58,11 @@
     border-width: 1px;
     border-style: solid;
     border-color: #fca5a54d;
-    background-color: #ef444414;
+    background-color: 
+    #ef444414;
     text-align: left;
     font-weight: 600;
-    --tw-text-opacity: 1;
-    color: rgb(0 255 21 / var(--tw-text-opacity, 1));
+    color: #faf9f9;
     font-family: inherit;
     transition: background-color .2s, border-color .2s, color .2s;
 }
