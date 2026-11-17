@@ -155,9 +155,9 @@
             D.text(
               expiries[0] ? expiries[0].split('-').reverse().join('/') : '—',
             ) +
-            '</td><td>' +
+            '</td><td><span class="product-status ' + (product.ativo ? 'active' : 'inactive') + '">' +
             (product.ativo ? 'Ativo' : 'Inativo') +
-            '</td><td><div class="catalog-actions"><button type="button" data-edit="' +
+            '</span></td><td><div class="catalog-actions"><button type="button" data-edit="' +
             product.id +
             '">Editar</button><button type="button" data-delete="' +
             product.id +

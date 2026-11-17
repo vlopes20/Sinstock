@@ -21,7 +21,7 @@
       }
     }
     async function notifications(pagina = 1, overlay) {
-      overlay ||= D.dialog('Notificações', '<p>Carregando...</p>');
+      overlay ||= D.dialog('Notificações', '<p class="catalog-status" role="status">Carregando notificações...</p>');
       const content = overlay.querySelector('.catalog-content');
       try {
         const result = await D.get('/notificacoes', {
@@ -38,7 +38,7 @@
           result.dados
             .map(
               (item) =>
-                '<article><strong>' +
+                '<article class="' + (item.lida ? 'is-read' : 'is-unread') + '"><strong>' +
                 D.text(item.titulo) +
                 '</strong><p>' +
                 D.text(item.mensagem) +
@@ -55,7 +55,7 @@
             .join('') +
           (result.dados.length
             ? ''
-            : '<p>Nenhuma notificação encontrada.</p>') +
+            : '<p class="catalog-status" role="status">Nenhuma notificação encontrada.</p>') +
           '</div><div class="catalog-pagination"></div>';
         D.paginate(
           content.querySelector('.catalog-pagination'),
@@ -82,7 +82,7 @@
           }
         };
       } catch (error) {
-        content.textContent = error.message;
+        content.innerHTML = '<p class="catalog-status" role="alert">' + D.text(error.message) + '</p>';
       }
     }
     if (bell)

@@ -489,3 +489,55 @@
     }
 
 }
+/* Controles compartilhados entre todas as abas de configuracoes. */
+.settings-page .settings-header { align-items: center; }
+.settings-page .settings-tabs { padding: 6px; border: 1px solid #e5e7eb; border-radius: 14px; background: white; gap: 6px; }
+.settings-page .settings-tab { min-height: 44px; flex: 1 0 auto; padding: 10px 16px; font: inherit; font-size: 14px; font-weight: 600; }
+.settings-page .settings-tab.active { background: #fff0e9; color: #9a3412; }
+.settings-page .settings-card-header { background: #fafafa; flex-wrap: wrap; }
+.settings-page .settings-card-header h2 { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 18px; font-weight: 600; line-height: 1.5; }
+.settings-page .settings-card-header h2 svg { width: 22px; height: 22px; flex-shrink: 0; color: #c2410c; }
+.settings-page .settings-card-body > p { margin: 0 0 20px; color: #64748b; font-size: 14px; line-height: 1.6; }
+.settings-page .settings-card-body > p:last-child { margin-bottom: 0; }
+.settings-page .settings-card-body > label:not(.settings-check-row),
+.settings-page .settings-profile-tools label { display: flex; flex-direction: column; gap: 8px; max-width: 360px; margin-bottom: 18px; color: #374151; font-size: 14px; font-weight: 600; }
+.settings-page :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea) {
+    box-sizing: border-box; width: 100%; min-width: 0; min-height: 46px; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 10px; background: white; color: #374151; font: inherit; font-size: 14px;
+}
+.settings-page :is(input, select, textarea):focus-visible { outline: 2px solid #fed7aa; outline-offset: 2px; border-color: #c2410c; }
+.settings-page input:read-only:not([type="checkbox"]) { background: #f8fafc; color: #64748b; }
+.settings-page input[type="checkbox"] { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: #c2410c; cursor: pointer; }
+.settings-page input:disabled { cursor: not-allowed; opacity: .6; }
+.settings-page .settings-check-row { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 16px; margin-bottom: 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fafafa; color: #374151; font-size: 14px; line-height: 1.5; cursor: pointer; }
+.settings-page .settings-check-row:has(input:checked) { background: #fff7ed; border-color: #fed7aa; }
+.settings-page .settings-check-row:focus-within { outline: 2px solid #fed7aa; outline-offset: 2px; }
+.settings-page .settings-card button,
+.settings-page .settings-header > a {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 10px; background: #fff; color: #374151; font: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; text-decoration: none; cursor: pointer; transition: background-color .15s, border-color .15s;
+}
+.settings-page .settings-card button:hover:not(:disabled) { background: #f8fafc; border-color: #9ca3af; }
+.settings-page .settings-header > a,
+.settings-page .settings-card :is(button[type="submit"], .add-user-button) { background: #c2410c; border-color: #c2410c; color: #fff; }
+.settings-page .settings-header > a:hover,
+.settings-page .settings-card :is(button[type="submit"], .add-user-button):hover:not(:disabled) { background: #9a3412; border-color: #9a3412; }
+.settings-page .settings-header > a svg { width: 18px; height: 18px; flex-shrink: 0; }
+.settings-page .settings-card button:disabled { cursor: not-allowed; opacity: .5; }
+.settings-page .settings-card-footer { gap: 12px; flex-wrap: wrap; }
+.settings-page .settings-profile-tools { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.settings-page .settings-profile-tools label { flex: 1 1 220px; margin: 0; }
+.settings-page .settings-profile-tools button { min-height: 46px; }
+.settings-page #permissionsForm th:not(:first-child), .settings-page #permissionRows td:not(:first-child) { text-align: center; }
+.settings-page #permissionsForm .settings-table { min-width: 520px; }
+.settings-page .settings-table td { padding: 16px 22px; line-height: 1.5; }
+.settings-page .settings-table tbody tr:hover { background: #fafafa; }
+.settings-page .settings-table .catalog-actions { flex-wrap: nowrap; }
+.settings-page #twoFactorStatus { display: inline-flex; padding: 8px 12px; border-radius: 8px; background: #f1f5f9; color: #475569; font-weight: 600; }
+.settings-page #twoFactorStatus:empty, .settings-page #settingsError:empty, .settings-page [data-form-error]:empty { display: none; }
+.settings-page #settingsError:not(:empty), .settings-page [data-form-error]:not(:empty) { margin: 0 0 18px; padding: 14px 18px; border: 1px solid #fecaca; border-radius: 10px; background: #fef2f2; color: #991b1b; line-height: 1.5; }
+.settings-page .catalog-tools { margin-bottom: 0; gap: 10px; }
+@media (max-width: 600px) {
+    .settings-page .settings-card-header, .settings-page .settings-card-body, .settings-page .settings-card-footer { padding: 18px; }
+    .settings-page .settings-card-footer button, .settings-page .settings-profile-tools button, .settings-page .catalog-tools button { flex: 1 1 auto; }
+    .settings-page .settings-profile-tools label { max-width: none; }
+    .settings-page :is(input:not([type="checkbox"]), select, textarea) { font-size: 16px; }
+}

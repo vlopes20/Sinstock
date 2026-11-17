@@ -106,10 +106,10 @@
           <button
             type="button"
             id="sessionLogout"
-            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            class="sidebar-logout"
           >
             <i data-lucide="log-out" aria-hidden="true"></i>
-            <span>Sair do sistema</span>
+            <span>Sair</span>
           </button>
         </div>
       </aside>
@@ -200,7 +200,7 @@
             ====================================== -->
 
         <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+          class="content sales-page [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
         >
           <!-- =========================================
          CABEÇALHO
@@ -240,7 +240,7 @@
          CARDS
     ========================================== -->
 
-          <div class="catalog-tools">
+          <div class="catalog-tools sales-period-filters">
             <label>Filial<select id="salesBranch"></select></label
             ><label>De<input id="salesFrom" type="date" /></label
             ><label>Até<input id="salesTo" type="date" /></label>
@@ -344,7 +344,7 @@
               <div
                 class="sales-card-icon cancelled w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:27px] text-[#fff0e9] [background:#b64e2e]"
               >
-                <i data-lucide="credit-card-x"></i>
+                <i class="converted-icon" data-lucide="circle-x" aria-hidden="true"></i>
               </div>
 
               <div class="sales-card-info min-w-[0] flex flex-col gap-[5px]">
@@ -398,7 +398,7 @@
                   class="sales-section-header flex items-center justify-between gap-[15px] mb-[25px]"
                 >
                   <div>
-                    <h2 class="text-[length:18px] mb-[5px]">Faturamento</h2>
+                    <h2 class="text-[length:18px] mb-[5px]"><i data-lucide="chart-column" aria-hidden="true"></i>Faturamento</h2>
 
                     <p class="text-[#94a3b8] text-[length:13px]">
                       Desempenho das vendas nos últimos dias.
@@ -433,7 +433,7 @@
                 >
                   <div>
                     <h2 class="text-[length:18px] mb-[5px]">
-                      Formas de pagamento
+                      <i data-lucide="wallet" aria-hidden="true"></i>Formas de pagamento
                     </h2>
 
                     <p class="text-[#94a3b8] text-[length:13px]">
@@ -476,6 +476,7 @@
                   <input
                     type="text"
                     id="salesSearch"
+                    aria-label="Buscar venda, cliente ou código"
                     placeholder="Buscar venda, cliente ou código..."
                     class="[flex:1] min-w-[0] h-full [border:none] [outline:none] [background:transparent]"
                   />
@@ -484,6 +485,7 @@
                 <div class="sales-filters flex gap-[12px]">
                   <select
                     id="paymentFilter"
+                    aria-label="Filtrar por forma de pagamento"
                     class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569]"
                   >
                     <option value="">Todas as formas</option>
@@ -496,6 +498,7 @@
 
                   <select
                     id="salesStatusFilter"
+                    aria-label="Filtrar por status da venda"
                     class="min-w-[170px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569]"
                   >
                     <option value="">Todos os status</option>
@@ -519,7 +522,7 @@
                       <th>Pagamento</th>
                       <th>Valor</th>
                       <th>Status</th>
-                      <th></th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
 

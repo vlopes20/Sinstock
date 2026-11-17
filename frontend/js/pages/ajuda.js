@@ -43,7 +43,7 @@
               : '') +
             '</details>',
         )
-        .join('') || '<p>Nenhuma orientação encontrada.</p>';
+        .join('') || '<p class="catalog-status" role="status">Nenhuma orientação encontrada.</p>';
   }
   async function tickets(pagina = page) {
     const callId = ++sequence;
@@ -65,11 +65,13 @@
             D.text(item.assunto) +
             '</td><td>' +
             D.text(item.usuarios?.nome || '—') +
-            '</td><td>' +
-            D.text(item.prioridade) +
-            '</td><td>' +
+            '</td><td><span class="support-badge" data-priority="' +
+            D.text(item.prioridade) + '">' +
+            D.text({ BAIXA: 'Baixa', MEDIA: 'Média', ALTA: 'Alta', CRITICA: 'Crítica' }[item.prioridade] || item.prioridade) +
+            '</span></td><td><span class="support-badge" data-status="' +
+            D.text(item.status) + '">' +
             D.text(statusNames[item.status]) +
-            '</td><td>' +
+            '</span></td><td>' +
             D.text(new Date(item.data_abertura).toLocaleString('pt-BR')) +
             '</td><td><button type="button" data-ticket="' +
             item.id +
@@ -231,6 +233,7 @@
           : '<p>Chamado encerrado.</p>') +
         '<form id="ticketStatusForm"><label>Status<select name="status"></select></label><button type="submit">Atualizar status</button></form>',
     );
+    overlay.classList.add('support-dialog');
     function render(data) {
       overlay.querySelector('.support-messages').innerHTML =
         '<h3>Conversa</h3>' +

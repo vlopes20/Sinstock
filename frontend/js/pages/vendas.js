@@ -55,9 +55,9 @@
             D.text(C.payments[order.pagamento] || 'Não informado') +
             '</td><td>' +
             D.money(order.total) +
-            '</td><td>' +
-            C.statuses[order.status] +
-            '</td><td><button type="button" data-order="' +
+            '</td><td><span class="sale-status" data-status="' + D.text(order.status) + '">' +
+            D.text(C.statuses[order.status] || order.status) +
+            '</span></td><td><button type="button" data-order="' +
             order.id +
             '">Detalhes</button></td></tr>',
         )
@@ -101,7 +101,7 @@
               '</span></div>',
           )
           .join('')
-      : '<p>Nenhuma venda confirmada no período.</p>';
+      : '<p class="catalog-status" role="status">Nenhuma venda confirmada no período.</p>';
     document.querySelector('.sales-chart-footer strong').textContent = D.money(
       info.faturamento,
     );
@@ -124,7 +124,7 @@
               '%"></div></div>',
           )
           .join('')
-      : '<p>Nenhum pagamento no período.</p>';
+      : '<p class="catalog-status" role="status">Nenhum pagamento no período.</p>';
   }
   async function refresh() {
     try {

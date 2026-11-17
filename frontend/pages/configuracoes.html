@@ -107,10 +107,10 @@
           <button
             type="button"
             id="sessionLogout"
-            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            class="sidebar-logout"
           >
             <i data-lucide="log-out" aria-hidden="true"></i>
-            <span>Sair do sistema</span>
+            <span>Sair</span>
           </button>
         </div>
       </aside>
@@ -201,7 +201,7 @@
             ====================================== -->
 
         <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+          class="content settings-page [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
         >
           <div class="settings-header mb-[25px]">
             <div>
@@ -214,7 +214,7 @@
                 Empresa, usuários, estoque e segurança da sua conta.
               </p>
             </div>
-            <a href="cadastro.html" data-admin-only>Cadastrar usuário</a>
+            <a href="cadastro.html" data-admin-only><i data-lucide="user-plus" aria-hidden="true"></i>Cadastrar usuário</a>
           </div>
           <div
             class="settings-tabs flex gap-[8px] mb-[20px] pb-[2px] overflow-x-auto"
@@ -257,6 +257,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="building-2" aria-hidden="true"></i>
                   Dados da empresa
                 </h2>
               </div>
@@ -396,6 +397,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="users" aria-hidden="true"></i>
                   Usuários
                 </h2>
                 <button
@@ -430,11 +432,14 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="shield-check" aria-hidden="true"></i>
                   Permissões por perfil
                 </h2>
               </div>
               <div class="settings-card-body p-[24px]">
-                <label>Perfil<select id="permissionProfile"></select></label>
+                <div class="settings-profile-tools">
+                  <label for="permissionProfile">Perfil<select id="permissionProfile"></select></label>
+                </div>
                 <div class="settings-table-container">
                   <table class="settings-table">
                     <thead>
@@ -472,6 +477,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="boxes" aria-hidden="true"></i>
                   Padrões de estoque
                 </h2>
               </div>
@@ -540,14 +546,15 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="bell" aria-hidden="true"></i>
                   Minhas notificações
                 </h2>
               </div>
               <div class="settings-card-body p-[24px]">
-                <label
+                <label class="settings-check-row"
                   ><input type="checkbox" id="lowStockAlert" /> Receber
                   notificações de estoque baixo</label
-                ><label
+                ><label class="settings-check-row"
                   ><input type="checkbox" id="expirationAlert" /> Receber
                   notificações de validade</label
                 >
@@ -576,6 +583,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="key-round" aria-hidden="true"></i>
                   Alterar minha senha
                 </h2>
               </div>
@@ -653,6 +661,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="shield" aria-hidden="true"></i>
                   Verificação em duas etapas
                 </h2>
               </div>
@@ -679,6 +688,7 @@
                 class="settings-card-header min-h-[85px] [padding:20px_24px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
               >
                 <h2 class="mb-[5px] text-[#111827] text-[length:18px]">
+                  <i data-lucide="sliders-horizontal" aria-hidden="true"></i>
                   Minhas preferências
                 </h2>
               </div>
@@ -694,7 +704,7 @@
                     <option value="50">50</option>
                     <option value="100">100</option>
                   </select></label
-                ><label
+                ><label class="settings-check-row"
                   ><input type="checkbox" id="automaticLogout" /> Encerrar a
                   sessão após 15 minutos sem atividade</label
                 >

@@ -674,3 +674,70 @@
     }
 
 }
+/* Apresentacao da pagina de vendas e do formulario conectado. */
+.sales-page .sales-header { flex-wrap: wrap; }
+.sales-page .sales-period-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 22px 24px; margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 18px; background: white; box-shadow: 0 5px 20px rgb(15 23 42 / .04); }
+.sales-page .sales-period-filters label { font-size: 14px; font-weight: 600; color: #374151; }
+.sales-page :is(.sales-period-filters, .sales-filters) :is(input, select) { box-sizing: border-box; width: 100%; min-width: 0; height: 46px; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 10px; background: white; color: #374151; font: inherit; font-size: 14px; font-weight: 400; }
+.sales-page :is(input, select):focus-visible { outline: 2px solid #fed7aa; outline-offset: 2px; border-color: #c2410c; }
+.sales-page .sales-summary { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.sales-page .sales-summary-card { padding: 20px; gap: 14px; }
+.sales-page .sales-card-icon { width: 48px; height: 48px; border-radius: 14px; }
+.sales-page .sales-card-icon svg { width: 24px; height: 24px; }
+.sales-page .sales-card-info strong { font-size: clamp(20px, 1.8vw, 24px); line-height: 1.3; overflow-wrap: anywhere; }
+.sales-page .sales-tabs { padding: 6px; gap: 6px; border: 1px solid #e5e7eb; border-radius: 14px; background: white; }
+.sales-page .sales-tab { min-height: 44px; flex: 1 0 auto; padding: 10px 16px; font: inherit; font-size: 14px; font-weight: 600; }
+.sales-page .sales-tab.active { background: #fff0e9; color: #9a3412; }
+.sales-page .sales-tab:hover:not(.active) { background: #f8fafc; }
+.sales-page .sales-section-header h2 { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; line-height: 1.4; color: #111827; }
+.sales-page .sales-section-header h2 svg { width: 22px; height: 22px; flex-shrink: 0; color: #c2410c; }
+.sales-page .sales-section-header p { color: #64748b; line-height: 1.6; }
+.sales-page .sales-chart { overflow-x: auto; height: 300px; }
+.sales-page .chart-bars { min-width: 100%; width: max-content; gap: 12px; }
+.sales-page .sales-bar-group { min-width: 40px; flex: 1 0 40px; padding-top: 10px; }
+.sales-page .sales-bar { flex-shrink: 1; background: #fb923c; }
+.sales-page .sales-bar-group span { white-space: nowrap; }
+.sales-page .sales-chart:has(.catalog-status) { height: auto; min-height: 160px; align-items: stretch; }
+.sales-page .chart-bars:has(.catalog-status) { border: 0; width: 100%; }
+.sales-page .chart-bars .catalog-status { width: 100%; align-self: center; }
+.sales-page .sales-chart-footer { flex-wrap: wrap; gap: 12px; font-size: 14px; }
+.sales-page .payment-item { flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.sales-page .payment-item:first-child { margin-top: 0; }
+.sales-page .payment-item p { margin-top: 4px; font-size: 13px; color: #64748b; }
+.sales-page .payment-item strong { color: #374151; font-size: 14px; overflow-wrap: anywhere; }
+.sales-page .payment-progress { margin-bottom: 8px; height: 8px; }
+.sales-page .payment-progress > div { background: #ea580c; }
+.sales-page .sales-toolbar { flex-wrap: wrap; align-items: center; }
+.sales-page .sales-search { flex: 1 1 240px; height: 46px; background: white; }
+.sales-page .sales-search input { font: inherit; font-size: 14px; }
+.sales-page .sales-filters { flex: 1 1 360px; min-width: 0; }
+.sales-page .sales-filters select { flex: 1; }
+.sales-page .sales-table th { padding: 14px 20px; background: #f8fafc; }
+.sales-page .sales-table td { padding: 16px 20px; line-height: 1.5; }
+.sales-page .sales-table td[role="status"] { height: 140px; text-align: center; color: #64748b; }
+.sales-page .sale-status { white-space: nowrap; background: #f1f5f9; color: #475569; }
+.sales-page .sale-status[data-status="CONCLUIDO"] { background: #f0fdf4; color: #166534; }
+.sales-page .sale-status[data-status="ORCAMENTO"] { background: #fffbeb; color: #92400e; }
+.sales-page .sale-status[data-status="CANCELADO"] { background: #fef2f2; color: #991b1b; }
+.sales-page .sales-table-footer { padding: 18px 22px; flex-wrap: wrap; gap: 16px; background: #fafafa; }
+.sales-page .sales-pagination { align-items: center; flex-wrap: wrap; gap: 12px; }
+.sales-page .sales-table button, .sales-page .sales-pagination button, .sales-page .new-sale-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: auto; min-height: 44px; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 10px; background: white; color: #374151; font: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; cursor: pointer; }
+.sales-page .sales-table button:hover:not(:disabled), .sales-page .sales-pagination button:hover:not(:disabled) { background: #fff7ed; border-color: #c2410c; }
+.sales-page .new-sale-button { background: #c2410c; color: white; border-color: #c2410c; }
+.sales-page .new-sale-button:hover { background: #9a3412; border-color: #9a3412; transform: none; }
+.sales-page .new-sale-button svg { width: 18px; height: 18px; }
+.sales-page button:disabled { cursor: not-allowed; opacity: .5; }
+#saleModal .commerce-product-row { padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; margin: 16px 0; background: #fafafa; align-items: end; }
+#saleModal .sale-product-price { text-align: left; color: #64748b; font-size: 13px; }
+#saleModal .sale-summary-box { margin: 20px 0; padding: 18px; background: #fff7ed; border: 1px solid #fed7aa; }
+#saleModal .sale-summary-box p { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; line-height: 1.5; }
+#saleModal .sale-summary-box p + p { margin-top: 12px; padding-top: 12px; border-top: 1px solid #fed7aa; font-size: 18px; }
+#saleModal .catalog-actions { justify-content: flex-end; }
+#saleModal .catalog-note { margin: 16px 0; }
+@media (max-width: 600px) {
+    .sales-page .sales-period-filters { grid-template-columns: minmax(0, 1fr); padding: 18px; gap: 14px; }
+    .sales-page .sales-chart-card, .sales-page .payment-card { padding: 18px; }
+    .sales-page .sales-filters { flex-direction: column; flex-basis: 100%; }
+    .sales-page .sales-pagination { width: 100%; justify-content: space-between; gap: 8px; }
+    .sales-page :is(.sales-period-filters, .sales-filters) :is(input, select) { font-size: 16px; }
+}

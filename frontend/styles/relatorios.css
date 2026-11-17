@@ -5,6 +5,89 @@
     @apply [background:#f2672f];
 }
 
+/* Layout da consulta conectada e seus controles. */
+.reports-page .reports-header { flex-wrap: wrap; }
+.reports-page .reports-header-actions { align-items: center; }
+.reports-page .reports-filter-panel {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgb(15 23 42 / .04);
+}
+.reports-page .reports-filter-heading { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.reports-page .reports-filter-heading h2 { margin: 0 0 4px; font-size: 18px; font-weight: 600; color: #111827; }
+.reports-page .reports-filter-heading p { margin: 0; font-size: 13px; line-height: 1.6; color: #64748b; }
+.reports-page .reports-section-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: #fff0e9; color: #c2410c; }
+.reports-page .reports-section-icon svg { width: 22px; height: 22px; }
+.reports-page .reports-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.reports-page .report-filter-group { min-width: 0; }
+.reports-page :is(.reports-filters, .reports-header-actions) :is(input, select) {
+    box-sizing: border-box;
+    min-width: 0;
+    height: 46px;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: white;
+    color: #374151;
+    font: inherit;
+    font-size: 14px;
+}
+.reports-page :is(input, select):focus-visible { outline: 2px solid #fed7aa; outline-offset: 2px; border-color: #c2410c; }
+.reports-page .filter-buttons { grid-column: 1 / -1; justify-content: flex-end; padding-top: 18px; border-top: 1px solid #edf0f2; gap: 10px; }
+.reports-page :is(.reports-header-actions, .filter-buttons) button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    color: #374151;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s;
+}
+.reports-page button svg { width: 18px; height: 18px; flex-shrink: 0; }
+.reports-page :is(.reports-header-actions, .filter-buttons) button:hover:not(:disabled) { background: #f9fafb; border-color: #9ca3af; }
+.reports-page :is(#applyReportFilters, #exportReport) { background: #c2410c; border-color: #c2410c; color: #fff; }
+.reports-page :is(#applyReportFilters, #exportReport):hover:not(:disabled) { background: #9a3412; border-color: #9a3412; }
+.reports-page .report-table-header { gap: 14px; padding: 22px 24px; }
+.reports-page .report-table-header h2 { margin: 0 0 5px; font-weight: 600; line-height: 1.4; }
+.reports-page .report-table-header p { margin: 0; color: #64748b; line-height: 1.6; }
+.reports-page .report-table th { padding: 14px 20px; background: #f8fafc; }
+.reports-page .report-table td { padding: 16px 20px; line-height: 1.5; }
+.reports-page .report-table td[role="status"] { height: 150px; text-align: center; color: #64748b; }
+.reports-page .reports-footer { align-items: center; padding: 18px 24px; background: #fafafa; }
+.reports-page #reportCount { font-size: 13px; color: #64748b; }
+.reports-page .catalog-pagination { margin: 0; padding: 0; border: 0; }
+.reports-page .catalog-pagination button:hover:not(:disabled) { background: #fff7ed; border-color: #c2410c; }
+.reports-page #reportError:empty { display: none; }
+.reports-page #reportError:not(:empty) { padding: 14px 18px; border: 1px solid #fecaca; border-radius: 10px; background: #fef2f2; line-height: 1.5; }
+@media (max-width: 1100px) {
+    .reports-page .reports-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+    .reports-page .reports-filter-panel { padding: 18px; }
+    .reports-page .reports-filters { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .reports-page .reports-header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+    .reports-page #reportFormat { grid-column: 1 / -1; width: 100%; }
+    .reports-page .filter-buttons button { flex: 1 1 auto; }
+    .reports-page .report-table-header, .reports-page .reports-footer { padding: 18px; }
+    .reports-page .catalog-pagination { width: 100%; }
+}
+@media print {
+    .reports-page .reports-filter-panel, .reports-page #reportError, .reports-page .catalog-pagination { display: none !important; }
+    .reports-page .report-table-container { overflow: visible; }
+    .reports-page .report-table { min-width: 0; }
+}
+
 /* =========================================
    FILTROS
 ========================================= */
