@@ -983,3 +983,64 @@
     }
 
 }
+/* Central conectada: cards, filtros e conversas. */
+.help-page .help-header { flex-wrap: wrap; }
+.help-page .help-tabs { padding: 6px; gap: 6px; border: 1px solid #e5e7eb; border-radius: 14px; background: white; }
+.help-page .help-tab { min-height: 44px; flex: 1 0 auto; padding: 10px 16px; font: inherit; font-size: 14px; font-weight: 600; }
+.help-page .help-tab.active { color: #9a3412; background: #fff0e9; }
+.help-page .help-tab:hover:not(.active) { background: #f8fafc; }
+.help-page .help-card { min-width: 0; padding: 24px; border: 1px solid #e5e7eb; border-radius: 18px; background: white; box-shadow: 0 5px 20px rgb(15 23 42 / .04); }
+.help-page .help-card-heading { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.help-page .help-heading-icon { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #fff0e9; color: #c2410c; }
+.help-page .help-heading-icon svg { width: 22px; height: 22px; }
+.help-page .help-card h2 { margin: 0 0 4px; font-size: 18px; font-weight: 600; color: #111827; line-height: 1.4; }
+.help-page .help-card-heading p, .help-page .help-contact-card > p { color: #64748b; font-size: 14px; line-height: 1.6; }
+.help-page .catalog-tools { align-items: end; gap: 14px; margin-bottom: 24px; }
+.help-page .catalog-tools label { flex: 1 1 220px; color: #374151; font-size: 14px; font-weight: 600; }
+.help-page .catalog-tools :is(input, select) { box-sizing: border-box; width: 100%; min-width: 0; min-height: 46px; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 10px; background: white; color: #374151; font: inherit; font-weight: 400; }
+.help-page :is(input, select):focus-visible { outline: 2px solid #fed7aa; outline-offset: 2px; border-color: #c2410c; }
+.help-page .help-card button, .help-page .new-ticket-button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 10px; background: white; color: #374151; font: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; cursor: pointer; transition: background-color .15s, border-color .15s;
+}
+.help-page .help-card button:hover:not(:disabled) { background: #f8fafc; border-color: #9ca3af; }
+.help-page :is(.new-ticket-button, #openTicketFromHelp) { background: #c2410c; border-color: #c2410c; color: white; }
+.help-page :is(.new-ticket-button, #openTicketFromHelp):hover:not(:disabled) { background: #9a3412; border-color: #9a3412; transform: none; }
+.help-page button svg { width: 18px; height: 18px; flex-shrink: 0; }
+.help-page .help-card button:disabled { cursor: not-allowed; opacity: .5; }
+.help-page .faq-list { display: grid; gap: 12px; }
+.help-page .live-faq { padding: 0; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; overflow-wrap: anywhere; }
+.help-page .live-faq summary { padding: 18px; color: #374151; font-size: 15px; line-height: 1.5; border-radius: 12px; }
+.help-page .live-faq summary::marker { color: #c2410c; }
+.help-page .live-faq summary:hover { background: #f8fafc; }
+.help-page .live-faq[open] { border-color: #fed7aa; }
+.help-page .live-faq[open] summary { background: #fff7ed; color: #9a3412; }
+.help-page .live-faq p { margin: 16px 18px; font-size: 14px; color: #64748b; line-height: 1.7; }
+.help-page .live-faq .catalog-actions { padding: 0 18px 18px; }
+.help-page .tickets-table-container { border: 1px solid #e5e7eb; border-radius: 12px; }
+.help-page .tickets-table th { padding: 14px 16px; text-align: left; font-size: 12px; color: #64748b; background: #f8fafc; border-bottom: 1px solid #e5e7eb; }
+.help-page .tickets-table td { padding: 16px; color: #475569; font-size: 14px; line-height: 1.5; border-bottom: 1px solid #edf0f2; }
+.help-page .tickets-table tbody tr:last-child td { border-bottom: 0; }
+.help-page .tickets-table tbody tr:hover { background: #fafafa; }
+.help-page .tickets-table button { white-space: nowrap; }
+.help-page .tickets-table td[role="status"] { height: 140px; text-align: center; color: #64748b; }
+.help-page .support-badge { display: inline-flex; padding: 6px 10px; border-radius: 20px; background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.help-page .support-badge:is([data-status="ABERTO"], [data-priority="BAIXA"]) { background: #eff6ff; color: #1d4ed8; }
+.help-page .support-badge:is([data-status="EM_ANDAMENTO"], [data-priority="MEDIA"]) { background: #fffbeb; color: #92400e; }
+.help-page .support-badge[data-status="RESOLVIDO"] { background: #f0fdf4; color: #166534; }
+.help-page .support-badge:is([data-priority="ALTA"], [data-priority="CRITICA"]) { background: #fef2f2; color: #991b1b; }
+.help-page #supportContact { margin: 20px 0; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; background: #f8fafc; overflow-wrap: anywhere; color: #64748b; line-height: 1.6; }
+.help-page #supportContact a { color: #9a3412; text-underline-offset: 3px; }
+.help-page #helpError:empty { display: none; }
+.help-page #helpError:not(:empty) { padding: 14px 18px; border: 1px solid #fecaca; border-radius: 10px; background: #fef2f2; line-height: 1.5; }
+.support-dialog .support-messages article { padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; }
+.support-dialog .support-messages small { display: block; margin-top: 4px; color: #64748b; font-size: 12px; }
+.support-dialog .support-attachments { margin-bottom: 24px; }
+.support-dialog .support-attachments button { max-width: 100%; overflow-wrap: anywhere; text-align: left; margin: 8px 0; }
+.support-dialog #ticketStatusForm { padding-top: 20px; border-top: 1px solid #e5e7eb; }
+:is(#ticketModal, .support-dialog) input[type="file"]::file-selector-button { margin-right: 12px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: #f8fafc; color: #374151; font: inherit; cursor: pointer; }
+@media (max-width: 600px) {
+    .help-page .help-card { padding: 18px; }
+    .help-page .catalog-tools > button { flex: 1 1 100%; }
+    .help-page .catalog-tools :is(input, select) { font-size: 16px; }
+    .help-page #openTicketFromHelp { width: 100%; }
+}

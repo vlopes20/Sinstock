@@ -106,10 +106,10 @@
           <button
             type="button"
             id="sessionLogout"
-            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            class="sidebar-logout"
           >
             <i data-lucide="log-out" aria-hidden="true"></i>
-            <span>Sair do sistema</span>
+            <span>Sair</span>
           </button>
         </div>
       </aside>
@@ -200,7 +200,7 @@
             ====================================== -->
 
         <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+          class="content help-page [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
         >
           <div
             class="help-header w-full flex items-center justify-between gap-[20px] mb-[25px]"
@@ -220,7 +220,7 @@
               id="openTicketModal"
               type="button"
             >
-              Novo chamado
+              <i data-lucide="plus" aria-hidden="true"></i>Novo chamado
             </button>
           </div>
           <div class="help-tabs flex gap-[8px] mb-[18px] overflow-x-auto">
@@ -244,6 +244,10 @@
           <p id="helpError" role="alert"></p>
           <div class="help-tab-content active hidden" id="helpCenter">
             <div class="help-card">
+              <div class="help-card-heading">
+                <span class="help-heading-icon"><i data-lucide="book-open" aria-hidden="true"></i></span>
+                <div><h2>Central de ajuda</h2><p>Encontre respostas para as dúvidas do dia a dia.</p></div>
+              </div>
               <div class="catalog-tools">
                 <label
                   >Pesquisar orientações<input
@@ -251,7 +255,7 @@
                     id="helpSearch"
                     placeholder="Como registrar uma entrada?" /></label
                 ><button type="button" id="newFaq" data-admin-only>
-                  Nova orientação
+                  <i data-lucide="plus" aria-hidden="true"></i>Nova orientação
                 </button>
               </div>
               <div class="faq-list" id="faqList"></div>
@@ -259,10 +263,15 @@
           </div>
           <div class="help-tab-content hidden" id="tickets">
             <div class="help-card">
+              <div class="help-card-heading">
+                <span class="help-heading-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
+                <div><h2>Acompanhe seus chamados</h2><p>Consulte o status e continue a conversa com o suporte.</p></div>
+              </div>
               <div class="catalog-tools">
                 <label
                   >Buscar chamado<input
                     id="ticketSearch"
+                    placeholder="Busque por código ou assunto"
                     type="search" /></label
                 ><label
                   >Status<select id="ticketStatusFilter">
@@ -297,15 +306,18 @@
             </div>
           </div>
           <div class="help-tab-content hidden" id="contact">
-            <div class="help-card">
-              <h2>Contato com o suporte</h2>
+            <div class="help-card help-contact-card">
+              <div class="help-card-heading">
+                <span class="help-heading-icon"><i data-lucide="headset" aria-hidden="true"></i></span>
+                <div><h2>Contato com o suporte</h2><p>Conte com a administração para ajudar.</p></div>
+              </div>
               <p>
                 Abra um chamado para manter o histórico e conversar com a
                 administração.
               </p>
               <div id="supportContact"></div>
               <button type="button" id="openTicketFromHelp">
-                Abrir chamado
+                <i data-lucide="message-square-plus" aria-hidden="true"></i>Abrir chamado
               </button>
             </div>
           </div>

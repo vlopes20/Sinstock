@@ -255,7 +255,7 @@
   const newProfile = document.createElement('button');
   newProfile.type = 'button';
   newProfile.textContent = 'Novo perfil';
-  $('permissionProfile').after(newProfile);
+  $('permissionProfile').parentElement.after(newProfile);
   newProfile.onclick = () => {
     const overlay = D.dialog(
       'Novo perfil',

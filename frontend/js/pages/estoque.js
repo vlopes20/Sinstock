@@ -125,13 +125,13 @@
             D.money(product.custo_medio) +
             '</td><td>' +
             D.money(physical * Number(product.custo_medio)) +
-            '</td><td>' +
+            '</td><td><span class="stock-status ' + (available === 0 ? 'out' : available <= minimum ? 'low' : 'normal') + '">' +
             (available === 0
               ? 'Sem estoque'
               : available <= minimum
                 ? 'Estoque baixo'
                 : 'Normal') +
-            '</td><td><button type="button" class="stock-actions-button" data-lots="' +
+            '</span></td><td><button type="button" class="stock-actions-button" data-lots="' +
             product.id +
             '">Lotes</button></td></tr>'
           );
@@ -170,9 +170,9 @@
             D.text(log.lotes?.numero_lote || 'Sem lote') +
             ' · ' +
             D.text(log.filiais.nome) +
-            '</small></td><td>' +
+            '</small></td><td><span class="stock-label" data-type="' + D.text(log.tipo_movimentacao) + '">' +
             D.text(log.tipo_movimentacao) +
-            '</td><td>' +
+            '</span></td><td>' +
             D.number(log.quantidade) +
             '<small>' +
             D.number(log.saldo_anterior) +
@@ -223,9 +223,9 @@
             date(note.data_emissao) +
             '</td><td>' +
             D.money(note.total) +
-            '</td><td>' +
-            D.text(note.status) +
-            '</td><td><button type="button" data-note="' +
+            '</td><td><span class="stock-label" data-status="' + D.text(note.status) + '">' +
+            D.text({ PENDENTE: 'Pendente', RECEBIDA: 'Recebida', CANCELADA: 'Cancelada' }[note.status] || note.status) +
+            '</span></td><td><button type="button" data-note="' +
             note.id +
             '">Detalhes</button></td></tr>',
         )

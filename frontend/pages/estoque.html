@@ -105,10 +105,10 @@
           <button
             type="button"
             id="sessionLogout"
-            class="menu-item sidebar-logout relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            class="sidebar-logout"
           >
             <i data-lucide="log-out" aria-hidden="true"></i>
-            <span>Sair do sistema</span>
+            <span>Sair</span>
           </button>
         </div>
       </aside>
@@ -199,7 +199,7 @@
             ====================================== -->
 
         <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
+          class="content stock-page [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
         >
           <!-- ==============================
          CABEÇALHO
@@ -240,12 +240,11 @@
     =============================== -->
 
           <p id="stockError" class="demo-error" role="alert"></p>
-          <div class="catalog-tools">
-            <label for="stockBranch">Filial</label
-            ><select id="stockBranch" required></select
-            ><button type="button" data-catalog="filiais">
-              Gerenciar filiais</button
-            ><button type="button" id="refreshStock">Atualizar</button>
+          <div class="catalog-tools stock-branch-tools">
+            <label for="stockBranch">Filial<select id="stockBranch" required></select></label>
+            <button type="button" data-catalog="filiais">
+              <i data-lucide="building-2" aria-hidden="true"></i>Gerenciar filiais</button
+            ><button type="button" id="refreshStock"><i data-lucide="refresh-cw" aria-hidden="true"></i>Atualizar</button>
           </div>
           <div
             class="stock-summary w-full grid grid-cols-[repeat(4,_minmax(0,_1fr))] gap-[20px] mb-[28px]"
@@ -462,7 +461,7 @@
                       <th>Custo unitário</th>
                       <th>Valor estoque</th>
                       <th>Status</th>
-                      <th></th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
 
@@ -653,7 +652,7 @@
               >
                 <option value="">Selecione</option></select
               ><button type="button" id="scanMovementProduct">
-                Ler pela câmera
+                <i data-lucide="scan-barcode" aria-hidden="true"></i>Ler pela câmera
               </button>
             </div>
           </div>
