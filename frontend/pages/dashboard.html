@@ -101,11 +101,7 @@
         <div
           class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
         >
-          <button
-            type="button"
-            id="sessionLogout"
-            class="sidebar-logout"
-          >
+          <button type="button" id="sessionLogout" class="sidebar-logout">
             <i data-lucide="log-out" aria-hidden="true"></i>
             <span>Sair</span>
           </button>
@@ -140,7 +136,7 @@
 
             <input
               type="text"
-              placeholder="Buscar produtos, pedidos, clientes..."
+              placeholder="Buscar produtos, fornecedores, lotes..."
               class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
             />
 
@@ -169,9 +165,9 @@
               <i data-lucide="bell"></i>
 
               <span
+                hidden
                 class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
               >
-                1
               </span>
             </div>
 
@@ -181,10 +177,10 @@
               <div
                 class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
               >
-                <span aria-label="Usuário">DE</span>
+                <span aria-label="Usuário"></span>
               </div>
 
-              <span> Vini </span>
+              <span></span>
 
               <span class="user-arrow text-[#64748b] relative top-[4px]"
                 ><i data-lucide="chevron-down"></i
@@ -197,176 +193,150 @@
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-        <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
-        >
-          <div class="welcome mb-[28px]">
-            <h1
-              id="dashboardWelcome"
-              class="text-[length:39px] mb-[8px] tracking-[-1px]"
-            >
-              Resumo do sistema
-            </h1>
-            <p class="text-[length:18px] text-[#7c8493]">
-              Estoque atual e desempenho no período selecionado.
-            </p>
+        <section class="content dashboard-page">
+          <header class="welcome">
+            <h1 id="dashboardWelcome">Visão geral</h1>
+            <p>Estoque atual e desempenho no período selecionado.</p>
+          </header>
+
+          <div class="dashboard-toolbar">
+            <div class="catalog-tools dashboard-filters">
+              <label
+                >Filial
+                <select id="dashboardBranch" disabled>
+                  <option value="">Todas as filiais</option>
+                </select>
+              </label>
+              <label
+                >Período
+                <select id="dashboardPeriod" disabled>
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="30">Últimos 30 dias</option>
+                  <option value="90">Últimos 90 dias</option>
+                </select>
+              </label>
+              <button type="button" id="refreshDashboard" disabled>
+                <i data-lucide="refresh-cw" aria-hidden="true"></i> Atualizar
+              </button>
+            </div>
+            <p id="dashboardLiveStatus" class="catalog-note" role="status"></p>
           </div>
-          <div class="catalog-tools dashboard-filters">
-            <label>Filial<select id="dashboardBranch"></select></label
-            ><label
-              >Período<select id="dashboardPeriod">
-                <option value="7">Últimos 7 dias</option>
-                <option value="30">Últimos 30 dias</option>
-                <option value="90">Últimos 90 dias</option>
-              </select></label
-            ><button type="button" id="refreshDashboard">Atualizar</button>
-          </div>
-          <p id="dashboardError" role="alert"></p>
-          <div
-            class="summary-cards grid grid-cols-[repeat(_auto-fit,_minmax(260px,_1fr)_)] gap-[clamp(16px,_2vw,_28px)] mb-[30px]"
-          >
-            <article
-              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
-            >
-              <div class="card-information flex flex-col">
-                <span
-                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
-                  >Pedidos no período</span
-                ><strong
-                  id="dashboardOrders"
-                  class="text-[length:32px] mb-[12px]"
-                  >—</strong
-                >
-                <p class="text-[#7c8493] text-[length:15px]">
-                  Inclui reservas e cancelamentos
-                </p>
-              </div>
-            </article>
-            <article
-              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
-            >
-              <div class="card-information flex flex-col">
-                <span
-                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
-                  >Estoque disponível</span
-                ><strong
-                  id="dashboardStock"
-                  class="text-[length:32px] mb-[12px]"
-                  >—</strong
-                >
-                <p class="text-[#7c8493] text-[length:15px]">
-                  Quantidade física menos reservas
-                </p>
-              </div>
-            </article>
-            <article
-              class="summary-card min-h-[158px] [background:#ffffff] [border:1px_solid_#dfdfdf] rounded-[6px] flex items-center [padding:28px_24px] relative [box-shadow:0_7px_22px_rgba(15,_23,_42,_0.05)]"
-            >
-              <div class="card-information flex flex-col">
-                <span
-                  class="card-title text-[length:17px] text-[#4b5563] mb-[6px]"
-                  >Vendas confirmadas</span
-                ><strong
-                  id="dashboardRevenue"
-                  class="text-[length:32px] mb-[12px]"
-                  >—</strong
-                >
-                <p class="text-[#7c8493] text-[length:15px]">
-                  Faturamento no período
-                </p>
-              </div>
-            </article>
-          </div>
-          <div
-            class="dashboard-grid grid grid-cols-[minmax(0,_1.6fr)_minmax(320px,_1fr)] gap-[24px]"
-          >
-            <article
-              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
-            >
-              <div
-                class="card-header flex items-center justify-between mb-[20px]"
-              >
-                <h2 class="text-[length:18px]">Vendas por dia</h2>
-                <button type="button" id="showSalesData">Ver dados</button>
-              </div>
-              <div class="chart h-[290px] flex relative">
-                <div
-                  class="chart-area relative [flex:1] h-full"
-                  id="dashboardChart"
-                >
-                  <p>Carregando...</p>
+
+          <p id="dashboardError" class="catalog-status" role="alert" hidden></p>
+          <p id="dashboardLoading" class="catalog-status" role="status">
+            Carregando resumo...
+          </p>
+
+          <div id="dashboardResults" hidden>
+            <div class="summary-cards">
+              <article class="summary-card">
+                <span class="card-icon orders-icon"
+                  ><i data-lucide="clipboard-list" aria-hidden="true"></i
+                ></span>
+                <div class="card-information">
+                  <h2>Pedidos no período</h2>
+                  <strong id="dashboardOrders">—</strong>
+                  <p>Inclui reservas e cancelamentos</p>
                 </div>
-              </div>
-              <div
-                class="chart-total h-[58px] [border:1px_solid_#e5e7eb] rounded-[12px] mt-[14px] flex items-center justify-between [padding:0_14px] text-[#64748b]"
-              >
-                <span>Total do período</span>
-                <div class="total-value flex items-center gap-[25px]">
-                  <strong
-                    id="dashboardTotal"
-                    class="text-[#111827] text-[length:25px]"
-                    >—</strong
-                  >
+              </article>
+              <article class="summary-card">
+                <span class="card-icon stock-icon"
+                  ><i data-lucide="boxes" aria-hidden="true"></i
+                ></span>
+                <div class="card-information">
+                  <h2>Estoque disponível</h2>
+                  <strong id="dashboardStock">—</strong>
+                  <p>Quantidade física menos reservas</p>
                 </div>
-              </div>
-            </article>
-            <article
-              class="alerts-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] overflow-hidden"
-            >
-              <div
-                class="alerts-header h-[84px] flex items-center justify-between [padding:0_28px] [border-bottom:1px_solid_#e5e7eb]"
-              >
-                <strong>Alertas atuais</strong>
-              </div>
-              <div id="dashboardAlerts"></div>
-            </article>
-          </div>
-          <div
-            class="dashboard-grid grid grid-cols-[minmax(0,_1.6fr)_minmax(320px,_1fr)] gap-[24px]"
-          >
-            <article
-              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
-            >
-              <div
-                class="card-header flex items-center justify-between mb-[20px]"
-              >
-                <h2 class="text-[length:18px]">Estoque por categoria</h2>
-              </div>
-              <div class="catalog-table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Categoria</th>
-                      <th>Disponível</th>
-                      <th>Valor físico</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dashboardCategories"></tbody>
-                </table>
-              </div>
-            </article>
-            <article
-              class="chart-card [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[22px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.05)] p-[24px]"
-            >
-              <div
-                class="card-header flex items-center justify-between mb-[20px]"
-              >
-                <h2 class="text-[length:18px]">Movimentações recentes</h2>
-              </div>
-              <div class="catalog-table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Produto</th>
-                      <th>Operação</th>
-                      <th>Quantidade</th>
-                      <th>Responsável</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dashboardRecent"></tbody>
-                </table>
-              </div>
-            </article>
+              </article>
+              <article class="summary-card">
+                <span class="card-icon revenue-icon"
+                  ><i data-lucide="badge-dollar-sign" aria-hidden="true"></i
+                ></span>
+                <div class="card-information">
+                  <h2>Faturamento no período</h2>
+                  <strong id="dashboardRevenue">—</strong>
+                  <p>Vendas confirmadas</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="dashboard-grid">
+              <article class="dashboard-panel">
+                <div class="panel-heading catalog-actions">
+                  <h2>Vendas por dia</h2>
+                  <button type="button" id="showSalesData">Ver dados</button>
+                </div>
+                <div id="dashboardChart"></div>
+                <div class="sales-total">
+                  <span>Total do período</span>
+                  <strong id="dashboardTotal">—</strong>
+                </div>
+              </article>
+              <article class="dashboard-panel">
+                <div class="panel-heading"><h2>Alertas atuais</h2></div>
+                <div id="dashboardAlerts">
+                  <button type="button" class="alert-item" data-alert="low">
+                    <span
+                      ><strong>Estoque baixo</strong
+                      ><small>Saldos no mínimo ou abaixo dele</small></span
+                    >
+                    <b id="lowCount"></b
+                    ><i data-lucide="chevron-right" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="alert-item" data-alert="expiry">
+                    <span
+                      ><strong>Validade dos lotes</strong
+                      ><small id="expiryDescription"></small
+                    ></span>
+                    <b id="expiryCount"></b
+                    ><i data-lucide="chevron-right" aria-hidden="true"></i>
+                  </button>
+                  <a class="alert-item" href="pedidos.html">
+                    <span
+                      ><strong>Reservas abertas</strong
+                      ><small>Pedidos reservados no período</small></span
+                    >
+                    <b id="ordersCount"></b
+                    ><i data-lucide="chevron-right" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </article>
+            </div>
+
+            <div class="dashboard-grid dashboard-tables">
+              <article class="dashboard-panel">
+                <div class="panel-heading"><h2>Estoque por categoria</h2></div>
+                <div class="catalog-table-container">
+                  <table aria-label="Estoque por categoria">
+                    <thead>
+                      <tr>
+                        <th>Categoria</th>
+                        <th>Disponível</th>
+                        <th>Valor físico</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardCategories"></tbody>
+                  </table>
+                </div>
+              </article>
+              <article class="dashboard-panel">
+                <div class="panel-heading"><h2>Movimentações recentes</h2></div>
+                <div class="catalog-table-container">
+                  <table aria-label="Movimentações recentes">
+                    <thead>
+                      <tr>
+                        <th>Produto</th>
+                        <th>Operação</th>
+                        <th>Quantidade</th>
+                        <th>Responsável</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardRecent"></tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
           </div>
         </section>
       </main>
@@ -377,9 +347,5 @@
     <script src="../assets/vendor/lucide.min.js"></script>
     <script src="../js/shared/layout.js"></script>
     <script src="../js/pages/dashboard.js"></script>
-
-    <script>
-      if (window.lucide) window.lucide.createIcons();
-    </script>
   </body>
 </html>
