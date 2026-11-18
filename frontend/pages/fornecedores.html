@@ -36,7 +36,7 @@
         <nav class="sidebar-menu flex flex-col items-center gap-[10px] pt-0">
           <a
             href="dashboard.html"
-            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
           >
             <i data-lucide="layout-dashboard"></i>
             Visão Geral
@@ -76,7 +76,8 @@
 
           <a
             href="fornecedores.html"
-            class="menu-item relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
+            aria-current="page"
+            class="menu-item active relative h-[58px] w-[85%] flex items-center gap-[12px] p-[34px] text-[#ffffff] no-underline text-[length:18px] [transition:0.2s] rounded-[6px]"
           >
             <i data-lucide="truck"></i>
             Fornecedores
@@ -102,11 +103,7 @@
         <div
           class="sidebar-bottom mt-auto items-center justify-center flex [border-top:1px_solid_#7d7f85] [padding:10px_0]"
         >
-          <button
-            type="button"
-            id="sessionLogout"
-            class="sidebar-logout"
-          >
+          <button type="button" id="sessionLogout" class="sidebar-logout">
             <i data-lucide="log-out" aria-hidden="true"></i>
             <span>Sair</span>
           </button>
@@ -141,7 +138,7 @@
 
             <input
               type="text"
-              placeholder="Buscar produtos, pedidos, clientes..."
+              placeholder="Buscar produtos, fornecedores, lotes..."
               class="[flex:1] h-full [border:none] [outline:none] text-[length:17px] text-[#334155]"
             />
 
@@ -170,10 +167,9 @@
               <i data-lucide="bell"></i>
 
               <span
+                hidden
                 class="notification-number absolute top-[-10px] right-[-12px] w-[22px] h-[22px] flex items-center justify-center rounded-[50%] [background:#ff5b16] text-[white] text-[length:12px] [border:2px_solid_white]"
-              >
-                1
-              </span>
+              ></span>
             </div>
 
             <div
@@ -182,10 +178,10 @@
               <div
                 class="avatar w-[50px] h-[50px] rounded-[50%] overflow-hidden [background:#f1f5f9]"
               >
-                <span aria-label="Usuário">DE</span>
+                <span aria-label="Usuário"></span>
               </div>
 
-              <span> Vini </span>
+              <span></span>
 
               <span class="user-arrow text-[#64748b] relative top-[4px]"
                 ><i data-lucide="chevron-down"></i
@@ -198,211 +194,102 @@
                  CONTEÚDO DA DASHBOARD
             ====================================== -->
 
-        <section
-          class="content [padding:clamp(20px,_3vw,_45px)] [background:linear-gradient(_135deg,_#0000000c,_#ffffff_)]"
-        >
-          <!-- =====================================
-         CABEÇALHO
-    ====================================== -->
-
-          <div
-            class="suppliers-header w-full flex items-center justify-between gap-[20px] mb-[28px]"
-          >
-            <div>
-              <h1
-                class="text-[length:clamp(28px,_2.5vw,_36px)] mb-[7px] text-[#111827]"
-              >
-                Fornecedores
-              </h1>
-
-              <p class="text-[#7c8493] text-[length:16px]">
-                Gerencie seus fornecedores e contatos comerciais.
-              </p>
+        <section class="content suppliers-page">
+          <header class="suppliers-header">
+            <div class="welcome">
+              <h1>Fornecedores</h1>
+              <p>Gerencie seus fornecedores e contatos comerciais.</p>
             </div>
-
             <button
-              class="new-supplier-button h-[50px] [padding:0_22px] [border:none] rounded-[12px] [background:#fd6423] text-[#ffffff] flex items-center gap-[9px] text-[length:15px] font-semibold cursor-pointer [transition:0.2s]"
+              type="button"
+              class="supplier-primary"
               id="openSupplierModal"
             >
-              <span class="text-[length:23px]"
-                ><i
-                  class="converted-icon"
-                  data-lucide="plus"
-                  aria-hidden="true"
-                ></i
-              ></span>
-              Novo fornecedor
+              <i data-lucide="plus" aria-hidden="true"></i> Novo fornecedor
             </button>
-          </div>
-
-          <!-- =====================================
-         CARDS
-    ====================================== -->
-
-          <div
-            class="suppliers-summary grid grid-cols-[repeat(4,_minmax(0,_1fr))] gap-[20px] mb-[28px]"
-          >
-            <article
-              class="supplier-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
-            >
-              <div
-                class="supplier-card-icon total w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#eaf2ff] [background:#415683]"
-              >
-                <i class="converted-icon" data-lucide="truck" aria-hidden="true"></i>
-              </div>
-
-              <div>
-                <span class="text-[#64748b] text-[length:14px]"
-                  >Total de fornecedores</span
-                >
-
-                <strong class="text-[#111827] text-[length:25px]">—</strong>
-
-                <small class="text-[#94a3b8] text-[length:12px]">
-                  Fornecedores cadastrados
-                </small>
+          </header>
+          <div class="suppliers-summary">
+            <article class="summary-card supplier-summary-card">
+              <span class="card-icon stock-icon"
+                ><i data-lucide="truck" aria-hidden="true"></i
+              ></span>
+              <div class="card-information">
+                <h2>Total de fornecedores</h2>
+                <strong data-summary="total">—</strong>
               </div>
             </article>
-
-            <article
-              class="supplier-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
-            >
-              <div
-                class="supplier-card-icon active w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px]"
-              >
-                <i class="converted-icon" data-lucide="user-check" aria-hidden="true"></i>
-              </div>
-
-              <div>
-                <span class="text-[#64748b] text-[length:14px]"
-                  >Fornecedores ativos</span
-                >
-
-                <strong class="text-[#111827] text-[length:25px]">—</strong>
-
-                <small class="text-[#94a3b8] text-[length:12px]">
-                  Disponíveis para compras
-                </small>
+            <article class="summary-card supplier-summary-card">
+              <span class="card-icon revenue-icon"
+                ><i data-lucide="user-check" aria-hidden="true"></i
+              ></span>
+              <div class="card-information">
+                <h2>Fornecedores ativos</h2>
+                <strong data-summary="ativos">—</strong>
               </div>
             </article>
-
-            <article
-              class="supplier-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
-            >
-              <div
-                class="supplier-card-icon pending w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#fff5df] [background:#dd951a]"
-              >
-                <i class="converted-icon" data-lucide="clock" aria-hidden="true"></i>
-              </div>
-
-              <div>
-                <span class="text-[#64748b] text-[length:14px]"
-                  >Recebimentos pendentes</span
-                >
-
-                <strong class="text-[#111827] text-[length:25px]">—</strong>
-
-                <small class="text-[#94a3b8] text-[length:12px]">
-                  Notas aguardando recebimento
-                </small>
+            <article class="summary-card supplier-summary-card">
+              <span class="card-icon orders-icon"
+                ><i data-lucide="clock" aria-hidden="true"></i
+              ></span>
+              <div class="card-information">
+                <h2>Recebimentos pendentes</h2>
+                <strong data-summary="pendentes">—</strong>
               </div>
             </article>
-
-            <article
-              class="supplier-summary-card min-h-[125px] p-[22px] flex items-center gap-[18px] [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
-            >
-              <div
-                class="supplier-card-icon delayed w-[60px] h-[60px] shrink-0 flex items-center justify-center rounded-[16px] text-[length:26px] text-[#fff0e9] [background:#b64e2e]"
-              >
-                <i class="converted-icon" data-lucide="map-pin" aria-hidden="true"></i>
-              </div>
-
-              <div>
-                <span class="text-[#64748b] text-[length:14px]"
-                  >Com localização</span
-                >
-
-                <strong class="text-[#111827] text-[length:25px]">—</strong>
-
-                <small class="text-[#94a3b8] text-[length:12px]">
-                  Coordenadas cadastradas
-                </small>
+            <article class="summary-card supplier-summary-card">
+              <span class="card-icon location-icon"
+                ><i data-lucide="map-pin" aria-hidden="true"></i
+              ></span>
+              <div class="card-information">
+                <h2>Com localização</h2>
+                <strong data-summary="localizados">—</strong>
               </div>
             </article>
           </div>
 
-          <!-- =====================================
-         CARD PRINCIPAL
-    ====================================== -->
-
-          <div class="catalog-tools">
+          <div class="catalog-tools supplier-tools">
             <button type="button" id="openNearbyModal">
-              Fornecedores próximos</button
-            ><button type="button" data-catalog="categorias">
-              Gerenciar categorias</button
-            ><button type="button" data-catalog="filiais">
-              Gerenciar filiais</button
-            ><button type="button" data-catalog="clientes">
+              <i data-lucide="map-pin" aria-hidden="true"></i> Fornecedores
+              próximos
+            </button>
+            <button type="button" data-catalog="categorias">
+              Gerenciar categorias
+            </button>
+            <button type="button" data-catalog="filiais">
+              Gerenciar filiais
+            </button>
+            <button type="button" data-catalog="clientes">
               Gerenciar clientes
             </button>
           </div>
-          <div
-            class="suppliers-card w-full [background:#ffffff] [border:1px_solid_#e5e7eb] rounded-[18px] overflow-hidden [box-shadow:0_5px_20px_rgba(15,_23,_42,_0.04)]"
-          >
-            <!-- FILTROS -->
-
-            <div
-              class="suppliers-toolbar min-h-[88px] [padding:18px_22px] flex items-center justify-between gap-[20px] [border-bottom:1px_solid_#e5e7eb]"
-            >
-              <div
-                class="supplier-search w-[min(410px,_100%)] h-[50px] [padding:0_16px] flex items-center [border:1px_solid_#dfe3e8] rounded-[11px] [background:white]"
+          <div class="suppliers-card">
+            <div class="catalog-tools suppliers-toolbar">
+              <label
+                >Buscar fornecedor
+                <span class="supplier-search"
+                  ><i data-lucide="search" aria-hidden="true"></i
+                  ><input
+                    type="search"
+                    id="supplierSearch"
+                    placeholder="Nome, CNPJ ou contato"
+                /></span>
+              </label>
+              <label
+                >Categoria<select id="supplierCategoryFilter">
+                  <option value="">Todas</option>
+                </select></label
               >
-                <span class="mr-[10px] text-[#64748b] text-[length:25px]"
-                  ><i
-                    class="converted-icon"
-                    data-lucide="search"
-                    aria-hidden="true"
-                  ></i
-                ></span>
-
-                <input
-                  type="text"
-                  id="supplierSearch"
-                  placeholder="Buscar fornecedor, CNPJ ou contato..."
-                  class="[flex:1] min-w-[0] h-full [border:none] [outline:none] [background:transparent] text-[length:14px]"
-                />
-              </div>
-
-              <div class="supplier-filters flex gap-[12px]">
-                <select
-                  id="supplierCategoryFilter"
-                  class="min-w-[175px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
-                >
-                  <option value="">Carregando...</option>
-                </select>
-
-                <select
-                  id="supplierStatusFilter"
-                  class="min-w-[175px] h-[50px] [padding:0_14px] [border:1px_solid_#dfe3e8] rounded-[11px] [background:white] text-[#475569] [outline:none]"
-                >
-                  <option value="">Todos os status</option>
-
+              <label
+                >Status<select id="supplierStatusFilter">
+                  <option value="">Todos</option>
                   <option value="ativo">Ativo</option>
-
                   <option value="inativo">Inativo</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- =====================================
-             TABELA
-        ====================================== -->
-
-            <div class="suppliers-table-container w-full overflow-x-auto">
-              <table
-                class="suppliers-table w-full min-w-[1200px] border-collapse"
+                </select></label
               >
-                <thead class="[background:#fafafa]">
+            </div>
+            <div class="suppliers-table-container">
+              <table class="suppliers-table" aria-label="Fornecedores">
+                <thead>
                   <tr>
                     <th>Fornecedor</th>
                     <th>CNPJ</th>
@@ -413,514 +300,224 @@
                     <th>Ações</th>
                   </tr>
                 </thead>
-
                 <tbody id="suppliersTableBody">
                   <tr>
-                    <td colspan="9">Carregando...</td>
+                    <td colspan="7" role="status">
+                      Carregando fornecedores...
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-
-            <!-- =====================================
-             RODAPÉ
-        ====================================== -->
-
-            <div
-              class="suppliers-footer min-h-[70px] [padding:0_22px] flex items-center justify-between text-[#7c8493] text-[length:13px]"
-            >
-              <span>Carregando...</span>
-
-              <div class="suppliers-pagination flex gap-[7px]"></div>
+            <div class="suppliers-footer" hidden>
+              <span id="supplierCount" role="status"></span>
+              <div class="catalog-pagination suppliers-pagination"></div>
+              <button type="button" id="retrySuppliers" hidden>
+                Tentar novamente
+              </button>
             </div>
           </div>
         </section>
         <div
-          class="supplier-modal-overlay fixed [inset:0] z-[1000] hidden items-center justify-center p-[20px] [background:rgba(15,_23,_42,_0.55)]"
+          class="catalog-modal-overlay supplier-modal-overlay"
           id="supplierModal"
+          aria-labelledby="supplierModalTitle"
         >
-          <div
-            class="supplier-modal w-[min(720px,_100%)] max-h-[92vh] overflow-y-auto p-[26px] [background:white] rounded-[20px] [box-shadow:0_25px_70px_rgba(0,_0,_0,_0.2)]"
-          >
-            <!-- CABEÇALHO -->
-
-            <div
-              class="supplier-modal-header flex justify-between gap-[20px] mb-[25px]"
-            >
-              <div>
-                <h2 id="supplierModalTitle" class="mb-[5px] text-[length:23px]">
-                  Novo fornecedor
-                </h2>
-
-                <p class="text-[#94a3b8] text-[length:14px]">
-                  Informe os dados comerciais do fornecedor.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                class="close-supplier-modal w-[38px] h-[38px] shrink-0 [border:none] rounded-[9px] [background:#f3f4f6] text-[length:23px] cursor-pointer"
-                id="closeSupplierModal"
-                aria-label="Fechar"
-              >
-                <i
-                  class="converted-icon"
-                  data-lucide="x"
-                  aria-hidden="true"
-                ></i>
+          <div class="product-modal">
+            <div class="product-modal-header">
+              <h2 id="supplierModalTitle">Novo fornecedor</h2>
+              <button type="button" id="closeSupplierModal" aria-label="Fechar">
+                Fechar
               </button>
             </div>
-
-            <!-- FORM -->
-
-            <form id="supplierForm">
-              <input type="hidden" id="supplierId" />
-
-              <!-- RAZÃO SOCIAL -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="companyName"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Razão social *
-                </label>
-
-                <input
-                  type="text"
-                  id="companyName"
-                  placeholder="Ex: Distribuidora ABC Ltda."
-                  required
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                />
-              </div>
-
-              <!-- NOME FANTASIA -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="tradeName"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Nome fantasia *
-                </label>
-
-                <input
-                  type="text"
-                  id="tradeName"
-                  placeholder="Ex: Distribuidora ABC"
-                  required
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                />
-              </div>
-
-              <!-- CNPJ + IE -->
-
-              <div
-                class="supplier-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
-              >
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierCnpj"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    CNPJ *
-                  </label>
-
-                  <input
-                    type="text"
-                    id="supplierCnpj"
-                    placeholder="00.000.000/0000-00"
-                    maxlength="18"
-                    required
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="stateRegistration"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    Inscrição estadual
-                  </label>
-
-                  <input
-                    type="text"
-                    id="stateRegistration"
-                    placeholder="Inscrição estadual"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-              </div>
-
-              <!-- CONTATO -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="contactPerson"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Pessoa de contato
-                </label>
-
-                <input
-                  type="text"
-                  id="contactPerson"
-                  placeholder="Ex: Carlos Silva"
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                />
-              </div>
-
-              <!-- EMAIL + TELEFONE -->
-
-              <div
-                class="supplier-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
-              >
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierEmail"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    E-mail *
-                  </label>
-
-                  <input
-                    type="email"
-                    id="supplierEmail"
-                    placeholder="contato@empresa.com"
-                    required
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierPhone"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    Telefone *
-                  </label>
-
-                  <input
-                    type="tel"
-                    id="supplierPhone"
-                    placeholder="(11) 99999-9999"
-                    required
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-              </div>
-
-              <!-- CATEGORIA + PRAZO -->
-
-              <div
-                class="supplier-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
-              >
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierCategory"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    Categoria principal *
-                  </label>
-
-                  <select
-                    id="supplierCategory"
-                    required
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  >
-                    <option value="">Carregando...</option>
-                  </select>
-                </div>
-
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="deliveryTime"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    Prazo médio de entrega
-                  </label>
-
-                  <div class="supplier-input-suffix relative">
-                    <input
-                      type="number"
-                      id="deliveryTime"
-                      min="0"
-                      placeholder="0"
-                      class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px] pr-[55px] [padding-bottom:12px] [padding-left:14px] [padding-top:12px]"
-                    />
-
-                    <span
-                      class="absolute right-[14px] top-[50%] [transform:translateY(-50%)] text-[#94a3b8] text-[length:13px]"
+            <div class="catalog-content">
+              <form id="supplierForm">
+                <input type="hidden" id="supplierId" />
+                <fieldset>
+                  <legend>Dados comerciais</legend>
+                  <div class="supplier-fields">
+                    <label
+                      >Razão social *<input
+                        id="companyName"
+                        type="text"
+                        maxlength="150"
+                        required
+                    /></label>
+                    <label
+                      >Nome fantasia<input
+                        id="tradeName"
+                        type="text"
+                        maxlength="150"
+                    /></label>
+                    <label
+                      >CNPJ *<input
+                        id="supplierCnpj"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="18"
+                        pattern="[0-9]{14}|[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}"
+                        title="Informe 14 dígitos ou use o formato 00.000.000/0000-00"
+                        placeholder="00.000.000/0000-00"
+                        required
+                    /></label>
+                    <label
+                      >Inscrição estadual<input
+                        id="stateRegistration"
+                        maxlength="30"
+                    /></label>
+                    <label
+                      >Categoria principal<select id="supplierCategory">
+                        <option value="">Selecione</option>
+                      </select></label
                     >
-                      dias
-                    </span>
+                    <label
+                      >Status<select id="supplierStatus">
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                      </select></label
+                    >
+                    <label
+                      >Condição de pagamento<select id="paymentTerms">
+                        <option value="">Selecione</option>
+                        <option>À vista</option>
+                        <option>7 dias</option>
+                        <option>15 dias</option>
+                        <option>30 dias</option>
+                        <option>30 / 60 dias</option>
+                      </select></label
+                    >
+                    <label
+                      >Prazo médio de entrega (dias)<input
+                        id="deliveryTime"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="0"
+                    /></label>
                   </div>
-                </div>
-              </div>
-
-              <!-- CONDIÇÃO DE PAGAMENTO -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
+                </fieldset>
+                <fieldset>
+                  <legend>Contato</legend>
+                  <div class="supplier-fields">
+                    <label
+                      >Pessoa de contato<input
+                        id="contactPerson"
+                        maxlength="100"
+                    /></label>
+                    <label
+                      >E-mail<input
+                        id="supplierEmail"
+                        type="email"
+                        maxlength="100"
+                    /></label>
+                    <label
+                      >Telefone<input
+                        id="supplierPhone"
+                        type="tel"
+                        maxlength="20"
+                    /></label>
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend>Endereço e localização</legend>
+                  <div class="supplier-fields">
+                    <label class="full-field"
+                      >Endereço<input
+                        id="supplierAddress"
+                        maxlength="255"
+                        placeholder="Rua, número e complemento"
+                    /></label>
+                    <label
+                      >Cidade<input id="supplierCity" maxlength="100"
+                    /></label>
+                    <label
+                      >UF<select id="supplierState">
+                        <option value="">UF</option>
+                        <option>AC</option>
+                        <option>AL</option>
+                        <option>AP</option>
+                        <option>AM</option>
+                        <option>BA</option>
+                        <option>CE</option>
+                        <option>DF</option>
+                        <option>ES</option>
+                        <option>GO</option>
+                        <option>MA</option>
+                        <option>MT</option>
+                        <option>MS</option>
+                        <option>MG</option>
+                        <option>PA</option>
+                        <option>PB</option>
+                        <option>PR</option>
+                        <option>PE</option>
+                        <option>PI</option>
+                        <option>RJ</option>
+                        <option>RN</option>
+                        <option>RS</option>
+                        <option>RO</option>
+                        <option>RR</option>
+                        <option>SC</option>
+                        <option>SP</option>
+                        <option>SE</option>
+                        <option>TO</option>
+                      </select></label
+                    >
+                    <label
+                      >CEP<input
+                        id="supplierZip"
+                        inputmode="numeric"
+                        pattern="[0-9]{5}-?[0-9]{3}"
+                        maxlength="9"
+                        placeholder="00000-000"
+                    /></label>
+                  </div>
+                  <div class="supplier-geocode">
+                    <button type="button" id="locateSupplierAddress">
+                      Localizar endereço no OpenStreetMap
+                    </button>
+                    <p class="catalog-note">
+                      Confira as coordenadas antes de salvar.
+                      <a
+                        href="https://www.openstreetmap.org/copyright"
+                        target="_blank"
+                        rel="noopener"
+                        >© OpenStreetMap contributors</a
+                      >
+                    </p>
+                  </div>
+                  <div class="supplier-fields">
+                    <label
+                      >Latitude<input
+                        id="supplierLatitude"
+                        type="number"
+                        min="-90"
+                        max="90"
+                        step="0.00000001"
+                    /></label>
+                    <label
+                      >Longitude<input
+                        id="supplierLongitude"
+                        type="number"
+                        min="-180"
+                        max="180"
+                        step="0.00000001"
+                    /></label>
+                  </div>
+                </fieldset>
                 <label
-                  for="paymentTerms"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Condição de pagamento
+                  >Observações<textarea
+                    id="supplierNotes"
+                    rows="3"
+                    maxlength="5000"
+                  ></textarea>
                 </label>
-
-                <select
-                  id="paymentTerms"
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                >
-                  <option value="">Selecione</option>
-
-                  <option>À vista</option>
-
-                  <option>7 dias</option>
-
-                  <option>15 dias</option>
-
-                  <option>30 dias</option>
-
-                  <option>30 / 60 dias</option>
-                </select>
-              </div>
-
-              <!-- ENDEREÇO -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="supplierAddress"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Endereço
-                </label>
-
-                <input
-                  type="text"
-                  id="supplierAddress"
-                  placeholder="Rua, número e complemento"
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                />
-              </div>
-
-              <!-- CIDADE / UF / CEP -->
-
-              <div
-                class="supplier-address-row grid grid-cols-[minmax(0,_1fr)_100px_160px] gap-[15px]"
-              >
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierCity"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    Cidade
-                  </label>
-
-                  <input
-                    type="text"
-                    id="supplierCity"
-                    placeholder="Cidade"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
+                <p data-form-error role="alert"></p>
+                <div class="catalog-actions supplier-modal-footer">
+                  <button type="button" id="cancelSupplier">Cancelar</button>
+                  <button type="submit">Salvar fornecedor</button>
                 </div>
-
-                <div
-                  class="supplier-form-group state-field flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierState"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    UF
-                  </label>
-
-                  <select
-                    id="supplierState"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  >
-                    <option value="">UF</option>
-                    <option>AC</option>
-                    <option>AL</option>
-                    <option>AP</option>
-                    <option>AM</option>
-                    <option>BA</option>
-                    <option>CE</option>
-                    <option>DF</option>
-                    <option>ES</option>
-                    <option>GO</option>
-                    <option>MA</option>
-                    <option>MT</option>
-                    <option>MS</option>
-                    <option>MG</option>
-                    <option>PA</option>
-                    <option>PB</option>
-                    <option>PR</option>
-                    <option>PE</option>
-                    <option>PI</option>
-                    <option>RJ</option>
-                    <option>RN</option>
-                    <option>RS</option>
-                    <option>RO</option>
-                    <option>RR</option>
-                    <option>SC</option>
-                    <option>SP</option>
-                    <option>SE</option>
-                    <option>TO</option>
-                  </select>
-                </div>
-
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierZip"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                  >
-                    CEP
-                  </label>
-
-                  <input
-                    type="text"
-                    id="supplierZip"
-                    placeholder="00000-000"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-              </div>
-
-              <!-- STATUS -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="supplierStatus"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Status
-                </label>
-
-                <select
-                  id="supplierStatus"
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                >
-                  <option value="ativo">Ativo</option>
-
-                  <option value="inativo">Inativo</option>
-                </select>
-              </div>
-
-              <!-- OBSERVAÇÕES -->
-
-              <div
-                class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-              >
-                <label
-                  for="supplierNotes"
-                  class="text-[#374151] text-[length:14px] font-semibold"
-                >
-                  Observações
-                </label>
-
-                <textarea
-                  id="supplierNotes"
-                  rows="3"
-                  placeholder="Informações adicionais sobre o fornecedor..."
-                  class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px]"
-                ></textarea>
-              </div>
-
-              <!-- BOTÕES -->
-
-              <div
-                class="supplier-form-row grid grid-cols-[repeat(2,_minmax(0,_1fr))] gap-[15px]"
-              >
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierLatitude"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                    >Latitude do fornecedor</label
-                  ><input
-                    id="supplierLatitude"
-                    type="number"
-                    min="-90"
-                    max="90"
-                    step="0.00000001"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-                <div
-                  class="supplier-form-group flex flex-col gap-[8px] mb-[18px]"
-                >
-                  <label
-                    for="supplierLongitude"
-                    class="text-[#374151] text-[length:14px] font-semibold"
-                    >Longitude do fornecedor</label
-                  ><input
-                    id="supplierLongitude"
-                    type="number"
-                    min="-180"
-                    max="180"
-                    step="0.00000001"
-                    class="w-full [border:1px_solid_#dfe3e8] rounded-[10px] [padding:12px_14px] [outline:none] [font-family:inherit] text-[length:14px] h-[48px]"
-                  />
-                </div>
-              </div>
-              <button type="button" id="locateSupplierAddress">
-                Localizar endereço no OpenStreetMap
-              </button>
-              <p class="catalog-note">
-                Confira as coordenadas antes de salvar. Dados geográficos: ©
-                OpenStreetMap contributors.
-              </p>
-              <div
-                class="supplier-modal-footer flex justify-end gap-[12px] mt-[25px]"
-              >
-                <button
-                  type="button"
-                  class="cancel-supplier-button h-[48px] [padding:0_20px] rounded-[10px] font-semibold cursor-pointer [border:1px_solid_#e5e7eb] [background:white] text-[#475569]"
-                  id="cancelSupplier"
-                >
-                  Cancelar
-                </button>
-
-                <button
-                  type="submit"
-                  class="save-supplier-button h-[48px] [padding:0_20px] rounded-[10px] font-semibold cursor-pointer [border:none] [background:#fd7941] text-[white]"
-                >
-                  Salvar fornecedor
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </main>
@@ -933,9 +530,5 @@
     <script src="../js/shared/catalogs.js"></script>
     <script src="../js/pages/fornecedores.js"></script>
     <script src="../js/shared/layout.js"></script>
-
-    <script>
-      if (window.lucide) window.lucide.createIcons();
-    </script>
   </body>
 </html>

@@ -5,10 +5,17 @@
   let sequence = 0,
     current;
   let live;
-  const status = document.createElement('p');
-  status.id = 'dashboardLiveStatus';
-  status.className = 'catalog-note';
-  $('dashboardError').after(status);
+  let currentFilter;
+  let branchesLoaded = false;
+  const status = $('dashboardLiveStatus');
+  const operations = {
+    ENTRADA: 'Entrada',
+    SAIDA: 'Saída',
+    TRANSFERENCIA: 'Transferência',
+    AJUSTE: 'Ajuste',
+  };
+  const dayMs = 86400000;
+  const displayDate = (iso) => iso.slice(0, 10).split('-').reverse().join('/');
   function liveUpdates() {
     live?.abort();
     live = new AbortController();
@@ -26,88 +33,94 @@
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && SinstockSession.user) liveUpdates();
   });
-  function graph(data) {
-    $('dashboardChart').parentElement.classList.toggle('empty-chart', !data.length);
+  function graph(data, firstDay, lastDay, days) {
+    const chart = $('dashboardChart');
     if (!data.length) {
-      $('dashboardChart').textContent = 'Nenhuma venda confirmada no período.';
+      chart.innerHTML =
+        '<p class="catalog-status">Nenhuma venda confirmada no período.</p>';
       return;
     }
-    const max = Math.max(1, ...data.map((item) => item.total));
-    const points = data.map((item, i) => ({
-      x: 20 + (data.length === 1 ? 330 : (i * 660) / (data.length - 1)),
-      y: 200 - (item.total / max) * 180,
-      ...item,
-    }));
-    $('dashboardChart').innerHTML =
-      '<svg viewBox="0 0 700 220" preserveAspectRatio="none" role="img" aria-label="Faturamento diário">' +
-      '<polyline points="' +
-      points.map((p) => p.x + ',' + p.y).join(' ') +
-      '" fill="none" stroke="#f97316" stroke-width="3"></polyline>' +
-      points
-        .map(
-          (p) =>
-            '<circle cx="' +
-            p.x +
-            '" cy="' +
-            p.y +
-            '" r="5" fill="#f97316"><title>' +
-            D.text(p.data + ': ' + D.money(p.total)) +
-            '</title></circle>',
-        )
-        .join('') +
-      '</svg><div class="chart-days"><span>' +
-      D.text(data[0].data.split('-').reverse().join('/')) +
-      '</span><span>' +
-      D.text(data.at(-1).data.split('-').reverse().join('/')) +
-      '</span></div>';
+    const peak = Math.max(...data.map((item) => item.total)) || 1;
+    const bars = data.map((item) => {
+      const offset = (Date.parse(item.data) - Date.parse(firstDay)) / dayMs;
+      const height = (100 * item.total) / peak;
+      const label = D.text(
+        displayDate(item.data) + ' · ' + D.money(item.total),
+      );
+      return `<rect x="${offset + 0.15}" y="${100 - height}" width="0.7" height="${height}"><title>${label}</title></rect>`;
+    });
+    chart.innerHTML = `
+      <div class="sales-chart">
+        <div class="chart-scale"><span>${D.money(peak)}</span><span>${D.money(peak / 2)}</span><span>R$ 0,00</span></div>
+        <svg class="chart-plot" viewBox="0 0 ${days} 100" preserveAspectRatio="none" role="img" aria-label="Faturamento diário em reais">
+          ${bars.join('')}
+        </svg>
+        <div class="chart-days"><span>${displayDate(firstDay)}</span><span>${displayDate(lastDay)}</span></div>
+      </div>`;
   }
+
+  function expiryLabel(days) {
+    if (days === 0) return 'Vence hoje';
+    const duration = Math.abs(days) + (Math.abs(days) === 1 ? ' dia' : ' dias');
+    return days < 0 ? 'Vencido há ' + duration : 'Vence em ' + duration;
+  }
+
   async function load() {
     const callId = ++sequence;
-    $('dashboardError').textContent = '';
+    const branch = $('dashboardBranch').value;
+    const days = Number($('dashboardPeriod').value);
+    const today = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'America/Sao_Paulo',
+    });
+    const firstDay = new Date(Date.parse(today) - (days - 1) * dayMs)
+      .toISOString()
+      .slice(0, 10);
+    const filter = [branch, firstDay, today].join('|');
+    const cached = current && currentFilter === filter;
+    $('dashboardError').hidden = true;
+    $('dashboardResults').hidden = !cached;
+    $('dashboardLoading').hidden = !!cached;
+    $('refreshDashboard').disabled = true;
     try {
+      if (!branchesLoaded) {
+        const branches = await D.get('/filiais');
+        if (callId !== sequence) return;
+        D.options(
+          $('dashboardBranch'),
+          D.rows(branches),
+          (item) => item.nome,
+          'Todas as filiais',
+        );
+        branchesLoaded = true;
+        $('dashboardBranch').disabled = false;
+        $('dashboardPeriod').disabled = false;
+      }
       const result = await D.get('/dashboard/resumo', {
-        filial_id: $('dashboardBranch').value,
-        data_inicio: new Date(
-          Date.now() - Number($('dashboardPeriod').value) * 86400000,
-        ).toISOString(),
+        filial_id: branch,
+        data_inicio: firstDay + 'T00:00:00-03:00',
+        data_fim: today + 'T23:59:59.999-03:00',
       });
       if (callId !== sequence) return;
-      current = result;
       $('dashboardOrders').textContent = D.number(result.comercial.total);
       $('dashboardStock').textContent = D.number(result.estoque.disponivel);
       $('dashboardRevenue').textContent = $('dashboardTotal').textContent =
         D.money(result.comercial.faturamento);
-      graph(result.comercial.diario);
-      const low = result.alertas.alertas.estoque_baixo,
-        expiry = result.alertas.alertas.lotes_vencendo;
-      $('dashboardAlerts').innerHTML = [
-        [
-          'Estoque baixo',
-          low.length + ' saldos de produto/filial no mínimo ou abaixo dele.',
-          'low',
-        ],
-        [
-          'Validade',
-          expiry.length + ' lotes vencidos ou com validade em até sete dias.',
-          'expiry',
-        ],
-        [
-          'Reservas abertas',
-          result.comercial.reservas + ' pedidos reservados no período.',
-          'orders',
-        ],
-      ]
-        .map(
-          ([title, label, type]) =>
-            '<button type="button" class="alert-item" data-alert="' +
-            type +
-            '"><div class="alert-information"><strong>' +
-            title +
-            '</strong><span>' +
-            D.text(label) +
-            '</span></div></button>',
-        )
-        .join('');
+      graph(result.comercial.diario, firstDay, today, days);
+      const alerts = result.alertas.resumo;
+      const expiryDays = alerts.parametros_aplicados.dias_vencimento;
+      $('expiryDescription').textContent =
+        'Vencidos ou a vencer em até ' +
+        expiryDays +
+        (expiryDays === 1 ? ' dia' : ' dias');
+      for (const [id, count] of [
+        ['lowCount', alerts.total_estoque_baixo],
+        ['expiryCount', alerts.total_lotes_vencendo],
+        ['ordersCount', result.comercial.reservas],
+      ]) {
+        $(id).textContent = D.number(count);
+        $(id).classList.toggle('has-alert', count > 0);
+      }
+      $('showSalesData').disabled = !result.comercial.diario.length;
       $('dashboardCategories').innerHTML = result.categorias
         .map(
           (item) =>
@@ -130,7 +143,7 @@
             '<small>' +
             D.text(log.filiais.nome) +
             '</small></td><td>' +
-            D.text(log.tipo_movimentacao) +
+            D.text(operations[log.tipo_movimentacao] || log.tipo_movimentacao) +
             '</td><td>' +
             D.number(log.quantidade) +
             '</td><td>' +
@@ -140,17 +153,25 @@
         .join('');
       if (!result.recentes.length)
         D.message($('dashboardRecent'), 'Nenhuma movimentação encontrada.', 4);
+      current = result;
+      currentFilter = filter;
+      $('dashboardResults').hidden = false;
     } catch (error) {
-      if (callId === sequence) $('dashboardError').textContent = error.message;
+      if (callId !== sequence) return;
+      $('dashboardError').textContent =
+        error.message +
+        (cached ? ' Exibindo a última consulta concluída.' : '');
+      $('dashboardError').hidden = false;
+    } finally {
+      if (callId === sequence) {
+        $('dashboardLoading').hidden = true;
+        $('refreshDashboard').disabled = false;
+      }
     }
   }
   $('dashboardAlerts').onclick = (event) => {
     const button = event.target.closest('[data-alert]');
     if (!button || !current) return;
-    if (button.dataset.alert === 'orders') {
-      location.href = 'pedidos.html';
-      return;
-    }
     const low = button.dataset.alert === 'low';
     const data = low
       ? current.alertas.alertas.estoque_baixo
@@ -159,8 +180,9 @@
       low ? 'Estoque baixo por filial' : 'Validade dos lotes',
       '<ul>' +
         data
-          .map(
-            (item) =>
+          .map((item) => {
+            const branch = item.filial_id || $('dashboardBranch').value;
+            return (
               '<li><strong>' +
               D.text(item.produto_nome) +
               '</strong><p>' +
@@ -173,21 +195,15 @@
                 : 'Lote ' +
                   D.text(item.numero_lote) +
                   ' · ' +
-                  D.text(
-                    item.data_validade
-                      .slice(0, 10)
-                      .split('-')
-                      .reverse()
-                      .join('/'),
-                  ) +
+                  D.text(displayDate(item.data_validade)) +
                   ' · ' +
-                  item.dias_para_vencer +
-                  ' dias') +
+                  expiryLabel(item.dias_para_vencer)) +
               '</p><a href="estoque.html?busca=' +
               encodeURIComponent(item.produto_nome) +
-              (item.filial_id ? '&amp;filial_id=' + item.filial_id : '') +
-              '">Consultar estoque</a></li>',
-          )
+              (branch ? '&amp;filial_id=' + encodeURIComponent(branch) : '') +
+              '">Consultar estoque</a></li>'
+            );
+          })
           .join('') +
         (data.length ? '' : '<li>Nenhum alerta atual.</li>') +
         '</ul>',
@@ -197,12 +213,12 @@
     if (!current) return;
     D.dialog(
       'Faturamento diário',
-      '<div class="catalog-table-container"><table><thead><tr><th>Data</th><th>Faturamento</th></tr></thead><tbody>' +
+      '<div class="catalog-table-container daily-sales-table"><table><thead><tr><th>Data</th><th>Faturamento</th></tr></thead><tbody>' +
         current.comercial.diario
           .map(
             (item) =>
               '<tr><td>' +
-              D.text(item.data) +
+              D.text(displayDate(item.data)) +
               '</td><td>' +
               D.money(item.total) +
               '</td></tr>',
@@ -214,20 +230,11 @@
   $('dashboardBranch').onchange = load;
   $('dashboardPeriod').onchange = load;
   $('refreshDashboard').onclick = load;
-  SinstockSession.ready
-    .then(async (user) => {
-      if (!user) return;
-      $('dashboardWelcome').textContent = 'Olá, ' + user.nome.split(' ')[0];
-      D.options(
-        $('dashboardBranch'),
-        D.rows(await D.get('/filiais')),
-        (item) => item.nome,
-        'Todas as filiais',
-      );
-      await load();
-      liveUpdates();
-    })
-    .catch((error) => {
-      $('dashboardError').textContent = error.message;
-    });
+  SinstockSession.ready.then(async (user) => {
+    if (!user) return;
+    $('dashboardWelcome').textContent =
+      'Olá, ' + user.nome.trim().split(/\s+/)[0];
+    await load();
+    liveUpdates();
+  });
 })();
