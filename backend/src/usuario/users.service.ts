@@ -233,24 +233,47 @@ export class UsersService {
     });
   }
 
-  async setTwoFactorSecret(id: number, secret: string) {
-    return this.prisma.usuarios.update({
-      where: { id },
-      data: {
-        twoFactorSecret: secret,
+  async setTwoFactorSecret(id: number, authVersion: number, secret: string) {
+    const { count } = await this.prisma.usuarios.updateMany({
+      where: {
+        id,
+        ativo: true,
+        auth_version: authVersion,
+        isTwoFactorEnable: false,
       },
+      data: { twoFactorSecret: secret, ultimo_passo_totp: null },
     });
+    return count === 1;
   }
 
-  async enableTwoFactor(id: number) {
-    return this.prisma.usuarios.update({
-      where: { id },
+  async consumeTotp(
+    user: { id: number; auth_version: number; twoFactorSecret: string | null },
+    step: number,
+    action: 'login' | 'enable' | 'disable',
+  ) {
+    const { count } = await this.prisma.usuarios.updateMany({
+      where: {
+        id: user.id,
+        ativo: true,
+        auth_version: user.auth_version,
+        twoFactorSecret: user.twoFactorSecret,
+        isTwoFactorEnable: action !== 'enable',
+        ...(action === 'enable' ? {} : { two_factor_method: 'TOTP' }),
+        OR: [{ ultimo_passo_totp: null }, { ultimo_passo_totp: { lt: step } }],
+      },
       data: {
-        isTwoFactorEnable: true,
-        two_factor_method: 'TOTP',
-        auth_version: { increment: 1 },
+        ultimo_passo_totp: action === 'disable' ? null : step,
+        ...(action === 'login'
+          ? { ultimo_acesso: new Date() }
+          : {
+              isTwoFactorEnable: action === 'enable',
+              two_factor_method: 'TOTP',
+              auth_version: { increment: 1 },
+            }),
+        ...(action === 'disable' ? { twoFactorSecret: null } : {}),
       },
     });
+    return count === 1;
   }
 
   async findByIdWithSecrets(id: number) {

@@ -23,7 +23,13 @@ export class TwoFactorService {
       );
     }
 
-    await this.usersService.setTwoFactorSecret(userId, secret.base32);
+    const saved = await this.usersService.setTwoFactorSecret(
+      userId,
+      user.auth_version,
+      secret.base32,
+    );
+    if (!saved)
+      throw new BadRequestException('A configuração mudou. Tente novamente.');
 
     const qrCodeDataUrl = await qrcode.toDataURL(secret.otpauth_url);
 
@@ -33,13 +39,27 @@ export class TwoFactorService {
     };
   }
 
-  verifyTwoFactorCode(code: string, secret: string): boolean {
-    return speakeasy.totp.verify({
-      secret: secret,
-      encoding: 'base32',
-      token: code,
-      window: 1,
-    });
+  async consumeCode(
+    user: { id: number; auth_version: number; twoFactorSecret: string | null },
+    code: string,
+    action: 'login' | 'enable' | 'disable',
+  ) {
+    const secret = user.twoFactorSecret;
+    if (!secret) return false;
+    const step = Math.floor(Date.now() / 30_000);
+    // Prefer the newest matching step if adjacent codes happen to be equal.
+    const matched = [step + 1, step, step - 1].find((counter) =>
+      speakeasy.totp.verify({
+        secret,
+        encoding: 'base32',
+        token: code,
+        counter,
+      }),
+    );
+    return (
+      matched !== undefined &&
+      this.usersService.consumeTotp(user, matched, action)
+    );
   }
 
   async enableTwoFactor(userId: number, code: string) {
@@ -51,16 +71,16 @@ export class TwoFactorService {
       );
     }
 
-    const isValid = this.verifyTwoFactorCode(code, user.twoFactorSecret);
+    const isValid = await this.consumeCode(user, code, 'enable');
 
     if (!isValid) {
-      throw new BadRequestException('Código 2FA inválido ou expirado.');
+      throw new BadRequestException(
+        'Código 2FA inválido, expirado ou já utilizado.',
+      );
     }
 
-    await this.usersService.enableTwoFactor(userId);
-
     return {
-      message: 'Segundo fator ativado. Entre novamente.',
+      message: 'Segundo fator ativado. Entre novamente com um novo código.',
       reautenticar: true,
     };
   }

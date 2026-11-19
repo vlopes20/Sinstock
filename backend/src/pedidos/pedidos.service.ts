@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../prisma/prisma.service';
-import { StockService } from '../common/services/stock.service';
+import { StockService, stockRequest } from '../common/services/stock.service';
 import { CreateCheckoutDto } from './dto/create-checkout.dto';
 import { CreateReservaDto } from './dto/create-reserva.dto';
 import { FiltroPedidosDto } from './dto/filtro-pedidos.dto';
@@ -170,6 +170,11 @@ export class PedidosService {
           reservado_ate: expiration,
         };
       },
+      stockRequest(
+        usuarioId,
+        reserve ? 'pedidos/reservar' : 'pedidos/checkout',
+        dto,
+      ),
     );
   }
 

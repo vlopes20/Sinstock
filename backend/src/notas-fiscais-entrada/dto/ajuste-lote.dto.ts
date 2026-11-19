@@ -9,7 +9,9 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-export class AjusteLoteDto {
+import { StockRequestDto } from '../../common/dto/stock-request.dto';
+
+export class AjusteLoteDto extends StockRequestDto {
   @IsOptional() @IsString() @IsNotEmpty() @MaxLength(50) numero_lote?: string;
   @IsOptional() @IsDateString() data_fabricacao?: string;
   @IsOptional() @IsDateString() data_validade?: string;

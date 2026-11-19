@@ -70,6 +70,7 @@ test:stock usa um banco temporário sinstock_test_* com MySQL real, migrações 
 - [Validação e limites da homologação](docs/homologacao-integracao.md)
 - [SMTP com Gmail](docs/smtp.md)
 - [MySQL local no Windows](docs/mysql-local.md)
+- [Backup agendado e teste de restauração do MySQL](docs/backup-mysql.md)
 - [Frontend e compilação de estilos](frontend/README.md)
 
 Os inventários e a análise de 04/11/2026 documentam o diagnóstico anterior à integração. A documentação atual acima identifica as entregas posteriores.

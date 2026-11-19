@@ -9,7 +9,9 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateTransferenciaDto {
+import { StockRequestDto } from '../../common/dto/stock-request.dto';
+
+export class CreateTransferenciaDto extends StockRequestDto {
   @ApiProperty({ description: 'ID do produto' })
   @IsInt()
   @Min(1)

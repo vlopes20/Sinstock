@@ -2,6 +2,8 @@
 
 Base auditada: develop, commit 4c3eddc. Branch local: qa/testes-busca-global. Sem commit/push/merge. Este resumo representa o estado final; contagens 49/67 nos relatorios detalhados sao historicas.
 
+As pendências históricas de reenvio de lançamentos e reutilização de TOTP registradas abaixo foram corrigidas posteriormente. Consulte os [contratos atuais](../contratos-integracao.md).
+
 ## Validacao final repetida nesta rodada
 
 - Jest: 92 testes aprovados em 11 suites, zero falhas e bloqueados (9,243 s).

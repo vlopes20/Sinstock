@@ -12,6 +12,8 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { StockRequestDto } from '../../common/dto/stock-request.dto';
+
 export class ItemCheckoutDto {
   @IsInt() @Min(1) produto_id: number;
   @IsOptional() @IsInt() @Min(1) lote_id?: number;
@@ -21,7 +23,7 @@ export class ItemCheckoutDto {
   @Min(0)
   preco_unitario?: number;
 }
-export class CreateCheckoutDto {
+export class CreateCheckoutDto extends StockRequestDto {
   @IsOptional() @IsInt() @Min(1) cliente_id?: number;
   @IsInt() @Min(1) filial_id: number;
   @IsArray()

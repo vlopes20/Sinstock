@@ -369,7 +369,7 @@
         observacao = $('movementReason').value.trim();
       if (type === 'entrada') {
         const newLot = $('movementNewLot').value.trim();
-        await SinstockAPI.request('/notas-fiscais-entrada', {
+        await D.stockWrite('/notas-fiscais-entrada', {
           method: 'POST',
           body: {
             fornecedor_id: Number($('movementSupplier').value),
@@ -396,7 +396,7 @@
           },
         });
       } else if (type === 'transferencia') {
-        await SinstockAPI.request('/movimentacoes/transferencia', {
+        await D.stockWrite('/movimentacoes/transferencia', {
           method: 'POST',
           body: {
             produto_id: product,
@@ -408,7 +408,7 @@
           },
         });
       } else {
-        await SinstockAPI.request('/movimentacoes', {
+        await D.stockWrite('/movimentacoes', {
           method: 'POST',
           body: {
             produto_id: product,
@@ -591,7 +591,7 @@
             quantidade: Number(lotForm.elements.quantidade.value),
             custo_unitario: Number(lotForm.elements.custo.value),
           });
-        await SinstockAPI.request('/notas-fiscais-entrada/lotes/' + id, {
+        await D.stockWrite('/notas-fiscais-entrada/lotes/' + id, {
           method: 'PATCH',
           body,
         });

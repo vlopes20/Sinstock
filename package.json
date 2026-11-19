@@ -24,6 +24,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:status": "prisma migrate status",
+    "db:backup": "node backend/scripts/mysql-backup.cjs backup",
+    "db:backup:verify": "node backend/scripts/mysql-backup.cjs verify",
     "typecheck": "tsc --noEmit --incremental false",
     "check:architecture": "node --test scripts/architecture.test.cjs",
     "smtp:verify": "node backend/scripts/verify-smtp.cjs",

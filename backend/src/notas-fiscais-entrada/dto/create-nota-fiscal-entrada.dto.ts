@@ -14,9 +14,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateItemEntradaDto } from './create-item-entrada.dto';
+import { StockRequestDto } from '../../common/dto/stock-request.dto';
 export { CreateItemEntradaDto, CreateLoteDto } from './create-item-entrada.dto';
 
-export class CreateNotaFiscalEntradaDto {
+export class CreateNotaFiscalEntradaDto extends StockRequestDto {
   @IsInt() @Min(1) fornecedor_id: number;
   @IsInt() @Min(1) filial_id: number;
   @IsString() @IsNotEmpty() @MaxLength(50) numero_nf: string;

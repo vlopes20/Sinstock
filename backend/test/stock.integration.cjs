@@ -458,6 +458,101 @@ test('parallel confirmation consumes a reservation exactly once', async () => {
   assert.equal(Number((await stock()).quantidade), 10);
 });
 
+test('repeated checkout returns the original sale and debits stock once', async () => {
+  const before = Number((await stock()).quantidade);
+  const body = {
+    request_id: require('node:crypto').randomUUID(),
+    filial_id: branch.id,
+    itens: [{ produto_id: product.id, lote_id: lot.id, quantidade: 1 }],
+  };
+  const responses = await Promise.all([
+    call('/pedidos/checkout', 'POST', body),
+    call('/pedidos/checkout', 'POST', body),
+  ]);
+  assert.deepEqual(
+    responses.map((result) => result.status),
+    [201, 201],
+  );
+  assert.deepEqual(responses[0].body, responses[1].body);
+  const saleId = responses[0].body.pedido_id;
+  assert.equal(Number((await stock()).quantidade), before - 1);
+  assert.equal(
+    await prisma.logs_movimentacoes.count({
+      where: { referencia: 'VENDA:' + saleId },
+    }),
+    1,
+  );
+  const different = { ...body, itens: [{ ...body.itens[0], quantidade: 2 }] };
+  assert.equal(
+    (await call('/pedidos/checkout', 'POST', different)).status,
+    409,
+  );
+  await ok('/pedidos/' + saleId + '/cancelar', 'PATCH');
+  assert.deepEqual(
+    await ok('/pedidos/checkout', 'POST', body),
+    responses[0].body,
+  );
+  assert.equal(Number((await stock()).quantidade), before);
+});
+
+test('receipt, transfer and exit keys survive retries without repeated stock changes', async () => {
+  const { randomUUID } = require('node:crypto');
+  const item = await ok('/produtos', 'POST', {
+    nome: 'Produto para retentativas',
+    categoria_id: product.categoria_id,
+    preco_venda: 15,
+  });
+  const repeat = async (route, body) => {
+    const payload = { request_id: randomUUID(), ...body };
+    const first = await ok(route, 'POST', payload);
+    assert.deepEqual(await ok(route, 'POST', payload), first);
+    return first;
+  };
+  const receipt = await repeat('/notas-fiscais-entrada', {
+    fornecedor_id: supplier.id,
+    filial_id: branch.id,
+    numero_nf: 'RETRY-' + randomUUID(),
+    data_emissao: '2026-11-19',
+    itens: [{ produto_id: item.id, quantidade: 5, custo_unitario: 10 }],
+  });
+  assert.equal(
+    await prisma.logs_movimentacoes.count({
+      where: { produto_id: item.id, origem_id: receipt.id },
+    }),
+    1,
+  );
+  await repeat('/movimentacoes/transferencia', {
+    produto_id: item.id,
+    filial_origem_id: branch.id,
+    filial_destino_id: otherBranch.id,
+    quantidade: 2,
+  });
+  const exit = {
+    request_id: randomUUID(),
+    produto_id: item.id,
+    filial_id: otherBranch.id,
+    tipo: 'SAIDA',
+    observacao: 'Consumo interno',
+    quantidade: 3,
+  };
+  assert.equal((await call('/movimentacoes', 'POST', exit)).status, 400);
+  exit.quantidade = 1;
+  const [first, second] = await Promise.all([
+    call('/movimentacoes', 'POST', exit),
+    call('/movimentacoes', 'POST', exit),
+  ]);
+  assert.equal(first.status, 201);
+  assert.deepEqual(second, first);
+  const balances = await prisma.saldos_estoque.findMany({
+    where: { produto_id: item.id },
+    orderBy: { filial_id: 'asc' },
+  });
+  assert.deepEqual(
+    balances.map((balance) => Number(balance.quantidade)),
+    [3, 1],
+  );
+});
+
 test('transfer is atomic and keeps its lot and author on both branches', async () => {
   const transfer = await ok('/movimentacoes/transferencia', 'POST', {
     produto_id: product.id,
@@ -1067,8 +1162,32 @@ test(
         .waitFor();
       assert.equal(Number((await stock(otherBranch.id)).quantidade), before);
       await page.locator('#saleProducts .sale-product-quantity').fill('3');
+      const checkoutRequests = [];
+      await page.route('**/pedidos/checkout', async (route) => {
+        checkoutRequests.push(route.request().postDataJSON().request_id);
+        if (checkoutRequests.length === 1) {
+          await route.fetch();
+          await route.abort('connectionreset');
+        } else {
+          await route.continue();
+        }
+      });
+      await page.locator('#newSaleForm [type="submit"]').click();
+      await page
+        .locator('#newSaleForm [data-form-error]')
+        .getByText('Não foi possível conectar ao servidor', { exact: false })
+        .waitFor();
+      assert.equal(
+        Number((await stock(otherBranch.id)).quantidade),
+        before - 3,
+      );
       await page.locator('#newSaleForm [type="submit"]').click();
       await page.locator('#newSaleForm').waitFor({ state: 'detached' });
+      assert.match(checkoutRequests[0], /^[0-9a-f-]{36}$/);
+      assert.deepEqual(checkoutRequests, [
+        checkoutRequests[0],
+        checkoutRequests[0],
+      ]);
       assert.equal(
         Number((await stock(otherBranch.id)).quantidade),
         before - 3,
@@ -1508,6 +1627,55 @@ test('settings persist, protect mandatory stock rules and enforce account permis
       .status,
     400,
   );
+});
+
+test('parallel TOTP requests consume a single code for an existing account', async () => {
+  const speakeasy = require('speakeasy');
+  const secret = speakeasy.generateSecret().base32;
+  const user = await ok('/users', 'POST', {
+    nome: 'Conta autenticador',
+    email: 'totp@example.com',
+    senha: password,
+    perfil_id: 2,
+  });
+  await prisma.usuarios.update({
+    where: { id: user.id },
+    data: { isTwoFactorEnable: true, twoFactorSecret: secret },
+  });
+  const login = () =>
+    call('/auth/login', 'POST', { email: user.email, senha: password }, null);
+  const attempts = await Promise.all([login(), login()]);
+  const codigo = speakeasy.totp({ secret, encoding: 'base32' });
+  const results = await Promise.all(
+    attempts.map((attempt) =>
+      call(
+        '/auth/2fa/authenticate',
+        'POST',
+        { codigo },
+        attempt.body.preAuthToken,
+      ),
+    ),
+  );
+  assert.deepEqual(results.map((result) => result.status).sort(), [201, 401]);
+  const access = results.find((result) => result.status === 201).body
+    .access_token;
+  assert.ok(access);
+  assert.equal(
+    (
+      await call(
+        '/auth/2fa/disable',
+        'POST',
+        { codigo, senha_atual: password },
+        access,
+      )
+    ).status,
+    400,
+  );
+  const persisted = await prisma.usuarios.findUnique({
+    where: { id: user.id },
+  });
+  assert.ok(persisted.ultimo_passo_totp > 0);
+  assert.equal(persisted.isTwoFactorEnable, true);
 });
 
 test('email second factor uses expiring single-use codes and password changes revoke sessions', async () => {

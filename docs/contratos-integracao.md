@@ -33,6 +33,12 @@ Referência funcional: [requisitos-documentacao.md](requisitos-documentacao.md).
 - Código de barras duplicado é rejeitado pelo banco. Lotes vencidos são rejeitados na venda e na confirmação.
 - Listagem de pedidos usa {dados, meta} com filial, status, período, busca e paginação.
 
+## Reenvio de lançamentos
+
+- Checkout, reserva, entrada, movimentação, transferência e ajuste de lote aceitam `request_id` (UUID v4). A interface envia essa identificação automaticamente e a conserva enquanto aguarda uma resposta.
+- Para repetir uma chamada à API, envie a mesma identificação, os mesmos dados e o mesmo usuário. Uma repetição retorna o resultado original. Dados diferentes com a mesma identificação na mesma operação retornam HTTP 409. Uma operação nova deve receber outro UUID.
+- O resultado e a movimentação são gravados na mesma transação. Clientes existentes da API podem continuar omitindo `request_id`.
+
 ## Alertas e autorização
 
 - Estoque baixo: por produto e filial, somando lotes e descontando reservas, incluindo produtos sem saldo. O mínimo é o do produto.
@@ -55,7 +61,7 @@ Referência funcional: [requisitos-documentacao.md](requisitos-documentacao.md).
 
 - Senha atual obrigatória para trocar senha ou iniciar confirmação de segurança. A troca invalida sessões, desafios e links de recuperação pendentes.
 - Segundo fator por e-mail: seis dígitos aleatórios, HMAC no banco, cinco minutos, consumo único, até cinco tentativas e intervalo mínimo de um minuto entre envios. Pré-autenticação não permite operações privadas.
-- TOTP permanece disponível. Ativação/desativação confirma o fator e exige novo login. Segredos não são retornados no perfil.
+- Cada passo do autenticador (TOTP) pode ser aceito apenas uma vez, inclusive em requisições simultâneas. O último passo aceito fica no banco. A ativação consome o código informado e exige um código novo no próximo login. Segredos não são retornados no perfil.
 - Chamados usam autor/e-mail da sessão. Usuários veem os próprios; administradores acompanham todos. Mensagens e anexos obedecem ao mesmo acesso.
 - Arquivos: PNG/JPEG/PDF, até 2 MB, assinatura conferida, armazenamento protegido no banco e download autenticado. Falha de confirmação por e-mail é informada sem perder o chamado.
 - FAQ vem do banco e pode ser mantido por administradores. O cadastro inicial inclui três orientações; chamados não possuem exclusão física.

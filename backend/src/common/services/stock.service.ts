@@ -1,10 +1,13 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { createHash } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { StockRequestDto } from '../dto/stock-request.dto';
 import { StockEventsService } from './stock-events.service';
 
 export type StockKey = {
@@ -12,6 +15,32 @@ export type StockKey = {
   filial_id: number;
   lote_id?: number | null;
 };
+
+export function stockRequest(
+  usuario_id: number,
+  operacao: string,
+  dto: StockRequestDto,
+) {
+  const { request_id, ...payload } = dto;
+  if (!request_id) return undefined;
+  const json = JSON.stringify(payload, (_key, value: unknown) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value))
+      return value;
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).sort(([a], [b]) =>
+        a.localeCompare(b),
+      ),
+    );
+  });
+  return {
+    usuario_id,
+    operacao,
+    request_id: request_id.toLowerCase(),
+    hash: createHash('sha256').update(json).digest('hex'),
+  };
+}
+
+type StockRequest = NonNullable<ReturnType<typeof stockRequest>>;
 
 @Injectable()
 export class StockService {
@@ -47,6 +76,7 @@ export class StockService {
   async write<T>(
     ids: number[],
     work: (tx: Prisma.TransactionClient) => Promise<T>,
+    request?: StockRequest,
   ): Promise<T> {
     const products = [...new Set(ids)].sort((a, b) => a - b);
     if (
@@ -55,16 +85,37 @@ export class StockService {
     )
       throw new BadRequestException('Informe produtos válidos.');
     for (let attempt = 0; ; attempt++) {
-      let result: T;
+      let result: { value: T; replayed: boolean };
       try {
         result = await this.prisma.$transaction(
           async (tx) => {
+            const previous = request && (await this.claimRequest(tx, request));
+            if (previous?.resposta != null)
+              return { value: previous.resposta as T, replayed: true };
+
             const rows = await tx.$queryRaw<{ id: number }[]>(
               Prisma.sql`SELECT id FROM produtos WHERE id IN (${Prisma.join(products)}) ORDER BY id FOR UPDATE`,
             );
             if (rows.length !== products.length)
               throw new NotFoundException('Um dos produtos não existe.');
-            return work(tx);
+            const value = await work(tx);
+            if (previous) {
+              await tx.requisicaoEstoque.update({
+                where: {
+                  usuario_id_operacao_request_id: {
+                    usuario_id: previous.usuario_id,
+                    operacao: previous.operacao,
+                    request_id: previous.request_id,
+                  },
+                },
+                data: {
+                  resposta: JSON.parse(
+                    JSON.stringify(value),
+                  ) as Prisma.InputJsonValue,
+                },
+              });
+            }
+            return { value, replayed: false };
           },
           {
             isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
@@ -82,13 +133,36 @@ export class StockService {
         continue;
       }
       // Publication occurs after commit and must never trigger transaction retry.
-      this.events.emit({
-        tipo: 'ESTOQUE_ATUALIZADO',
-        produtoIds: products,
-        timestamp: new Date().toISOString(),
-      });
-      return result;
+      if (!result.replayed)
+        this.events.emit({
+          tipo: 'ESTOQUE_ATUALIZADO',
+          produtoIds: products,
+          timestamp: new Date().toISOString(),
+        });
+      return result.value;
     }
+  }
+
+  private async claimRequest(
+    tx: Prisma.TransactionClient,
+    { usuario_id, operacao, request_id, hash }: StockRequest,
+  ) {
+    // The unique key serializes concurrent requests, even for different products.
+    await tx.$executeRaw(Prisma.sql`
+      INSERT INTO requisicoes_estoque (usuario_id, operacao, request_id, hash)
+      VALUES (${usuario_id}, ${operacao}, ${request_id}, ${hash})
+      ON DUPLICATE KEY UPDATE hash = hash
+    `);
+    const request = await tx.requisicaoEstoque.findUniqueOrThrow({
+      where: {
+        usuario_id_operacao_request_id: { usuario_id, operacao, request_id },
+      },
+    });
+    if (request.hash !== hash)
+      throw new ConflictException(
+        'Esta solicitação já foi usada com outros dados. Confira o histórico antes de registrar outra operação.',
+      );
+    return request;
   }
 
   async balance(tx: Prisma.TransactionClient, key: StockKey) {

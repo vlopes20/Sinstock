@@ -10,13 +10,14 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateLoteDto } from '../../notas-fiscais-entrada/dto/create-item-entrada.dto';
+import { StockRequestDto } from '../../common/dto/stock-request.dto';
 export enum TipoMovimentacao {
   ENTRADA = 'ENTRADA',
   SAIDA = 'SAIDA',
   AJUSTE = 'AJUSTE',
   TRANSFERENCIA = 'TRANSFERENCIA',
 }
-export class CreateMovimentacaoDto {
+export class CreateMovimentacaoDto extends StockRequestDto {
   @IsInt() @Min(1) produto_id: number;
   @IsInt() @Min(1) filial_id: number;
   @IsOptional() @IsInt() @Min(1) lote_id?: number;

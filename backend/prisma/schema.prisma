@@ -273,6 +273,7 @@ model usuarios {
   ativo                 Boolean?                @default(true)
   auth_version          Int                     @default(0)
   two_factor_method     String                  @default("TOTP") @db.VarChar(10)
+  ultimo_passo_totp     Int?
   ultimo_acesso         DateTime?               @db.Timestamp(0)
   preferencias          Json?
   desafiosEmail         EmailLoginChallenge[]
@@ -385,6 +386,17 @@ model AnexoChamado {
   usuario usuarios @relation(fields: [usuario_id], references: [id], onDelete: Restrict)
   @@index([chamado_id])
   @@map("anexos_chamado")
+}
+
+model RequisicaoEstoque {
+  usuario_id Int
+  operacao   String @db.VarChar(64)
+  request_id String @db.Char(36)
+  hash       String @db.Char(64)
+  resposta   Json?
+
+  @@id([usuario_id, operacao, request_id])
+  @@map("requisicoes_estoque")
 }
 
 enum chamados_suporte_status {

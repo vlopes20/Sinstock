@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
-import { StockService } from '../common/services/stock.service';
+import { StockService, stockRequest } from '../common/services/stock.service';
 import { NotasFiscaisEntradaService } from '../notas-fiscais-entrada/notas-fiscais-entrada.service';
 import {
   CreateMovimentacaoDto,
@@ -20,6 +20,7 @@ export class MovimentacoesService {
   ) {}
 
   async registrarMovimentacao(dto: CreateMovimentacaoDto, usuarioId: number) {
+    const request = stockRequest(usuarioId, 'movimentacoes', dto);
     if (dto.tipo !== TipoMovimentacao.AJUSTE && dto.quantidade <= 0)
       throw new BadRequestException('Informe uma quantidade positiva.');
     if (dto.tipo === TipoMovimentacao.ENTRADA) {
@@ -50,6 +51,7 @@ export class MovimentacoesService {
           ],
         },
         usuarioId,
+        request,
       );
       return {
         message: 'Entrada registrada com documento de origem.',
@@ -58,71 +60,81 @@ export class MovimentacoesService {
     }
     if (!dto.observacao?.trim())
       throw new BadRequestException('Informe o motivo da saída ou ajuste.');
-    return this.stock.write([dto.produto_id], async (tx) => {
-      const key = {
-        produto_id: dto.produto_id,
-        filial_id: dto.filial_id,
-        lote_id: dto.lote_id ?? null,
-      };
-      const existing = await this.stock.balance(tx, key);
-      const delta =
-        dto.tipo === TipoMovimentacao.AJUSTE
-          ? new Prisma.Decimal(dto.quantidade).minus(existing?.quantidade ?? 0)
-          : new Prisma.Decimal(dto.quantidade).negated();
-      const change = await this.stock.change(tx, key, delta);
-      const log = await this.stock.log(tx, {
-        ...key,
-        usuario_id: usuarioId,
-        tipo_movimentacao: dto.tipo,
-        quantidade: delta.abs(),
-        saldo_anterior: change.before,
-        saldo_atual: change.after,
-        observacao: dto.observacao,
-        referencia: dto.referencia,
-      });
-      return { message: 'Movimentação registrada.', log };
-    });
+    return this.stock.write(
+      [dto.produto_id],
+      async (tx) => {
+        const key = {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_id,
+          lote_id: dto.lote_id ?? null,
+        };
+        const existing = await this.stock.balance(tx, key);
+        const delta =
+          dto.tipo === TipoMovimentacao.AJUSTE
+            ? new Prisma.Decimal(dto.quantidade).minus(
+                existing?.quantidade ?? 0,
+              )
+            : new Prisma.Decimal(dto.quantidade).negated();
+        const change = await this.stock.change(tx, key, delta);
+        const log = await this.stock.log(tx, {
+          ...key,
+          usuario_id: usuarioId,
+          tipo_movimentacao: dto.tipo,
+          quantidade: delta.abs(),
+          saldo_anterior: change.before,
+          saldo_atual: change.after,
+          observacao: dto.observacao,
+          referencia: dto.referencia,
+        });
+        return { message: 'Movimentação registrada.', log };
+      },
+      request,
+    );
   }
 
   async transferirSaldo(dto: CreateTransferenciaDto, usuarioId: number) {
     if (dto.filial_origem_id === dto.filial_destino_id)
       throw new BadRequestException('Escolha filiais diferentes.');
-    return this.stock.write([dto.produto_id], async (tx) => {
-      const reference = 'TRANSFERENCIA:' + randomUUID();
-      const origin = {
-        produto_id: dto.produto_id,
-        filial_id: dto.filial_origem_id,
-        lote_id: dto.lote_id ?? null,
-      };
-      const destination = { ...origin, filial_id: dto.filial_destino_id };
-      const from = await this.stock.change(
-        tx,
-        origin,
-        new Prisma.Decimal(dto.quantidade).negated(),
-      );
-      const to = await this.stock.change(tx, destination, dto.quantidade);
-      for (const [key, change] of [
-        [origin, from],
-        [destination, to],
-      ] as const) {
-        await this.stock.log(tx, {
-          ...key,
-          usuario_id: usuarioId,
-          tipo_movimentacao: 'TRANSFERENCIA',
-          quantidade: dto.quantidade,
-          saldo_anterior: change.before,
-          saldo_atual: change.after,
+    return this.stock.write(
+      [dto.produto_id],
+      async (tx) => {
+        const reference = 'TRANSFERENCIA:' + randomUUID();
+        const origin = {
+          produto_id: dto.produto_id,
+          filial_id: dto.filial_origem_id,
+          lote_id: dto.lote_id ?? null,
+        };
+        const destination = { ...origin, filial_id: dto.filial_destino_id };
+        const from = await this.stock.change(
+          tx,
+          origin,
+          new Prisma.Decimal(dto.quantidade).negated(),
+        );
+        const to = await this.stock.change(tx, destination, dto.quantidade);
+        for (const [key, change] of [
+          [origin, from],
+          [destination, to],
+        ] as const) {
+          await this.stock.log(tx, {
+            ...key,
+            usuario_id: usuarioId,
+            tipo_movimentacao: 'TRANSFERENCIA',
+            quantidade: dto.quantidade,
+            saldo_anterior: change.before,
+            saldo_atual: change.after,
+            referencia: reference,
+            observacao: dto.observacao,
+          });
+        }
+        return {
+          message: 'Transferência concluída.',
           referencia: reference,
-          observacao: dto.observacao,
-        });
-      }
-      return {
-        message: 'Transferência concluída.',
-        referencia: reference,
-        origem: from.row,
-        destino: to.row,
-      };
-    });
+          origem: from.row,
+          destino: to.row,
+        };
+      },
+      stockRequest(usuarioId, 'movimentacoes/transferencia', dto),
+    );
   }
 
   async listarHistorico(dto: HistoricoMovimentacoesDto) {

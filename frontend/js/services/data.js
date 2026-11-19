@@ -9,6 +9,52 @@
     return result.size ? '?' + result : '';
   };
   const get = (path, filters) => SinstockAPI.request(path + query(filters));
+  // Keep the same request on retries, including a reload in the same tab.
+  const pendingStockWrites = new Map();
+  const hexBytes = (bytes) =>
+    Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  async function stockWrite(path, { body, method = 'POST' }) {
+    const input = JSON.stringify([
+      window.SinstockSession?.user?.id,
+      method,
+      path,
+      body,
+    ]);
+    const digest = await crypto.subtle?.digest(
+      'SHA-256',
+      new TextEncoder().encode(input),
+    );
+    const key = digest
+      ? 'sinstock.stock-write.' + hexBytes(new Uint8Array(digest))
+      : input;
+    const storage = digest ? sessionStorage : pendingStockWrites;
+    let request_id = digest ? storage.getItem(key) : storage.get(key);
+    if (!request_id) {
+      const bytes = crypto.getRandomValues(new Uint8Array(16));
+      bytes[6] = (bytes[6] & 15) | 64;
+      bytes[8] = (bytes[8] & 63) | 128;
+      const hex = hexBytes(bytes);
+      request_id = [
+        hex.slice(0, 8),
+        hex.slice(8, 12),
+        hex.slice(12, 16),
+        hex.slice(16, 20),
+        hex.slice(20),
+      ].join('-');
+      if (digest) storage.setItem(key, request_id);
+      else storage.set(key, request_id);
+    }
+    const result = await SinstockAPI.request(path, {
+      method,
+      body: { ...body, request_id },
+    });
+    if (digest) {
+      if (storage.getItem(key) === request_id) storage.removeItem(key);
+    } else if (storage.get(key) === request_id) {
+      storage.delete(key);
+    }
+    return result;
+  }
   const pageSize = (fallback = 10) =>
     window.SinstockSession?.user?.preferencias?.itens_por_pagina || fallback;
   const quantities = (rows, reserved = false) =>
@@ -130,6 +176,7 @@
   }
   window.SinstockData = {
     get,
+    stockWrite,
     rows,
     meta,
     all,

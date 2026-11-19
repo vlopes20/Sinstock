@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { StockService } from '../common/services/stock.service';
+import { StockService, stockRequest } from '../common/services/stock.service';
 import { AjusteLoteDto } from './dto/ajuste-lote.dto';
 import { CreateNotaFiscalEntradaDto } from './dto/create-nota-fiscal-entrada.dto';
 import { EstornoNotaFiscalDto } from './dto/estorno-nota-fiscal.dto';
@@ -25,7 +25,11 @@ export class NotasFiscaisEntradaService {
     private readonly stock: StockService,
   ) {}
 
-  async criar(dto: CreateNotaFiscalEntradaDto, usuarioId: number) {
+  async criar(
+    dto: CreateNotaFiscalEntradaDto,
+    usuarioId: number,
+    request = stockRequest(usuarioId, 'notas-fiscais-entrada', dto),
+  ) {
     return this.stock.write(
       dto.itens.map((i) => i.produto_id),
       async (tx) => {
@@ -141,6 +145,7 @@ export class NotasFiscaisEntradaService {
           include: details,
         });
       },
+      request,
     );
   }
 
@@ -317,101 +322,107 @@ export class NotasFiscaisEntradaService {
       where: { id: loteId },
     });
     if (!initial) throw new NotFoundException('Lote não encontrado.');
-    return this.stock.write([initial.produto_id], async (tx) => {
-      const lote = await tx.lotes.findUniqueOrThrow({ where: { id: loteId } });
-      const manufacture = dto.data_fabricacao
-        ? new Date(dto.data_fabricacao)
-        : lote.data_fabricacao;
-      const expiry = dto.data_validade
-        ? new Date(dto.data_validade)
-        : lote.data_validade;
-      if (manufacture && manufacture > expiry)
-        throw new BadRequestException(
-          'A fabricação deve ser anterior à validade.',
-        );
-      if (dto.quantidade !== undefined || dto.custo_unitario !== undefined) {
-        if (!dto.item_entrada_id)
-          throw new BadRequestException(
-            'Informe item_entrada_id para identificar a nota que será ajustada.',
-          );
-        const item = await tx.itens_entrada.findUnique({
-          where: { id: dto.item_entrada_id },
+    return this.stock.write(
+      [initial.produto_id],
+      async (tx) => {
+        const lote = await tx.lotes.findUniqueOrThrow({
+          where: { id: loteId },
         });
-        if (!item || item.lote_id !== loteId)
+        const manufacture = dto.data_fabricacao
+          ? new Date(dto.data_fabricacao)
+          : lote.data_fabricacao;
+        const expiry = dto.data_validade
+          ? new Date(dto.data_validade)
+          : lote.data_validade;
+        if (manufacture && manufacture > expiry)
           throw new BadRequestException(
-            'O item não pertence ao lote informado.',
+            'A fabricação deve ser anterior à validade.',
           );
-        const nf = await this.lockedNote(tx, item.nota_fiscal_id);
-        if (nf.status === 'CANCELADA')
-          throw new BadRequestException(
-            'Não é possível ajustar uma nota cancelada.',
-          );
-        if (nf.status === 'RECEBIDA' && dto.quantidade !== undefined) {
-          await this.applyItem(
-            tx,
-            {
-              produto_id: item.produto_id,
-              filial_id: nf.filial_id!,
-              lote_id: loteId,
+        if (dto.quantidade !== undefined || dto.custo_unitario !== undefined) {
+          if (!dto.item_entrada_id)
+            throw new BadRequestException(
+              'Informe item_entrada_id para identificar a nota que será ajustada.',
+            );
+          const item = await tx.itens_entrada.findUnique({
+            where: { id: dto.item_entrada_id },
+          });
+          if (!item || item.lote_id !== loteId)
+            throw new BadRequestException(
+              'O item não pertence ao lote informado.',
+            );
+          const nf = await this.lockedNote(tx, item.nota_fiscal_id);
+          if (nf.status === 'CANCELADA')
+            throw new BadRequestException(
+              'Não é possível ajustar uma nota cancelada.',
+            );
+          if (nf.status === 'RECEBIDA' && dto.quantidade !== undefined) {
+            await this.applyItem(
+              tx,
+              {
+                produto_id: item.produto_id,
+                filial_id: nf.filial_id!,
+                lote_id: loteId,
+              },
+              new Prisma.Decimal(dto.quantidade).minus(item.quantidade),
+              usuarioId,
+              nf.id,
+              nf.numero_nf,
+              'AJUSTE',
+              dto.motivo,
+            );
+          }
+          await tx.itens_entrada.update({
+            where: { id: item.id },
+            data: {
+              quantidade: dto.quantidade,
+              custo_unitario: dto.custo_unitario,
             },
-            new Prisma.Decimal(dto.quantidade).minus(item.quantidade),
-            usuarioId,
-            nf.id,
-            nf.numero_nf,
-            'AJUSTE',
-            dto.motivo,
-          );
+          });
+          const all = await tx.itens_entrada.findMany({
+            where: { nota_fiscal_id: nf.id },
+          });
+          const total = all
+            .reduce(
+              (sum, i) => sum.plus(i.quantidade.times(i.custo_unitario)),
+              new Prisma.Decimal(0),
+            )
+            .toDecimalPlaces(2);
+          await tx.notas_fiscais_entrada.update({
+            where: { id: nf.id },
+            data: { total },
+          });
+          await this.stock.recalculateCost(tx, lote.produto_id);
         }
-        await tx.itens_entrada.update({
-          where: { id: item.id },
+        const updated = await tx.lotes.update({
+          where: { id: loteId },
           data: {
-            quantidade: dto.quantidade,
-            custo_unitario: dto.custo_unitario,
+            numero_lote: dto.numero_lote,
+            data_fabricacao: manufacture,
+            data_validade: expiry,
           },
         });
-        const all = await tx.itens_entrada.findMany({
-          where: { nota_fiscal_id: nf.id },
-        });
-        const total = all
-          .reduce(
-            (sum, i) => sum.plus(i.quantidade.times(i.custo_unitario)),
-            new Prisma.Decimal(0),
-          )
-          .toDecimalPlaces(2);
-        await tx.notas_fiscais_entrada.update({
-          where: { id: nf.id },
-          data: { total },
-        });
-        await this.stock.recalculateCost(tx, lote.produto_id);
-      }
-      const updated = await tx.lotes.update({
-        where: { id: loteId },
-        data: {
-          numero_lote: dto.numero_lote,
-          data_fabricacao: manufacture,
-          data_validade: expiry,
-        },
-      });
-      await tx.logAuditoriaEstoque.create({
-        data: {
-          usuarioId: String(usuarioId),
-          acao: 'AJUSTE_LOTE',
-          recurso: 'LOTE',
-          recursoId: String(loteId),
-          dadosAnteriores: {
-            numero_lote: lote.numero_lote,
-            data_validade: lote.data_validade.toISOString(),
+        await tx.logAuditoriaEstoque.create({
+          data: {
+            usuarioId: String(usuarioId),
+            acao: 'AJUSTE_LOTE',
+            recurso: 'LOTE',
+            recursoId: String(loteId),
+            dadosAnteriores: {
+              numero_lote: lote.numero_lote,
+              data_validade: lote.data_validade.toISOString(),
+            },
+            dadosNovos: {
+              ...JSON.parse(JSON.stringify(dto)),
+              data_validade: expiry.toISOString(),
+            },
           },
-          dadosNovos: {
-            ...JSON.parse(JSON.stringify(dto)),
-            data_validade: expiry.toISOString(),
-          },
-        },
-      });
-      return {
-        mensagem: 'Lote ajustado; estoque e custo recalculados.',
-        lote: updated,
-      };
-    });
+        });
+        return {
+          mensagem: 'Lote ajustado; estoque e custo recalculados.',
+          lote: updated,
+        };
+      },
+      stockRequest(usuarioId, `notas-fiscais-entrada/lotes/${loteId}`, dto),
+    );
   }
 }

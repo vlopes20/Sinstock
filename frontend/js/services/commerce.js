@@ -231,7 +231,7 @@
               preco_unitario: Number(product.preco_venda),
             };
           });
-          await SinstockAPI.request(
+          await D.stockWrite(
             reserve ? '/pedidos/reservar' : '/pedidos/checkout',
             {
               method: 'POST',

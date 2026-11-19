@@ -26,17 +26,21 @@ export class AuthService {
     private readonly email: EmailChallengeService,
     private readonly prisma: PrismaService,
   ) {}
-  private async token(user: {
-    id: number;
-    nome: string;
-    email: string;
-    perfil_id: number;
-    auth_version: number;
-  }) {
-    await this.prisma.usuarios.update({
-      where: { id: user.id },
-      data: { ultimo_acesso: new Date() },
-    });
+  private async token(
+    user: {
+      id: number;
+      nome: string;
+      email: string;
+      perfil_id: number;
+      auth_version: number;
+    },
+    recordAccess = true,
+  ) {
+    if (recordAccess)
+      await this.prisma.usuarios.update({
+        where: { id: user.id },
+        data: { ultimo_acesso: new Date() },
+      });
     return {
       access_token: this.jwtService.sign({
         sub: user.id,
@@ -120,14 +124,15 @@ export class AuthService {
     const user = await this.usersService.findByIdWithSecrets(userId);
     if (!user?.ativo || !user.isTwoFactorEnable)
       throw new BadRequestException('O segundo fator não está ativado.');
-    if (user.two_factor_method === 'EMAIL')
+    if (user.two_factor_method === 'EMAIL') {
       await this.email.consume(userId, challengeId, code, 'LOGIN');
-    else if (
-      !user.twoFactorSecret ||
-      !this.twoFactorService.verifyTwoFactorCode(code, user.twoFactorSecret)
-    )
-      throw new UnauthorizedException('Código 2FA inválido ou expirado.');
-    return this.token(user);
+      return this.token(user);
+    }
+    if (!(await this.twoFactorService.consumeCode(user, code, 'login')))
+      throw new UnauthorizedException(
+        'Código 2FA inválido, expirado ou já utilizado. Tente com um novo código.',
+      );
+    return this.token(user, false);
   }
   private async password(userId: number, password: string) {
     const user = await this.usersService.findByIdWithSecrets(userId);
@@ -151,6 +156,7 @@ export class AuthService {
         isTwoFactorEnable: true,
         two_factor_method: 'EMAIL',
         twoFactorSecret: null,
+        ultimo_passo_totp: null,
         auth_version: { increment: 1 },
       },
     });
@@ -171,24 +177,24 @@ export class AuthService {
     const user = await this.password(userId, dto.senha_atual);
     if (!user.isTwoFactorEnable)
       throw new BadRequestException('O segundo fator já está desativado.');
-    if (user.two_factor_method === 'EMAIL')
+    if (user.two_factor_method === 'EMAIL') {
       await this.email.consume(userId, dto.challenge_id, dto.codigo, 'DISABLE');
-    else if (
-      !user.twoFactorSecret ||
-      !this.twoFactorService.verifyTwoFactorCode(
-        dto.codigo,
-        user.twoFactorSecret,
-      )
-    )
-      throw new BadRequestException('Código inválido.');
-    await this.prisma.usuarios.update({
-      where: { id: userId },
-      data: {
-        isTwoFactorEnable: false,
-        twoFactorSecret: null,
-        auth_version: { increment: 1 },
-      },
-    });
+      await this.prisma.usuarios.update({
+        where: { id: userId },
+        data: {
+          isTwoFactorEnable: false,
+          twoFactorSecret: null,
+          ultimo_passo_totp: null,
+          auth_version: { increment: 1 },
+        },
+      });
+    } else if (
+      !(await this.twoFactorService.consumeCode(user, dto.codigo, 'disable'))
+    ) {
+      throw new BadRequestException(
+        'Código inválido, expirado ou já utilizado.',
+      );
+    }
     return {
       message: 'Segundo fator desativado. Entre novamente.',
       reautenticar: true,
